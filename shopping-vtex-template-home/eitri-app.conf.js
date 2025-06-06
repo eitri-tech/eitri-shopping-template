@@ -20,6 +20,9 @@ module.exports = {
       "isEitriAppShared": true,
       "version": "0.1.47"
     },
+    "i18n": {
+      "version": "14.1.2"
+    }
   },
   "type": "module"
 }

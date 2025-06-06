@@ -2,20 +2,23 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react/jsx-runtime": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react/jsx-dev-runtime"
-      ],
       "eitri-i18n": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react-i18next"
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react-i18next"
       ],
-      "eitri-luminus": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/eitri-app-components"
+      "shopping-vtex-template-shared": [
+        "./_shopping-vtex-template-shared/src/export.js"
       ],
       "eitri-bifrost": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/eitri-bifrost"
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/eitri-bifrost"
       ],
       "react": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react"
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react"
+      ],
+      "eitri-luminus": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/eitri-app-components"
+      ],
+      "react/jsx-runtime": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react/jsx-dev-runtime"
       ]
     },
     "target": "ESNext",
@@ -26,6 +29,6 @@
   },
   "include": [
     "./**/*",
-    "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/@types"
+    "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/@types"
   ]
 }

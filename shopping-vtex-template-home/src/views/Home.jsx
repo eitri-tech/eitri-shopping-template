@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { HEADER_TYPE } from 'shopping-vtex-template-shared'
+import { HEADER_TYPE, HeaderContentWrapper, HeaderLogo, HeaderCart } from 'shopping-vtex-template-shared'
 import HeaderTemplate from '../components/Header/HeaderTemplate'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getCmsContent } from '../services/CmsService'
@@ -70,13 +70,19 @@ export default function Home() {
   }
   return (
     <Page className="bg-white-300">
-      <HeaderTemplate
-        headerType={HEADER_TYPE.LOGO_SEARCH_AND_CART}
-        scrollEffect={true}
-        navigateToSearch={navigateToSearch}
-        navigateToCart={openCart}
-        quantityOfItems={cart?.items?.length}
-      />
+      {/*<HeaderTemplate*/}
+      {/*  headerType={HEADER_TYPE.LOGO_SEARCH_AND_CART}*/}
+      {/*  scrollEffect={true}*/}
+      {/*  navigateToSearch={navigateToSearch}*/}
+      {/*  navigateToCart={openCart}*/}
+      {/*  quantityOfItems={cart?.items?.length}*/}
+      {/*/>*/}
+      <HeaderContentWrapper scrollEffect={true} className='justify-between'>
+        <HeaderLogo />
+        <HeaderCart
+          cart={cart}
+        />
+      </HeaderContentWrapper>
       <View className="pt-[50px]" />
       <HomeSkeleton show={!cmsContent} />
       <CmsContentRender cmsContent={cmsContent} />

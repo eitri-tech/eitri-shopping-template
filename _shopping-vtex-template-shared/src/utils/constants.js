@@ -9,3 +9,7 @@ export const HEADER_TYPE = {
 	SEARCH_INPUT_AND_FILTER: 'searchInputAndFilter',
 	RETURN_SHARE_AND_CART: 'returnShareAndCart'
 }
+
+export const DIMENSIONS = {
+  HEADER_HEIGHT: 60
+}
