@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "react/jsx-runtime": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react/jsx-dev-runtime"
+      ],
+      "eitri-i18n": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react-i18next"
+      ],
+      "eitri-luminus": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/eitri-app-components"
+      ],
+      "eitri-bifrost": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/eitri-bifrost"
+      ],
+      "react": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/node_modules/react"
+      ]
+    },
+    "target": "ESNext",
+    "module": "CommonJS",
+    "jsx": "react-native",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "./**/*",
+    "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/9022c0fb-885f-4a5f-b99f-7e065189b893/@types"
+  ]
+}

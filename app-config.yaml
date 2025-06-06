@@ -1,0 +1,13 @@
+eitri-apps:
+- path: ./_shopping-vtex-template-shared
+  workspace: shared
+  alias: shared
+  focus: false
+  shared: true
+- path: ./shopping-vtex-template-home
+  workspace: home
+  alias: home
+  focus: true
+  shared: false
+
+application-id: 9022c0fb-885f-4a5f-b99f-7e065189b893
