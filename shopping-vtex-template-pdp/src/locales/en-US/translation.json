@@ -1,0 +1,55 @@
+{
+	"home": {
+		"title": "Product"
+	},
+	"description": {
+		"txtDescription": "Description",
+		"labelSeeLess": "See less",
+		"labelSeeMore": "See more"
+	},
+	"information": {
+		"txtInformation": "Information"
+	},
+	"supplier": {
+		"txtSupplier": "Supplier"
+	},
+	"freight": {
+		"labelZipCode": "ZIP Code",
+		"labelCalculate": "Calculate",
+		"txtCalculate": "Calculate delivery freight",
+		"txtCalculateDeadline": "Calculate the estimated delivery freight and deadline for your region. Enter your ZIP Code:"
+	},
+	"mainDescription": {
+		"txtUntil": "or up to",
+		"txtOf": "of"
+	},
+	"modalComponent": {
+		"txtProductAdded": "Product added",
+		"txtQuantity": "Quantity:",
+		"txtGoToCart": "Go to cart",
+		"txtAddToCart": "Add to cart",
+		"txtBuyTogether": "Take advantage and buy together"
+	},
+	"product": {
+		"labelAddToCart": "Add to cart",
+		"labelGoToCart": "Go to cart",
+		"errorNoProduct": "Product Unavailable"
+	},
+	"productBasicTemplate": {
+		"txtWhoSaw": "Who saw this, also saw:"
+	},
+	"productCardVertical": {
+		"cart": "see Cart",
+		"buy": "buy"
+	},
+	"review": {
+		"txtOpnion": "Customer did not write a review, only rated the product.",
+		"seeMoreReviews": "See more reviews"
+	},
+	"skuSelector": {
+		"txtSelect": "Select"
+	},
+	"tagsComponent": {
+		"labelOffer": "Deal"
+	}
+}

@@ -1,16 +1,9 @@
 import { getRemoteAppConfigProperty } from '../../utils/getRemoteConfigStyleProperty'
 import HeaderOffset from './HeaderOffset'
-import {DIMENSIONS} from "../../utils/constants";
+import { DIMENSIONS } from '../../utils/constants'
 
 export default function HeaderContentWrapper(props) {
-	const {
-		children,
-		scrollEffect,
-		scrollEffectMaxTranslate,
-		height,
-    className,
-		...rest
-	} = props
+	const { children, scrollEffect, scrollEffectMaxTranslate, height, className, ...rest } = props
 
 	const [safeAreaTop, setSafeAreaTop] = useState(0)
 	const [translate, setTranslate] = useState('')
@@ -75,16 +68,17 @@ export default function HeaderContentWrapper(props) {
 			}
 		}
 	}
+
 	return (
 		<>
 			<View
 				id='header-container'
-        className={`fixed top-0 left-0 right-0 z-[9999] ${translate || ''} transition-all duration-1 ease-in-out shadow-md header-bg w-full`}>
+				className={`fixed top-0 left-0 right-0 z-[9999] ${translate} transition-all duration-500 ease-in-out shadow-md w-full bg-[var(--header-background-color)]`}>
 				<View topInset />
 				<View id='header'>
 					<View
 						id='header-content'
-            className={`flex items-center w-screen min-h-[${_height}px] py-[16px] px-[16px] ${className}`}
+						className={`min-h-[var(--header-height)] flex items-center w-screen py-[8px] px-[16px] ${className}`}
 						{...rest}>
 						{children}
 					</View>
@@ -92,9 +86,12 @@ export default function HeaderContentWrapper(props) {
 			</View>
 			<View
 				topInset
-        className={`fixed top-0 left-0 right-0 z-[2000] w-full`}
+				className={`fixed top-0 left-0 right-0 z-[2000] w-full bg-[var(--header-background-color)]`}
 			/>
-			<HeaderOffset height={_height} />
+			<HeaderOffset
+				height={_height}
+				topInset
+			/>
 		</>
 	)
 }

@@ -10,11 +10,11 @@ export const openCart = async () => {
 	}
 }
 
-export const openAccount = async (action) => {
-  Eitri.nativeNavigation.open({
-    slug: 'account',
-    initParams: { action }
-  })
+export const openAccount = async action => {
+	Eitri.nativeNavigation.open({
+		slug: 'account',
+		initParams: { action }
+	})
 }
 
 export const openProduct = async product => {

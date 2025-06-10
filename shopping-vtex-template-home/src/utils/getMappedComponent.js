@@ -11,15 +11,15 @@ import BlogPostShelf from '../components/CmsComponents/Blog/BlogPostShelf'
 
 const componentMap = {
 	MultipleImageBanner: Banner,
-	// ProductTiles: ProductTiles,
-	// ProductShelf: ProductShelf,
-	// CategoryShelf: CategoryShelf,
-	// CategoryTree: CategoryTree,
-	// CategoryTiles: CategoryTiles,
-	// LastSeenProducts: LastSeenProducts,
-	// CategoryListSwipe: CategoryListSwipe,
-	// ProductInfiniteScroll: ProductInfiniteScroll,
-	// WordPressCardList: BlogPostShelf
+	ProductTiles: ProductTiles,
+	ProductShelf: ProductShelf,
+	CategoryShelf: CategoryShelf,
+	CategoryTree: CategoryTree,
+	CategoryTiles: CategoryTiles,
+	LastSeenProducts: LastSeenProducts,
+	CategoryListSwipe: CategoryListSwipe,
+	ProductInfiniteScroll: ProductInfiniteScroll,
+	WordPressCardList: BlogPostShelf
 }
 
 const shouldReloadOnResume = componentName => {

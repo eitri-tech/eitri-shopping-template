@@ -11,5 +11,5 @@ export const HEADER_TYPE = {
 }
 
 export const DIMENSIONS = {
-  HEADER_HEIGHT: 60
+	HEADER_HEIGHT: 70
 }

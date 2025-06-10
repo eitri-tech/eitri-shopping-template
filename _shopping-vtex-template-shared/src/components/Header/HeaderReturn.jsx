@@ -17,11 +17,19 @@ export default function HeaderReturn(props) {
 
 	return (
 		<View
-      display='flex'
-      alignItems='center'
-      justifyContent='center'
+			display='flex'
+			alignItems='center'
+			justifyContent='center'
 			width={width}>
-       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M5 12H19M5 12L11 6M5 12L11 18" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+			<svg
+				xmlns='http://www.w3.org/2000/svg'
+				height='24px'
+				viewBox='0 -960 960 960'
+				width='24px'
+				className='text-[var(--header-content-color)]'
+				fill='currentColor'>
+				<path d='M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z' />
+			</svg>
 		</View>
 	)
 }

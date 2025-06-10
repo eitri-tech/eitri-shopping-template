@@ -1,11 +1,19 @@
-import { View} from "eitri-luminus";
+import { View } from 'eitri-luminus'
+
 export default function HeaderSearchIcon(props) {
-	const { navigateToSearch, iconColor } = props
+	const { onPress } = props
 
 	return (
-		<View
-			onPress={navigateToSearch}>
-			<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" strokeWidth="0"></g><g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path> </g></svg>
+		<View onClick={onPress}>
+			<svg
+				xmlns='http://www.w3.org/2000/svg'
+				height='24px'
+				viewBox='0 -960 960 960'
+				width='24px'
+				className='text-[var(--header-content-color)]'
+				fill='currentColor'>
+				<path d='M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z' />
+			</svg>
 		</View>
 	)
 }

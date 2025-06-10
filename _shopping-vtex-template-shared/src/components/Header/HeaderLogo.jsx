@@ -27,7 +27,7 @@ export default function HeaderLogo(props) {
   }
 
 	return (
-		<View className="h-[50px] w-[150px] flex items-center">
+		<View className="max-h-full max-w-[150px] flex items-center">
 			<Image
 				src={urlLogo}
 				className="w-full h-full"

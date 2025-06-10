@@ -1,0 +1,55 @@
+{
+	"home": {
+		"title": "Produto"
+	},
+	"description": {
+		"txtDescription": "Descrição",
+		"labelSeeLess": "Ver menos",
+		"labelSeeMore": "Ver mais"
+	},
+	"information": {
+		"txtInformation": "Informações"
+	},
+	"supplier": {
+		"txtSupplier": "Fornecedor"
+	},
+	"freight": {
+		"labelZipCode": "CEP",
+		"labelCalculate": "Calcular",
+		"txtCalculate": "Calcular frete de entrega",
+		"txtCalculateDeadline": "Calcule o frete e prazo de entrega estimados para sua região. Informe seu CEP:"
+	},
+	"mainDescription": {
+		"txtUntil": "ou em até",
+		"txtOf": "de"
+	},
+	"modalComponent": {
+		"txtProductAdded": "Produto adicionado",
+		"txtQuantity": "Quantidade:",
+		"txtGoToCart": "Ir para carrinho",
+		"txtAddToCart": "Adicionar ao carrinho",
+		"txtBuyTogether": "Aproveite e compre junto"
+	},
+	"product": {
+		"labelAddToCart": "Adicionar ao carrinho",
+		"labelGoToCart": "Ir para carrinho",
+		"errorNoProduct": "Produto Indisponível"
+	},
+	"productBasicTemplate": {
+		"txtWhoSaw": "Quem viu esta, viu também:"
+	},
+	"productCardVertical": {
+		"cart": "ver Carrinho",
+		"buy": "comprar"
+	},
+	"review": {
+		"txtOpnion": "Cliente não escreveu uma avaliação, apenas deu a nota do produto.",
+		"seeMoreReviews": "Ver mais avaliações"
+	},
+	"skuSelector": {
+		"txtSelect": "Selecione o"
+	},
+	"tagsComponent": {
+		"labelOffer": "Oferta"
+	}
+}

@@ -9,6 +9,7 @@ export { default as CustomButton } from './components/CustomButton/CustomButton'
 export { default as CustomInput } from './components/CustomInput/CustomInput'
 export { default as HeaderTemplate } from './components/Header/HeaderTemplate'
 export { default as HeaderContentWrapper } from './components/Header/HeaderContentWrapper'
+export { default as HeaderSearchIcon } from './components/Header/HeaderSearchIcon'
 export { HEADER_TYPE } from './utils/constants'
 
 export { default as Loading } from './components/Loading/LoadingComponent'
