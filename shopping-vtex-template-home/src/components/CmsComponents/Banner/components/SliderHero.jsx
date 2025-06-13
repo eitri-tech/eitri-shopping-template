@@ -1,13 +1,15 @@
 import { Text, View, Carousel, Image } from 'eitri-luminus'
 
 export default function SliderHero(props) {
+	const { data, onClick } = props
+
 	const [currentSlide, setCurrentSlide] = useState(0)
-	const { data, onPress } = props
 	const imagesList = data.images
 
 	const onSwipe = i => {
 		setCurrentSlide(i)
 	}
+
 	return (
 		<View className='relative'>
 			{data.mainTitle && (
@@ -26,7 +28,7 @@ export default function SliderHero(props) {
 							key={`image_${image.imageUrl}`}>
 							<View
 								onClick={() => {
-									onPress(image)
+									onClick(image)
 								}}>
 								<Image
 									className='w-full'

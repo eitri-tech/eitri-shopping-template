@@ -29,7 +29,6 @@ const shouldReloadOnResume = componentName => {
 
 export const getMappedComponent = (content, reloadKey) => {
 	const Component = componentMap[content.name]
-	console.log(content.name)
 	if (!Component) {
 		console.error(`Component ${content.name} does not exist in the component map.`)
 		return null

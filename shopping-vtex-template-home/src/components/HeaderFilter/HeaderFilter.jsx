@@ -1,4 +1,6 @@
 import Eitri from 'eitri-bifrost'
+import { useState } from 'react'
+import { View } from 'eitri-luminus'
 import FacetsModal from '../FacetsModal/FacetsModal'
 
 export default function HeaderFilter(props) {
@@ -28,38 +30,31 @@ export default function HeaderFilter(props) {
 	return (
 		<>
 			<View
-				onPress={handleFilterModal}
-				position='relative'
-				opacity={facetsModalReady ? 'solid' : 'light'}>
+				onClick={handleFilterModal}
+				className={`relative ${facetsModalReady ? 'opacity-100' : 'opacity-50'}`}>
 				<View>
-					{/*<Icon*/}
-					{/*	color={'neutral-900'}*/}
-					{/*	iconKey='filter'*/}
-					{/*	width={24}*/}
-					{/*	height={24}*/}
-					{/*/>*/}
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						height='24px'
+						viewBox='0 -960 960 960'
+						width='24px'
+						fill='#e3e3e3'>
+						<path d='M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z' />
+					</svg>
 				</View>
 
 				{hasAppliedFilters() && (
-					<View
-						position='absolute'
-						backgroundColor='primary-700'
-						width='12px'
-						height='12px'
-						right={-4}
-						top={-2}
-						borderRadius='circular'
-					/>
+					<View className='absolute bg-primary-700 w-3 h-3 -right-1 -top-0.5 rounded-full' />
 				)}
 			</View>
 
 			<FacetsModal
 				show={showModal}
 				initialFilters={currentParams}
+				modalReady={() => setFacetsModalReady(true)}
+				onClose={() => setShowModal(false)}
 				onApplyFilters={_onApplyFilters}
 				onRemoveFilters={_onRemoveFilters}
-				modalReady={setFacetsModalReady}
-				onClose={() => setShowModal(false)}
 			/>
 		</>
 	)

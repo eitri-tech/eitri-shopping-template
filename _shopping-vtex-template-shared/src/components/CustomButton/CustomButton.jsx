@@ -1,11 +1,27 @@
 import Loading from '../Loading/LoadingComponent'
 
 export default function CustomButton(props) {
-	const { disabled, color, backgroundColor, variant, label, onPress, isLoading, width, borderRadius, ...rest } = props
+	const {
+		disabled,
+		color,
+		backgroundColor,
+		variant,
+		label,
+		onPress,
+		onClick,
+		isLoading,
+		width,
+		borderRadius,
+		...rest
+	} = props
 
 	const _onPress = () => {
 		if (!disabled && onPress && typeof onPress === 'function') {
 			onPress()
+		}
+
+		if (!disabled && onClick && typeof onClick === 'function') {
+			onClick()
 		}
 	}
 

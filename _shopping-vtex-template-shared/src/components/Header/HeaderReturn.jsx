@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 
 export default function HeaderReturn(props) {
-	const { backPage, backgroundColor, borderColor, iconColor, onPress, width } = props
+	const { backPage, onPress, width } = props
 
 	const onBack = () => {
 		if (typeof onPress === 'function') {
@@ -17,10 +17,8 @@ export default function HeaderReturn(props) {
 
 	return (
 		<View
-			display='flex'
-			alignItems='center'
-			justifyContent='center'
-			width={width}>
+			className={`relative w-[25px] h-[25px] flex items-center`}
+			onClick={onBack}>
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
 				height='24px'

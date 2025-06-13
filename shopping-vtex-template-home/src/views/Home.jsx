@@ -70,7 +70,10 @@ export default function Home() {
 	}
 
 	return (
-		<Page>
+		<Page
+			title='Home'
+			topInset
+			bottomInset>
 			<MainHeader />
 			<HomeSkeleton show={!cmsContent} />
 			<CmsContentRender cmsContent={cmsContent} />

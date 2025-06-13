@@ -44,6 +44,7 @@ const handleProductAction = value => {
 
 export const processActions = sliderData => {
 	const action = sliderData?.action
+
 	switch (action?.type) {
 		case 'legacySearch':
 			handleLegacySearchAction(action.value, action.title)

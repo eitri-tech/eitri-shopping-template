@@ -2,12 +2,12 @@ import Eitri from 'eitri-bifrost'
 import { View } from 'eitri-luminus'
 import SliderHero from './components/SliderHero'
 import BannerList from './components/BannerList'
-import { openBrand, openProductById, resolveNavigation } from '../../../services/NavigationService'
 import FitOnScreen from './components/FitOnScreen'
 import GridList from './components/GridList'
 import RoundedBannerList from './components/RoundedBannerList'
 import SingleBanner from './components/SingleBanner'
 import { processActions } from '../../../services/ResolveCmsActions'
+
 export default function Banner(props) {
 	const { data } = props
 	const mode = data.mode

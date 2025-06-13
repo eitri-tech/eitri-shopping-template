@@ -1,11 +1,9 @@
-import { Text, View} from "eitri-luminus";
+import { Text, View } from 'eitri-luminus'
 export default function HeaderText(props) {
-	const { text, contentColor } = props
+	const { text } = props
 	return (
-		<View className="flex w-full justify-center">
-			<Text className={`text-${contentColor} text-xl font-bold`}>
-				{text}
-			</Text>
+		<View>
+			<Text className={`text-[var(--header-content-color)] text-xl font-bold`}>{text}</Text>
 		</View>
 	)
 }
