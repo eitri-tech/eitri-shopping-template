@@ -21,7 +21,7 @@ export default function ProductCardDefault(props) {
 		className
 	} = props
 	return (
-		<View className={`relative drop-shadow-md bg-white rounded ${className}`}>
+		<View className={`relative drop-shadow-[0px_0px_6px_rgba(0,0,0,0.2)] bg-white rounded ${className}`}>
 			<View className='flex flex-col rounded-sm p-2'>
 				{/*{badge ? (*/}
 				{/*	<View className="max-h-[27px] min-h-[27px] rounded-full w-fit bg-green-300 px-4 py-1">*/}
@@ -63,11 +63,11 @@ export default function ProductCardDefault(props) {
 
 				<View
 					onClick={onPressCartButton}
-					className='mt-1 h-[36px] bg-primary w-full rounded-full flex justify-center items-center border border-primary-700 border-[0.5px] bg-primary-700 z-[99]'>
+					className='mt-2 h-[36px] bg-primary w-full rounded-full flex justify-center items-center border border-primary-700 border-[0.5px] bg-primary-700 z-[99]'>
 					{loadingCartOp ? (
 						<Loading width='36px' />
 					) : (
-						<Text className='text-background-color font-medium text-xs'>{actionLabel}</Text>
+						<Text className='text-primary-content font-medium text-xs'>{actionLabel}</Text>
 					)}
 				</View>
 			</View>
