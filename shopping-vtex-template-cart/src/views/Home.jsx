@@ -1,40 +1,84 @@
-import { useTranslation } from "eitri-i18n";
-import Eitri from "eitri-bifrost";
-import { Text, View, Image, Button, Page } from "eitri-luminus";
-import HeaderComponent from "../components/HeaderComponent";
-import Presentation from "../assets/images/presentation.webp";
-
+import Eitri from 'eitri-bifrost'
+import { sendPageView } from '../services/trackingService'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import { saveCartIdOnStorage } from '../services/cartService'
+import Freight from '../components/Freight/Freight'
+import Coupon from '../components/Coupon/Coupon'
+import CartSummary from '../components/CartSummary/CartSummary'
+import InstallmentsMsg from '../components/InstallmentsMsg/InstallmentsMsg'
+import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
+import { setLanguage, startConfigure } from '../services/AppService'
+import { Page } from 'eitri-luminus'
+import { useTranslation } from 'eitri-i18n'
 export default function Home(props) {
-  const { t } = useTranslation();
+	const openWithBottomBar = !!props?.location?.state?.tabIndex
+	const { t, i18n } = useTranslation()
+	const { cart, startCart } = useLocalShoppingCart()
 
-  function goToProducts() {
-    Eitri.navigation.navigate({ path: "/Products/ProductsList" });
-    return
-  }
-  return (
-    <Page className="w-screen h-screen">
-      <View className="pt-8 w-full h-full">
-        <HeaderComponent title={t("home.pageTitle")} />
-        <Image className="w-screen" cover src={Presentation} />
+	const [appIsLoading, setAppIsLoading] = useState(true)
 
-        <View className="flex flex-col  w-screen h-full justify-between items-center p-4">
-          <View className="prose">
-            <Text render="h3" className="mb-12 font-bold">
-              {t("home.title")}
-            </Text>
-            <Text render="p" className="my-8">
-              {t("home.description")}
-            </Text>
-          </View>
+	useEffect(() => {
+		startHome()
+		Eitri.navigation.setOnResumeListener(() => {
+			startHome()
+		})
+	}, [])
 
-          <Button
-            className="btn btn-secondary mt-16 w-full"
-            onClick={goToProducts}
-          >
-            {t("home.button")}
-          </Button>
-        </View>
-      </View>
-    </Page>
-  );
+	useEffect(() => {
+		if (cart && cart.items.length === 0) {
+			Eitri.navigation.navigate({
+				path: 'EmptyCart',
+				state: { showCloseButton: !openWithBottomBar },
+				replace: true
+			})
+		}
+	}, [cart])
+
+	const startHome = async () => {
+		await startConfigure()
+		await loadCart()
+		setAppIsLoading(false)
+		setLanguage(i18n)
+		sendPageView('Home')
+	}
+
+	const loadCart = async () => {
+		const startParams = await Eitri.getInitializationInfos()
+		if (startParams?.orderFormId) {
+			await saveCartIdOnStorage(startParams?.orderFormId)
+		}
+
+		return startCart()
+	}
+
+	return (
+		<Page
+			title='Carrinho'
+			bottomInset
+			topInset>
+			<Loading
+				fullScreen
+				isLoading={appIsLoading}
+			/>
+
+			<HeaderContentWrapper
+				gap={16}
+				scrollEffect={false}>
+				{!openWithBottomBar && <HeaderReturn />}
+
+				<HeaderText text={t('home.title')} />
+			</HeaderContentWrapper>
+
+			<InstallmentsMsg />
+
+			<CartItemsContent />
+
+			<Freight />
+
+			<Coupon />
+
+			<CartSummary />
+		</Page>
+	)
 }

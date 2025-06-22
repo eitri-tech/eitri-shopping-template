@@ -19,7 +19,8 @@ export default function SliderHero(props) {
 			)}
 			<Swiper
 				config={{
-					onChange: onSwipe
+					onChange: onSwipe,
+					autoPlay: true
 				}}>
 				{imagesList &&
 					imagesList.map(image => (

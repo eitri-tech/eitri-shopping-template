@@ -1,4 +1,6 @@
 import { Text, View } from 'eitri-luminus'
+import Eitri from 'eitri-bifrost'
+
 export default function HeaderCart(props) {
 	const { quantityOfItems, onPress, cart } = props
 

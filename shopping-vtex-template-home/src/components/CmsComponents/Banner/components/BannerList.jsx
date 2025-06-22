@@ -15,7 +15,7 @@ export default function BannerList(props) {
 				</View>
 			)}
 			<View className='flex overflow-x-auto'>
-				<View class='flex gap-4 px-4'>
+				<View className='flex gap-4 px-4'>
 					{imagesList &&
 						imagesList.map(slider => (
 							<View

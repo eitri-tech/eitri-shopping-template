@@ -22,7 +22,6 @@ export default function ProductCard(props) {
 	const [wishListId, setWishListId] = useState(null)
 
 	const [itemQuantity, setItemQuantity] = useState(1)
-
 	const [itemInCart, setItemInCart] = useState(null)
 
 	const item = product?.items?.[0]
@@ -38,7 +37,6 @@ export default function ProductCard(props) {
 	}, [])
 
 	// Loaders
-
 	const checkItemOnWishlist = async () => {
 		try {
 			const { inList, listId } = await productOnWishlist(product.productId)
@@ -49,6 +47,31 @@ export default function ProductCard(props) {
 			setLoadingWishlistOp(false)
 		} catch (e) {
 			setLoadingWishlistOp(false)
+		}
+	}
+
+	const getItemName = () => {
+		if (item) {
+			return item?.nameComplete || item?.name
+		}
+	}
+
+	const getItemImage = () => {
+		if (item) {
+			return item?.images?.[0]?.imageUrl
+		}
+	}
+
+	const getItemVideo = () => {
+		if (item) {
+			let productVideo = ''
+			if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
+				const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
+				const property = product?.properties?.find(prop => prop.name === productVideoTag)
+				if (property) {
+					productVideo = property.values?.[0]
+				}
+			}
 		}
 	}
 
@@ -87,14 +110,19 @@ export default function ProductCard(props) {
 
 	// Cart
 	const addToCart = async () => {
-		setLoadingCartOp(true)
-		const newCart = await addItem({ ...item, quantity: itemQuantity })
-		const itemIndex = newCart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
-		if (itemIndex > -1) {
-			setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
-			setItemQuantity(cart?.items?.[itemIndex].quantity)
+		try {
+			setLoadingCartOp(true)
+			const newCart = await addItem({ ...item, quantity: itemQuantity })
+			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
+			if (itemIndex > -1) {
+				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
+				setItemQuantity(cart?.items?.[itemIndex].quantity)
+			}
+			setLoadingCartOp(false)
+		} catch (e) {
+			console.error('Error adding cart item', e)
+			setLoadingCartOp(false)
 		}
-		setLoadingCartOp(false)
 	}
 
 	const removeFromCart = async () => {
@@ -170,7 +198,6 @@ export default function ProductCard(props) {
 	// }
 
 	const onPressCartButton = () => {
-		console.log('aqui')
 		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
 			openProduct(product)
 			return
@@ -193,8 +220,8 @@ export default function ProductCard(props) {
 	}
 
 	const params = {
-		name: item?.nameComplete || item?.name,
-		image: item?.images?.[0]?.imageUrl,
+		name: getItemName(),
+		image: getItemImage(),
 		video: productVideo,
 		badge: getBadge(),
 		listPrice: getListPrice(),
@@ -206,11 +233,11 @@ export default function ProductCard(props) {
 		loadingWishlistOp: loadingWishlistOp,
 		loadingCartOp: loadingCartOp,
 		itemQuantity: itemQuantity,
+		actionLabel: 'Comprar',
 		onPressOnCard: onPressOnCard,
 		onPressCartButton: onPressCartButton,
 		onPressOnWishlist: onPressOnWishlist,
 		onChangeQuantity: onChangeQuantity,
-		actionLabel: 'Comprar',
 		t: t,
 		className
 	}

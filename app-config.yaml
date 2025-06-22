@@ -14,6 +14,16 @@ eitri-apps:
   alias: pdp
   focus: false
   shared: false
+- path: ./shopping-vtex-template-account
+  workspace: account
+  alias: account
+  focus: false
+  shared: false
+- path: ./shopping-vtex-template-cart
+  workspace: cart
+  alias: cart
+  focus: false
+  shared: false
 bottom-tab-view-simulation:
   eitri-apps:
     - slug: "shopping-vtex-template-home"
@@ -26,16 +36,11 @@ bottom-tab-view-simulation:
       initialization-params:
         type: "string"
         value: "tabIndex=1&route=Categories"
-    - slug: "shopping-vtex-template-home"
-      title: "Cupom"
+    - slug: "shopping-vtex-template-cart"
+      title: "Sacola"
       initialization-params:
         type: "string"
-        value: "tabIndex=2&route=Coupons"
-    - slug: "shopping-vtex-template-home"
-      title: "Cartão"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=3&route=Card"
+        value: "tabIndex=2"
     - slug: "shopping-vtex-template-account"
       title: "Perfil"
       initialization-params:
