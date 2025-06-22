@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE, CustomInput } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE, CustomInput } from 'shopping-vtex-template-shared'
 import ShippingMethods from '../components/Methods/ShippingMethods'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { sendPageView } from '../services/trackingService'

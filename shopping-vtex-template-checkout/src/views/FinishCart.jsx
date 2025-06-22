@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { formatAmountInCents } from '../utils/utils'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
 import { clearCart, startPayment } from '../services/cartService'
 import Recaptcha from '../services/Recaptcha'
 import UserData from '../components/FinishCart/UserData'
@@ -121,7 +121,9 @@ export default function FinishCart() {
 	}
 
 	return (
-		<View topInset bottomInset>
+		<View
+			topInset
+			bottomInset>
 			<HeaderTemplate
 				headerType={HEADER_TYPE.RETURN_AND_TEXT}
 				viewBackButton={true}

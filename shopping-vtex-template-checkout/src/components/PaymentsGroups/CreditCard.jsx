@@ -3,7 +3,7 @@ import CardIcon from '../Icons/CardIcons/CardIcon'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import GroupsWrapper from './GroupsWrapper'
 import Card from '../Icons/MethodIcons/Card'
-import { CustomInput } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomInput } from 'shopping-vtex-template-shared'
 
 export default function CreditCard(props) {
 	const { cart, selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()
@@ -41,7 +41,7 @@ export default function CreditCard(props) {
 	useEffect(() => {
 		const { cardNumber, holderName, expirationDate, securityCode } = selectedPaymentData?.cardInfo ?? {}
 		const { street, number, city, neighborhood, state, country, postalCode } =
-		selectedPaymentData?.billingAddress ?? {}
+			selectedPaymentData?.billingAddress ?? {}
 
 		if (
 			cardNumber &&
@@ -142,7 +142,7 @@ export default function CreditCard(props) {
 			onPress={onSelectThisGroup}
 			isChecked={groupName === selectedPaymentData?.groupName}>
 			<View paddingHorizontal='extra-small'>
-				<Text className="font-bold">Bandeiras aceitas:</Text>
+				<Text className='font-bold'>Bandeiras aceitas:</Text>
 				<View
 					display='flex'
 					justifyContent='between'
@@ -196,52 +196,51 @@ export default function CreditCard(props) {
 					display='flex'
 					gap={5}
 					direction='row'>
-
+					<View
+						width='100%'
+						direction='row'
+						display='flex'
+						gap={5}>
+						<CustomInput
+							placeholder={'Validade'}
+							value={selectedPaymentData?.cardInfo?.expirationDate}
+							onChange={text => handleCardDataChange('expirationDate', text)}
+							inputMode='numeric'
+							mask='99/99'
+							width='35%'
+						/>
+						<CustomInput
+							placeholder={'CVV'}
+							value={selectedPaymentData?.cardInfo?.securityCode}
+							onChange={text => handleCardDataChange('securityCode', text)}
+							inputMode='numeric'
+							mask='999'
+							width='35%'
+						/>
 						<View
-							width='100%'
-							direction='row'
-							display='flex'
-							gap={5}>
-							<CustomInput
-								placeholder={'Validade'}
-								value={selectedPaymentData?.cardInfo?.expirationDate}
-								onChange={text => handleCardDataChange('expirationDate', text)}
-								inputMode='numeric'
-								mask='99/99'
-								width='35%'
-							/>
-							<CustomInput
-								placeholder={'CVV'}
-								value={selectedPaymentData?.cardInfo?.securityCode}
-								onChange={text => handleCardDataChange('securityCode', text)}
-								inputMode='numeric'
-								mask='999'
-								width='35%'
-							/>
-							<View
-								height={48}
-								overflow='hidden'
-								elevation='low'
-								borderRadius='small'
-								width='30%'
-								alignItems='center'
-								justifyContent='center'
-								direction='column'>
-								{selectedPaymentData?.cardInfo?.cardNumber?.length < 15 ? (
-									<Text
-										marginHorizontal='small'
-										fontSize='small'>
-										Bandeira
-									</Text>
-								) : (
-									<View
-										position='relative'
-										top={2}>
-										<CardIcon iconKey={selectedPaymentData?.paymentSystem?.name} />
-									</View>
-								)}
-							</View>
+							height={48}
+							overflow='hidden'
+							elevation='low'
+							borderRadius='small'
+							width='30%'
+							alignItems='center'
+							justifyContent='center'
+							direction='column'>
+							{selectedPaymentData?.cardInfo?.cardNumber?.length < 15 ? (
+								<Text
+									marginHorizontal='small'
+									fontSize='small'>
+									Bandeira
+								</Text>
+							) : (
+								<View
+									position='relative'
+									top={2}>
+									<CardIcon iconKey={selectedPaymentData?.paymentSystem?.name} />
+								</View>
+							)}
 						</View>
+					</View>
 				</View>
 				<View>
 					<Dropdown
@@ -259,7 +258,7 @@ export default function CreditCard(props) {
 					</Dropdown>
 				</View>
 				<View marginVertical='nano'>
-					<Text className="font-bold">Endereço de cobrança:</Text>
+					<Text className='font-bold'>Endereço de cobrança:</Text>
 					{cart.shipping?.address && (
 						<View
 							marginVertical='nano'
@@ -273,7 +272,7 @@ export default function CreditCard(props) {
 								checked={billingAddressSame}
 								onChange={checkBillingAddressSame}
 							/>
-							<Text className="text-sm">{`Seu endereço de fatura é o mesmo da entrega`}</Text>
+							<Text className='text-sm'>{`Seu endereço de fatura é o mesmo da entrega`}</Text>
 						</View>
 					)}
 					{!billingAddressSame && (

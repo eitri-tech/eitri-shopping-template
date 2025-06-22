@@ -1,9 +1,9 @@
-import {Page, View, Text, Image} from "eitri-luminus";
+import { Page, View, Text, Image } from 'eitri-luminus'
 import pixImg from '../assets/images/pix.png'
 import Eitri from 'eitri-bifrost'
 import { sendPageView, logEvent } from '../services/trackingService'
 import { Vtex } from 'eitri-shopping-vtex-shared'
-import { CustomButton } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomButton } from 'shopping-vtex-template-shared'
 import { clearCart } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
 
@@ -47,7 +47,7 @@ export default function PixOrder(props) {
 	}, [pixPayload])
 
 	useEffect(() => {
-    sendPageView(`PixOrder`, 'PixOrder')
+		sendPageView(`PixOrder`, 'PixOrder')
 	}, [])
 	const copyCode = async () => {
 		Eitri.clipboard.setText({
@@ -88,31 +88,26 @@ export default function PixOrder(props) {
 		<Page
 			topInset
 			bottomInset>
-			<View
-				className="flex flex-col justify-center items-center min-h-screen p-small gap-5">
-				<View
-					 className="flex flex-col justify-center items-center gap-2\.5">
+			<View className='flex flex-col justify-center items-center min-h-screen p-small gap-5'>
+				<View className='flex flex-col justify-center items-center gap-2\.5'>
 					<Image
 						src={pixImg}
-						className="w-1/2"
+						className='w-1/2'
 					/>
-					<Text>{t('pixOrder.txtTimeRemaining')}&nbsp;{formatTime(timeOut)}</Text>
+					<Text>
+						{t('pixOrder.txtTimeRemaining')}&nbsp;{formatTime(timeOut)}
+					</Text>
 				</View>
 
-				<View
-					className="flex flex-col justify-center items-center">
+				<View className='flex flex-col justify-center items-center'>
 					<Image
 						src={pixPayload.qrCodeBase64Image}
-						className="w-[70%]"
+						className='w-[70%]'
 					/>
 				</View>
 
-				<View
-					className="max-w-full rounded-sm p-extra-small border border-neutral-500 border-hairline">
-					<Text
-					 className="break-words max-w-full">
-						{pixPayload.code}
-					</Text>
+				<View className='max-w-full rounded-sm p-extra-small border border-neutral-500 border-hairline'>
+					<Text className='break-words max-w-full'>{pixPayload.code}</Text>
 				</View>
 
 				<CustomButton

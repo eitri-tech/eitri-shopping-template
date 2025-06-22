@@ -1,6 +1,6 @@
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { CustomInput, Loading, CustomButton } from 'eitri-shopping-vtex-daisy-shared'
-import { Button } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomInput, Loading, CustomButton } from 'shopping-vtex-template-shared'
+import { Button } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 
 export default function GiftCardInput(props) {
@@ -93,14 +93,12 @@ export default function GiftCardInput(props) {
 							<View
 								gap={5}
 								direction='row'>
-								<Text className="text-sm">{`${gift.redemptionCode} - ${gift.formattedValue}`} </Text>
+								<Text className='text-sm'>{`${gift.redemptionCode} - ${gift.formattedValue}`} </Text>
 							</View>
-							<View className="flex flex-row items-center justify-between">
-								<Text className="text-xs font-bold">
-									{gift.name}
-								</Text>
+							<View className='flex flex-row items-center justify-between'>
+								<Text className='text-xs font-bold'>{gift.name}</Text>
 								<Button onClick={() => removeGiftCart(gift.id)}>
-									<Text className="text-xs font-bold text-primary-500">
+									<Text className='text-xs font-bold text-primary-500'>
 										{t('giftCardInput.txtRemove')}
 									</Text>
 								</Button>

@@ -1,6 +1,6 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
-import { HEADER_TYPE, HeaderTemplate, Loading } from 'eitri-shopping-vtex-daisy-shared'
+import { HEADER_TYPE, HeaderTemplate, Loading } from 'shopping-vtex-template-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
 import { setLanguage, startConfigure } from '../services/AppService'
@@ -21,6 +21,11 @@ export default function Home() {
 
 	const loadCart = async () => {
 		const startParams = await Eitri.getInitializationInfos()
+
+		if (startParams?.cartman === 'on') {
+			Eitri.navigation.navigate({ path: 'Cartman', replace: true })
+			return
+		}
 
 		if (startParams?.orderFormId) {
 			await saveCartIdOnStorage(startParams?.orderFormId)
@@ -56,7 +61,9 @@ export default function Home() {
 	}
 
 	return (
-		<View topInset bottomInset>
+		<View
+			topInset
+			bottomInset>
 			<HeaderTemplate
 				headerType={HEADER_TYPE.RETURN_AND_TEXT}
 				viewBackButton={true}

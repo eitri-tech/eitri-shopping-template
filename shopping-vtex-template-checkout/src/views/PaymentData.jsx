@@ -1,5 +1,5 @@
-import {Page, View, Text, Button} from "eitri-luminus";
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'eitri-shopping-vtex-daisy-shared'
+import { Page, View, Text, Button } from 'eitri-luminus'
+import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import PaymentMethods from '../components/Methods/PaymentMethods'
@@ -52,8 +52,9 @@ export default function PaymentData(props) {
 	}
 
 	return (
-		<Page bottomInset topInset>
-
+		<Page
+			bottomInset
+			topInset>
 			<HeaderTemplate
 				headerType={HEADER_TYPE.RETURN_AND_TEXT}
 				viewBackButton={true}
@@ -65,32 +66,20 @@ export default function PaymentData(props) {
 				isLoading={isLoading}
 			/>
 
-			<View
-				className="p-9 flex-1 flex flex-col">
-				<View
-					 className="flex flex-row justify-between items-center">
-					<Text
-						className="text-xs font-bold">
-							{t('paymentData.txtTotalPayment')}
-					</Text>
-					<Text
-						className="text-sm font-bold text-primary-700">
-						{cart.formattedValue}
-					</Text>
+			<View className='p-9 flex-1 flex flex-col'>
+				<View className='flex flex-row justify-between items-center'>
+					<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
+					<Text className='text-sm font-bold text-primary-700'>{cart.formattedValue}</Text>
 				</View>
 
-				<View 
-				>
+				<View>
 					<GiftCardInput onPressAddGiftCard={handlePaymentOptionsChange} />
 				</View>
 
-				<View
-
-					className="flex flex-col gap-4 my-4">
+				<View className='flex flex-col gap-4 my-4'>
 					<PaymentMethods paymentSystems={cart?.paymentSystems} />
 
-					<View
-						className="mx-1 my-4">
+					<View className='mx-1 my-4'>
 						<CustomButton
 							disabled={!selectedPaymentData?.isReadyToPay}
 							label={t('paymentData.labelButton')}

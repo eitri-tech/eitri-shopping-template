@@ -1,4 +1,4 @@
-import { CustomButton, HEADER_TYPE, HeaderTemplate } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomButton, HEADER_TYPE, HeaderTemplate } from 'shopping-vtex-template-shared'
 import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
 import { useTranslation } from 'eitri-i18n'
@@ -7,8 +7,9 @@ export default function EmptyCart() {
 	const { t } = useTranslation()
 
 	return (
-		<Window bottomInset topInset>
-
+		<Window
+			bottomInset
+			topInset>
 			<HeaderTemplate
 				headerType={HEADER_TYPE.RETURN_AND_TEXT}
 				viewBackButton={true}
@@ -37,14 +38,14 @@ export default function EmptyCart() {
 						color='primary-base'
 						fontSize='extra-large'
 						textAlign='center'>
-							{t('emptyCart.txtEmptyCart')}						
+						{t('emptyCart.txtEmptyCart')}
 					</Text>
 					<Text
 						marginTop='large'
 						color='neutral-700'
 						fontSize='medium'
 						textAlign='center'>
-							{t('emptyCart.txtAddItem')}
+						{t('emptyCart.txtAddItem')}
 					</Text>
 				</View>
 				<View width='80vw'>

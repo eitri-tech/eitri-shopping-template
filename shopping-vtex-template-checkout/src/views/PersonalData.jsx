@@ -1,6 +1,6 @@
-import {Page, View, Text, Button} from "eitri-luminus";
+import { Page, View, Text, Button } from 'eitri-luminus'
 import Eitri from 'eitri-bifrost'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE, CustomInput } from 'eitri-shopping-vtex-daisy-shared'
+import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE, CustomInput } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getUserByEmail, registerToNotify } from '../services/cartService'
 import { sendPageView } from '../services/trackingService'
@@ -232,13 +232,10 @@ export default function PersonalData() {
 				contentText={t('personalData.title')}
 			/>
 
-			<View
-				className="p-10 flex-1 flex flex-col justify-between"> 
+			<View className='p-10 flex-1 flex flex-col justify-between'>
 				<View>
-					<View
-						 className="flex flex-col gap-16">
-						<View
-							 className="flex gap-8 w-full items-end">
+					<View className='flex flex-col gap-16'>
+						<View className='flex gap-8 w-full items-end'>
 							<CustomInput
 								width='100%'
 								autoFocus={true}
@@ -278,9 +275,11 @@ export default function PersonalData() {
 							))}
 
 						{userDataVerified && (
-							<View className="flex flex-col justify-center items-center">
-								<Button className="bg-transparent" onClick={handleLegalPerson}>
-									<Text className="text-primary-900 font-bold">
+							<View className='flex flex-col justify-center items-center'>
+								<Button
+									className='bg-transparent'
+									onClick={handleLegalPerson}>
+									<Text className='text-primary-900 font-bold'>
 										{isLegalPerson
 											? t('personalData.labelPerson')
 											: t('personalData.labelCorporate')}
@@ -306,12 +305,12 @@ export default function PersonalData() {
 				</View>
 
 				{socialNumberError && (
-					<View className="flex flex-col gap-16 bg-negative-700 p-small rounded-lg mx-1">
-						<Text className="text-neutral-100">{t('personalData.errorInvalidDoc')}</Text>
+					<View className='flex flex-col gap-16 bg-negative-700 p-small rounded-lg mx-1'>
+						<Text className='text-neutral-100'>{t('personalData.errorInvalidDoc')}</Text>
 					</View>
 				)}
 
-				<View className="items-center mt-2"> 
+				<View className='items-center mt-2'>
 					<CustomButton
 						disabled={!handleDataFilled()}
 						label={t('personalData.labelButton')}
