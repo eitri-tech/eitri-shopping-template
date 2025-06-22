@@ -1,40 +1,68 @@
-import { useTranslation } from "eitri-i18n";
-import Eitri from "eitri-bifrost";
-import { Text, View, Image, Button, Page } from "eitri-luminus";
-import HeaderComponent from "../components/HeaderComponent";
-import Presentation from "../assets/images/presentation.webp";
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import Eitri from 'eitri-bifrost'
+import { HEADER_TYPE, HeaderTemplate, Loading } from 'eitri-shopping-vtex-daisy-shared'
+import { saveCartIdOnStorage } from '../services/cartService'
+import { useTranslation } from 'eitri-i18n'
+import { setLanguage, startConfigure } from '../services/AppService'
 
-export default function Home(props) {
-  const { t } = useTranslation();
+export default function Home() {
+	const { startCart } = useLocalShoppingCart()
 
-  function goToProducts() {
-    Eitri.navigation.navigate({ path: "/Products/ProductsList" });
-    return
-  }
-  return (
-    <Page className="w-screen h-screen">
-      <View className="pt-8 w-full h-full">
-        <HeaderComponent title={t("home.pageTitle")} />
-        <Image className="w-screen" cover src={Presentation} />
+	const { t, i18n } = useTranslation()
 
-        <View className="flex flex-col  w-screen h-full justify-between items-center p-4">
-          <View className="prose">
-            <Text render="h3" className="mb-12 font-bold">
-              {t("home.title")}
-            </Text>
-            <Text render="p" className="my-8">
-              {t("home.description")}
-            </Text>
-          </View>
+	useEffect(() => {
+		startHome()
+	}, [])
 
-          <Button
-            className="btn btn-secondary mt-16 w-full"
-            onClick={goToProducts}
-          >
-            {t("home.button")}
-          </Button>
-        </View>
-      </View>
-    </Page>
-  );
+	const startHome = async () => {
+		await loadConfigs()
+		loadCart()
+	}
+
+	const loadCart = async () => {
+		const startParams = await Eitri.getInitializationInfos()
+
+		if (startParams?.orderFormId) {
+			await saveCartIdOnStorage(startParams?.orderFormId)
+		}
+
+		const cart = await startCart()
+
+		if (cart && cart?.items?.length > 0) {
+			if (
+				!cart.clientProfileData ||
+				!cart.clientProfileData?.email ||
+				!cart.clientProfileData?.firstName ||
+				!cart.clientProfileData?.lastName ||
+				!cart.clientProfileData?.document ||
+				!cart.clientProfileData?.phone
+			) {
+				Eitri.navigation.navigate({ path: 'PersonalData', state: { cart: cart }, replace: true })
+			} else {
+				Eitri.navigation.navigate({ path: 'FinishCart', replace: true })
+			}
+		} else {
+			Eitri.navigation.navigate({ path: 'EmptyCart', replace: true })
+		}
+	}
+
+	const loadConfigs = async () => {
+		try {
+			await startConfigure()
+			setLanguage(i18n)
+		} catch (e) {
+			console.log('Error ao buscar configurações', e)
+		}
+	}
+
+	return (
+		<View topInset bottomInset>
+			<HeaderTemplate
+				headerType={HEADER_TYPE.RETURN_AND_TEXT}
+				viewBackButton={true}
+				contentText={t('home.title')}
+			/>
+			<Loading fullScreen />
+		</View>
+	)
 }
