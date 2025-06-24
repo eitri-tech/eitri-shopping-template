@@ -1,7 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { formatAmountInCents } from '../utils/utils'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
+import { CustomButton, Loading, HeaderContentWrapper, HeaderReturn, HeaderText } from 'shopping-vtex-template-shared'
 import { clearCart, startPayment } from '../services/cartService'
 import Recaptcha from '../services/Recaptcha'
 import UserData from '../components/FinishCart/UserData'
@@ -10,6 +9,7 @@ import DeliveryData from '../components/FinishCart/DeliveryData'
 import { requestLogin } from '../services/navigationService'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
+import CartSummary from '../components/CartSummary/CartSummary'
 
 export default function FinishCart() {
 	const { cart, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
@@ -50,7 +50,7 @@ export default function FinishCart() {
 				setUnavailableItems(unavailableItems)
 			}
 		}
-		sendPageView('Home')
+		sendPageView('Checkout - Home')
 	}, [cart])
 
 	useEffect(() => {
@@ -121,118 +121,65 @@ export default function FinishCart() {
 	}
 
 	return (
-		<View
+		<Page
+			title='Checkout - Home'
 			topInset
 			bottomInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('finishCart.title')}
-			/>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('home.title')} />
+			</HeaderContentWrapper>
 
 			{(cartIsLoading || isLoading) && <Loading fullScreen />}
 
-			<View padding='large'>
+			<View className='p-4'>
 				<>
 					{error.state && (
-						<View
-							direction='column'
-							gap='16px'
-							backgroundColor='negative-700'
-							padding='small'
-							marginBottom='small'
-							borderRadius='small'>
+						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
 							<Text color='neutral-100'>{error.message}</Text>
 						</View>
 					)}
 
 					{unavailableItems.length > 0 && (
-						<View
-							direction='column'
-							gap='16px'
-							backgroundColor='negative-700'
-							padding='small'
-							marginBottom='small'
-							borderRadius='small'>
+						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
 							<Text color='neutral-100'>{t('finishCart.errorItems')}</Text>
 						</View>
 					)}
 
-					<View
-						direction='row'
-						width='100%'
-						justifyContent='between'
-						alignItems='center'
-						marginBottom='large'
-						paddingTop='nano'>
-						<Text
-							color='neutral-700'
-							fontWeight='bold'>{`${cart?.items?.length} ${
-							cart?.items?.length < 2 ? t('finishCart.txtProduct') : t('finishCart.txtProducts')
-						}`}</Text>
-						<Text
-							fontWeight='bold'
-							color='primary-700'>
-							{`${t('finishCart.txtTotal')} ${formatAmountInCents(cart.netValue || cart.value, currencyProps.locale, currencyProps.currency)}`}
-						</Text>
-					</View>
+					<CartSummary />
 
-					<View
-						direction='column'
-						gap='16px'>
-						{cart && (
-							<UserData
-								clientProfileData={cart?.clientProfileData}
-								onPress={() => navigateToEditor('PersonalData', cart?.canEditData)}
-							/>
-						)}
+					<View className='flex flex-col gap-4'>
+						{cart && <UserData onPress={() => navigateToEditor('PersonalData', cart?.canEditData)} />}
 
-						<DeliveryData
-							shipping={cart.shipping}
-							address={cart.shipping?.address}
-							clientProfileData={cart.clientProfileData}
-							onPress={() => navigateToEditor('AddNewShippingAddress', cart.canEditData)}
-						/>
+						<DeliveryData onPress={() => navigateToEditor('AddNewShippingAddress', cart?.canEditData)} />
 
 						{unavailableItems.length === 0 && (
 							<SelectedPaymentData
-								payments={cart.payments}
+								payments={cart?.payments}
 								selectedPaymentData={selectedPaymentData}
 								onPress={() => navigateToEditor('PaymentData', true)}
 							/>
 						)}
 					</View>
 
-					<>
-						<View height='90px' />
-						<View
-							backgroundColor='background-color'
-							position='fixed'
-							bottom={0}
-							left={0}
-							right={0}>
-							<View
-								padding='large'
-								direction='column'
-								alignItems='center'
-								justifyContent='center'>
-								<CustomButton
-									borderRadius='pill'
-									marginVertical='small'
-									label={t('finishCart.labelButton')}
-									fontSize='medium'
-									backgroundColor='primary-500'
-									block
-									onPress={runPaymentScript}
-								/>
-							</View>
+					{/*<>*/}
+					{/*	<View className='h-[90px]' />*/}
+					{/*	<View className='bg-background-color fixed bottom-0 left-0 right-0'>*/}
+					{/*		<View className='p-4 flex flex-col items-center justify-center'>*/}
+					{/*			<CustomButton*/}
+					{/*				borderRadius='pill'*/}
+					{/*				marginVertical='small'*/}
+					{/*				label={t('finishCart.labelButton')}*/}
+					{/*				fontSize='medium'*/}
+					{/*				backgroundColor='primary-500'*/}
+					{/*				block*/}
+					{/*				onPress={runPaymentScript}*/}
+					{/*			/>*/}
+					{/*		</View>*/}
 
-							<View
-								bottomInset
-								width='100%'
-							/>
-						</View>
-					</>
+					{/*		<View className='w-full bottomInset' />*/}
+					{/*	</View>*/}
+					{/*</>*/}
 				</>
 			</View>
 
@@ -241,6 +188,6 @@ export default function FinishCart() {
 				siteKey={RECAPTCHA_SITE_KEY}
 				onRecaptchaReady={() => setRecaptchaIsReady(true)}
 			/>
-		</View>
+		</Page>
 	)
 }

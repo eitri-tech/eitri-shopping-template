@@ -1,23 +1,26 @@
 import Eitri from 'eitri-bifrost'
+import { App } from 'eitri-shopping-vtex-shared'
 
-export const formatAmount = (amount, locale='pt-BR', currency='BRL') => {
-	if (typeof amount !== 'number') {
-		return ''
-	}
-	return amount.toLocaleString(locale, { style: 'currency', currency: currency })
+export const formatAmount = price => {
+	if (!price) return ''
+
+	const locale = App?.configs?.storePreferences?.locale || 'pt-BR'
+	const currency = App?.configs?.storePreferences?.currencyCode || 'BRL'
+
+	return price.toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
-export const formatAmountInCents = (amount, locale='pt-BR', currency='BRL') => {
+export const formatAmountInCents = amount => {
 	if (typeof amount !== 'number') {
 		return ''
 	}
 	if (amount === 0) {
 		return 'Grátis'
 	}
-	return (amount / 100).toLocaleString(locale, { style: 'currency', currency: currency })
+	return formatAmount(amount / 100)
 }
 
-const discoverInstallments = (item, locale='pt-BR', currency='BRL') => {
+const discoverInstallments = (item, locale = 'pt-BR', currency = 'BRL') => {
 	try {
 		const mainSeller = item.sellers.find(seller => seller.sellerDefault)
 		if (mainSeller) {
@@ -55,7 +58,7 @@ export const calculateDiscount = (initialValue, currencyValue) => {
 	return 0
 }
 
-export const formatProductFromVtex = (product, locale='pt-BR', currency='BRL') => {
+export const formatProductFromVtex = (product, locale = 'pt-BR', currency = 'BRL') => {
 	try {
 		return {
 			productId: product.productId,

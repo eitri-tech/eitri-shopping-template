@@ -1,72 +1,47 @@
 import SimpleCard from '../Card/SimpleCard'
 import iconTruck from '../../assets/images/truck.svg'
 import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { getShippingAddress } from '../../utils/getShippingAddress'
 
 export default function DeliveryData(props) {
-	const { onPress, address, clientProfileData, shipping } = props
-	const { street, number, complement, neighborhood, city, state, postalCode } = address ?? {}
-	const { firstName, lastName } = clientProfileData ?? {}
-	const [isPickUp, setIsPickUp] = useState(false)
-	const [pickupAddress, setPickupAddress] = useState('')
+	const { onPress } = props
+	const { cart } = useLocalShoppingCart()
 
 	const { t } = useTranslation()
-	
-	useEffect(() => {
-		const pickUpOption = shipping?.options?.find(option => option.isPickupInPoint && option.isCurrent)
 
-		if (pickUpOption) {
-			setIsPickUp(true)
-			setPickupAddress(pickUpOption?.slas?.[0].pickupStoreInfo?.friendlyName)
-		}
-	}, [shipping])
-
-	const isAddressFilled = address => {
-		return address && address.street && address.neighborhood && address.city && address.state && address.postalCode
-	}
+	const shippingAddress = getShippingAddress(cart)
 
 	return (
 		<SimpleCard
-			isFilled={isAddressFilled(address)}
+			isFilled={!!shippingAddress}
 			onPress={onPress}
-			title={isPickUp ? t('deliveryData.txtWithdrawal') : t('deliveryData.txtDelivery')}
+			title={shippingAddress?.isPickUp ? t('deliveryData.txtWithdrawal') : t('deliveryData.txtDelivery')}
 			icon={iconTruck}>
-			{isPickUp ? (
-				<Text className="text-xs">{pickupAddress}</Text>
+			{shippingAddress?.isPickUp ? (
+				<Text className='text-xs'>{shippingAddress?.formattedAddress}</Text>
 			) : (
 				<>
-					{firstName && isAddressFilled(address) && (
-						<Text
-							marginBottom='nano'
-							fontSize='extra-small'>{`${firstName} ${lastName}`}</Text>
-					)}
-					<View
-						direction='column'
-						display='flex'
-						gap={3}>
-						<Text
-							fontSize='extra-small'
-							color={'neutral-900'}>
-							{`${street}, ${number === null ? t('deliveryData.txtNoNumber') : number}${
-								complement ? ` - ${complement}` : ''
-							}`}
+					{cart?.clientProfileData?.firstName && shippingAddress && (
+						<Text className='mb-1 text-xs'>
+							{`${cart?.clientProfileData?.firstName} ${cart?.clientProfileData?.lastName}`}
 						</Text>
-						<Text
-							fontSize='extra-small'
-							color='neutral-900'>{`${neighborhood}, ${city} - ${state}`}</Text>
-						<Text
-							fontSize='extra-small'
-							color='neutral-900'>{`${postalCode}`}</Text>
-						{!number && (
-							<View
-								direction='row'
-								display='flex'
-								gap={4}
-								marginTop='small'>
-								<Text
-									fontSize='extra-small'
-									color={'negative-700'}>
-									{t('deliveryData.txtAlert')}
-								</Text>
+					)}
+					<View className='flex flex-col gap-1'>
+						<Text className='text-xs text-neutral-900'>
+							{`${shippingAddress?.street}, ${
+								shippingAddress?.number === null
+									? t('deliveryData.txtNoNumber')
+									: shippingAddress?.number
+							}${shippingAddress?.complement ? ` - ${shippingAddress?.complement}` : ''}`}
+						</Text>
+						<Text className='text-xs text-neutral-900'>
+							{`${shippingAddress?.neighborhood}, ${shippingAddress?.city} - ${shippingAddress?.state}`}
+						</Text>
+						<Text className='text-xs text-neutral-900'>{`${shippingAddress?.postalCode}`}</Text>
+						{!shippingAddress?.number && (
+							<View className='mt-2 flex flex-row gap-1'>
+								<Text className='text-xs text-red-700'>{t('deliveryData.txtAlert')}</Text>
 							</View>
 						)}
 					</View>

@@ -1,9 +1,14 @@
 import ImplementationInterface from '../PaymentsGroups/ImplementationInterface'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { getPaymentSystem } from '../../utils/getPaymentSystem'
 
 export default function PaymentMethods(props) {
-	const { paymentSystems } = props
+	const { cart } = useLocalShoppingCart()
+
+	const paymentSystems = getPaymentSystem(cart)
+
 	return (
-		<View className="w-full gap-4 flex flex-col">
+		<View className='w-full gap-4 flex flex-col'>
 			{paymentSystems?.map(system => {
 				return (
 					<ImplementationInterface

@@ -1,11 +1,18 @@
-import { Page, View, Text, Button } from 'eitri-luminus'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
-import Eitri from 'eitri-bifrost'
+import { Page, View, Text } from 'eitri-luminus'
+import {
+	CustomButton,
+	Loading,
+	HeaderReturn,
+	HeaderContentWrapper,
+	HeaderText,
+	CustomInput
+} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import PaymentMethods from '../components/Methods/PaymentMethods'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import GiftCardInput from '../components/GiftCardInput/GiftCardInput'
+import { formatAmountInCents } from '../utils/utils'
 
 export default function PaymentData(props) {
 	const { cart, selectedPaymentData, setPaymentOption } = useLocalShoppingCart()
@@ -52,24 +59,24 @@ export default function PaymentData(props) {
 	}
 
 	return (
-		<Page
-			bottomInset
-			topInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('paymentData.title')}
-			/>
+		<Page title='Dados de pagamento'>
+			<HeaderContentWrapper
+				gap={16}
+				scrollEffect={false}>
+				<HeaderReturn />
+
+				<HeaderText text={t('paymentData.title')} />
+			</HeaderContentWrapper>
 
 			<Loading
 				fullScreen
 				isLoading={isLoading}
 			/>
 
-			<View className='p-9 flex-1 flex flex-col'>
+			<View className='p-4 flex-1 flex flex-col'>
 				<View className='flex flex-row justify-between items-center'>
 					<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
-					<Text className='text-sm font-bold text-primary-700'>{cart.formattedValue}</Text>
+					<Text className='text-sm font-bold text-primary-700'>{formatAmountInCents(cart.value)}</Text>
 				</View>
 
 				<View>
@@ -77,7 +84,7 @@ export default function PaymentData(props) {
 				</View>
 
 				<View className='flex flex-col gap-4 my-4'>
-					<PaymentMethods paymentSystems={cart?.paymentSystems} />
+					<PaymentMethods />
 
 					<View className='mx-1 my-4'>
 						<CustomButton

@@ -12,6 +12,7 @@ export default function CustomButton(props) {
 		isLoading,
 		width,
 		borderRadius,
+		className,
 		...rest
 	} = props
 
@@ -44,11 +45,11 @@ export default function CustomButton(props) {
 			onClick={_onPress}
 			className={`
 				flex items-center justify-center 
-				w-full
 				h-[45px]
 				rounded
 				${_backgroundColor ? `bg-${_backgroundColor}` : ''}
 				${variant === 'outlined' ? `border border-[2px] border-primary` : ''}
+				${className || ''}
 			`}
 			{...rest}>
 			{isLoading ? <Loading /> : <Text className={`font-bold text-${_contentColor}`}>{label}</Text>}

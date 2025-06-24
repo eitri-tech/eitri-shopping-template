@@ -1,6 +1,13 @@
 import { Page, View, Text, Button } from 'eitri-luminus'
 import Eitri from 'eitri-bifrost'
-import { CustomButton, Loading, HeaderTemplate, HEADER_TYPE, CustomInput } from 'shopping-vtex-template-shared'
+import {
+	CustomButton,
+	Loading,
+	HeaderReturn,
+	HeaderContentWrapper,
+	HeaderText,
+	CustomInput
+} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getUserByEmail, registerToNotify } from '../services/cartService'
 import { sendPageView } from '../services/trackingService'
@@ -51,7 +58,8 @@ export default function PersonalData() {
 		if (personalData?.document?.length === 11) checkSocialNumber(personalData?.document)
 	}, [personalData?.document])
 
-	const handlePersonalDataChange = (key, value) => {
+	const handlePersonalDataChange = (key, e) => {
+		const { value } = e.target
 		setPersonalData({ ...personalData, [key]: value })
 	}
 
@@ -222,86 +230,82 @@ export default function PersonalData() {
 	}
 
 	return (
-		<Page
-			topInset
-			bottomInset>
+		<Page title='Checkout - Dados de usuário'>
+			<HeaderContentWrapper
+				gap={16}
+				scrollEffect={false}>
+				<HeaderReturn />
+
+				<HeaderText text={t('personalData.title')} />
+			</HeaderContentWrapper>
+
 			{isLoading && <Loading fullScreen />}
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('personalData.title')}
-			/>
 
-			<View className='p-10 flex-1 flex flex-col justify-between'>
-				<View>
-					<View className='flex flex-col gap-16'>
-						<View className='flex gap-8 w-full items-end'>
-							<CustomInput
-								width='100%'
-								autoFocus={true}
-								label={t('personalData.frmEmail')}
-								showClearInput={false}
-								type={'email'}
-								value={personalData['email'] || ''}
-								onChange={text => {
-									handlePersonalDataChange('email', text)
-								}}
-								placeholder={t('personalData.placeholderEmail')}
-								inputMode={'email'}
-							/>
-							<CustomButton
-								width='50px'
-								label='OK'
-								onPress={findUserByEmail}
-							/>
-						</View>
-
-						{userDataVerified &&
-							personalInputOptions.map(inputOption => (
-								<CustomInput
-									autoFocus={inputOption.autoFocus}
-									key={inputOption.label}
-									label={inputOption.title}
-									showClearInput={false}
-									type={inputOption.type}
-									value={personalData[inputOption.label] || ''}
-									onChange={text => {
-										handlePersonalDataChange(inputOption.label, text)
-									}}
-									placeholder={inputOption.placeholder}
-									inputMode={inputOption.inputMode}
-									mask={inputOption.mask}
-								/>
-							))}
-
-						{userDataVerified && (
-							<View className='flex flex-col justify-center items-center'>
-								<Button
-									className='bg-transparent'
-									onClick={handleLegalPerson}>
-									<Text className='text-primary-900 font-bold'>
-										{isLegalPerson
-											? t('personalData.labelPerson')
-											: t('personalData.labelCorporate')}
-									</Text>
-								</Button>
-							</View>
-						)}
-
-						{userDataVerified &&
-							isLegalPerson &&
-							corporateInputOptions.map(inputOption => (
-								<CustomInput
-									key={inputOption.label}
-									label={inputOption.title}
-									showClearInput={false}
-									type={inputOption.type}
-									value={personalData[inputOption.label]}
-									onChange={text => handlePersonalDataChange(inputOption.label, text)}
-									placeholder={inputOption.placeholder}
-								/>
-							))}
+			<View className='p-4 flex flex-col justify-between'>
+				<View className='flex flex-col gap-16'>
+					<View className='flex w-full items-end gap-4'>
+						<CustomInput
+							autoFocus={true}
+							label={t('personalData.frmEmail')}
+							type={'email'}
+							value={personalData['email'] || ''}
+							onChange={text => {
+								handlePersonalDataChange('email', text)
+							}}
+							placeholder={t('personalData.placeholderEmail')}
+							inputMode={'email'}
+							className='w-[70%]'
+						/>
+						<CustomButton
+							label='OK'
+							className='w-[30%]'
+							onPress={findUserByEmail}
+						/>
 					</View>
+
+					{userDataVerified &&
+						personalInputOptions.map(inputOption => (
+							<CustomInput
+								autoFocus={inputOption.autoFocus}
+								key={inputOption.label}
+								label={inputOption.title}
+								showClearInput={false}
+								type={inputOption.type}
+								value={personalData[inputOption.label] || ''}
+								onChange={text => {
+									handlePersonalDataChange(inputOption.label, text)
+								}}
+								placeholder={inputOption.placeholder}
+								inputMode={inputOption.inputMode}
+								mask={inputOption.mask}
+							/>
+						))}
+
+					{userDataVerified && (
+						<View className='flex flex-col justify-center items-center'>
+							<Button
+								className='bg-transparent'
+								onClick={handleLegalPerson}>
+								<Text className='text-primary-900 font-bold'>
+									{isLegalPerson ? t('personalData.labelPerson') : t('personalData.labelCorporate')}
+								</Text>
+							</Button>
+						</View>
+					)}
+
+					{userDataVerified &&
+						isLegalPerson &&
+						corporateInputOptions.map(inputOption => (
+							<CustomInput
+								key={inputOption.label}
+								label={inputOption.title}
+								showClearInput={false}
+								type={inputOption.type}
+								value={personalData[inputOption.label]}
+								onChange={text => handlePersonalDataChange(inputOption.label, text)}
+								placeholder={inputOption.placeholder}
+							/>
+						))}
 				</View>
 
 				{socialNumberError && (
@@ -309,14 +313,14 @@ export default function PersonalData() {
 						<Text className='text-neutral-100'>{t('personalData.errorInvalidDoc')}</Text>
 					</View>
 				)}
+			</View>
 
-				<View className='items-center mt-2'>
-					<CustomButton
-						disabled={!handleDataFilled()}
-						label={t('personalData.labelButton')}
-						onPress={setUserData}
-					/>
-				</View>
+			<View className='items-center mt-2'>
+				<CustomButton
+					disabled={!handleDataFilled()}
+					label={t('personalData.labelButton')}
+					onPress={setUserData}
+				/>
 			</View>
 		</Page>
 	)

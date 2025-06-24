@@ -5,7 +5,7 @@ import adaptCart from './../adapter/CartAdapter'
 export const getCart = async () => {
 	try {
 		const cart = await Vtex.cart.getCartIfExists()
-		return adaptCart(cart)
+		return cart
 	} catch (error) {
 		console.log('Erro ao buscar carrinho', error)
 	}
@@ -57,12 +57,12 @@ export const saveCartIdOnStorage = async orderFormId => {
 
 export const addUserData = async userData => {
 	const newCart = await Vtex.checkout.addUserData(userData)
-	return adaptCart(newCart)
+	return newCart
 }
 
 export const selectPaymentOption = async payload => {
 	const newCart = await Vtex.checkout.selectPaymentOption(payload)
-	return adaptCart(newCart)
+	return newCart
 }
 
 export const clearCart = async () => {

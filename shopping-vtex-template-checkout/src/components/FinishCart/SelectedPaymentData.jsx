@@ -2,13 +2,15 @@ import { formatAmountInCents, hideCreditCardNumber } from '../../utils/utils'
 import SimpleCard from '../Card/SimpleCard'
 import iconCard from '../../assets/images/credit_card.svg'
 import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
 
 export default function SelectedPaymentData(props) {
-	const { onPress, payments, selectedPaymentData } = props
+	const { cart } = useLocalShoppingCart()
 
+	const { onPress, payments, selectedPaymentData } = props
 	const { t } = useTranslation()
 
-	const paymentSystem = payments[0]
+	const paymentSystem = payments?.[0]
 	const paymentWithCardHasMissingValues = () => {
 		if (paymentSystem?.groupName === 'creditCardPaymentGroup') {
 			if (!selectedPaymentData?.cardInfo?.cardNumber) {
