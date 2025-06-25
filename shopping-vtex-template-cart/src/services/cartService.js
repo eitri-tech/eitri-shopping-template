@@ -113,4 +113,3 @@ export const addCoupon = async coupon => {
 export const removeCoupon = async () => {
 	return await Vtex.checkout.addPromoCode('')
 }
-

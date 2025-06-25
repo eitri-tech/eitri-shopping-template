@@ -39,15 +39,15 @@ export const addToWishlist = async (productId, title, sku) => {
 }
 
 export const productOnWishlist = async productId => {
-  if (!(await isLoggedIn())) {
-    return { inList: false }
-  }
-  const result = await Vtex.wishlist.checkItem(productId)
-  const inList = result?.data?.checkList?.inList
-  if (inList) {
-    const listId = result?.data?.checkList?.listIds?.[0]
-    return { inList, listId }
-  } else {
-    return { inList }
-  }
+	if (!(await isLoggedIn())) {
+		return { inList: false }
+	}
+	const result = await Vtex.wishlist.checkItem(productId)
+	const inList = result?.data?.checkList?.inList
+	if (inList) {
+		const listId = result?.data?.checkList?.listIds?.[0]
+		return { inList, listId }
+	} else {
+		return { inList }
+	}
 }

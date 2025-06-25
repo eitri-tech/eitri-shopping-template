@@ -18,7 +18,6 @@ export const getWhoSawAlsoSaw = async productId => {
 }
 
 export const markLastViewedProduct = async product => {
-
 	const key = `last-seen-products`
 
 	const productHistory = await Eitri.sharedStorage.getItemJson(key)

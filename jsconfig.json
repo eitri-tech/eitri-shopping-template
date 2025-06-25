@@ -2,12 +2,6 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "react/jsx-runtime": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react/jsx-dev-runtime"
-      ],
-      "eitri-i18n": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react-i18next"
-      ],
       "eitri-shopping-vtex-shared": [
         "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/@types/eitri-shopping-vtex-shared/index.d.ts"
       ],
@@ -17,11 +11,17 @@
       "eitri-bifrost": [
         "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/eitri-bifrost"
       ],
-      "shopping-vtex-template-shared": [
-        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/@types/shopping-vtex-template-shared/index.d.ts"
-      ],
       "react": [
         "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react"
+      ],
+      "react/jsx-runtime": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react/jsx-dev-runtime"
+      ],
+      "eitri-i18n": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/node_modules/react-i18next"
+      ],
+      "shopping-vtex-template-shared": [
+        "/var/folders/tp/mgwmq3416rx3zs9gwl3w4lcc0000gn/T/8e4cbe7a-98bf-4e1e-a50c-14cbcadc14ae/@types/shopping-vtex-template-shared/index.d.ts"
       ]
     },
     "target": "ESNext",

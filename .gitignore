@@ -57,3 +57,4 @@ Thumbs.db
 jsconfig.json
 
 /.release
+.vscode

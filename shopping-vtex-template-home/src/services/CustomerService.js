@@ -1,12 +1,12 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
-import {openAccount} from "./NavigationService";
+import { openAccount } from './NavigationService'
 
 let CheckLoginPromise = null
 
 export const requestLogin = () => {
 	return new Promise((resolve, reject) => {
-    openAccount('RequestLogin')
+		openAccount('RequestLogin')
 		CheckLoginPromise = null
 		Eitri.navigation.setOnResumeListener(resolve)
 	})

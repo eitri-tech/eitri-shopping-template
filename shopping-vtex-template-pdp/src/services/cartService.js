@@ -1,5 +1,5 @@
-import { Vtex } from "eitri-shopping-vtex-shared";
-import { crashLog } from "./trackingService";
+import { Vtex } from 'eitri-shopping-vtex-shared'
+import { crashLog } from './trackingService'
 
 export const getCart = async () => {
 	try {
@@ -19,7 +19,7 @@ export const addItemToCart = async item => {
 	}
 }
 
-export const removeCartItem = async (index) => {
+export const removeCartItem = async index => {
 	try {
 		return await Vtex.cart.removeItem(index)
 	} catch (error) {
@@ -73,4 +73,3 @@ const resolveCustomizedOptions = item => {
 		customizations: assemblies
 	}
 }
-

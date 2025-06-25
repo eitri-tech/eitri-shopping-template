@@ -11,7 +11,7 @@ export const openCart = async cart => {
 	}
 }
 
-export const openProduct = async (product) => {
+export const openProduct = async product => {
 	try {
 		Eitri.nativeNavigation.open({
 			slug: 'pdp',

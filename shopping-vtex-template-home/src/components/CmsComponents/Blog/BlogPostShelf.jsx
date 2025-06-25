@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import BlogCard from './BlogCard'
-import { Loading } from "shopping-vtex-template-shared";
+import { Loading } from 'shopping-vtex-template-shared'
 import SwiperContent from '../../SwiperContent/SwiperContent'
 import { useTranslation } from 'eitri-i18n'
 
@@ -43,7 +43,7 @@ export default function BlogPostShelf(props) {
 			title={data.title}
 			gap='16px'>
 			{isLoading ? (
-				<View className="w-screen flex flex-row justify-center">
+				<View className='w-screen flex flex-row justify-center'>
 					<Loading />
 				</View>
 			) : (
@@ -63,14 +63,10 @@ export default function BlogPostShelf(props) {
 					})}
 
 					<View
-						className="flex flex-col justify-center items-center w-[120px] h-full p-4"
+						className='flex flex-col justify-center items-center w-[120px] h-full p-4'
 						onClick={navigateToSeeMore}>
-						<Text className="text-primary-500 font-bold mb-[4px]">
-							{t('blogPostShelf.seeMore')}
-						</Text>
-						<Text className="text-primary-500 font-bold">
-							+
-						</Text>
+						<Text className='text-primary-500 font-bold mb-[4px]'>{t('blogPostShelf.seeMore')}</Text>
+						<Text className='text-primary-500 font-bold'>+</Text>
 					</View>
 				</>
 			)}

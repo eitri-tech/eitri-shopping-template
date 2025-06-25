@@ -1,0 +1,142 @@
+{
+	"home": {
+		"labelHello": "Olá",
+		"labelLeave": "Sair",
+		"labelMyFavorites": "Meus favoritos",
+		"labelEditFavorites": "Adicione ou edite seus favoritos",
+		"labelMyAccount": "Minha conta",
+		"labelConfig": "Informações pessoais e configurações",
+		"labelMyOrders": "Meus pedidos",
+		"labelHistoryOders": "Confira todo o histórico dos seus pedidos",
+		"lbPersonalData": "Dados pessoais",
+		"lbOrders": "Pedidos"
+	},
+	"passwordReset": {
+		"messageRecovery": "* Vamos te mandar uma mensagem com um código para recuperar senha",
+		"sendButton": "Enviar código",
+		"messageError": "Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.",
+		"recoveryPass": "Recuperação de senha",
+		"headerText": "Senha",
+		"forgotPass": "Esqueceu a senha?",
+		"setEmail": "Digite seu e-mail"
+	},
+	"passwordResetCode": {
+		"messageEmail": "Digite sual senha de 6 dígitos enviado para o email",
+		"sendButton": "Continuar",
+		"headerText": "Senha",
+		"forgotPass": "Esqueceu a senha?"
+	},
+	"passwordResetNewPass": {
+		"headerText": "Senha",
+		"forgotPass": "Esqueceu a senha?",
+		"newPass": "Nova senha",
+		"confirmPass": "Confirme a senha",
+		"sendButton": "Continuar",
+		"messageError": "Houve um erro ao redefinir a senha. Tente novamente mais tarde.",
+		"passwordRequirementsCharacters": "Mínimo de 8 caracteres",
+		"passwordRequirementsNumber": "Pelo menos um número",
+		"passwordRequirementsUppercase": "Pelo menos uma letra maiúscula",
+		"passwordRequirementsLowercase": "Pelo menos uma letra minúscula"
+	},
+	"signIn": {
+		"errosSendAccess": "erro ao enviar email",
+		"errorInvalidUser": "Usuário ou senha inválidos",
+		"wrongCredentials": "Token incorreto",
+		"verifyAgain": "Verifique as informaçoes e tente novamente",
+		"headerText": "Entrar",
+		"welcome": "Bem vindo de volta!",
+		"formName": "Nome de usuário ou e-mail",
+		"formPass": "Senha",
+		"formEmail": "Email",
+		"labelButton": "Login",
+		"labelAccessWithCode": "Login com código de acesso",
+		"forgotPass": "Esqueceu a senha?",
+		"noRegister": "Não tenho cadastro",
+		"formCodeVerification": "Código de verificação",
+		"textSendCode": "Enviar código",
+		"textResendCode": "Reenviar código",
+		"labelLoginWithPass": "Login com email e senha"
+	},
+	"orderStatusBadge": {
+		"cancel": "Cancelando pedido",
+		"complete": "Pedido completo",
+		"approved": "Pagamento aprovado",
+		"pending": "Aguardando pagamento",
+		"requestCancel": "Pedido cancelamento",
+		"canceled": "Cancelado",
+		"waitAuthorization": "Esperando autorizaçao",
+		"authorizeFulfillment": "Autorizado formulario",
+		"windowCancel": "Janela de cancelamento",
+		"readyInvoicing": "pronto para nota fiscal",
+		"invoice": "Gerar nota fiscal",
+		"created": "Criado"
+	},
+	"loginCard": {
+		"lbOpen": "Entrar",
+		"infoPage": "Acesse suas informações de perfil",
+		"lbButton": "Entrar ou criar conta"
+	},
+	"history": {
+		"title": "Histórico",
+		"lbPoints": "Pontos"
+	},
+	"socialLogin": {
+		"lbButton": "Continuar com o Google"
+	},
+	"terms": {
+		"title": "Termos"
+	},
+	"signUp": {
+		"alertMessageSendEmailError": "Erro ao enviar email",
+		"alertMessageAcceptTerms": "Necessário aceitar os termos",
+		"alertMessageInvalidToken": "Token incorreto",
+		"alertMessageServiceError": "Ocorreu uma falha no serviço, tente novamente",
+		"alertMessageVerify": "Verifique as informaçoes e tente novamente",
+		"lbRegister": "Registrar",
+		"lbEmailAccess": "Acessar com o seu email",
+		"textTerms": "Ao clicar em Registrar você concorda com os termos de serviço",
+		"lbVerifyCode": "Código de verificação",
+		"lbResendCode": "Reenviar código",
+		"lbLogin": "Login",
+		"lbBack": "Voltar"
+	},
+	"editProfile": {
+		"title": "Editar perfil",
+		"lbName": "Nome",
+		"lbLastName": "Sobrenome",
+		"lbBirthdate": "Data de nascimento",
+		"lbPhone": "Telefone",
+		"lbGender": "Sexo",
+		"lbGenderMale": "Masculino",
+		"lbGenderFemale": "Feminino",
+		"lbCPF": "CPF",
+		"lbSave": "Salvar"
+	},
+	"orderDetails": {
+		"title": "Meus Pedidos",
+		"lbFree": "Grátis",
+		"lbSeeBilling": "Ver boleto",
+		"lbOrder": "Pedido",
+		"lbOrderDate": "Data do pedido",
+		"lbAddress": "Endereço",
+		"lbPayment": "Forma de pagamento",
+		"lbDelivery": "Entrega",
+		"lbShippingUntil": "Entrega até",
+		"lbShippingDeadline": "Prazo de",
+		"lbShippingDeadlineInfo": "dias úteis após aprovação do pagamento",
+		"lbSumary": "Resumo",
+		"lbTotal": "Total",
+		"lbCancelReason": "Selecione o motivo para o cancelamento",
+		"lbSelectCancelReason": "Selecione o motivo",
+		"valueCancelReasonNoMoreItems": "Não quero mais este produto.",
+		"valueCancelReasonAccidentallyBuy": "Comprei sem querer.",
+		"valueCancelReasonSlowDelivery": "A entrega vai demorar demais.",
+		"valueCancelReasonFoundABetterPrice": "Encontrei um preço melhor em outro lugar.",
+		"valueCancelReasonPrefferNotInform": "Prefiro não informar.",
+		"valueCancelReasonOther": "Outro",
+		"lbBack": "Voltar",
+		"lbCancel": "Cancelar pedido",
+		"lbContinueCancel": "Continuar cancelamento"
+	}
+}
+// t('orderDetails.lbCancel')

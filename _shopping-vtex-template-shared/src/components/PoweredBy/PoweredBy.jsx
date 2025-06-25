@@ -1,5 +1,5 @@
 import animationData from './EitriLottie'
-import { View, Animator } from "eitri-luminus";
+import { View, Animator } from 'eitri-luminus'
 export default function PoweredBy(props) {
 	const { spacing } = props
 
@@ -18,8 +18,7 @@ export default function PoweredBy(props) {
 	return (
 		<>
 			{spacing && <View className={`h-[${spacing}]`} />}
-			<View
-				className="w-full flex flex-col items-center justify-center gap-2.5">
+			<View className='w-full flex flex-col items-center justify-center gap-2.5'>
 				<View onClick={handlePress}>
 					<svg
 						width='136'
@@ -59,11 +58,9 @@ export default function PoweredBy(props) {
 				</View>
 			</View>
 			{showEffect && (
-				<View
-					className="z-[9998] overflow-hidden absolute top-0 left-0 bottom-0 right-0 bg-[#1D1D1D]"
-				>
+				<View className='z-[9998] overflow-hidden absolute top-0 left-0 bottom-0 right-0 bg-[#1D1D1D]'>
 					<View
-						className="absolute right-4 top-8 z-50"
+						className='absolute right-4 top-8 z-50'
 						onClick={() => setShowEffect(false)}>
 						<svg
 							width='32'
@@ -92,19 +89,14 @@ export default function PoweredBy(props) {
 							</g>
 						</svg>
 					</View>
-					<View
-						className="relative h-full w-full">
-						<View
-							className="absolute top-1/3 left-3/5 transform -translate-x-1/2 -translate-y-1/2 z-0"
-						>
+					<View className='relative h-full w-full'>
+						<View className='absolute top-1/3 left-3/5 transform -translate-x-1/2 -translate-y-1/2 z-0'>
 							<Animator
-								className="h-full w-full"
+								className='h-full w-full'
 								animationData={animationData}
 							/>
 						</View>
-						<View
-							className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
-						>
+						<View className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10'>
 							<svg
 								width='190'
 								height='81'

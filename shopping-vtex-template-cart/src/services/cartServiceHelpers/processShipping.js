@@ -1,4 +1,4 @@
-import { addDaysToDate, formatAmountInCents, formatDate } from "../../utils/utils"
+import { addDaysToDate, formatAmountInCents, formatDate } from '../../utils/utils'
 
 export default function processShipping(cart) {
 	try {

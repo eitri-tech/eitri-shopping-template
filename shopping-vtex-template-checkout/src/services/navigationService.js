@@ -18,7 +18,7 @@ export const goHome = () => {
 	Eitri.exposedApis.appState.goHome()
 }
 
-export const openAccount = async (product) => {
+export const openAccount = async product => {
 	try {
 		Eitri.nativeNavigation.open({
 			slug: 'account',

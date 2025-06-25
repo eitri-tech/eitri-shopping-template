@@ -172,14 +172,6 @@ export default function PersonalData() {
 			mask: '99.999.999/9999-99'
 		},
 		{
-			label: 'corporatePhone',
-			type: 'string',
-			title: t('personalData.frmCorporatePhone'),
-			placeholder: t('personalData.placeholderCorporatePhone'),
-			inputMode: 'tel',
-			mask: '(99) 99999-9999'
-		},
-		{
 			label: 'stateInscription',
 			type: 'string',
 			title: t('personalData.frmStateInscription'),
@@ -189,23 +181,25 @@ export default function PersonalData() {
 	]
 
 	const verifySocialNumber = cpf => {
-		if (!cpf || cpf?.length !== 11 || cpf.match(/(\d)\1{10}/)) return false
+		// Remove dots and dashes
+		const cleanCpf = cpf?.replace(/[\.\-]/g, '')
+		if (!cleanCpf || cleanCpf.length !== 11 || cleanCpf.match(/(\d)\1{10}/)) return false
 
 		let sum = 0
 		let rest
 
-		for (let i = 1; i <= 9; i++) sum += parseInt(cpf.substring(i - 1, i)) * (11 - i)
+		for (let i = 1; i <= 9; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (11 - i)
 		rest = (sum * 10) % 11
 
 		if (rest === 10 || rest === 11) rest = 0
-		if (rest !== parseInt(cpf.substring(9, 10))) return false
+		if (rest !== parseInt(cleanCpf.substring(9, 10))) return false
 
 		sum = 0
-		for (let i = 1; i <= 10; i++) sum += parseInt(cpf.substring(i - 1, i)) * (12 - i)
+		for (let i = 1; i <= 10; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (12 - i)
 		rest = (sum * 10) % 11
 
 		if (rest === 10 || rest === 11) rest = 0
-		if (rest !== parseInt(cpf.substring(10, 11))) return false
+		if (rest !== parseInt(cleanCpf.substring(10, 11))) return false
 
 		return true
 	}
@@ -225,102 +219,108 @@ export default function PersonalData() {
 			personalData?.firstName !== '' &&
 			personalData?.lastName !== '' &&
 			verifySocialNumber(personalData?.document) &&
-			personalData?.phone !== ''
+			personalData?.phone?.length > '9'
 		)
 	}
 
 	return (
 		<Page title='Checkout - Dados de usuário'>
-			<HeaderContentWrapper
-				gap={16}
-				scrollEffect={false}>
-				<HeaderReturn />
+			<View className='min-h-[100vh] flex flex-col'>
+				<HeaderContentWrapper
+					gap={16}
+					scrollEffect={false}>
+					<HeaderReturn />
+					<HeaderText text={t('personalData.title')} />
+				</HeaderContentWrapper>
 
-				<HeaderText text={t('personalData.title')} />
-			</HeaderContentWrapper>
+				{isLoading && <Loading fullScreen />}
 
-			{isLoading && <Loading fullScreen />}
-
-			<View className='p-4 flex flex-col justify-between'>
-				<View className='flex flex-col gap-16'>
-					<View className='flex w-full items-end gap-4'>
-						<CustomInput
-							autoFocus={true}
-							label={t('personalData.frmEmail')}
-							type={'email'}
-							value={personalData['email'] || ''}
-							onChange={text => {
-								handlePersonalDataChange('email', text)
-							}}
-							placeholder={t('personalData.placeholderEmail')}
-							inputMode={'email'}
-							className='w-[70%]'
-						/>
-						<CustomButton
-							label='OK'
-							className='w-[30%]'
-							onPress={findUserByEmail}
-						/>
-					</View>
-
-					{userDataVerified &&
-						personalInputOptions.map(inputOption => (
+				<View className='flex-1 p-4'>
+					<View className='flex flex-col gap-4'>
+						<View className='flex w-full items-end gap-4'>
 							<CustomInput
-								autoFocus={inputOption.autoFocus}
-								key={inputOption.label}
-								label={inputOption.title}
-								showClearInput={false}
-								type={inputOption.type}
-								value={personalData[inputOption.label] || ''}
+								autoFocus={true}
+								label={t('personalData.frmEmail')}
+								type={'email'}
+								value={personalData['email'] || ''}
 								onChange={text => {
-									handlePersonalDataChange(inputOption.label, text)
+									handlePersonalDataChange('email', text)
 								}}
-								placeholder={inputOption.placeholder}
-								inputMode={inputOption.inputMode}
-								mask={inputOption.mask}
+								placeholder={t('personalData.placeholderEmail')}
+								inputMode={'email'}
+								className='w-[70%]'
 							/>
-						))}
-
-					{userDataVerified && (
-						<View className='flex flex-col justify-center items-center'>
-							<Button
-								className='bg-transparent'
-								onClick={handleLegalPerson}>
-								<Text className='text-primary-900 font-bold'>
-									{isLegalPerson ? t('personalData.labelPerson') : t('personalData.labelCorporate')}
-								</Text>
-							</Button>
+							<CustomButton
+								label='OK'
+								className='w-[30%]'
+								onPress={findUserByEmail}
+							/>
 						</View>
-					)}
 
-					{userDataVerified &&
-						isLegalPerson &&
-						corporateInputOptions.map(inputOption => (
-							<CustomInput
-								key={inputOption.label}
-								label={inputOption.title}
-								showClearInput={false}
-								type={inputOption.type}
-								value={personalData[inputOption.label]}
-								onChange={text => handlePersonalDataChange(inputOption.label, text)}
-								placeholder={inputOption.placeholder}
-							/>
-						))}
+						{userDataVerified &&
+							personalInputOptions.map(inputOption => (
+								<CustomInput
+									autoFocus={inputOption.autoFocus}
+									key={inputOption.label}
+									label={inputOption.title}
+									showClearInput={false}
+									type={inputOption.type}
+									value={personalData[inputOption.label] || ''}
+									onChange={text => {
+										handlePersonalDataChange(inputOption.label, text)
+									}}
+									placeholder={inputOption.placeholder}
+									inputMode={inputOption.inputMode}
+									mask={inputOption.mask}
+									variant='mask'
+								/>
+							))}
+
+						{socialNumberError && (
+							<View className='bg-negative-100 p-3 rounded-lg'>
+								<Text className='text-negative-900'>{t('personalData.errorInvalidDoc')}</Text>
+							</View>
+						)}
+
+						{userDataVerified && (
+							<View className='flex flex-col justify-center items-center my-2'>
+								<View
+									className='bg-transparent'
+									onClick={handleLegalPerson}>
+									<Text className='text-primary-900 font-bold'>
+										{isLegalPerson
+											? t('personalData.labelPerson')
+											: t('personalData.labelCorporate')}
+									</Text>
+								</View>
+							</View>
+						)}
+
+						{userDataVerified &&
+							isLegalPerson &&
+							corporateInputOptions.map(inputOption => (
+								<CustomInput
+									key={inputOption.label}
+									label={inputOption.title}
+									showClearInput={false}
+									type={inputOption.type}
+									value={personalData[inputOption.label]}
+									onChange={text => handlePersonalDataChange(inputOption.label, text)}
+									placeholder={inputOption.placeholder}
+								/>
+							))}
+					</View>
 				</View>
 
-				{socialNumberError && (
-					<View className='flex flex-col gap-16 bg-negative-700 p-small rounded-lg mx-1'>
-						<Text className='text-neutral-100'>{t('personalData.errorInvalidDoc')}</Text>
-					</View>
-				)}
-			</View>
-
-			<View className='items-center mt-2'>
-				<CustomButton
-					disabled={!handleDataFilled()}
-					label={t('personalData.labelButton')}
-					onPress={setUserData}
-				/>
+				<View
+					bottomInset
+					className='p-4'>
+					<CustomButton
+						disabled={!handleDataFilled()}
+						label={t('personalData.labelButton')}
+						onPress={setUserData}
+					/>
+				</View>
 			</View>
 		</Page>
 	)

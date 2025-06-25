@@ -1,0 +1,141 @@
+{
+	"home": {
+		"labelHello": "Hello",
+		"labelLeave": "Leave",
+		"labelMyFavorites": "My Favorites",
+		"labelEditFavorites": "Add or Edit Your Favorites",
+		"labelMyAccount": "My Account",
+		"labelConfig": "Personal Information and Settings",
+		"labelMyOrders": "My Orders",
+		"labelHistoryOders": "Check Your Order History",
+		"lbPersonalData": "Personal Data",
+		"lbOrders": "Orders"
+	},
+	"passwordReset": {
+		"messageRecovery": "* We will send you a message with a code to recover your password",
+		"sendButton": "Send Code",
+		"messageError": "There was an error sending the recovery code. Please try again later.",
+		"recoveryPass": "Password Recovery",
+		"headerText": "Password",
+		"forgotPass": "Forgot Password?",
+		"setEmail": "Enter Your Email"
+	},
+	"passwordResetCode": {
+		"messageEmail": "Enter the 6-digit code sent to your email",
+		"sendButton": "Continue",
+		"headerText": "Password",
+		"forgotPass": "Forgot Password?"
+	},
+	"passwordResetNewPass": {
+		"headerText": "Password",
+		"forgotPass": "Forgot Password?",
+		"newPass": "New Password",
+		"confirmPass": "Confirm Password",
+		"sendButton": "Continue",
+		"messageError": "There was an error resetting the password. Please try again later.",
+		"passwordRequirementsCharacters": "Minimum of 8 characters",
+		"passwordRequirementsNumber": "At least one number",
+		"passwordRequirementsUppercase": "At least one uppercase letter",
+		"passwordRequirementsLowercase": "At least one lowercase letter"
+	},
+	"signIn": {
+		"errosSendAccess": "error sending email",
+		"errorInvalidUser": "Invalid Username or Password",
+		"wrongCredentials": "Incorrect Token",
+		"verifyAgain": "Check the information and try again",
+		"headerText": "Sign In",
+		"welcome": "Welcome Back!",
+		"formName": "Username or Email",
+		"formPass": "Password",
+		"formEmail": "Email",
+		"labelButton": "Login",
+		"labelAccessWithCode": "Login with Access Code",
+		"forgotPass": "Forgot Password?",
+		"noRegister": "No Account",
+		"formCodeVerification": "Verification Code",
+		"textSendCode": "Send Code",
+		"textResendCode": "Resend Code",
+		"labelLoginWithPass": "Login with Email and Password"
+	},
+	"orderStatusBadge": {
+		"cancel": "Cancelling Order",
+		"complete": "Order Complete",
+		"approved": "Payment Approved",
+		"pending": "Awaiting Payment",
+		"requestCancel": "Cancellation Requested",
+		"canceled": "Cancelled",
+		"waitAuthorization": "Waiting for Authorization",
+		"authorizeFulfillment": "Fulfillment Authorized",
+		"windowCancel": "Cancellation Window",
+		"readyInvoicing": "Ready for Invoicing",
+		"invoice": "Generate Invoice",
+		"created": "Created"
+	},
+	"loginCard": {
+		"lbOpen": "Login",
+		"infoPage": "Access your profile information",
+		"lbButton": "Login or create account"
+	},
+	"history": {
+		"title": "History",
+		"lbPoints": "Points"
+	},
+	"socialLogin": {
+		"lbButton": "Continue with Google"
+	},
+	"terms": {
+		"title": "Terms"
+	},
+	"signUp": {
+		"alertMessageSendEmailError": "Error sending email",
+		"alertMessageAcceptTerms": "You must accept the terms",
+		"alertMessageInvalidToken": "Incorrect token",
+		"alertMessageServiceError": "A service error occurred, please try again",
+		"alertMessageVerify": "Check the information and try again",
+		"lbRegister": "Register",
+		"lbEmailAccess": "Access with your email",
+		"textTerms": "By clicking Register you agree to the terms of service",
+		"lbVerifyCode": "Verification code",
+		"lbResendCode": "Resend code",
+		"lbLogin": "Login",
+		"lbBack": "Back"
+	},
+	"editProfile": {
+		"title": "Edit Profile",
+		"lbName": "First Name",
+		"lbLastName": "Last Name",
+		"lbBirthdate": "Birthdate",
+		"lbPhone": "Phone",
+		"lbGender": "Gender",
+		"lbGenderMale": "Male",
+		"lbGenderFemale": "Female",
+		"lbCPF": "CPF",
+		"lbSave": "Save"
+	},
+	"orderDetails": {
+		"title": "My Orders",
+		"lbFree": "Free",
+		"lbSeeBilling": "View boleto",
+		"lbOrder": "Order",
+		"lbOrderDate": "Order Date",
+		"lbAddress": "Address",
+		"lbPayment": "Payment Method",
+		"lbDelivery": "Delivery",
+		"lbShippingUntil": "Delivery by",
+		"lbShippingDeadline": "Deadline of",
+		"lbShippingDeadlineInfo": "business days after payment approval",
+		"lbSumary": "Summary",
+		"lbTotal": "Total",
+		"lbCancelReason": "Select the reason for cancellation",
+		"lbSelectCancelReason": "Select a reason",
+		"valueCancelReasonNoMoreItems": "I no longer want this product.",
+		"valueCancelReasonAccidentallyBuy": "I bought it by mistake.",
+		"valueCancelReasonSlowDelivery": "The delivery is taking too long.",
+		"valueCancelReasonFoundABetterPrice": "I found a better price elsewhere.",
+		"valueCancelReasonPrefferNotInform": "I prefer not to say.",
+		"valueCancelReasonOther": "Other",
+		"lbBack": "Back",
+		"lbCancel": "Cancel order",
+		"lbContinueCancel": "Continue cancellation"
+	}
+}

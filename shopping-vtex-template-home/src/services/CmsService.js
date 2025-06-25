@@ -26,7 +26,7 @@ export const getCmsContent = async (contentType, pageName) => {
 		} else {
 			return null
 		}
-  } catch (e) {
+	} catch (e) {
 		console.error('Error trying get content', e)
 	}
 

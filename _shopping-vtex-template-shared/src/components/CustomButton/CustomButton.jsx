@@ -30,14 +30,14 @@ export default function CustomButton(props) {
 		if (variant === 'outlined') {
 			return 'transparent'
 		}
-		return isLoading || disabled ? 'neutral-100' : 'primary'
+		return isLoading || disabled ? 'bg-gray-300' : 'bg-primary'
 	})()
 
 	const _contentColor = (() => {
 		if (variant === 'outlined') {
 			return 'primary'
 		}
-		return isLoading || disabled ? 'neutral-100' : 'primary-content'
+		return isLoading || disabled ? 'text-gray-500' : 'text-primary-content'
 	})()
 
 	return (
@@ -47,12 +47,12 @@ export default function CustomButton(props) {
 				flex items-center justify-center 
 				h-[45px]
 				rounded
-				${_backgroundColor ? `bg-${_backgroundColor}` : ''}
-				${variant === 'outlined' ? `border border-[2px] border-primary` : ''}
+				${_backgroundColor ? `${_backgroundColor}` : ''}
+				${variant === 'outlined' ? `border border border-primary` : ''}
 				${className || ''}
 			`}
 			{...rest}>
-			{isLoading ? <Loading /> : <Text className={`font-bold text-${_contentColor}`}>{label}</Text>}
+			{isLoading ? <Loading /> : <Text className={`font-bold ${_contentColor}`}>{label}</Text>}
 		</View>
 	)
 }

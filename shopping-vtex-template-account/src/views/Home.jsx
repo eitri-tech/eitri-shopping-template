@@ -1,40 +1,129 @@
-import { useTranslation } from "eitri-i18n";
-import Eitri from "eitri-bifrost";
-import { Text, View, Image, Button, Page } from "eitri-luminus";
-import HeaderComponent from "../components/HeaderComponent";
-import Presentation from "../assets/images/presentation.webp";
+import {
+	CustomButton,
+	HEADER_TYPE,
+	HeaderTemplate,
+	HeaderText,
+	Loading,
+	HeaderContentWrapper
+} from 'shopping-vtex-template-shared'
+import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
+import { navigate, PAGES } from '../services/NavigationService'
+import { sendPageView } from '../services/TrackingService'
+import { useTranslation } from 'eitri-i18n'
+import iconLogout from '../assets/icons/logout.svg'
+import Eitri from 'eitri-bifrost'
+import ProfileCardButton from '../components/ProfileCardButton/ProfileCardButton'
+import { setLanguage, startConfigure } from '../services/AppService'
+import PoweredBy from '../components/PoweredBy/PoweredBy'
+import LoginCard from '../components/LoginCard/LoginCard'
+import InfoCard from 'src/components/InfoCard/InfoCard'
 
 export default function Home(props) {
-  const { t } = useTranslation();
+	const PAGE = 'Minha Conta'
 
-  function goToProducts() {
-    Eitri.navigation.navigate({ path: "/Products/ProductsList" });
-    return
-  }
-  return (
-    <Page className="w-screen h-screen">
-      <View className="pt-8 w-full h-full">
-        <HeaderComponent title={t("home.pageTitle")} />
-        <Image className="w-screen" cover src={Presentation} />
+	const [isLoading, setIsLoading] = useState(true)
+	const [customerData, setCustomerData] = useState(props.customerData || {})
+	const { t, i18n } = useTranslation()
+	const [isLogged, setIsLogged] = useState(null)
 
-        <View className="flex flex-col  w-screen h-full justify-between items-center p-4">
-          <View className="prose">
-            <Text render="h3" className="mb-12 font-bold">
-              {t("home.title")}
-            </Text>
-            <Text render="p" className="my-8">
-              {t("home.description")}
-            </Text>
-          </View>
+	useEffect(() => {
+		init()
+	}, [])
 
-          <Button
-            className="btn btn-secondary mt-16 w-full"
-            onClick={goToProducts}
-          >
-            {t("home.button")}
-          </Button>
-        </View>
-      </View>
-    </Page>
-  );
+	const init = async () => {
+		await startConfigure()
+
+		setLanguage(i18n)
+
+		const initialInfos = await Eitri.getInitializationInfos()
+
+		if (initialInfos?.action === 'RequestLogin') {
+			navigate(PAGES.SIGNIN, { closeAppAfterLogin: true }, true)
+			return
+		}
+
+		const isLogged = await isLoggedIn()
+
+		await loadMe()
+		setIsLogged(isLogged)
+
+		setIsLoading(false)
+
+		sendPageView(PAGE)
+	}
+
+	const loadMe = async () => {
+		const customerData = await getCustomerData()
+		setCustomerData(customerData)
+	}
+
+	const _doLogout = async () => {
+		setIsLoading(true)
+		await doLogout()
+		init()
+	}
+
+	return (
+		<Page title={PAGE}>
+			<Loading
+				fullScreen
+				isLoading={isLoading}
+			/>
+
+			<HeaderContentWrapper className='justify-between'>
+				<HeaderText text={t('home.labelMyAccount')} />
+			</HeaderContentWrapper>
+
+			{!isLoading && (isLogged ? <InfoCard customerData={customerData} /> : <LoginCard />)}
+
+			<View className='px-4 mt-2 mb-2'>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData')}</Text>
+				<ProfileCardButton
+					label={t('home.labelMyAccount')}
+					icon={'user'}
+					onClick={() => {
+						isLogged
+							? navigate(PAGES.EDIT_PROFILE, { customerData })
+							: navigate(PAGES.SIGNIN, { redirectTo: PAGES.EDIT_PROFILE })
+					}}
+				/>
+				<ProfileCardButton
+					label={t('home.labelMyFavorites')}
+					icon={'bookmark'}
+					onClick={() => {
+						isLogged ? navigate(PAGES.WISH_LIST) : navigate(PAGES.SIGNIN, { redirectTo: PAGES.WISH_LIST })
+					}}
+				/>
+			</View>
+
+			<View className='px-4 mt-6 mb-2'>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbOrders')}</Text>
+				<ProfileCardButton
+					label={t('home.labelMyOrders')}
+					icon={'package'}
+					onClick={() => {
+						isLogged ? navigate(PAGES.ORDER_LIST) : navigate(PAGES.SIGNIN, { redirectTo: PAGES.ORDER_LIST })
+					}}
+				/>
+			</View>
+
+			{isLogged && (
+				<View className='px-4 py-6 mt-4'>
+					<CustomButton
+						variant='outlined'
+						label={t('home.labelLeave')}
+						iconKey='log-out'
+						icon={iconLogout}
+						iconPosition='right'
+						iconJustify='between'
+						onPress={_doLogout}
+					/>
+				</View>
+			)}
+
+			<View className='w-full items-center mt-8 mb-4'>
+				<PoweredBy />
+			</View>
+		</Page>
+	)
 }

@@ -9,7 +9,7 @@ import HeaderSearchIcon from './HeaderSearchIcon'
 import HeaderShare from './HeaderShare'
 import HeaderFilter from './HeaderFilter'
 import { HEADER_TYPE } from '../../utils/constants'
-import { View} from "eitri-luminus";
+import { View } from 'eitri-luminus'
 
 export default function HeaderTemplate(props) {
 	const {
@@ -150,12 +150,12 @@ export default function HeaderTemplate(props) {
 					<View
 						display='flex'
 						gap={16}>
-            <HeaderFilter
-              iconColor={contentColor}
-              handleFilterModal={handleFilterModal}
-              facetsModalReady={facetsModalReady}
-              hasFilters={hasFilters}
-            />
+						<HeaderFilter
+							iconColor={contentColor}
+							handleFilterModal={handleFilterModal}
+							facetsModalReady={facetsModalReady}
+							hasFilters={hasFilters}
+						/>
 						<HeaderSearchIcon
 							iconColor={contentColor}
 							navigateToSearch={navigateToSearch}
@@ -166,12 +166,12 @@ export default function HeaderTemplate(props) {
 			{headerType === HEADER_TYPE.SEARCH_INPUT_AND_FILTER && (
 				<>
 					{children}
-          <HeaderFilter
-            iconColor={contentColor}
-            handleFilterModal={handleFilterModal}
-            facetsModalReady={facetsModalReady}
-            hasFilters={hasFilters}
-          />
+					<HeaderFilter
+						iconColor={contentColor}
+						handleFilterModal={handleFilterModal}
+						facetsModalReady={facetsModalReady}
+						hasFilters={hasFilters}
+					/>
 				</>
 			)}
 			{headerType === HEADER_TYPE.RETURN_SHARE_AND_CART && (
@@ -181,7 +181,7 @@ export default function HeaderTemplate(props) {
 						iconColor={contentColor}
 						backgroundColor={backgroundColor}
 					/>
-					<View className="bg-primary-100 flex flex-row gap-2">
+					<View className='bg-primary-100 flex flex-row gap-2'>
 						<HeaderShare
 							iconColor={contentColor}
 							handleShare={handleShare}

@@ -29,8 +29,8 @@
 	"emptyCart": {
 		"txtEmptyCart": "Your cart is empty",
 		"txtMessageList": "Add products to your cart and they will be listed here.",
-        "labelButton": "Buy now"
-    },
+		"labelButton": "Buy now"
+	},
 	"freight": {
 		"errorCep": "Enter a valid Zip Code",
 		"errorCalcFreight": "Unable to calculate freight",

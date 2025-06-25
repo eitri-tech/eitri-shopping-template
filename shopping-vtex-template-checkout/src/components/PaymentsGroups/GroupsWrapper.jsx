@@ -6,18 +6,18 @@ export default function GroupsWrapper(props) {
 	return (
 		<Button
 			onClick={onPress}
-			className="py-2 px-1 border border-neutral-400 rounded flex flex-col">
-			<View className="w-full flex flex-col">
-				<View className="flex flex-row items-center justify-between gap-3">
-					<View className="flex flex-row items-center gap-3">
+			className='py-2 px-1 border border-neutral-400 rounded flex flex-col'>
+			<View className='w-full flex flex-col'>
+				<View className='flex flex-row items-center justify-between gap-3'>
+					<View className='flex flex-row items-center gap-3'>
 						<Radio checked={isChecked} />
-						<Text className="text-xs">{title}</Text>
+						<Text className='text-xs'>{title}</Text>
 					</View>
 
 					<View>{icon}</View>
 				</View>
 			</View>
-			{children && isChecked && <View className="mt-4">{children}</View>}
+			{children && isChecked && <View className='mt-4'>{children}</View>}
 		</Button>
 	)
 }

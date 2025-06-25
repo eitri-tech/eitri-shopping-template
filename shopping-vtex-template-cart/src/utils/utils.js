@@ -1,4 +1,4 @@
-export const formatAmountInCents = (amount, locale='pt-BR', currency='BRL') => {
+export const formatAmountInCents = (amount, locale = 'pt-BR', currency = 'BRL') => {
 	if (typeof amount !== 'number') {
 		return ''
 	}

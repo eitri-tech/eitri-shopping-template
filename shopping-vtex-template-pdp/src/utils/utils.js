@@ -1,24 +1,23 @@
 import Eitri from 'eitri-bifrost'
 import { App } from 'eitri-shopping-vtex-shared'
 
-
 export const formatPrice = (price, _locale, _currency) => {
-  if (!price) return ''
+	if (!price) return ''
 
-  const locale = _locale || App?.configs?.storePreferences?.locale || 'pt-BR'
-  const currency = _currency || App?.configs?.storePreferences?.currencyCode || 'BRL'
+	const locale = _locale || App?.configs?.storePreferences?.locale || 'pt-BR'
+	const currency = _currency || App?.configs?.storePreferences?.currencyCode || 'BRL'
 
-  return price.toLocaleString(locale, { style: 'currency', currency: currency })
+	return price.toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
-export const formatAmount = (amount, locale='pt-BR', currency='BRL') => {
+export const formatAmount = (amount, locale = 'pt-BR', currency = 'BRL') => {
 	if (typeof amount !== 'number') {
 		return ''
 	}
 	return amount.toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
-export const formatAmountInCents = (amount, locale='pt-BR', currency='BRL') => {
+export const formatAmountInCents = (amount, locale = 'pt-BR', currency = 'BRL') => {
 	if (typeof amount !== 'number') {
 		return ''
 	}

@@ -39,19 +39,19 @@
 		"loading": "Carregando...",
 		"seeMore": "Ver mais"
 	},
-    "lists": {
-      "title": "Ordenar por",
-      "labelRelevance": "Relevância",
-      "labelBestSellers": "Mais vendidos",
-      "labelNewest": "Mais recentes",
-      "labelDiscounts": "Descontos",
-      "labelHighestPrice": "Maior preço",
-      "labelLowestPrice": "Menor preço",
-      "labelAToZ": "De A a Z",
-      "labelZToA": "De Z a A"
-    },
-    "facetsModal": {
-      "from": "De",
-      "to": "à"
-    }
+	"lists": {
+		"title": "Ordenar por",
+		"labelRelevance": "Relevância",
+		"labelBestSellers": "Mais vendidos",
+		"labelNewest": "Mais recentes",
+		"labelDiscounts": "Descontos",
+		"labelHighestPrice": "Maior preço",
+		"labelLowestPrice": "Menor preço",
+		"labelAToZ": "De A a Z",
+		"labelZToA": "De Z a A"
+	},
+	"facetsModal": {
+		"from": "De",
+		"to": "à"
+	}
 }

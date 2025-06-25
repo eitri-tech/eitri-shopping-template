@@ -29,7 +29,7 @@
 	"emptyCart": {
 		"txtEmptyCart": "Seu carrinho está vazio",
 		"txtMessageList": "Adicione produtos no seu carrinho e eles serão listados aqui.",
-        "labelButton": "Comprar Agora"
+		"labelButton": "Comprar Agora"
 	},
 	"freight": {
 		"errorCep": "Digite um CEP válido",

@@ -2,9 +2,9 @@ export default function CheckoutInput(props) {
 	const { icon, type, backgroundColor, mask, label, width, ...rest } = props
 
 	return (
-		<View className="w-full">
+		<View className='w-full'>
 			{label && (
-				<View className="mb-2">
+				<View className='mb-2'>
 					<Text
 						fontSize='extra-small'
 						fontWeight={'bold'}>
@@ -21,13 +21,11 @@ export default function CheckoutInput(props) {
 				)}
 				{mask ? (
 					<TextInput
-						variant="mask"
+						variant='mask'
 						mask={mask}
 					/>
 				) : (
-					<TextInput
-						{...rest}
-					/>
+					<TextInput {...rest} />
 				)}
 			</View>
 		</View>
