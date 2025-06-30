@@ -13,6 +13,7 @@ export default function CustomButton(props) {
 		width,
 		borderRadius,
 		className,
+		outlined,
 		...rest
 	} = props
 
@@ -27,14 +28,14 @@ export default function CustomButton(props) {
 	}
 
 	const _backgroundColor = (() => {
-		if (variant === 'outlined') {
+		if (variant === 'outlined' || outlined) {
 			return 'transparent'
 		}
 		return isLoading || disabled ? 'bg-gray-300' : 'bg-primary'
 	})()
 
 	const _contentColor = (() => {
-		if (variant === 'outlined') {
+		if (variant === 'outlined' || outlined) {
 			return 'primary'
 		}
 		return isLoading || disabled ? 'text-gray-500' : 'text-primary-content'

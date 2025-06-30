@@ -1,4 +1,5 @@
-import { cartShippingResolver } from '../utils/cartShippingResolver'
+import { cartShippingResolver } from 'shopping-vtex-template-shared'
+
 import { calculateDiscount, formatAmountInCents } from '../utils/utils'
 
 export default function adaptCart(cart) {
@@ -131,7 +132,9 @@ function processPaymentSystems(cart) {
 				isCurrentPaymentSystem: isCurrentPaymentSystem,
 				installments: installments?.installments.map(installment => ({
 					...installment,
-					label: `${installment.count}x de ${formatAmountInCents(installment.value)} (total: ${formatAmountInCents(installment.total)})`,
+					label: `${installment.count}x de ${formatAmountInCents(
+						installment.value
+					)} (total: ${formatAmountInCents(installment.total)})`,
 					formattedValue: formatAmountInCents(installment.value)
 				}))
 			})

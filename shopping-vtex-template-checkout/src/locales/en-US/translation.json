@@ -123,5 +123,17 @@
 		"labelNeighborhood": "Neighborhood",
 		"labelCity": "City",
 		"labelState": "State"
+	},
+	"addressSelector": {
+		"title": "Delivery Addresses",
+		"subtitle": "Select a delivery address",
+		"noAddresses": "No addresses registered",
+		"addFirstAddress": "Add First Address",
+		"addNewAddress": "Add New Address",
+		"default": "Default",
+		"noReceiver": "Name not provided",
+		"loading": "Loading addresses...",
+		"selectedAddress": "Selected Address",
+		"otherAddresses": "Other Addresses"
 	}
 }

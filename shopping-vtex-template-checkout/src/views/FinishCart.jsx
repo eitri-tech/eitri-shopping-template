@@ -151,7 +151,7 @@ export default function FinishCart() {
 					<View className='flex flex-col gap-4'>
 						{cart && <UserData onPress={() => navigateToEditor('PersonalData', cart?.canEditData)} />}
 
-						<DeliveryData onPress={() => navigateToEditor('AddNewShippingAddress', cart?.canEditData)} />
+						<DeliveryData onPress={() => navigateToEditor('AddressSelector', cart?.canEditData)} />
 
 						{unavailableItems.length === 0 && (
 							<SelectedPaymentData

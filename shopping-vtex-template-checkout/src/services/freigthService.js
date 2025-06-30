@@ -1,15 +1,10 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import adaptCart from '../adapter/CartAdapter'
 
-export default async function setFreight(cart, shippingOptions) {
+export default async function setFreight(payload) {
 	try {
-		const newCart = await Vtex.checkout.setLogisticInfo({
-			logisticsInfo: generateLogisticInfoPayload(cart?.address?.addressId, shippingOptions.slas),
-			clearAddressIfPostalCodeNotFound: false,
-			selectedAddresses: cart?.shipping?.selectedAddresses
-		})
-
-		return adaptCart(newCart)
+		const newCart = await Vtex.checkout.setLogisticInfo(payload)
+		return newCart
 	} catch (error) {
 		console.error('setFreight', error)
 	}
@@ -49,6 +44,14 @@ export const updateAddress = async (cart, address) => {
 	})
 
 	return adaptCart(newCart)
+}
+
+export const setShippingAddress = async address => {
+	const newCart = await Vtex.checkout.setLogisticInfo({
+		clearAddressIfPostalCodeNotFound: false,
+		address
+	})
+	return newCart
 }
 
 const generateLogisticInfoPayload = (addressId, shippingOptions) => {

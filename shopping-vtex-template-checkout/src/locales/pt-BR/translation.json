@@ -123,5 +123,17 @@
 		"labelNeighborhood": "Bairro",
 		"labelCity": "Cidade",
 		"labelState": "Estado"
+	},
+	"addressSelector": {
+		"title": "Endereços de Entrega",
+		"subtitle": "Selecione um endereço para entrega",
+		"noAddresses": "Nenhum endereço cadastrado",
+		"addFirstAddress": "Adicionar Primeiro Endereço",
+		"addNewAddress": "Adicionar Novo Endereço",
+		"default": "Padrão",
+		"noReceiver": "Nome não informado",
+		"loading": "Carregando endereços...",
+		"selectedAddress": "Endereço Selecionado",
+		"otherAddresses": "Outros Endereços"
 	}
 }

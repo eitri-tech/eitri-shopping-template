@@ -1,8 +1,8 @@
 import { useTranslation } from 'eitri-i18n'
-import { View, Text, Button, Radio } from 'eitri-luminus'
+import { View, Text, Button } from 'eitri-luminus'
 
 export default function ShippingMethods(props) {
-	const { customLogisticInfo, onSelectCustomLogistiInfoOption, ...rest } = props
+	const { customLogisticInfo, onSelectCustomLogistiInfoOption, options, ...rest } = props
 
 	const { t } = useTranslation()
 
@@ -10,34 +10,99 @@ export default function ShippingMethods(props) {
 		onSelectCustomLogistiInfoOption(option)
 	}
 
-	if (!customLogisticInfo || customLogisticInfo?.options.length === 0) {
+	if (options?.length === 0) {
 		return null
 	}
 
+	console.log(options)
+
+	const currentSelectedOption = options?.find(option => option.isCurrent)
+	const otherOptions = options?.filter(option => !option.isCurrent)
+
 	return (
 		<View {...rest}>
-			<Text className='font-bold text-xs mb-1'>{t('shippingMethods.txtSelectDelivery')}</Text>
-			<View className='w-full flex flex-col rounded border border-neutral-700 px-4'>
-				{customLogisticInfo &&
-					customLogisticInfo?.options.map((option, index) => (
-						<Button
-							key={option.label}
-							onClick={() => handleMethodChange(option)}
-							className={`border-b border-neutral-700 ${index < customLogisticInfo?.options.length - 1 ? '' : 'border-b-0'}`}>
-							<View className='py-2 px-1 flex justify-between items-center w-full'>
-								<View className='flex flex-row items-center gap-3'>
-									<Radio checked={option.isCurrent} />
-									<View className='flex flex-col gap-1.5'>
-										<Text>{option.label}</Text>
-										<Text className='text-xs text-neutral-700'>{option?.shippingEstimate}</Text>
-									</View>
-								</View>
-								<View className='w-1/5 border-l border-neutral-700 h-[35px] flex flex-row items-center pl-1'>
-									<Text>{option.price}</Text>
-								</View>
+			<View className='flex flex-col gap-1 mb-4'>
+				<Text className='text-lg font-bold text-base-content'>
+					{t('shippingMethods.txtSelectDelivery', 'Métodos de Entrega')}
+				</Text>
+				<Text className='text-sm text-base-content/70 mt-1'>
+					{t('shippingMethods.subtitle', 'Escolha como deseja receber seu pedido')}
+				</Text>
+			</View>
+
+			<View className='flex flex-col gap-3'>
+				{currentSelectedOption && (
+					<>
+						<View className='mb-2'>
+							<Text className='text-sm font-medium text-primary mb-2'>
+								{t('shippingMethods.selectedMethod', 'Método Selecionado')}
+							</Text>
+						</View>
+						<ShippingMethodCard
+							option={currentSelectedOption}
+							isSelected={true}
+							onClick={() => handleMethodChange(currentSelectedOption)}
+						/>
+					</>
+				)}
+
+				{otherOptions.length > 0 && (
+					<>
+						<View className='mb-2'>
+							<Text className='text-sm font-medium text-base-content/70 mb-2'>
+								{t('shippingMethods.otherMethods', 'Outros Métodos')}
+							</Text>
+						</View>
+						{otherOptions.map((option, index) => (
+							<ShippingMethodCard
+								key={option.label}
+								option={option}
+								isSelected={false}
+								onClick={() => handleMethodChange(option)}
+							/>
+						))}
+					</>
+				)}
+			</View>
+		</View>
+	)
+}
+
+function ShippingMethodCard({ option, isSelected = false, onClick }) {
+	return (
+		<View
+			className={`rounded-lg shadow-sm transition-all duration-200 border cursor-pointer hover:shadow-md ${
+				isSelected ? 'border-2 border-primary' : 'border-neutral-300 hover:border-primary/30 bg-base-100'
+			}`}
+			onClick={onClick}>
+			<View className='p-4'>
+				<View className='flex flex-row justify-between items-start'>
+					<View className='flex flex-col gap-1 flex-1'>
+						<Text className='font-semibold text-base-content text-base mb-1'>{option.label}</Text>
+
+						<Text className='text-sm text-base-content/70 mb-1'>{option?.shippingEstimate}</Text>
+					</View>
+
+					<View className='flex flex-col items-end gap-1'>
+						<Text className='font-semibold text-base-content text-lg'>{option.price}</Text>
+
+						{isSelected && (
+							<View className='flex items-center justify-center w-6 h-6 bg-primary rounded-full'>
+								<svg
+									width='12'
+									height='12'
+									viewBox='0 0 16 16'
+									fill='none'
+									xmlns='http://www.w3.org/2000/svg'>
+									<path
+										d='M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z'
+										fill='white'
+									/>
+								</svg>
 							</View>
-						</Button>
-					))}
+						)}
+					</View>
+				</View>
 			</View>
 		</View>
 	)

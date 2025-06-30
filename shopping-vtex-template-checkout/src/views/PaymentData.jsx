@@ -59,21 +59,21 @@ export default function PaymentData(props) {
 	}
 
 	return (
-		<Page title='Dados de pagamento'>
-			<HeaderContentWrapper
-				gap={16}
-				scrollEffect={false}>
-				<HeaderReturn />
+		<Page title='Checkout - Dados de pagamento'>
+			<View className='min-h-[100vh] flex flex-col'>
+				<HeaderContentWrapper
+					gap={16}
+					scrollEffect={false}>
+					<HeaderReturn />
 
-				<HeaderText text={t('paymentData.title')} />
-			</HeaderContentWrapper>
+					<HeaderText text={t('paymentData.title')} />
+				</HeaderContentWrapper>
 
-			<Loading
-				fullScreen
-				isLoading={isLoading}
-			/>
+				<Loading
+					fullScreen
+					isLoading={isLoading}
+				/>
 
-			<View className='p-4 flex-1 flex flex-col'>
 				<View className='flex flex-row justify-between items-center'>
 					<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
 					<Text className='text-sm font-bold text-primary-700'>{formatAmountInCents(cart.value)}</Text>
