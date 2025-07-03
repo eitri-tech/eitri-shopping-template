@@ -3,14 +3,18 @@ import { View, Text, Button, Radio } from 'eitri-luminus'
 export default function GroupsWrapper(props) {
 	const { title, icon, isChecked, children, onPress } = props
 
+	// Destaque simples: borda primária e efeito scale
+	const highlightClass = isChecked
+		? 'border-2 border-primary scale-[102%]  transition-transform duration-300'
+		: 'border border-neutral-400'
+
 	return (
-		<Button
+		<View
 			onClick={onPress}
-			className='py-2 px-1 border border-neutral-400 rounded flex flex-col'>
+			className={`p-4 rounded flex flex-col cursor-pointer transition-all duration-300 ${highlightClass}`}>
 			<View className='w-full flex flex-col'>
 				<View className='flex flex-row items-center justify-between gap-3'>
 					<View className='flex flex-row items-center gap-3'>
-						<Radio checked={isChecked} />
 						<Text className='text-xs'>{title}</Text>
 					</View>
 
@@ -18,6 +22,6 @@ export default function GroupsWrapper(props) {
 				</View>
 			</View>
 			{children && isChecked && <View className='mt-4'>{children}</View>}
-		</Button>
+		</View>
 	)
 }

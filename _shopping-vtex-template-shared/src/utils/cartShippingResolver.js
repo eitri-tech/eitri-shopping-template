@@ -72,7 +72,7 @@ export default function cartShippingResolver(cart) {
 					slas: pickUpInPoint?.slas,
 					isPickupInPoint: true,
 					pickUpAddress: pickUpInPoint?.pickupStoreInfo?.friendlyName,
-					address: pickUpInPointAddress,
+					address: { ...pickUpInPointAddress },
 					formatedPickAddress: `${pickUpInPointAddress?.street}, ${pickUpInPointAddress?.number} - ${pickUpInPointAddress?.neighborhood} - ${pickUpInPointAddress?.city}`,
 					isCurrent: pickUpInPoint?.slas.every(_pickUpInPoint => _pickUpInPoint.selected)
 				})

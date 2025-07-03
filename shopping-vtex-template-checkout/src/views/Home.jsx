@@ -1,6 +1,6 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
-import { HEADER_TYPE, HeaderTemplate, Loading } from 'shopping-vtex-template-shared'
+import { Loading } from 'shopping-vtex-template-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
 import { setLanguage, startConfigure } from '../services/AppService'
@@ -64,11 +64,6 @@ export default function Home() {
 		<View
 			topInset
 			bottomInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('home.title')}
-			/>
 			<Loading fullScreen />
 		</View>
 	)

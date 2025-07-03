@@ -28,8 +28,8 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(updateAddress, cart, zipCode)
 	}
 
-	const _setFreight = async (cart, option) => {
-		return executeCartOperation(setFreight, cart, option)
+	const _setFreight = async option => {
+		return executeCartOperation(setFreight, option)
 	}
 
 	const setNewAddressToCart = async (cart, address) => {
@@ -40,7 +40,7 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(addUserData, userData, orderFormId)
 	}
 
-	const setPaymentOption = async payload => {
+	const _selectPaymentOption = async payload => {
 		return executeCartOperation(selectPaymentOption, payload)
 	}
 
@@ -60,7 +60,7 @@ export default function CartProvider({ children }) {
 				setNewAddressToCart,
 				updateCartAddress,
 				addCustomerData,
-				setPaymentOption,
+				selectPaymentOption: _selectPaymentOption,
 				setShippingAddress: _setShippingAddress,
 				selectedPaymentData,
 				setSelectedPaymentData,

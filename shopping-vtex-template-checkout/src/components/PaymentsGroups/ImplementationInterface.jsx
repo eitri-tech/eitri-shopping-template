@@ -1,9 +1,9 @@
-import CreditCard from './CreditCard'
-import BankInvoice from './BankInvoice'
-import InstantPayment from './InstantPayment'
+import CreditCard from './Groups/CreditCard'
+import BankInvoice from './Groups/BankInvoice'
+import InstantPayment from './Groups/InstantPayment'
 
 export default function ImplementationInterface(props) {
-	const { groupName, paymentSystems } = props
+	const { groupName, systemGroup, paymentSystems, onSelectPaymentMethod } = props
 
 	const PAYMENT_GROUPS_IMPLEMENTATION = {
 		creditCardPaymentGroup: CreditCard,
@@ -18,5 +18,5 @@ export default function ImplementationInterface(props) {
 	const Implementation = PAYMENT_GROUPS_IMPLEMENTATION[groupName]
 
 	/*prettier-ignore*/
-	return React.createElement(Implementation, { paymentSystems, groupName })
+	return React.createElement(Implementation, { paymentSystems, groupName, systemGroup, onSelectPaymentMethod })
 }

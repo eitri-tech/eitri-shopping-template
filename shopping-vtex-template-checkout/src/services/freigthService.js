@@ -2,12 +2,8 @@ import { Vtex } from 'eitri-shopping-vtex-shared'
 import adaptCart from '../adapter/CartAdapter'
 
 export default async function setFreight(payload) {
-	try {
-		const newCart = await Vtex.checkout.setLogisticInfo(payload)
-		return newCart
-	} catch (error) {
-		console.error('setFreight', error)
-	}
+	const newCart = await Vtex.checkout.setLogisticInfo(payload)
+	return newCart
 }
 
 export const setNewAddress = async (cart, postalCode) => {

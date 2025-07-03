@@ -1,11 +1,10 @@
-import Card from '../Icons/MethodIcons/Card'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import Boleto from '../Icons/MethodIcons/Boleto'
-import Pix from '../Icons/MethodIcons/Pix'
+import Card from '../../Icons/MethodIcons/Card'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import Boleto from '../../Icons/MethodIcons/Boleto'
 import GroupsWrapper from './GroupsWrapper'
 
-export default function InstantPayment(props) {
-	const { cart, selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()
+export default function BankInvoice(props) {
+	const { selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()
 	const { paymentSystems, groupName } = props
 
 	const onSelectThisGroup = () => {
@@ -31,9 +30,10 @@ export default function InstantPayment(props) {
 
 	return (
 		<GroupsWrapper
-			title='Pix'
-			icon={<Pix />}
+			title='Boleto Bancário'
+			icon={<Boleto />}
+			isChecked={groupName === selectedPaymentData?.groupName}
 			onPress={onSelectThisGroup}
-			isChecked={groupName === selectedPaymentData?.groupName}></GroupsWrapper>
+		/>
 	)
 }

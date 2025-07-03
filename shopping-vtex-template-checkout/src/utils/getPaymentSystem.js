@@ -10,33 +10,32 @@ export const getPaymentSystem = cart => {
 			installment => installment.paymentSystem === paymentSystem.stringId
 		)
 
-		const isCurrentPaymentSystem = paymentData?.payments?.some(
+		const currentPaymentSystem = paymentData?.payments?.some(
 			payment => payment.paymentSystem === paymentSystem.stringId
 		)
 
+		const paymentSystemObject = {
+			...paymentSystem,
+			isCurrentPaymentSystem: currentPaymentSystem,
+			installments: installments?.installments.map(installment => ({
+				...installment,
+				label: `${installment.count}x de ${formatAmountInCents(
+					installment.value
+				)} (total: ${formatAmountInCents(installment.total)})`,
+				formattedValue: formatAmountInCents(installment.value)
+			}))
+		}
+
 		if (group) {
-			group.isCurrentPaymentSystemGroup = isCurrentPaymentSystem
 			group.paymentSystems.push({
-				...paymentSystem,
-				isCurrentPaymentSystem: isCurrentPaymentSystem,
-				installments: installments?.installments.map(installment => ({
-					...installment,
-					label: `${installment.count}x de ${formatAmountInCents(installment.value)} (total: ${formatAmountInCents(installment.total)})`,
-					formattedValue: formatAmountInCents(installment.value)
-				}))
+				...paymentSystemObject
 			})
 		} else {
 			acc.push({
 				groupName: paymentSystem.groupName,
-				isCurrentPaymentSystemGroup: isCurrentPaymentSystem,
 				paymentSystems: [
 					{
-						...paymentSystem,
-						isCurrentPaymentSystem: isCurrentPaymentSystem,
-						installments: installments?.installments.map(installment => ({
-							...installment,
-							formattedValue: formatAmountInCents(installment.value)
-						}))
+						...paymentSystemObject
 					}
 				]
 			})

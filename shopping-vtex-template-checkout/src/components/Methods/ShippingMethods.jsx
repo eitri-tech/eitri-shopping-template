@@ -1,23 +1,18 @@
 import { useTranslation } from 'eitri-i18n'
-import { View, Text, Button } from 'eitri-luminus'
+import { View, Text, Skeleton } from 'eitri-luminus'
 
 export default function ShippingMethods(props) {
-	const { customLogisticInfo, onSelectCustomLogistiInfoOption, options, ...rest } = props
+	const { onSelectFreightOption, options, loading = false, ...rest } = props
 
 	const { t } = useTranslation()
 
 	const handleMethodChange = option => {
-		onSelectCustomLogistiInfoOption(option)
+		onSelectFreightOption(option)
 	}
 
-	if (options?.length === 0) {
+	if (!options || options.length === 0) {
 		return null
 	}
-
-	console.log(options)
-
-	const currentSelectedOption = options?.find(option => option.isCurrent)
-	const otherOptions = options?.filter(option => !option.isCurrent)
 
 	return (
 		<View {...rest}>
@@ -31,38 +26,20 @@ export default function ShippingMethods(props) {
 			</View>
 
 			<View className='flex flex-col gap-3'>
-				{currentSelectedOption && (
+				{options.map(option => (
 					<>
-						<View className='mb-2'>
-							<Text className='text-sm font-medium text-primary mb-2'>
-								{t('shippingMethods.selectedMethod', 'Método Selecionado')}
-							</Text>
-						</View>
-						<ShippingMethodCard
-							option={currentSelectedOption}
-							isSelected={true}
-							onClick={() => handleMethodChange(currentSelectedOption)}
-						/>
-					</>
-				)}
-
-				{otherOptions.length > 0 && (
-					<>
-						<View className='mb-2'>
-							<Text className='text-sm font-medium text-base-content/70 mb-2'>
-								{t('shippingMethods.otherMethods', 'Outros Métodos')}
-							</Text>
-						</View>
-						{otherOptions.map((option, index) => (
+						{loading ? (
+							<Skeleton className='w-full h-[40px]' />
+						) : (
 							<ShippingMethodCard
 								key={option.label}
 								option={option}
-								isSelected={false}
+								isSelected={!!option.isCurrent}
 								onClick={() => handleMethodChange(option)}
 							/>
-						))}
+						)}
 					</>
-				)}
+				))}
 			</View>
 		</View>
 	)

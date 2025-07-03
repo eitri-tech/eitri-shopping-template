@@ -5,16 +5,19 @@ import { getPaymentSystem } from '../../utils/getPaymentSystem'
 export default function PaymentMethods(props) {
 	const { cart } = useLocalShoppingCart()
 
-	const paymentSystems = getPaymentSystem(cart)
+	const { onSelectPaymentMethod } = props
+
+	const paymentSystemGroups = getPaymentSystem(cart)
 
 	return (
 		<View className='w-full gap-4 flex flex-col'>
-			{paymentSystems?.map(system => {
+			{paymentSystemGroups?.map(system => {
 				return (
 					<ImplementationInterface
 						key={system.groupName}
 						groupName={system.groupName}
-						paymentSystems={system.paymentSystems}
+						systemGroup={system}
+						onSelectPaymentMethod={onSelectPaymentMethod}
 					/>
 				)
 			})}

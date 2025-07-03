@@ -15,43 +15,34 @@ import GiftCardInput from '../components/GiftCardInput/GiftCardInput'
 import { formatAmountInCents } from '../utils/utils'
 
 export default function PaymentData(props) {
-	const { cart, selectedPaymentData, setPaymentOption } = useLocalShoppingCart()
-	const [isLoading, setIsLoading] = useState(false)
+	const { cart, selectPaymentOption } = useLocalShoppingCart()
 
 	const { t } = useTranslation()
+
+	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
 		sendPageView('Dados de pagamento')
 	}, [])
 
-	// TODO ver cenário onde o carrinho já vem com um metodo de pagamento. Para evitar que o usuário tenha que selecionar novamente
-	// useEffect(() => {
-	// 	if (!selectedPaymentData) {
-	// 		const currentGroup = cart?.paymentSystems.find(system => system.isCurrentPaymentSystemGroup)
-	// 		if (currentGroup) {
-	// 			setSelectedPaymentData({ groupName: currentGroup.groupName })
-	// 		}
-	// 	}
-	// }, [cart])
-
 	const submitPaymentSystemSelected = async () => {
-		setIsLoading(true)
-		await handlePaymentOptionsChange()
-		setIsLoading(false)
 		await Eitri.navigation.back()
 	}
 
-	const handlePaymentOptionsChange = async () => {
-		let tempGiftCard = []
-		if (cart.giftCards.length > 0) {
-			tempGiftCard = cart.giftCards
-			await setPaymentOption({ giftCards: [] })
+	const handlePaymentOptionsChange = async paymentMethod => {
+		try {
+			setIsLoading(true)
+			const payload = {
+				payments: Array.isArray(paymentMethod) ? paymentMethod : [paymentMethod],
+				giftCards: cart.paymentData.giftCards
+			}
+			await selectPaymentOption(payload)
+			setIsLoading(false)
+		} catch (error) {
+			console.log('Erro ao selecionar método de pagamento', error)
+		} finally {
+			setIsLoading(false)
 		}
-		const payload = {
-			payments: selectedPaymentData?.payload && !cart.payOnlyInGiftCard ? [selectedPaymentData.payload] : [],
-			giftCards: tempGiftCard
-		}
-		await setPaymentOption(payload)
 	}
 
 	if (!cart) {
@@ -65,7 +56,6 @@ export default function PaymentData(props) {
 					gap={16}
 					scrollEffect={false}>
 					<HeaderReturn />
-
 					<HeaderText text={t('paymentData.title')} />
 				</HeaderContentWrapper>
 
@@ -74,25 +64,29 @@ export default function PaymentData(props) {
 					isLoading={isLoading}
 				/>
 
-				<View className='flex flex-row justify-between items-center'>
-					<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
-					<Text className='text-sm font-bold text-primary-700'>{formatAmountInCents(cart.value)}</Text>
-				</View>
-
-				<View>
-					<GiftCardInput onPressAddGiftCard={handlePaymentOptionsChange} />
-				</View>
-
-				<View className='flex flex-col gap-4 my-4'>
-					<PaymentMethods />
-
-					<View className='mx-1 my-4'>
-						<CustomButton
-							disabled={!selectedPaymentData?.isReadyToPay}
-							label={t('paymentData.labelButton')}
-							onPress={submitPaymentSystemSelected}
-						/>
+				<View className='flex-1 p-4 flex flex-col gap-4'>
+					<View className='flex flex-row justify-between items-center'>
+						<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
+						<Text className='text-sm font-bold text-primary-700'>{formatAmountInCents(cart.value)}</Text>
 					</View>
+
+					<View>
+						<GiftCardInput onPressAddGiftCard={handlePaymentOptionsChange} />
+					</View>
+
+					<View className='flex flex-col gap-4 py-4'>
+						<PaymentMethods onSelectPaymentMethod={handlePaymentOptionsChange} />
+					</View>
+				</View>
+
+				<View
+					bottomInset
+					className='p-4'>
+					<CustomButton
+						disabled={false}
+						label={t('paymentData.labelButton')}
+						onPress={submitPaymentSystemSelected}
+					/>
 				</View>
 			</View>
 		</Page>

@@ -1,26 +1,20 @@
-import MethodIcon from '../Icons/MethodIcon'
-import CardIcon from '../Icons/CardIcons/CardIcon'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
+import MethodIcon from '../../Icons/MethodIcon'
+import CardIcon from '../../Icons/CardIcons/CardIcon'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import GroupsWrapper from './GroupsWrapper'
-import Card from '../Icons/MethodIcons/Card'
+import Card from '../../Icons/MethodIcons/Card'
 import { CustomInput } from 'shopping-vtex-template-shared'
 
 export default function CreditCard(props) {
 	const { cart, selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()
 
-	const { paymentSystems, groupName } = props
+	const { onSelectPaymentMethod, systemGroup, groupName } = props
 
 	const [billingAddressSame, setBillingAddressSame] = useState(true)
 
 	useEffect(() => {
-		if (cart?.payments && cart.payments.length > 0 && cart.payments[0].groupName === groupName) {
-			onSelectThisGroup()
-		}
-	}, [])
-
-	useEffect(() => {
 		if (selectedPaymentData?.cardInfo?.cardNumber && selectedPaymentData?.cardInfo?.cardNumber.length > 15) {
-			const paymentSystem = paymentSystems?.find(method => {
+			const paymentSystem = systemGroup?.paymentSystems?.find(method => {
 				const regex = RegExp(method.validator.regex)
 				return regex.test(selectedPaymentData?.cardInfo?.cardNumber)
 			})
@@ -75,27 +69,17 @@ export default function CreditCard(props) {
 	}, [selectedPaymentData?.cardInfo, selectedPaymentData?.cardInfo?.billingAddress])
 
 	const onSelectThisGroup = () => {
-		if (selectedPaymentData?.groupName !== groupName) {
-			setSelectedPaymentData({
-				groupName: groupName,
-				cardInfo: {
-					cardNumber: '',
-					holderName: '',
-					expirationDate: '',
-					securityCode: ''
-				},
-				billingAddress: {
-					street: cart?.shipping?.address?.street,
-					number: cart?.shipping?.address?.number,
-					city: cart?.shipping?.address?.city,
-					neighborhood: cart?.shipping?.address?.neighborhood,
-					state: cart?.shipping?.address?.state,
-					country: cart?.shipping?.address?.country,
-					postalCode: cart?.shipping?.address?.postalCode
-				},
-				isReadyToPay: false
-			})
-		}
+		const firstPaymentSystem = systemGroup.paymentSystems[0]
+		onSelectPaymentMethod([
+			{
+				paymentSystem: firstPaymentSystem.id,
+				installmentsInterestRate: 0,
+				installments: 1,
+				referenceValue: cart.value,
+				value: cart.value,
+				hasDefaultBillingAddress: true
+			}
+		])
 	}
 
 	const selectInstallment = installment => {
@@ -135,26 +119,28 @@ export default function CreditCard(props) {
 		setSelectedPaymentData(prev => ({ ...prev, billingAddress }))
 	}
 
+	// console.log('systemGroup', JSON.stringify(systemGroup))
+
 	return (
 		<GroupsWrapper
 			title='Cartão de Crédito'
 			icon={<Card />}
 			onPress={onSelectThisGroup}
-			isChecked={groupName === selectedPaymentData?.groupName}>
+			isChecked={systemGroup?.isCurrentPaymentSystemGroup}>
 			<View paddingHorizontal='extra-small'>
 				<Text className='font-bold'>Bandeiras aceitas:</Text>
 				<View
 					display='flex'
 					justifyContent='between'
 					marginTop='extra-small'>
-					{paymentSystems.map(system => {
+					{systemGroup?.paymentSystems?.map(system => {
 						return (
 							<View
 								key={system.name}
 								grow={1}
 								direction='column'
-								width={100 / paymentSystems.length + '%'}
-								maxWidth={100 / paymentSystems.length + '%'}
+								width={100 / systemGroup?.paymentSystems?.length + '%'}
+								maxWidth={100 / systemGroup?.paymentSystems?.length + '%'}
 								gap={5}
 								alignItems='center'>
 								<View
