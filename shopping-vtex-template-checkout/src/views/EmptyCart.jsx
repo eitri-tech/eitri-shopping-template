@@ -10,7 +10,7 @@ export default function EmptyCart() {
 		<Page title='Checkout - Carrinho Vazio'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('personalData.title')} />
+				<HeaderText text={t('emptyCart.title')} />
 			</HeaderContentWrapper>
 
 			<View className='flex flex-col items-center justify-center gap-[25px] mt-10 mb-6'>
