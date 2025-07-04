@@ -7,6 +7,7 @@ export default function CartProvider({ children }) {
 	const [cart, setCart] = useState(null)
 	const [cartIsLoading, setCartIsLoading] = useState(null)
 	const [selectedPaymentData, setSelectedPaymentData] = useState()
+	const [cardInfo, setCardInfo] = useState()
 
 	const executeCartOperation = async (operation, ...args) => {
 		setCartIsLoading(true)
@@ -53,7 +54,6 @@ export default function CartProvider({ children }) {
 			value={{
 				cart,
 				setCart,
-				cardInfo: {},
 				addPersonalData,
 				startCart,
 				setFreight: _setFreight,
@@ -64,7 +64,9 @@ export default function CartProvider({ children }) {
 				setShippingAddress: _setShippingAddress,
 				selectedPaymentData,
 				setSelectedPaymentData,
-				cartIsLoading
+				cartIsLoading,
+				cardInfo,
+				setCardInfo
 			}}>
 			{children}
 		</LocalCart.Provider>

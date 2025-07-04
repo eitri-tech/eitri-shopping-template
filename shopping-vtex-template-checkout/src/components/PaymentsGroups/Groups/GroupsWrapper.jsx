@@ -9,10 +9,10 @@ export default function GroupsWrapper(props) {
 		: 'border border-neutral-400'
 
 	return (
-		<View
-			onClick={onPress}
-			className={`p-4 rounded flex flex-col cursor-pointer transition-all duration-300 ${highlightClass}`}>
-			<View className='w-full flex flex-col'>
+		<View className={`p-4 rounded flex flex-col cursor-pointer transition-all duration-300 ${highlightClass}`}>
+			<View
+				onClick={onPress}
+				className='w-full flex flex-col'>
 				<View className='flex flex-row items-center justify-between gap-3'>
 					<View className='flex flex-row items-center gap-3'>
 						<Text className='text-xs'>{title}</Text>

@@ -27,11 +27,14 @@ export const getPaymentSystem = cart => {
 		}
 
 		if (group) {
+			group.isCurrentPaymentSystemGroup =
+				paymentSystemObject.isCurrentPaymentSystem || group.paymentSystems.some(ps => ps.isCurrentPaymentSystem)
 			group.paymentSystems.push({
 				...paymentSystemObject
 			})
 		} else {
 			acc.push({
+				isCurrentPaymentSystemGroup: paymentSystemObject.isCurrentPaymentSystem,
 				groupName: paymentSystem.groupName,
 				paymentSystems: [
 					{

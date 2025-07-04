@@ -29,19 +29,18 @@ export default function PaymentData(props) {
 		await Eitri.navigation.back()
 	}
 
-	const handlePaymentOptionsChange = async paymentMethod => {
+	const handlePaymentOptionsChange = async (paymentMethod, silentMode = false) => {
 		try {
-			setIsLoading(true)
+			!silentMode && setIsLoading(true)
 			const payload = {
 				payments: Array.isArray(paymentMethod) ? paymentMethod : [paymentMethod],
 				giftCards: cart.paymentData.giftCards
 			}
 			await selectPaymentOption(payload)
-			setIsLoading(false)
 		} catch (error) {
 			console.log('Erro ao selecionar método de pagamento', error)
 		} finally {
-			setIsLoading(false)
+			!silentMode && setIsLoading(false)
 		}
 	}
 
