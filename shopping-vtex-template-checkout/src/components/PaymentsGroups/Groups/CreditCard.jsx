@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react'
-import MethodIcon from '../../Icons/MethodIcon'
 import CardIcon from '../../Icons/CardIcons/CardIcon'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import GroupsWrapper from './GroupsWrapper'
 import Card from '../../Icons/MethodIcons/Card'
 import { CustomInput } from 'shopping-vtex-template-shared'
-import { View, Text, Dropdown, Checkbox } from 'eitri-luminus'
+import { View, Text, Checkbox } from 'eitri-luminus'
+import CreditCardBillingAddress from './Components/CreditCardBillingAddress'
 
 export default function CreditCard(props) {
 	const { cart, cardInfo, setCardInfo } = useLocalShoppingCart()
 
-	const { onSelectPaymentMethod, systemGroup, groupName } = props
+	const { onSelectPaymentMethod, systemGroup } = props
 
-	const [billingAddressSame, setBillingAddressSame] = useState(true)
 	const [invalidCard, setInvalidCard] = useState(false)
 	const [paymentSystemName, setPaymentSystemName] = useState('')
+	const [installmentOptions, setInstallmentOptions] = useState([])
 
 	useEffect(() => {
 		if (cardInfo?.cardNumber && cardInfo?.cardNumber.length > 15) {
@@ -34,51 +34,16 @@ export default function CreditCard(props) {
 					setPaymentSystem(paymentSystem, true)
 				}
 				setPaymentSystemName(paymentSystem.name)
-				selectInstallment(paymentSystem.installments[0])
+				setInstallmentOptions(paymentSystem.installments)
 			} else {
 				setInvalidCard(true)
-				selectInstallment(null)
+				setInstallmentOptions([])
 			}
 		} else {
 			setInvalidCard(true)
-			selectInstallment(null)
+			setInstallmentOptions([])
 		}
 	}, [cardInfo?.cardNumber])
-
-	useEffect(() => {
-		const { cardNumber, holderName, expirationDate, securityCode } = cardInfo ?? {}
-		const { street, number, city, neighborhood, state, country, postalCode } = cardInfo?.billingAddress ?? {}
-
-		if (
-			cardNumber &&
-			holderName &&
-			expirationDate &&
-			securityCode &&
-			street &&
-			number &&
-			city &&
-			neighborhood &&
-			state &&
-			country &&
-			postalCode
-		) {
-			const payload = {
-				accountId: null,
-				bin: null,
-				hasDefaultBillingAddress: true,
-				installments: `${cardInfo?.installment?.count}`,
-				installmentsInterestRate: null,
-				isLuhnValid: null,
-				isRegexValid: null,
-				paymentSystem: cardInfo?.paymentSystem?.stringId,
-				referenceValue: cardInfo?.installment?.value ?? cart?.value,
-				tokenId: null,
-				value: cardInfo?.installment?.total ?? cart?.value
-			}
-
-			setCardInfo(prev => ({ ...prev, payload, isReadyToPay: true }))
-		}
-	}, [cardInfo])
 
 	const onSelectThisGroup = () => {
 		const firstPaymentSystem = systemGroup.paymentSystems[0]
@@ -111,58 +76,6 @@ export default function CreditCard(props) {
 	const handleCardDataChange = (key, e) => {
 		const value = e.target.value
 		setCardInfo(prev => ({ ...prev, [key]: value }))
-	}
-
-	const handleAddressChange = (key, value) => {
-		const billingAddress = { ...cardInfo?.billingAddress, [key]: value }
-		setCardInfo(prev => ({ ...prev, billingAddress }))
-	}
-
-	// Métodos que resolvem billing address
-	const checkBillingAddressSame = () => {
-		const billingAddressWillBeSame = !billingAddressSame
-
-		if (billingAddressWillBeSame) {
-			setBillingAddressSameOfShippingAddress()
-		}
-
-		setBillingAddressSame(billingAddressWillBeSame)
-	}
-
-	const setBillingAddressSameOfShippingAddress = () => {
-		const { street, number, city, neighborhood, state, country, postalCode } = cart?.shipping?.address ?? {}
-		const billingAddress = { street, number, city, neighborhood, state, country, postalCode }
-		setCardInfo(prev => ({ ...prev, billingAddress }))
-	}
-
-	const handlePostalCodeChange = async (key, value) => {
-		// if (!/^\d{5}-?\d{3}$/.test(value)) {
-		// 	handleAddressChange(key, value)
-		// 	return
-		// }
-		//
-		// try {
-		// 	const result = await loadAddressFromPostalCode(value)
-		// 	const { street, neighborhood, city, state, country } = result
-		// 	const billingAddress = {
-		// 		...selectedPaymentData.billingAddress,
-		// 		street,
-		// 		neighborhood,
-		// 		city,
-		// 		state,
-		// 		country,
-		// 		postalCode: value
-		// 	}
-		// 	setSelectedPaymentData({ ...selectedPaymentData, billingAddress })
-		// } catch (e) {
-		// 	console.error('Error ao carregar endereço pelo CEP:', e)
-		// }
-	}
-
-	// console.log('systemGroup', JSON.stringify(systemGroup))
-
-	const currentDeliveryIsPickUp = () => {
-		return cart.shipping?.options?.some(option => option.isPickupInPoint && option.isCurrent)
 	}
 
 	return (
@@ -249,103 +162,23 @@ export default function CreditCard(props) {
 					<View className='mb-1'>
 						<Text className='text-accent-100 text-xs font-bold'>Parcelamento</Text>
 					</View>
-					{/*<Dropdown*/}
-					{/*	required={true}*/}
-					{/*	disabled={!selectedPaymentData?.paymentSystem?.installments?.length}*/}
-					{/*	placeholder='Parcelamento'*/}
-					{/*	onChange={selectInstallment}*/}
-					{/*	value={selectedPaymentData?.cardInfo?.installment?.label}>*/}
-					{/*	{selectedPaymentData?.paymentSystem?.installments?.map((option, index) => (*/}
-					{/*		<Dropdown.Item*/}
-					{/*			key={option.count}*/}
-					{/*			value={option}*/}
-					{/*			label={option.label}*/}
-					{/*		/>*/}
-					{/*	))}*/}
-					{/*</Dropdown>*/}
+					<Select
+						required={true}
+						disabled={!installmentOptions?.length}
+						placeholder='Parcelamento'
+						onChange={selectInstallment}
+						value={1}>
+						{installmentOptions?.map((option, index) => (
+							<Select.Item
+								key={option.count}
+								value={option.count}>
+								{option.label}
+							</Select.Item>
+						))}
+					</Select>
 				</View>
-				<View className='my-1'>
-					<Text className='text-accent-100 font-bold'>Endereço de cobrança:</Text>
-					{cart.shipping?.address && !currentDeliveryIsPickUp() && (
-						<View className='mt-1 flex flex-row gap-2 items-center'>
-							<Checkbox
-								name='billingAddress'
-								value='Sim'
-								checked={billingAddressSame}
-								onChange={checkBillingAddressSame}
-							/>
-							<Text className='text-accent-100'>Seu endereço de fatura é o mesmo da entrega</Text>
-						</View>
-					)}
-					{(!billingAddressSame || currentDeliveryIsPickUp()) && (
-						<View className='mt-1 flex flex-col gap-2'>
-							<View>
-								<CustomInput
-									color='accent-100'
-									inputMode='numeric'
-									maxLength={9}
-									placeholder='CEP'
-									value={cardInfo?.billingAddress?.postalCode}
-									onChange={text => handlePostalCodeChange('postalCode', text)}
-									className='w-2/5'
-								/>
-							</View>
-							<View>
-								<CustomInput
-									color='accent-100'
-									placeholder={'Rua/ Avenida'}
-									value={cardInfo?.billingAddress?.street}
-									onChange={text => handleAddressChange('street', text)}
-								/>
-							</View>
 
-							<View className='flex flex-row gap-4'>
-								<View className='w-1/2'>
-									<CustomInput
-										color='accent-100'
-										placeholder={'Número'}
-										value={cardInfo?.billingAddress?.number}
-										onChange={text => handleAddressChange('number', text)}
-									/>
-								</View>
-								<View className='w-1/2'>
-									<CustomInput
-										color='accent-100'
-										placeholder={'Complemento'}
-										value={cardInfo?.billingAddress?.complement}
-										onChange={text => handleAddressChange('complement', text)}
-									/>
-								</View>
-							</View>
-							<View>
-								<CustomInput
-									color='accent-100'
-									placeholder={'Bairro'}
-									value={cardInfo?.billingAddress?.neighborhood}
-									onChange={text => handleAddressChange('neighborhood', text)}
-								/>
-							</View>
-							<View className='flex flex-row gap-4'>
-								<View className='w-1/2'>
-									<CustomInput
-										color='accent-100'
-										placeholder={'Cidade'}
-										value={cardInfo?.billingAddress?.city}
-										onChange={text => handleAddressChange('city', text)}
-									/>
-								</View>
-								<View className='w-1/2'>
-									<CustomInput
-										color='accent-100'
-										placeholder={'Estado'}
-										value={cardInfo?.billingAddress?.state}
-										onChange={text => handleAddressChange('state', text)}
-									/>
-								</View>
-							</View>
-						</View>
-					)}
-				</View>
+				<CreditCardBillingAddress />
 			</View>
 		</GroupsWrapper>
 	)

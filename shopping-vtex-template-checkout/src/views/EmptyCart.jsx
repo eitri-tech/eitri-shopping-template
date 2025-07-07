@@ -2,6 +2,7 @@ import { CustomButton, HeaderReturn, HeaderContentWrapper, HeaderText } from 'sh
 import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
 import { useTranslation } from 'eitri-i18n'
+import { goToCartman } from '../utils/utils'
 
 export default function EmptyCart() {
 	const { t } = useTranslation()
@@ -10,10 +11,15 @@ export default function EmptyCart() {
 		<Page title='Checkout - Carrinho Vazio'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('emptyCart.title')} />
+				<View onClick={goToCartman}>
+					<HeaderText text={t('emptyCart.title')} />
+				</View>
 			</HeaderContentWrapper>
 
-			<View className='flex flex-col items-center justify-center gap-[25px] mt-10 mb-6'>
+			<View
+				topInset
+				bottomInset
+				className='flex flex-col items-center justify-center gap-[25px] mt-10 mb-6 p-4'>
 				<Image
 					src={cartImage}
 					className='w-[50px]'
@@ -26,13 +32,11 @@ export default function EmptyCart() {
 					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem')}</Text>
 				</View>
 
-				<View className='w-[80vw]'>
-					<CustomButton
-						label={t('emptyCart.labelBack')}
-						onPress={closeEitriApp}
-						block
-					/>
-				</View>
+				<CustomButton
+					className={'w-full'}
+					label={t('emptyCart.labelBack')}
+					onPress={closeEitriApp}
+				/>
 			</View>
 		</Page>
 	)

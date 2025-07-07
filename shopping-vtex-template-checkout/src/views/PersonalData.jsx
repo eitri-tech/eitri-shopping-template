@@ -12,6 +12,7 @@ import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getUserByEmail, registerToNotify } from '../services/cartService'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
+import { goToCartman } from '../utils/utils'
 
 export default function PersonalData() {
 	const [isLoading, setIsLoading] = useState(false)
@@ -230,7 +231,9 @@ export default function PersonalData() {
 					gap={16}
 					scrollEffect={false}>
 					<HeaderReturn />
-					<HeaderText text={t('personalData.title')} />
+					<View onClick={goToCartman}>
+						<HeaderText text={t('personalData.title')} />
+					</View>
 				</HeaderContentWrapper>
 
 				{isLoading && <Loading fullScreen />}

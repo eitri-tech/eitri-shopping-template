@@ -8,7 +8,7 @@ import { setLanguage, startConfigure } from '../services/AppService'
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
 
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		startHome()
@@ -21,11 +21,6 @@ export default function Home() {
 
 	const loadCart = async () => {
 		const startParams = await Eitri.getInitializationInfos()
-
-		if (startParams?.cartman === 'on') {
-			Eitri.navigation.navigate({ path: 'Cartman', replace: true })
-			return
-		}
 
 		if (startParams?.orderFormId) {
 			await saveCartIdOnStorage(startParams?.orderFormId)
@@ -54,7 +49,6 @@ export default function Home() {
 	const loadConfigs = async () => {
 		try {
 			await startConfigure()
-			setLanguage(i18n)
 		} catch (e) {
 			console.log('Error ao buscar configurações', e)
 		}

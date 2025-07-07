@@ -1,24 +1,26 @@
-import { Page, View, Text, Image } from 'eitri-luminus'
 import pixImg from '../assets/images/pix.png'
 import Eitri from 'eitri-bifrost'
-import { sendPageView, logEvent } from '../services/trackingService'
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import { CustomButton } from 'shopping-vtex-template-shared'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 import { clearCart } from '../services/cartService'
-import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../providers/LocalCart'
 
 export default function PixOrder(props) {
+	const PAGE = 'Pix'
+
 	const [timeOut, setTimeOut] = useState(10 * 60)
 
 	const [pixPayload, setPixPayload] = useState(null)
 
 	let isMounted = true
 
-	const { t } = useTranslation()
+	const { cart } = useLocalShoppingCart()
 
 	useEffect(() => {
-		if (props.location?.state?.pixData) {
-			const appPayload = JSON.parse(props.location?.state?.pixData)
+		if (props.location?.state?.paymentResult) {
+			const result = props.location?.state?.paymentResult
+
+			const appPayload = JSON.parse(result?.paymentAuthorizationAppCollection?.[0].appPayload)
 
 			setPixPayload(appPayload)
 
@@ -33,12 +35,11 @@ export default function PixOrder(props) {
 				clearInterval(interval)
 			}
 		}
-	}, [props.location?.state?.pixData])
+	}, [props.location?.state?.paymentResult])
 
 	useEffect(() => {
 		if (timeOut <= 0) {
-			Eitri.navigation.navigate({ path: 'Checkout/FinishCart' })
-			return
+			Eitri.navigation.navigate({ path: 'FinishCart', replace: true })
 		}
 	}, [timeOut])
 
@@ -46,14 +47,10 @@ export default function PixOrder(props) {
 		checkPixStatus()
 	}, [pixPayload])
 
-	useEffect(() => {
-		sendPageView(`PixOrder`, 'PixOrder')
-	}, [])
 	const copyCode = async () => {
 		Eitri.clipboard.setText({
 			text: pixPayload.code
 		})
-		await logEvent('CopyPixCode', { ...pixPayload })
 	}
 
 	const formatTime = seconds => {
@@ -73,11 +70,12 @@ export default function PixOrder(props) {
 				await checkPixStatus(transactionId, paymentId)
 			} else {
 				clearCart()
-				Eitri.navigation.navigate({ path: 'OrderCompleted', state: { orderId: result?.orderId } })
+				navigate('OrderCompleted', {
+					orderId: result?.orderId,
+					orderValue: cart.value
+				})
 			}
-		} catch (error) {
-			console.error('Error fetching data:', error)
-		}
+		} catch (error) {}
 	}
 
 	// Call the function to start fetching data
@@ -85,34 +83,33 @@ export default function PixOrder(props) {
 	if (!pixPayload) return null
 
 	return (
-		<Page
-			topInset
-			bottomInset>
-			<View className='flex flex-col justify-center items-center min-h-screen p-small gap-5'>
-				<View className='flex flex-col justify-center items-center gap-2\.5'>
+		<Page title='Pix QR Code'>
+			<View
+				topInset
+				bottomInset
+				className='flex flex-col justify-center items-center min-h-screen p-4 gap-5'>
+				<View className='flex flex-col justify-center items-center gap-3'>
 					<Image
 						src={pixImg}
 						className='w-1/2'
 					/>
-					<Text>
-						{t('pixOrder.txtTimeRemaining')}&nbsp;{formatTime(timeOut)}
-					</Text>
+					<Text>Tempo restante&nbsp;{formatTime(timeOut)}</Text>
 				</View>
 
 				<View className='flex flex-col justify-center items-center'>
 					<Image
-						src={pixPayload.qrCodeBase64Image}
+						src={`data:image;base64,${pixPayload.qrCodeBase64Image}`}
 						className='w-[70%]'
 					/>
 				</View>
 
-				<View className='max-w-full rounded-sm p-extra-small border border-neutral-500 border-hairline'>
+				<View className='max-w-full rounded-sm p-2 border border-neutral-500 border-opacity-50'>
 					<Text className='break-words max-w-full'>{pixPayload.code}</Text>
 				</View>
 
 				<CustomButton
-					borderRadius='pill'
-					label={t('pixOrder.labelCopyCode')}
+					label='Copiar código'
+					className='w-full'
 					onPress={copyCode}
 				/>
 			</View>

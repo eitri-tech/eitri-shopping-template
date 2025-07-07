@@ -35,6 +35,11 @@ export default function Cartman() {
 		return
 	}
 
+	const clearCart = async () => {
+		await Vtex.cart.clearCart()
+		return
+	}
+
 	return (
 		<Page
 			bottomInset
@@ -56,6 +61,11 @@ export default function Cartman() {
 					className='btn-primary w-full'
 					onClick={addRandomItem}>
 					Adicionar item aleatório
+				</Button>
+				<Button
+					className='btn-primary w-full'
+					onClick={clearCart}>
+					Limpar carrinho
 				</Button>
 				<Button
 					className='btn-primary w-full'

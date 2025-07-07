@@ -1,66 +1,53 @@
-import { formatAmountInCents, hideCreditCardNumber } from '../../utils/utils'
+import { hideCreditCardNumber } from '../../utils/utils'
 import SimpleCard from '../Card/SimpleCard'
 import iconCard from '../../assets/images/credit_card.svg'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 
 export default function SelectedPaymentData(props) {
-	const { cart } = useLocalShoppingCart()
+	const { onPress } = props
 
-	const { onPress, payments, selectedPaymentData } = props
+	const { cart, cardInfo } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
-	const paymentSystem = payments?.[0]
-	const paymentWithCardHasMissingValues = () => {
-		if (paymentSystem?.groupName === 'creditCardPaymentGroup') {
-			if (!selectedPaymentData?.cardInfo?.cardNumber) {
-				return true
-			}
-		}
+	const currentPayments = cart?.paymentData?.payments?.map(payment => {
+		const paymentSystem = cart?.paymentData?.paymentSystems?.find(p => p.stringId === payment.paymentSystem)
+		const isCreditCard = paymentSystem?.groupName === 'creditCardPaymentGroup'
 
-		return false
-	}
+		return {
+			...payment,
+			paymentSystemName: paymentSystem?.name,
+			isCreditCard,
+			cardInfo,
+			hasMissingValues: isCreditCard && !cardInfo?.cardNumber
+		}
+	})
 
 	return (
 		<SimpleCard
-			isFilled={paymentSystem}
+			isFilled={currentPayments?.length > 0}
 			onPress={onPress}
 			title={t('selectedPaymentData.txtPayment')}
 			icon={iconCard}>
 			<>
-				{paymentSystem && (
-					<View
-						direction='column'
-						display='flex'
-						gap={3}>
-						<Text
-							fontSize='extra-small'
-							color='neutral-900'>
-							{paymentSystem?.name}
-						</Text>
+				{currentPayments?.map(payment => (
+					<View className='flex flex-col gap-3'>
+						<Text className='text-xs text-neutral-900'>{payment?.paymentSystemName}</Text>
 
-						{selectedPaymentData?.cardInfo && (
+						{payment?.isCreditCard?.cardInfo && (
 							<>
-								{selectedPaymentData?.cardInfo?.cardNumber && (
-									<Text>{hideCreditCardNumber(selectedPaymentData.cardInfo?.cardNumber)}</Text>
+								{payment?.cardInfo?.cardNumber && (
+									<Text>{hideCreditCardNumber(payment?.cardInfo?.cardNumber)}</Text>
 								)}
-								{selectedPaymentData.cardInfo?.holderName && (
-									<Text>{selectedPaymentData.cardInfo?.holderName}</Text>
-								)}
-								{selectedPaymentData.cardInfo?.installment && (
-									<Text>{selectedPaymentData.cardInfo?.installment?.label}</Text>
-								)}
+								{payment?.cardInfo?.holderName && <Text>{payment?.cardInfo?.holderName}</Text>}
+								{payment?.cardInfo?.installment && <Text>{payment?.cardInfo?.installment?.label}</Text>}
 							</>
 						)}
-
-						{paymentWithCardHasMissingValues() && (
-							<Text
-								fontSize='extra-small'
-								color='negative-700'>
-								{t('selectedPaymentData.txtFillCard')}
-							</Text>
-						)}
 					</View>
+				))}
+
+				{currentPayments?.some(p => p.hasMissingValues) && (
+					<Text className='text-xs text-negative-700'>{t('selectedPaymentData.txtFillCard')}</Text>
 				)}
 			</>
 		</SimpleCard>

@@ -1,18 +1,12 @@
 import { Page, View, Text } from 'eitri-luminus'
-import {
-	CustomButton,
-	Loading,
-	HeaderReturn,
-	HeaderContentWrapper,
-	HeaderText,
-	CustomInput
-} from 'shopping-vtex-template-shared'
+import { CustomButton, Loading, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import PaymentMethods from '../components/Methods/PaymentMethods'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import GiftCardInput from '../components/GiftCardInput/GiftCardInput'
 import { formatAmountInCents } from '../utils/utils'
+import { navigate } from '../services/flowControl'
 
 export default function PaymentData(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
@@ -26,7 +20,7 @@ export default function PaymentData(props) {
 	}, [])
 
 	const submitPaymentSystemSelected = async () => {
-		await Eitri.navigation.back()
+		navigate('PaymentData', cart)
 	}
 
 	const handlePaymentOptionsChange = async (paymentMethod, silentMode = false) => {
@@ -42,6 +36,13 @@ export default function PaymentData(props) {
 		} finally {
 			!silentMode && setIsLoading(false)
 		}
+	}
+
+	const readyToProceed = () => {
+		if (cart?.paymentData?.payments?.length === 0 && cart?.paymentData?.giftCards?.length === 0) {
+			return false
+		}
+		return true
 	}
 
 	if (!cart) {
@@ -82,7 +83,7 @@ export default function PaymentData(props) {
 					bottomInset
 					className='p-4'>
 					<CustomButton
-						disabled={false}
+						disabled={!readyToProceed()}
 						label={t('paymentData.labelButton')}
 						onPress={submitPaymentSystemSelected}
 					/>

@@ -12,7 +12,7 @@ import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 
 export default function FinishCart() {
-	const { cart, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
+	const { cart, cardInfo, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState({ state: false, message: '' })
@@ -95,16 +95,23 @@ export default function FinishCart() {
 				captchaToken = await recaptchaRef?.current?.getRecaptchaToken()
 			}
 
-			const paymentResult = await startPayment(selectedPaymentData, captchaToken, RECAPTCHA_SITE_KEY)
+			const paymentResult = await startPayment(cart, cardInfo, captchaToken, RECAPTCHA_SITE_KEY)
 
 			if (paymentResult.status === 'completed') {
 				clearCart()
-				Eitri.navigation.navigate({ path: '../OrderCompleted', state: { orderId: paymentResult.orderId } })
+				Eitri.navigation.navigate('../OrderCompleted', {
+					orderId: paymentResult.orderId,
+					orderValue: cart.value
+				})
+				return
 			}
 
-			if (paymentResult.status === 'waiting_pix_payment') {
-				Eitri.navigation.navigate({ path: '../PixOrder', state: { pixData: paymentResult.pixData } })
+			if (paymentResult?.paymentAuthorizationAppCollection?.[0]?.appName === 'vtex.pix-payment') {
+				Eitri.navigation.navigate({ path: '../PixOrder', state: { paymentResult } })
+				return
 			}
+
+			Eitri.navigation.navigate('../ExternalProviderOrder', { paymentResult })
 		} catch (error) {
 			console.log('Erro no runPaymentScript', error)
 			setError({
@@ -121,10 +128,7 @@ export default function FinishCart() {
 	}
 
 	return (
-		<Page
-			title='Checkout - Home'
-			topInset
-			bottomInset>
+		<Page title='Checkout - Home'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('home.title')} />
@@ -132,7 +136,10 @@ export default function FinishCart() {
 
 			{(cartIsLoading || isLoading) && <Loading fullScreen />}
 
-			<View className='p-4'>
+			<View
+				topInset
+				bottomInset
+				className='p-4'>
 				<>
 					{error.state && (
 						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
@@ -155,31 +162,18 @@ export default function FinishCart() {
 
 						{unavailableItems.length === 0 && (
 							<SelectedPaymentData
-								payments={cart?.payments}
 								selectedPaymentData={selectedPaymentData}
 								onPress={() => navigateToEditor('PaymentData', true)}
 							/>
 						)}
+
+						<View className='w-full'>
+							<CustomButton
+								label={t('finishCart.labelButton')}
+								onPress={runPaymentScript}
+							/>
+						</View>
 					</View>
-
-					{/*<>*/}
-					{/*	<View className='h-[90px]' />*/}
-					{/*	<View className='bg-background-color fixed bottom-0 left-0 right-0'>*/}
-					{/*		<View className='p-4 flex flex-col items-center justify-center'>*/}
-					{/*			<CustomButton*/}
-					{/*				borderRadius='pill'*/}
-					{/*				marginVertical='small'*/}
-					{/*				label={t('finishCart.labelButton')}*/}
-					{/*				fontSize='medium'*/}
-					{/*				backgroundColor='primary-500'*/}
-					{/*				block*/}
-					{/*				onPress={runPaymentScript}*/}
-					{/*			/>*/}
-					{/*		</View>*/}
-
-					{/*		<View className='w-full bottomInset' />*/}
-					{/*	</View>*/}
-					{/*</>*/}
 				</>
 			</View>
 
