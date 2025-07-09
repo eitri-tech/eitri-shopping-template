@@ -5,26 +5,12 @@ export default async function setFreight(payload) {
 	return newCart
 }
 
-export const setNewAddress = async (cart, postalCode) => {
+export const setNewAddress = async address => {
 	try {
-		const resultCep = await Vtex.cart.resolvePostalCode(postalCode)
-
-		const { street, neighborhood, city, state, country, geoCoordinates } = resultCep
-
-		const newCart = await Vtex.checkout.setLogisticInfo({
+		return await Vtex.checkout.setLogisticInfo({
 			clearAddressIfPostalCodeNotFound: false,
-			selectedAddresses: generateSelectedAddressesPayload({
-				postalCode,
-				street,
-				neighborhood,
-				city,
-				state,
-				country,
-				geoCoordinates
-			})
+			selectedAddresses: Array.isArray(address) ? address : [address]
 		})
-
-		return newCart
 	} catch (error) {
 		console.error('getZipCode Error', error)
 	}
