@@ -1,11 +1,13 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, CustomInput, Loading } from 'shopping-vtex-template-shared'
+import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'
+import { simulateCart } from '../../services/freigthService'
 
 export default function Freight(props) {
-	const { cart, changeCartAddress, updateCartFreight } = useLocalShoppingCart()
+	const { cart, changeCartAddress } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [zipCode, setZipCode] = useState('')
 	const [shipping, setShipping] = useState(null)
@@ -15,62 +17,68 @@ export default function Freight(props) {
 	const [selectedOption, setSelectedOption] = useState('')
 	const [error, setError] = useState(false)
 
-	const { t } = useTranslation()
-
 	useEffect(() => {
-		const shipping = cart?.shipping
-
-		if (shipping) {
-			const { address, postalCode } = shipping
-			const { geoCoordinates } = address
-
-			if (geoCoordinates.length === 0 && cart?.canEditData) {
-				setError(t('freight.errorCep'))
-				setZipCode(postalCode)
-			} else {
-				setShipping(shipping)
-				setZipCode(postalCode)
-				setError('')
-				if (shipping?.shippingUnavailable) {
-					setIsUnavailable(shipping.shippingUnavailable)
-					setMessagesError(cart?.messages)
-				}
-			}
-		} else {
-			getZipCodeOnStorage()
+		if (cart) {
+			loadZipCode()
 		}
 	}, [cart])
 
+	const loadZipCode = async () => {
+		const zipCode = await getZipCodeOnStorage()
+		if (!zipCode) {
+			return
+		}
+		setZipCode(zipCode)
+		fetchFreight(zipCode)
+	}
+
 	const getZipCodeOnStorage = async () => {
-		let postalCode = await Eitri.sharedStorage.getItem('zipCode')
-		setZipCode(postalCode || '')
+		return await Eitri.sharedStorage.getItem('zipCode')
 	}
 
 	const setZipCodeOnStorage = async zipCode => {
 		await Eitri.sharedStorage.setItem('zipCode', zipCode)
 	}
 
-	const onInputZipCode = value => {
-		setZipCode(value)
+	const onInputZipCode = e => {
+		setZipCode(e.target.value)
 	}
 
-	const fetchFreight = async () => {
+	const handleZipCodeChange = async () => {
+		if (!zipCode) {
+			return
+		}
+		if (!(zipCode.length == 8 || zipCode.length == 9)) {
+			setError(t('freight.errorCep'))
+			return
+		}
+		fetchFreight(zipCode)
+	}
+
+	const fetchFreight = async zipCode => {
 		setIsLoading(true)
 		try {
-			if (!zipCode) {
-				return
-			}
-			if (!(zipCode.length == 8 || zipCode.length == 9)) {
-				setError(t('freight.errorCep'))
-				return
-			}
 			setError('')
 			setZipCodeOnStorage(zipCode)
-			await changeCartAddress(cart, zipCode)
-			setIsLoading(false)
+
+			const simulatedCart = await simulateCart(zipCode, cart)
+			const shipping = cartShippingResolver({
+				shippingData: {
+					logisticsInfo: simulatedCart?.logisticsInfo
+				}
+			})
+
+			if (!shipping.shippingAvailable) {
+				setError('Entrega indisponível')
+				return
+			}
+
+			setShipping(shipping)
 		} catch (error) {
 			console.error('Error fetching freight [1]', error)
 			setError(t('freight.errorCalcFreight'))
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -114,33 +122,34 @@ export default function Freight(props) {
 						placeholder={t('freight.labelZipCode')}
 						value={zipCode}
 						onChange={onInputZipCode}
-						maxLength={9}
+						variant='mask'
 						mask='99999-999'
 						inputMode='numeric'
 					/>
 					<CustomButton
 						variant='outlined'
-						onPress={fetchFreight}
 						isLoading={isLoading}
 						label={t('freight.txtCalculate')}
-						width='40%'
+						className='grow'
+						onPress={handleZipCodeChange}
 					/>
 				</View>
 			) : (
 				<View className='mt-2'>
-					<Text className='text-base font-medium'>{`[b]${t('freight.labelZipCode')}[/b]: ${shipping?.address?.postalCode}`}</Text>
+					<Text className='text-base font-medium'>{`[b]${t('freight.labelZipCode')}[/b]: ${
+						shipping?.address?.postalCode
+					}`}</Text>
 				</View>
 			)}
 
 			{error && (
-				<View
-					className='mt-2'
-					paddingBottom='small'>
-					<Text className='text-xs text-tertiary-700'>{error}</Text>
+				<View className='mt-1'>
+					<Text className='text-xs text-red-600'>{error}</Text>
 				</View>
 			)}
-			{shipping && (
-				<View className='flex flex-col my-2 py-2 border border-neutral-300 rounded-sm items-center justify-between'>
+
+			{shipping && shipping?.options.length > 0 && (
+				<View className='flex flex-col my-2 p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
 					{shipping?.options.map((item, index) => (
 						<View
 							key={index}
@@ -155,14 +164,6 @@ export default function Freight(props) {
 										</View>
 									) : (
 										<>
-											<View className='w-1/4 p-2'>
-												<Radio
-													name='shippingOptions'
-													value={item?.slas[0]?.id}
-													checked={item?.slas[0]?.selected}
-													onChange={() => onSetCartFreight(item)}
-												/>
-											</View>
 											<View className='w-full flex flex-col'>
 												<Text className='font-bold'>{item?.label}</Text>
 												<Text className='text-xs text-neutral-500'>

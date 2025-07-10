@@ -80,7 +80,16 @@
 		"frmNeighborhood": "Rua / Avenida",
 		"frmCity": "Cidade",
 		"frmState": "Estado",
-		"labelButton": "Continuar"
+		"labelButton": "Continuar",
+		"ok": "OK",
+		"loading": "Aguarde...",
+		"errorPostalCode": "Informe o CEP",
+		"errorStreet": "Informe a rua/avenida",
+		"errorNeighborhood": "Informe o bairro",
+		"errorCity": "Informe a cidade",
+		"errorState": "Informe o estado",
+		"errorReceiverName": "Informe quem irá receber",
+		"errorNumber": "Informe o número"
 	},
 	"simpleCard": {
 		"txtEdit": "ALTERAR"

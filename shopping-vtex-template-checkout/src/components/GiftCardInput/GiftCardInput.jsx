@@ -4,7 +4,7 @@ import { Button } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 
 export default function GiftCardInput(props) {
-	const { cart, setPaymentOption } = useLocalShoppingCart()
+	const { cart, selectPaymentOption } = useLocalShoppingCart()
 	const [isLoading, setIsLoading] = useState(false)
 	const [redemptionCode, setRedemptionCode] = useState('')
 	const { t } = useTranslation()
@@ -23,7 +23,7 @@ export default function GiftCardInput(props) {
 					}
 				]
 			}
-			await setPaymentOption(payload)
+			await selectPaymentOption(payload)
 			setRedemptionCode('')
 			setIsLoading(false)
 		} catch (e) {
@@ -35,13 +35,12 @@ export default function GiftCardInput(props) {
 	const removeGiftCart = async giftId => {
 		try {
 			const newGiftCardList = cart?.giftCards?.filter(gift => gift.id !== giftId)
-			// console.log('New gift card list:', newGiftCardList)
 			setIsLoading(true)
 			const payload = {
 				payments: cart.paymentData.payments,
 				giftCards: newGiftCardList
 			}
-			await setPaymentOption(payload)
+			await selectPaymentOption(payload)
 			setRedemptionCode('')
 			setIsLoading(false)
 		} catch (e) {
@@ -54,28 +53,33 @@ export default function GiftCardInput(props) {
 		<View>
 			<Text
 				fontSize='small'
-				fontWeight='bold'>
+				fontWeight='bold'
+				className='mb-2'>
 				Adicionar vale presente
 			</Text>
 			<View
 				marginTop='nano'
 				alignItems='center'
 				direction='row'
-				gap='10px'>
+				gap='10px'
+				className='flex flex-row gap-2 mb-4'>
 				<CustomInput
 					placeholder='Insira o código do vale presente'
 					value={redemptionCode}
 					onChange={setRedemptionCode}
 				/>
 				<CustomButton
-					width='fit-content'
 					label='Adicionar'
-					paddingHorizontal='small'
+					className='grow'
 					onPress={addGiftCard}
 				/>
 			</View>
-			<View>
-				{isLoading && <Loading inline />}
+			<View className='flex flex-col gap-2'>
+				{isLoading && (
+					<View className='flex justify-center my-2'>
+						<Loading inline />
+					</View>
+				)}
 				{!isLoading &&
 					cart?.giftCards?.length > 0 &&
 					cart?.giftCards?.map(gift => (
@@ -89,7 +93,8 @@ export default function GiftCardInput(props) {
 							key={gift.id}
 							direction='row'
 							justifyContent='between'
-							marginTop='extra-small'>
+							marginTop='extra-small'
+							className='flex flex-row items-center justify-between'>
 							<View
 								gap={5}
 								direction='row'>

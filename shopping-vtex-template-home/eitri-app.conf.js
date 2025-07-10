@@ -2,7 +2,7 @@ module.exports = {
 	'name': 'shopping-vtex-template-home',
 	'title': 'shopping-vtex-template-home',
 	'slug': 'shopping-vtex-template-home',
-	'eitri-luminus': '2.1.5',
+	'eitri-luminus': '2.3.1',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
 	'version': '0.1.0',
@@ -14,11 +14,11 @@ module.exports = {
 	'eitri-app-dependencies': {
 		'shopping-vtex-template-shared': {
 			isEitriAppShared: true,
-			version: '0.3.17'
+			version: '0.1.0'
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
-			version: '0.1.47'
+			version: '1.1.1'
 		},
 		'i18n': {
 			version: '14.1.2'

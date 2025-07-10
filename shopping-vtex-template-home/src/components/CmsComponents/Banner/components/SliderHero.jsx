@@ -6,7 +6,7 @@ export default function SliderHero(props) {
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const imagesList = data.images
 
-	const onSwipe = i => {
+	const onChange = i => {
 		setCurrentSlide(i)
 	}
 
@@ -17,28 +17,32 @@ export default function SliderHero(props) {
 					<Text className='font-bold mb-8'>{data.mainTitle}</Text>
 				</View>
 			)}
-			<Swiper
+			<Carousel
 				config={{
-					onChange: onSwipe,
-					autoPlay: true
+					onChange: onChange,
+					autoPlay: true,
+					interval: 4000,
+					loop: true,
+					currentSlide: currentSlide
 				}}>
 				{imagesList &&
 					imagesList.map(image => (
-						<Swiper.Item
-							className='w-full flex justify-center'
+						<Carousel.Item
+							className='w-full flex justify-center snap-x snap-always'
 							key={`image_${image.imageUrl}`}>
 							<View
 								onClick={() => {
 									onClick(image)
 								}}>
 								<Image
+									fadeIn={1000}
 									className='w-full'
 									src={image.imageUrl}
 								/>
 							</View>
-						</Swiper.Item>
+						</Carousel.Item>
 					))}
-			</Swiper>
+			</Carousel>
 			{imagesList.length > 1 && (
 				<View className='flex justify-center gap-2'>
 					{imagesList &&
@@ -49,7 +53,11 @@ export default function SliderHero(props) {
 							(_, index) => (
 								<View
 									key={index}
-									className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${currentSlide === index ? 'bg-primary' : 'bg-base-300'} transition-[width,background-color] duration-300 ease-in-out"`}
+									className={`${
+										currentSlide === index ? 'w-[36px]' : 'w-[12px]'
+									} h-[6px] rounded-lg ${
+										currentSlide === index ? 'bg-primary' : 'bg-base-300'
+									} transition-[width,background-color] duration-300 ease-in-out"`}
 								/>
 							)
 						)}

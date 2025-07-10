@@ -22,8 +22,7 @@ export default function CartItem(props) {
 	const [loadingWishlist, setLoadingWishlist] = useState(false)
 	const [wishlistId, setWishlistId] = useState('')
 	const [showModalRemoveItem, setShowModalRemoveItem] = useState(false)
-
-	const resizedImageUrl = item.imageUrl.replace('60-60', '200-200')
+	const resizedImageUrl = item.imageUrl.replace(/\/(\d+)-\d+-\d+\//, '/$1-200-200/')
 
 	const { t } = useTranslation()
 
@@ -72,14 +71,15 @@ export default function CartItem(props) {
 	const handleModalRemoveItem = () => {
 		setShowModalRemoveItem(!showModalRemoveItem)
 	}
+	console.log('item', resizedImageUrl)
 
 	return (
 		<View>
-			<View className='bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-4'>
+			<View className='bg-white rounded shadow-sm border border-gray-300 p-4 mb-4'>
 				<View className='flex gap-4'>
 					<View className='flex-shrink-0'>
 						<Image
-							className='w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg'
+							className='w-20 h-20 object-cover rounded'
 							src={resizedImageUrl}
 						/>
 					</View>
@@ -87,14 +87,6 @@ export default function CartItem(props) {
 					<View className='flex-1 min-w-0'>
 						<View className='flex justify-between items-start mb-2'>
 							<Text className='text-sm font-medium text-gray-900 pr-2'>{item.name}</Text>
-							<View className='flex-shrink-0 flex flex-col gap-2'>
-								<View onClick={handleModalRemoveItem}>
-									<Image
-										className='h-5'
-										src={trash}
-									/>
-								</View>
-							</View>
 						</View>
 
 						{/* Preço */}
@@ -103,21 +95,13 @@ export default function CartItem(props) {
 						</View>
 
 						{/* Seletor de Quantidade */}
-						<View className='flex items-center justify-between'>
-							<View className='flex items-center gap-3'>
-								<Text className='text-sm text-gray-600'>Qtd:</Text>
-								<Quantity
-									quantity={item.quantity}
-									handleItemQuantity={handleQuantityOfItemsCart}
-								/>
-							</View>
-							<View
-								onClick={handleModalRemoveItem}
-								className='text-gray-400 hover:text-red-500 transition-colors'>
-								<Image
-									className='h-5'
-									src={trash}
-								/>
+						<View className='flex items-center gap-2'>
+							<Quantity
+								quantity={item.quantity}
+								handleItemQuantity={handleQuantityOfItemsCart}
+							/>
+							<View onClick={handleModalRemoveItem}>
+								<Text className='flex items-center text-gray-400 size-3'>Excluir</Text>
 							</View>
 						</View>
 
@@ -185,7 +169,7 @@ export default function CartItem(props) {
 				</View>
 
 				{item?.offerings?.length > 0 && !message && (
-					<View className='mt-4 pt-3 border-t border-gray-100'>
+					<View className='mt-4 pt-3 border-t border-gray-300'>
 						{item?.offerings
 							?.filter(o => !o.isBundled)
 							.map((offering, index) => (
@@ -229,7 +213,9 @@ export default function CartItem(props) {
 							<View className='bg-background-color w-full h-0.5' />
 							<View className='py-2 px-6 flex justify-between items-center'>
 								<Text className='text-sm font-medium'>
-									{`${offering?.name}: ${offering?.price ? formatAmountInCents(offering.price, locale, currency) : ''}`}
+									{`${offering?.name}: ${
+										offering?.price ? formatAmountInCents(offering.price, locale, currency) : ''
+									}`}
 								</Text>
 								<Button onClick={() => onRemoveOfferingFromCart(item.itemIndex, offering.id)}>
 									<Image

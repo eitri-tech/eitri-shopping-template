@@ -81,7 +81,7 @@ export default function cartShippingResolver(cart) {
 
 		const shipping = {
 			postalCode: cart.shippingData?.address?.postalCode,
-			shippingUnavailable: cheapers.length === 0 && fasters.length === 0 && pickUpInPoints.length === 0,
+			shippingAvailable: !(cheapers.length === 0 && fasters.length === 0 && pickUpInPoints.length === 0),
 			selectedAddresses,
 			options
 		}

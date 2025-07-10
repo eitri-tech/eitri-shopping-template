@@ -25,6 +25,11 @@ export default function FreightSelector(props) {
 
 	// Determina automaticamente qual aba abrir baseada na opção já selecionada
 	useEffect(() => {
+		if (!cart?.shippingData?.address) {
+			navigate('AddressSelector', {}, true)
+			return
+		}
+
 		if (cart?.shippingData?.logisticsInfo?.[0]) {
 			const firstLogisticInfo = cart.shippingData.logisticsInfo[0]
 			const isPickup = firstLogisticInfo.selectedDeliveryChannel === 'pickup-in-point'

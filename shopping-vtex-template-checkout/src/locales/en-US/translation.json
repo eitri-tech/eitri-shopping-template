@@ -80,7 +80,16 @@
 		"frmNeighborhood": "Neighborhood",
 		"frmCity": "City",
 		"frmState": "State",
-		"labelButton": "Continue"
+		"labelButton": "Continue",
+		"ok": "OK",
+		"loading": "Please wait...",
+		"errorPostalCode": "Enter the zip code",
+		"errorStreet": "Enter the street/avenue",
+		"errorNeighborhood": "Enter the neighborhood",
+		"errorCity": "Enter the city",
+		"errorState": "Enter the state",
+		"errorReceiverName": "Enter the receiver's name",
+		"errorNumber": "Enter the number"
 	},
 	"simpleCard": {
 		"txtEdit": "EDIT"

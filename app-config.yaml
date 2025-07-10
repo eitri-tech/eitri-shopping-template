@@ -4,26 +4,26 @@ eitri-apps:
       alias: shared
       focus: false
       shared: true
-    #- path: ./shopping-vtex-template-home
-    #  workspace: home
-    #  alias: home
-    #  focus: true
-    #  shared: false
-    #- path: ./shopping-vtex-template-pdp
-    #  workspace: pdp
-    #  alias: pdp
-    #  focus: false
-    #  shared: false
-    # - path: ./shopping-vtex-template-account
-    #   workspace: account
-    #   alias: account
-    #   focus: true
-    #   shared: false
-    #- path: ./shopping-vtex-template-cart
-    #  workspace: cart
-    #  alias: cart
-    #  focus: false
-    #  shared: false
+    - path: ./shopping-vtex-template-home
+      workspace: home
+      alias: home
+      focus: true
+      shared: false
+    - path: ./shopping-vtex-template-pdp
+      workspace: pdp
+      alias: pdp
+      focus: false
+      shared: false
+    - path: ./shopping-vtex-template-account
+      workspace: account
+      alias: account
+      focus: true
+      shared: false
+    - path: ./shopping-vtex-template-cart
+      workspace: cart
+      alias: cart
+      focus: false
+      shared: false
     - path: ./shopping-vtex-template-checkout
       workspace: checkout
       alias: checkout

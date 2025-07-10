@@ -6,13 +6,13 @@ import { useTranslation } from 'eitri-i18n'
 import { Page, View, Text } from 'eitri-luminus'
 import { useState, useEffect } from 'react'
 import DeliveryAddressList from '../components/AddressSelector/DeliveryAddressList'
+import { navigate } from '../services/navigationService'
 
 export default function AddressSelector(props) {
 	const { cart, setShippingAddress } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isAddressLoading, setIsAddressLoading] = useState(false)
-
-	const { t } = useTranslation()
 
 	const PAGE = 'Checkout - Seleção de Endereço'
 
@@ -36,7 +36,7 @@ export default function AddressSelector(props) {
 	}
 
 	const handleAddNewAddress = () => {
-		Eitri.navigation.navigate({ path: '/AddressForm' })
+		navigate('AddressForm', {}, true)
 	}
 
 	const getAddresses = () => {

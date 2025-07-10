@@ -8,15 +8,16 @@ import Coupon from '../components/Coupon/Coupon'
 import CartSummary from '../components/CartSummary/CartSummary'
 import InstallmentsMsg from '../components/InstallmentsMsg/InstallmentsMsg'
 import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
-import { setLanguage, startConfigure } from '../services/AppService'
+import { startConfigure } from '../services/AppService'
 import { Page } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+
 export default function Home(props) {
-	const openWithBottomBar = !!props?.location?.state?.tabIndex
-	const { t, i18n } = useTranslation()
+	const { t } = useTranslation()
 	const { cart, startCart } = useLocalShoppingCart()
 
 	const [appIsLoading, setAppIsLoading] = useState(true)
+	const [openWithBottomBar, setOpenWithBottomBar] = useState(false)
 
 	useEffect(() => {
 		startHome()
@@ -36,10 +37,13 @@ export default function Home(props) {
 	}, [cart])
 
 	const startHome = async () => {
+		const startParams = await Eitri.getInitializationInfos()
+		setOpenWithBottomBar(startParams?.tabIndex)
+
 		await startConfigure()
 		await loadCart()
+
 		setAppIsLoading(false)
-		setLanguage(i18n)
 		sendPageView('Home')
 	}
 
@@ -48,20 +52,11 @@ export default function Home(props) {
 		if (startParams?.orderFormId) {
 			await saveCartIdOnStorage(startParams?.orderFormId)
 		}
-
 		return startCart()
 	}
 
 	return (
-		<Page
-			title='Carrinho'
-			bottomInset
-			topInset>
-			<Loading
-				fullScreen
-				isLoading={appIsLoading}
-			/>
-
+		<Page title='Carrinho'>
 			<HeaderContentWrapper
 				gap={16}
 				scrollEffect={false}>
@@ -70,15 +65,22 @@ export default function Home(props) {
 				<HeaderText text={t('home.title')} />
 			</HeaderContentWrapper>
 
-			<InstallmentsMsg />
+			<Loading
+				fullScreen
+				isLoading={appIsLoading}
+			/>
 
-			<CartItemsContent />
+			<View
+				topInset
+				bottomInset>
+				<CartItemsContent />
 
-			<Freight />
+				<Freight />
 
-			<Coupon />
+				<Coupon />
 
-			<CartSummary />
+				<CartSummary />
+			</View>
 		</Page>
 	)
 }

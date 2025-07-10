@@ -13,14 +13,70 @@ import { getUserByEmail, registerToNotify } from '../services/cartService'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import { goToCartman } from '../utils/utils'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+
+// Função utilitária extraída para validação de CPF
+function verifySocialNumber(cpf) {
+	const cleanCpf = cpf?.replace(/[\.\-]/g, '')
+	if (!cleanCpf || cleanCpf.length !== 11 || cleanCpf.match(/(\d)\1{10}/)) return false
+
+	let sum = 0
+	let rest
+
+	for (let i = 1; i <= 9; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (11 - i)
+	rest = (sum * 10) % 11
+
+	if (rest === 10 || rest === 11) rest = 0
+	if (rest !== parseInt(cleanCpf.substring(9, 10))) return false
+
+	sum = 0
+	for (let i = 1; i <= 10; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (12 - i)
+	rest = (sum * 10) % 11
+
+	if (rest === 10 || rest === 11) rest = 0
+	if (rest !== parseInt(cleanCpf.substring(10, 11))) return false
+
+	return true
+}
+
+function PersonalInputs({ options, personalData, onChange }) {
+	return options.map(inputOption => (
+		<CustomInput
+			autoFocus={inputOption.autoFocus}
+			key={inputOption.label}
+			label={inputOption.title}
+			showClearInput={false}
+			type={inputOption.type}
+			value={personalData[inputOption.label] || ''}
+			onChange={onChange(inputOption.label)}
+			placeholder={inputOption.placeholder}
+			inputMode={inputOption.inputMode}
+			mask={inputOption.mask}
+			variant='mask'
+		/>
+	))
+}
+
+function CorporateInputs({ options, personalData, onChange }) {
+	return options.map(inputOption => (
+		<CustomInput
+			key={inputOption.label}
+			label={inputOption.title}
+			showClearInput={false}
+			type={inputOption.type}
+			value={personalData[inputOption.label] || ''}
+			onChange={onChange(inputOption.label)}
+			placeholder={inputOption.placeholder}
+		/>
+	))
+}
 
 export default function PersonalData() {
 	const { cart, addCustomerData } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
-
-	const [isLegalPerson, setIsLegalPerson] = useState(false)
+	const [isCorporatePerson, setIsCorporatePerson] = useState(false)
 	const [personalData, setPersonalData] = useState({
 		email: '',
 		firstName: '',
@@ -36,38 +92,115 @@ export default function PersonalData() {
 		isCorporate: false,
 		stateInscription: ''
 	})
-
 	const [userDataVerified, setUserDataVerified] = useState(false)
 	const [socialNumberError, setSocialNumberError] = useState(false)
 
+	// Memoize input options
+	const personalInputOptions = useMemo(
+		() => [
+			{
+				id: 'firstName',
+				label: 'firstName',
+				type: 'string',
+				title: t('personalData.frmName'),
+				placeholder: t('personalData.placeholderName'),
+				inputMode: 'string'
+			},
+			{
+				label: 'lastName',
+				type: 'string',
+				title: t('personalData.frmLastName'),
+				placeholder: t('personalData.placeholderLastName'),
+				inputMode: 'string'
+			},
+			{
+				label: 'document',
+				type: 'string',
+				title: t('personalData.frmTaxpayerId'),
+				placeholder: t('personalData.placeholderTaxpayerId'),
+				inputMode: 'numeric',
+				mask: '999.999.999-99'
+			},
+			{
+				label: 'phone',
+				type: 'string',
+				title: t('personalData.frmPhone'),
+				placeholder: t('personalData.placeholderPhone'),
+				inputMode: 'tel',
+				mask: '(99) 9999-99999'
+			}
+		],
+		[t]
+	)
+
+	const corporateInputOptions = useMemo(
+		() => [
+			{
+				label: 'corporateName',
+				type: 'string',
+				title: t('personalData.frmCorporateName'),
+				placeholder: t('personalData.placeholderCorporateName'),
+				inputMode: 'string'
+			},
+			{
+				label: 'tradeName',
+				type: 'string',
+				title: t('personalData.frmFantasyName'),
+				placeholder: t('personalData.placeholderFantasyName'),
+				inputMode: 'string'
+			},
+			{
+				label: 'corporateDocument',
+				type: 'string',
+				title: t('personalData.frmCorporateDocument'),
+				placeholder: t('personalData.placeholderCorporateDocument'),
+				inputMode: 'numeric',
+				mask: '99.999.999/9999-99'
+			},
+			{
+				label: 'stateInscription',
+				type: 'string',
+				title: t('personalData.frmStateInscription'),
+				placeholder: t('personalData.placeholderStateInscription'),
+				inputMode: 'string'
+			}
+		],
+		[t]
+	)
+
+	// Padronizar handler de mudança de input
+	const handlePersonalDataChange = useCallback(
+		key => e => {
+			const value = e.target?.value ?? e
+			setPersonalData(prev => ({ ...prev, [key]: value }))
+		},
+		[]
+	)
+
+	// Efeito para preencher dados do usuário do carrinho
 	useEffect(() => {
 		if (cart?.clientProfileData?.email) {
-			setPersonalData({
-				...personalData,
+			setPersonalData(prev => ({
+				...prev,
 				...cart.clientProfileData
-			})
-			if (cart?.clientProfileData?.email) {
-				setUserDataVerified(true)
-			}
+			}))
+			setUserDataVerified(true)
 		} else {
 			setUserDataVerified(false)
 		}
-
-		console.log(cart?.orderFormId)
 		sendPageView('Dados pessoais')
 	}, [cart])
 
+	// Efeito para validar CPF
 	useEffect(() => {
-		if (personalData?.document?.length !== 11) setSocialNumberError(false)
-		if (personalData?.document?.length === 11) checkSocialNumber(personalData?.document)
+		if (personalData?.document?.length === 11) {
+			setSocialNumberError(!verifySocialNumber(personalData?.document))
+		} else {
+			setSocialNumberError(false)
+		}
 	}, [personalData?.document])
 
-	const handlePersonalDataChange = (key, e) => {
-		const { value } = e.target
-		setPersonalData({ ...personalData, [key]: value })
-	}
-
-	const setUserData = () => {
+	const setUserData = useCallback(() => {
 		const localPersonalData = {
 			email: personalData.email,
 			firstName: personalData.firstName,
@@ -79,31 +212,33 @@ export default function PersonalData() {
 			isCorporate: false,
 			corporateName: '',
 			tradeName: '',
-			corporateDocument: personalData.corporateDocument,
+			corporateDocument: '',
 			corporatePhone: '',
 			stateInscription: ''
 		}
 		addUserData(localPersonalData)
-	}
+	}, [personalData])
 
-	const addUserData = async userData => {
-		try {
-			setIsLoading(true)
-			await addCustomerData(userData, cart.orderFormId)
-			setIsLoading(false)
-			Eitri.navigation.navigate({ path: 'FinishCart', replace: true })
-		} catch (error) {
-			console.log('error', error)
-		} finally {
-			setIsLoading(false)
-		}
-	}
+	const addUserData = useCallback(
+		async userData => {
+			try {
+				setIsLoading(true)
+				await addCustomerData(userData, cart.orderFormId)
+				Eitri.navigation.navigate({ path: 'FinishCart', replace: true })
+			} catch (error) {
+				console.log('error', error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[addCustomerData, cart?.orderFormId]
+	)
 
-	const handleLegalPerson = () => {
-		setIsLegalPerson(!isLegalPerson)
-	}
+	const handleCorporateToggle = useCallback(() => {
+		setIsCorporatePerson(prev => !prev)
+	}, [])
 
-	const findUserByEmail = async () => {
+	const findUserByEmail = useCallback(async () => {
 		setIsLoading(true)
 		const client = await getUserByEmail(personalData.email)
 		if (client.userProfileId) {
@@ -114,118 +249,18 @@ export default function PersonalData() {
 		} else {
 			setUserDataVerified(true)
 		}
-
 		setIsLoading(false)
-	}
+	}, [personalData.email, addCustomerData, cart?.orderFormId])
 
-	const personalInputOptions = [
-		{
-			id: 'firstName',
-			label: 'firstName',
-			type: 'string',
-			title: t('personalData.frmName'),
-			placeholder: t('personalData.placeholderName'),
-			inputMode: 'string'
-		},
-		{
-			label: 'lastName',
-			type: 'string',
-			title: t('personalData.frmLastName'),
-			placeholder: t('personalData.placeholderLastName'),
-			inputMode: 'string'
-		},
-		{
-			label: 'document',
-			type: 'string',
-			title: t('personalData.frmTaxpayerId'),
-			placeholder: t('personalData.placeholderTaxpayerId'),
-			inputMode: 'numeric',
-			mask: '999.999.999-99'
-		},
-		{
-			label: 'phone',
-			type: 'string',
-			title: t('personalData.frmPhone'),
-			placeholder: t('personalData.placeholderPhone'),
-			inputMode: 'tel',
-			mask: '(99) 9999-99999'
-		}
-	]
-
-	const corporateInputOptions = [
-		{
-			label: 'corporateName',
-			type: 'string',
-			title: t('personalData.frmCorporateName'),
-			placeholder: t('personalData.placeholderCorporateName'),
-			inputMode: 'string'
-		},
-		{
-			label: 'tradeName',
-			type: 'string',
-			title: t('personalData.frmFantasyName'),
-			placeholder: t('personalData.placeholderFantasyName'),
-			inputMode: 'string'
-		},
-		{
-			label: 'corporateDocument',
-			type: 'string',
-			title: t('personalData.frmCorporateDocument'),
-			placeholder: t('personalData.placeholderCorporateDocument'),
-			inputMode: 'numeric',
-			mask: '99.999.999/9999-99'
-		},
-		{
-			label: 'stateInscription',
-			type: 'string',
-			title: t('personalData.frmStateInscription'),
-			placeholder: t('personalData.placeholderStateInscription'),
-			inputMode: 'string'
-		}
-	]
-
-	const verifySocialNumber = cpf => {
-		// Remove dots and dashes
-		const cleanCpf = cpf?.replace(/[\.\-]/g, '')
-		if (!cleanCpf || cleanCpf.length !== 11 || cleanCpf.match(/(\d)\1{10}/)) return false
-
-		let sum = 0
-		let rest
-
-		for (let i = 1; i <= 9; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (11 - i)
-		rest = (sum * 10) % 11
-
-		if (rest === 10 || rest === 11) rest = 0
-		if (rest !== parseInt(cleanCpf.substring(9, 10))) return false
-
-		sum = 0
-		for (let i = 1; i <= 10; i++) sum += parseInt(cleanCpf.substring(i - 1, i)) * (12 - i)
-		rest = (sum * 10) % 11
-
-		if (rest === 10 || rest === 11) rest = 0
-		if (rest !== parseInt(cleanCpf.substring(10, 11))) return false
-
-		return true
-	}
-
-	const checkSocialNumber = document => {
-		const verifiedSocialNumber = verifySocialNumber(document)
-		if (verifiedSocialNumber) {
-			setSocialNumberError(false)
-		} else {
-			setSocialNumberError(true)
-		}
-	}
-
-	const handleDataFilled = () => {
-		return (
+	const isDataFilled = useMemo(
+		() =>
 			personalData?.email !== '' &&
 			personalData?.firstName !== '' &&
 			personalData?.lastName !== '' &&
 			verifySocialNumber(personalData?.document) &&
-			personalData?.phone?.length > '9'
-		)
-	}
+			personalData?.phone?.length > 9,
+		[personalData]
+	)
 
 	return (
 		<Page title='Checkout - Dados de usuário'>
@@ -249,9 +284,7 @@ export default function PersonalData() {
 								label={t('personalData.frmEmail')}
 								type={'email'}
 								value={personalData['email'] || ''}
-								onChange={text => {
-									handlePersonalDataChange('email', text)
-								}}
+								onChange={handlePersonalDataChange('email')}
 								placeholder={t('personalData.placeholderEmail')}
 								inputMode={'email'}
 								className='w-[70%]'
@@ -263,24 +296,13 @@ export default function PersonalData() {
 							/>
 						</View>
 
-						{userDataVerified &&
-							personalInputOptions.map(inputOption => (
-								<CustomInput
-									autoFocus={inputOption.autoFocus}
-									key={inputOption.label}
-									label={inputOption.title}
-									showClearInput={false}
-									type={inputOption.type}
-									value={personalData[inputOption.label] || ''}
-									onChange={text => {
-										handlePersonalDataChange(inputOption.label, text)
-									}}
-									placeholder={inputOption.placeholder}
-									inputMode={inputOption.inputMode}
-									mask={inputOption.mask}
-									variant='mask'
-								/>
-							))}
+						{userDataVerified && (
+							<PersonalInputs
+								options={personalInputOptions}
+								personalData={personalData}
+								onChange={handlePersonalDataChange}
+							/>
+						)}
 
 						{socialNumberError && (
 							<View className='bg-negative-100 p-3 rounded-lg'>
@@ -292,9 +314,9 @@ export default function PersonalData() {
 							<View className='flex flex-col justify-center items-center my-2'>
 								<View
 									className='bg-transparent'
-									onClick={handleLegalPerson}>
+									onClick={handleCorporateToggle}>
 									<Text className='text-primary-900 font-bold'>
-										{isLegalPerson
+										{isCorporatePerson
 											? t('personalData.labelPerson')
 											: t('personalData.labelCorporate')}
 									</Text>
@@ -302,19 +324,13 @@ export default function PersonalData() {
 							</View>
 						)}
 
-						{userDataVerified &&
-							isLegalPerson &&
-							corporateInputOptions.map(inputOption => (
-								<CustomInput
-									key={inputOption.label}
-									label={inputOption.title}
-									showClearInput={false}
-									type={inputOption.type}
-									value={personalData[inputOption.label]}
-									onChange={text => handlePersonalDataChange(inputOption.label, text)}
-									placeholder={inputOption.placeholder}
-								/>
-							))}
+						{userDataVerified && isCorporatePerson && (
+							<CorporateInputs
+								options={corporateInputOptions}
+								personalData={personalData}
+								onChange={handlePersonalDataChange}
+							/>
+						)}
 					</View>
 				</View>
 
@@ -322,7 +338,7 @@ export default function PersonalData() {
 					bottomInset
 					className='p-4'>
 					<CustomButton
-						disabled={!handleDataFilled()}
+						disabled={!isDataFilled}
 						label={t('personalData.labelButton')}
 						onPress={setUserData}
 					/>

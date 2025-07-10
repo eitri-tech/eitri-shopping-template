@@ -4,7 +4,7 @@ export default function Quantity(props) {
 	const { quantity, handleItemQuantity, disable } = props
 
 	return (
-		<View className='flex items-center border border-gray-300 rounded-lg'>
+		<View className='flex items-center border border-gray-300 rounded px-2'>
 			<View className='w-1/3 flex items-center justify-center'>
 				{quantity === 1 || disable ? (
 					<svg
@@ -40,6 +40,7 @@ export default function Quantity(props) {
 					</View>
 				)}
 			</View>
+
 			<Text className='px-3 py-2 text-sm font-medium min-w-[3rem] text-center'>{quantity}</Text>
 
 			<View className='w-1/3 items-center justify-center pl-1'>

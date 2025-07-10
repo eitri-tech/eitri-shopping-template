@@ -116,3 +116,32 @@ const generateSelectedAddressesPayload = address => {
 		}
 	]
 }
+
+export const simulateCart = async (zipCode, cart) => {
+	if (!zipCode) {
+		return
+	}
+
+	try {
+		const address = await Vtex.checkout.resolveZipCode(zipCode)
+
+		const { postalCode, city, state, street, neighborhood, country, geoCoordinates } = address
+
+		const cartSimulationPayload = {
+			items: cart?.items?.map(item => {
+				return {
+					id: item.id,
+					quantity: item.quantity,
+					seller: item.seller
+				}
+			}),
+			country,
+			postalCode,
+			geoCoordinates
+		}
+
+		return await Vtex.cart.simulateCart(cartSimulationPayload)
+	} catch (error) {
+		console.error('Error fetching freight', error)
+	}
+}
