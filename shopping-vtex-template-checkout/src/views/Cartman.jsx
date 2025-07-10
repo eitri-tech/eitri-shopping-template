@@ -11,6 +11,7 @@ export default function Cartman() {
 	const getCart = async () => {
 		try {
 			const cart = await Vtex.cart.getCartIfExists()
+			console.log('cart========>', cart.orderFormId)
 			setCart(cart)
 		} catch (error) {
 			console.log('Erro ao buscar carrinho', error)

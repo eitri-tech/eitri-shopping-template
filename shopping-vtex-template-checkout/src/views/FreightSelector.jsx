@@ -8,24 +8,36 @@ import {
 } from 'shopping-vtex-template-shared'
 import ShippingMethods from '../components/Methods/ShippingMethods'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View, Text } from 'eitri-luminus'
 import AddressTypeTabs from '../components/AddressSelector/AddressTypeTabs'
 import PickupPointList from '../components/AddressSelector/PickupPointList'
-import { navigate } from '../services/flowControl'
+import { navigate } from '../services/navigationService'
+import { useState, useEffect } from 'react'
 
 export default function FreightSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
 
-	const [adressError, setAddressError] = useState('')
 	const [selectedTab, setSelectedTab] = useState('delivery') // 'delivery' or 'pickup'
 	const [isLoading, setIsLoading] = useState(false)
 
 	const { t } = useTranslation()
 
+	// Determina automaticamente qual aba abrir baseada na opção já selecionada
+	useEffect(() => {
+		if (cart?.shippingData?.logisticsInfo?.[0]) {
+			const firstLogisticInfo = cart.shippingData.logisticsInfo[0]
+			const isPickup = firstLogisticInfo.selectedDeliveryChannel === 'pickup-in-point'
+
+			// Se há uma opção selecionada, abre na aba correspondente
+			if (firstLogisticInfo.selectedSla) {
+				setSelectedTab(isPickup ? 'pickup' : 'delivery')
+			}
+		}
+	}, [cart])
+
 	const submit = async () => {
-		navigate('FreightSelector', cart)
+		navigate('FinishCart')
 	}
 
 	const onSelectFreightOption = async freightOption => {
@@ -66,8 +78,6 @@ export default function FreightSelector(props) {
 
 				<View className='flex-1 flex flex-col p-4'>
 					<View className='flex flex-col gap-4 flex-1'>
-						{adressError && <Text className='mt-2 text-red-700'>{adressError}</Text>}
-
 						<AddressTypeTabs
 							selectedTab={selectedTab}
 							onTabChange={setSelectedTab}
@@ -86,6 +96,15 @@ export default function FreightSelector(props) {
 								loading={isLoading}
 							/>
 						)}
+
+						<View className='p-4'>
+							<CustomButton
+								width='100%'
+								label={'Alterar endereço de entrega'}
+								outlined
+								onPress={() => navigate('AddressSelector')}
+							/>
+						</View>
 					</View>
 				</View>
 

@@ -1,16 +1,16 @@
 import { useTranslation } from 'eitri-i18n'
 
 export default function SimpleCard(props) {
-	const { isFilled, title, subtitle, index, onPress, children, icon, ...rest } = props
+	const { isFilled, title, subtitle, onPress, children, icon, mainActionLabel, ...rest } = props
 
 	const { t } = useTranslation()
 
 	return (
-		<View
-			onClick={onPress}
-			className='w-full p-4 border border-neutral-700 flex flex-col rounded'>
+		<View className='w-full p-4 border border-neutral-700 flex flex-col rounded'>
 			<View className='flex flex-row justify-between'>
-				<View className='flex items-center justify-center gap-3'>
+				<View
+					onClick={onPress}
+					className='flex items-center justify-center gap-3'>
 					<Image
 						src={icon}
 						width='24px'
@@ -51,8 +51,12 @@ export default function SimpleCard(props) {
 				<>
 					<View className='mt-4'>
 						<View>{children}</View>
-						<View className='mt-2'>
-							<Text className='uppercase text-xs text-primary-700'>{t('simpleCard.txtEdit')}</Text>
+						<View
+							onClick={onPress}
+							className='mt-2'>
+							<Text className='uppercase text-xs text-primary-700'>
+								{mainActionLabel || t('simpleCard.txtEdit')}
+							</Text>
 						</View>
 					</View>
 				</>

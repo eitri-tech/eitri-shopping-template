@@ -1,36 +1,41 @@
-import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import SimpleCard from '../Card/SimpleCard'
 import personalIcon from '../../assets/images/personal.svg'
-import { removeClientData } from '../../services/cartService'
 import { useTranslation } from 'eitri-i18n'
+import { navigate, requestLogin } from '../../services/navigationService'
 
 export default function UserData(props) {
-	const { cart, startCart } = useLocalShoppingCart()
-	const { onPress } = props
+	const { cart, removeClientData } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const clearClientData = async () => {
 		try {
 			if (cart?.clientProfileData) {
 				await removeClientData()
-				await startCart()
-				Eitri.navigation.navigate({ path: 'PersonalData' })
+				navigate('PersonalData')
 			}
 		} catch (e) {
 			console.log('Erro ao limpar dados do cliente', e)
 		}
 	}
 
-	// console.log(JSON.stringify(cart.clientProfileData))
+	const onPressMainAction = async () => {
+		try {
+			if (!cart?.canEditData) {
+				await requestLogin()
+			}
+			navigate('PersonalData')
+		} catch (e) {
+			console.log('Erro ao navegar para a tela de dados pessoais', e)
+		}
+	}
 
 	return (
 		<SimpleCard
-			isFilled={cart?.clientProfileData?.email}
-			onPress={onPress}
 			title={t('userData.txtPersonData')}
-			icon={personalIcon}
-			index='1'>
+			isFilled={cart?.clientProfileData?.email}
+			onPress={onPressMainAction}
+			icon={personalIcon}>
 			<View className='flex flex-col'>
 				<View className='flex flex-row justify-between'>
 					<Text className='text-xs mb-1'>{cart?.clientProfileData?.email}</Text>

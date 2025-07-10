@@ -1,6 +1,5 @@
 import { App } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
-import { saveCartIdOnStorage } from '../services/cartService'
 
 export const formatAmount = price => {
 	if (!price) return ''

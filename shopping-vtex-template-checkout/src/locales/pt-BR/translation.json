@@ -54,6 +54,9 @@
 		"txtProduct": "Produto",
 		"txtProducts": "Produtos",
 		"txtTotal": "Total",
+		"txtItems": "Itens do Carrinho",
+		"txtNoItems": "Nenhum item no carrinho",
+		"txtSubtotal": "Subtotal",
 		"labelButton": "Finalizar Compra"
 	},
 	"emptyCart": {

@@ -54,6 +54,9 @@
 		"txtProduct": "Product",
 		"txtProducts": "Products",
 		"txtTotal": "Total",
+		"txtItems": "Cart Items",
+		"txtNoItems": "No items in cart",
+		"txtSubtotal": "Subtotal",
 		"labelButton": "Complete Purchase"
 	},
 	"emptyCart": {

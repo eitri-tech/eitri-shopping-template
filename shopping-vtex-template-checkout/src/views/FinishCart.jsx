@@ -10,6 +10,8 @@ import { requestLogin } from '../services/navigationService'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
+import { navigate } from '../services/navigationService'
+import CartItems from '../components/CartItems/CartItems'
 
 export default function FinishCart() {
 	const { cart, cardInfo, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
@@ -17,7 +19,6 @@ export default function FinishCart() {
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState({ state: false, message: '' })
 	const [recaptchaIsReady, setRecaptchaIsReady] = useState(false)
-	const [currencyProps, setCurrencyProps] = useState({})
 	const [unavailableItems, setUnavailableItems] = useState([])
 
 	const recaptchaRef = useRef()
@@ -52,22 +53,6 @@ export default function FinishCart() {
 		}
 		sendPageView('Checkout - Home')
 	}, [cart])
-
-	useEffect(() => {
-		configLanguage()
-	}, [])
-
-	const configLanguage = async () => {
-		try {
-			const remoteConfig = await Eitri.environment.getRemoteConfigs()
-			const locale = remoteConfig?.storePreferences?.locale || 'pt-BR'
-			const currency = remoteConfig?.storePreferences?.currencyCode || 'BRL'
-
-			setCurrencyProps({ locale, currency })
-		} catch (e) {
-			console.error('Erro ao buscar configurações', e)
-		}
-	}
 
 	const navigateToEditor = (path, canOpenWithoutLogin) => {
 		if (canOpenWithoutLogin) {
@@ -113,7 +98,6 @@ export default function FinishCart() {
 
 			Eitri.navigation.navigate('../ExternalProviderOrder', { paymentResult })
 		} catch (error) {
-			console.log('Erro no runPaymentScript', error)
 			setError({
 				state: true,
 				message: t('finishCart.errorOrder')
@@ -153,19 +137,21 @@ export default function FinishCart() {
 						</View>
 					)}
 
-					<CartSummary />
-
 					<View className='flex flex-col gap-4'>
-						{cart && <UserData onPress={() => navigateToEditor('PersonalData', cart?.canEditData)} />}
+						{cart && <UserData />}
 
-						<DeliveryData onPress={() => navigateToEditor('AddressSelector', cart?.canEditData)} />
+						<DeliveryData />
 
 						{unavailableItems.length === 0 && (
 							<SelectedPaymentData
 								selectedPaymentData={selectedPaymentData}
-								onPress={() => navigateToEditor('PaymentData', true)}
+								onPress={() => navigate('PaymentData', true)}
 							/>
 						)}
+
+						<CartSummary />
+
+						<CartItems />
 
 						<View className='w-full'>
 							<CustomButton

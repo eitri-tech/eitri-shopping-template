@@ -14,8 +14,14 @@ export default function AddressSelector(props) {
 
 	const { t } = useTranslation()
 
+	const PAGE = 'Checkout - Seleção de Endereço'
+
 	useEffect(() => {
-		sendPageView('Seleção de Endereço')
+		if (cart?.shippingData?.availableAddresses?.length > 0) {
+			sendPageView(PAGE)
+		} else {
+			handleAddNewAddress()
+		}
 	}, [])
 
 	const handleAddressSelect = async address => {
@@ -30,8 +36,7 @@ export default function AddressSelector(props) {
 	}
 
 	const handleAddNewAddress = () => {
-		// Navigate to add new address page
-		Eitri.navigation.navigate({ path: '/AddNewShippingAddress' })
+		Eitri.navigation.navigate({ path: '/AddressForm' })
 	}
 
 	const getAddresses = () => {
@@ -56,7 +61,7 @@ export default function AddressSelector(props) {
 	}
 
 	return (
-		<Page title='Checkout - Seleção de Endereço'>
+		<Page title={PAGE}>
 			<View className='min-h-[100vh] flex flex-col'>
 				<HeaderContentWrapper
 					gap={16}

@@ -1,4 +1,4 @@
-import { getCart, addUserData, selectPaymentOption } from '../services/cartService'
+import { getCart, addUserData, selectPaymentOption, removeClientData } from '../services/cartService'
 import setFreight, { setNewAddress, updateAddress, setShippingAddress } from '../services/freigthService'
 
 const LocalCart = createContext({})
@@ -33,8 +33,8 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setFreight, option)
 	}
 
-	const setNewAddressToCart = async (cart, address) => {
-		return executeCartOperation(setNewAddress, cart, address)
+	const _setNewAddress = async address => {
+		return executeCartOperation(setNewAddress, address)
 	}
 
 	const addCustomerData = async (userData, orderFormId) => {
@@ -49,6 +49,10 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setShippingAddress, payload)
 	}
 
+	const _removeClientData = async payload => {
+		return executeCartOperation(removeClientData, payload)
+	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -57,11 +61,12 @@ export default function CartProvider({ children }) {
 				addPersonalData,
 				startCart,
 				setFreight: _setFreight,
-				setNewAddressToCart,
+				setNewAddress: _setNewAddress,
 				updateCartAddress,
 				addCustomerData,
 				selectPaymentOption: _selectPaymentOption,
 				setShippingAddress: _setShippingAddress,
+				removeClientData: _removeClientData,
 				selectedPaymentData,
 				setSelectedPaymentData,
 				cartIsLoading,

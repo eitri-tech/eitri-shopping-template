@@ -12,45 +12,23 @@ export default function DeliveryAddressList({
 }) {
 	const { t } = useTranslation()
 
-	const currentSelectedAddress = addresses.find(address => selectedAddress?.addressId === address?.addressId)
-	const otherAddresses = addresses.filter(address => selectedAddress?.addressId !== address?.addressId)
-
 	return (
 		<View className='flex flex-col gap-3'>
-			{currentSelectedAddress && (
+			{addresses.length > 0 && (
 				<>
 					<View className='mb-2'>
 						<Text className='text-sm font-medium text-primary mb-2'>
-							{t('addressSelector.selectedAddress', 'Endereço Selecionado')}
+							{t('addressSelector.addresses', 'Endereços')}
 						</Text>
 					</View>
-					{isLoading ? (
-						<Skeleton className='h-[100px] w-full rounded' />
-					) : (
-						<AddressCard
-							address={currentSelectedAddress}
-							isSelected={true}
-							onClick={() => onAddressSelect(currentSelectedAddress)}
-						/>
-					)}
-				</>
-			)}
-
-			{otherAddresses.length > 0 && (
-				<>
-					<View className='mb-2'>
-						<Text className='text-sm font-medium text-base-content/70 mb-2'>
-							{t('addressSelector.otherAddresses', 'Outros Endereços')}
-						</Text>
-					</View>
-					{otherAddresses.map((address, index) => (
+					{addresses.map((address, index) => (
 						<View key={address.id || index}>
 							{isLoading ? (
 								<Skeleton className='h-[100px] w-full rounded' />
 							) : (
 								<AddressCard
 									address={address}
-									isSelected={false}
+									isSelected={selectedAddress?.addressId === address?.addressId}
 									onClick={() => onAddressSelect(address)}
 								/>
 							)}

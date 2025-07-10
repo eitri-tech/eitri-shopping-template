@@ -2,12 +2,7 @@ import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
 
 export const getCart = async () => {
-	try {
-		const cart = await Vtex.cart.getCartIfExists()
-		return cart
-	} catch (error) {
-		console.log('Erro ao buscar carrinho', error)
-	}
+	return await Vtex.cart.getCartIfExists()
 }
 
 export const startPayment = async (cart, cardInfo, recaptchaToken, siteKey) => {
@@ -44,6 +39,7 @@ export const clearCart = async () => {
 
 export const removeClientData = async () => {
 	await Vtex.cart.removeClientData()
+	return await getCart()
 }
 
 export const registerToNotify = async userProfileId => {

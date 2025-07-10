@@ -15,6 +15,9 @@ import { useTranslation } from 'eitri-i18n'
 import { goToCartman } from '../utils/utils'
 
 export default function PersonalData() {
+	const { cart, addCustomerData } = useLocalShoppingCart()
+	const { t } = useTranslation()
+
 	const [isLoading, setIsLoading] = useState(false)
 
 	const [isLegalPerson, setIsLegalPerson] = useState(false)
@@ -37,12 +40,8 @@ export default function PersonalData() {
 	const [userDataVerified, setUserDataVerified] = useState(false)
 	const [socialNumberError, setSocialNumberError] = useState(false)
 
-	const { cart, addCustomerData } = useLocalShoppingCart()
-
-	const { t } = useTranslation()
-
 	useEffect(() => {
-		if (cart) {
+		if (cart?.clientProfileData?.email) {
 			setPersonalData({
 				...personalData,
 				...cart.clientProfileData
@@ -50,7 +49,11 @@ export default function PersonalData() {
 			if (cart?.clientProfileData?.email) {
 				setUserDataVerified(true)
 			}
+		} else {
+			setUserDataVerified(false)
 		}
+
+		console.log(cart?.orderFormId)
 		sendPageView('Dados pessoais')
 	}, [cart])
 

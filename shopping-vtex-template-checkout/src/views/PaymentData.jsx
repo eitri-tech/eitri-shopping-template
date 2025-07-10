@@ -6,7 +6,7 @@ import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import GiftCardInput from '../components/GiftCardInput/GiftCardInput'
 import { formatAmountInCents } from '../utils/utils'
-import { navigate } from '../services/flowControl'
+import { navigate } from '../services/navigationService'
 
 export default function PaymentData(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
@@ -20,7 +20,7 @@ export default function PaymentData(props) {
 	}, [])
 
 	const submitPaymentSystemSelected = async () => {
-		navigate('PaymentData', cart)
+		navigate('FinishCart')
 	}
 
 	const handlePaymentOptionsChange = async (paymentMethod, silentMode = false) => {
