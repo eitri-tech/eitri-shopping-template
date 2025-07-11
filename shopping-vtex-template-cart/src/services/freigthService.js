@@ -1,12 +1,8 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 
-export default async function setFreight(cart, shippingOptions) {
+export default async function setFreight(payload) {
 	try {
-		const newCart = await Vtex.checkout.setLogisticInfo({
-			logisticsInfo: generateLogisticInfoPayload(cart?.address?.addressId, shippingOptions.slas),
-			clearAddressIfPostalCodeNotFound: false,
-			selectedAddresses: cart?.shipping?.selectedAddresses
-		})
+		const newCart = await Vtex.checkout.setLogisticInfo(payload)
 
 		return newCart
 	} catch (error) {
@@ -14,35 +10,16 @@ export default async function setFreight(cart, shippingOptions) {
 	}
 }
 
-export const setNewAddress = async (cart, postalCode) => {
+export const setNewAddress = async (cart, zipCode) => {
 	try {
-		const resultCep = await Vtex.checkout.resolveZipCode(postalCode)
+		const address = await Vtex.checkout.resolveZipCode(zipCode)
 
-		const { street, neighborhood, city, state, country, geoCoordinates } = resultCep
+		const { street, neighborhood, city, state, country, geoCoordinates, postalCode } = address
 
-		const logisticsInfo = generateLogisticInfoPayload(
-			null,
-			cart?.items?.map((item, index) => {
-				return {
-					itemIndex: index,
-					deliveryChannel: null,
-					id: null
-				}
-			})
-		)
-
-		const selectedAddresses = generateSelectedAddressesPayload({
-			postalCode,
-			street,
-			neighborhood,
-			city,
-			state,
-			country,
-			geoCoordinates
-		})
+		const selectedAddresses = generateSelectedAddressesPayload(cart?.shippingData?.selectedAddresses, address)
 
 		return await Vtex.checkout.setLogisticInfo({
-			logisticsInfo: logisticsInfo,
+			logisticsInfo: cart?.shippingData?.logisticsInfo,
 			clearAddressIfPostalCodeNotFound: false,
 			selectedAddresses: selectedAddresses
 		})
@@ -62,55 +39,61 @@ const generateLogisticInfoPayload = (addressId, shippingOptions) => {
 	})
 }
 
-const generateSelectedAddressesPayload = address => {
-	const {
-		addressType,
-		addressId,
-		postalCode,
-		complement,
-		number,
-		street,
-		neighborhood,
-		city,
-		state,
-		country,
-		geoCoordinates,
-		receiverName,
-		reference,
-		isDisposable
-	} = address
+const generateSelectedAddressesPayload = (selectedAddresses, address) => {
+	const { street, neighborhood, city, state, country, geoCoordinates, postalCode } = address
+
+	if (selectedAddresses && selectedAddresses.length > 0) {
+		return selectedAddresses.map(selectedAd => {
+			return {
+				addressType: selectedAd.addressType,
+				receiverName: selectedAd.receiverName,
+				addressId: selectedAd.addressId,
+				isDisposable: true,
+				postalCode: postalCode,
+				city: selectedAd.city,
+				state: selectedAd.state,
+				country,
+				street,
+				number: null,
+				neighborhood,
+				complement: null,
+				reference: null,
+				geoCoordinates,
+				addressQuery: selectedAd.addressQuery
+			}
+		})
+	}
 
 	return [
 		{
-			addressType: addressType || 'residential',
+			addressType: 'search',
 			receiverName,
-			addressId,
-			isDisposable: isDisposable,
+			isDisposable: true,
 			postalCode: postalCode,
 			city: city,
 			state: state,
 			country: country,
 			street: street,
-			number: number,
+			number: null,
 			neighborhood: neighborhood,
-			complement: complement,
-			reference,
+			complement: null,
+			reference: null,
 			geoCoordinates: geoCoordinates.map(coord => coord),
 			addressQuery: ''
 		},
 		{
-			addressType: 'search',
+			addressType: 'residential',
 			receiverName,
-			isDisposable: isDisposable,
+			isDisposable: true,
 			postalCode: postalCode,
 			city: city,
 			state: state,
 			country: country,
 			street: street,
-			number: number,
+			number: null,
 			neighborhood: neighborhood,
-			complement: complement,
-			reference,
+			complement: null,
+			reference: null,
 			geoCoordinates: geoCoordinates.map(coord => coord),
 			addressQuery: ''
 		}
@@ -144,4 +127,8 @@ export const simulateCart = async (zipCode, cart) => {
 	} catch (error) {
 		console.error('Error fetching freight', error)
 	}
+}
+
+export const resolveZipCode = async zipCode => {
+	return await Vtex.checkout.resolveZipCode(zipCode)
 }

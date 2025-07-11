@@ -48,6 +48,7 @@ export default function CustomButton(props) {
 				flex items-center justify-center 
 				h-[45px]
 				rounded
+				w-full
 				${_backgroundColor ? `${_backgroundColor}` : ''}
 				${variant === 'outlined' ? `border border border-primary` : ''}
 				${className || ''}

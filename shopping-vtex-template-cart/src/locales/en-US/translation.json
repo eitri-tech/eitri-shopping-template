@@ -38,7 +38,11 @@
 		"txtDelivery": "Delivery",
 		"txtCalculate": "Calculate",
 		"labelZipCode": "Zip Code",
-		"txtUnknow": "I don't know my Zip Code"
+		"txtUnknow": "I don't know my Zip Code",
+		"tabDelivery": "Delivery",
+		"tabPickup": "Pickup",
+		"noDeliveryOptions": "No delivery options available",
+		"noPickupOptions": "No pickup options available"
 	},
 	"modalOfferingGender": {
 		"labelReceiverGift": "Who is the gift for?",

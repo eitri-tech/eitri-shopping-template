@@ -50,7 +50,7 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(removeCartItem, index)
 	}
 
-	const changeCartAddress = async (cart, zipCode) => {
+	const _setNewAddress = async (cart, zipCode) => {
 		return executeCartOperation(setNewAddress, cart, zipCode)
 	}
 
@@ -74,7 +74,7 @@ export default function CartProvider({ children }) {
 				removeOffering,
 				changeQuantity,
 				removeItem,
-				changeCartAddress,
+				setNewAddress: _setNewAddress,
 				applyCouponToCart,
 				removeCouponToCart
 			}}>

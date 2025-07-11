@@ -9,7 +9,6 @@ export default function CartSummary(props) {
 	const { cart } = useLocalShoppingCart()
 
 	const [collapsed, setCollapsed] = useState(true)
-
 	const [itemsValue, setItemsValue] = useState({ value: null })
 	const [shipping, setShipping] = useState({ value: null })
 	const [discounts, setDiscounts] = useState({ value: null })
@@ -40,12 +39,10 @@ export default function CartSummary(props) {
 
 	return (
 		<>
-			<View className='bg-base-100 fixed bottom-0 shadow-lg'>
-				{/* <Divisor /> */}
-
-				<View className={'h-[10px]'} />
-
-				<Button
+			<View
+				bottomInset={'auto'}
+				className='bg-base-100 fixed bottom-0 border-t-2 border-neutral-300'>
+				<View
 					onClick={() => setCollapsed(!collapsed)}
 					className='flex justify-center'>
 					{collapsed ? (
@@ -75,7 +72,7 @@ export default function CartSummary(props) {
 							/>
 						</svg>
 					)}
-				</Button>
+				</View>
 
 				{!collapsed && (
 					<>
@@ -114,15 +111,12 @@ export default function CartSummary(props) {
 
 				<View className={'h-[10px]'} />
 
-				<View className='flex w-screen justify-center px-6 items-center'>
+				<View className='flex w-screen justify-center px-4 items-center pb-4'>
 					<CustomButton
-						borderRadius='small'
 						label={t('cartSummary.labelFinish')}
 						onPress={goToCheckout}
 					/>
 				</View>
-				<View className={'h-[16px]'} />
-				<View bottomInset />
 			</View>
 			<View className={collapsed ? 'h-[111px]' : 'h-[224px]'} />
 		</>

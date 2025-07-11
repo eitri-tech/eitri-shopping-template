@@ -38,7 +38,11 @@
 		"txtDelivery": "Entrega",
 		"txtCalculate": "Calcular",
 		"labelZipCode": "CEP",
-		"txtUnknow": "Não sei meu cep"
+		"txtUnknow": "Não sei meu cep",
+		"tabDelivery": "Entrega",
+		"tabPickup": "Retirada",
+		"noDeliveryOptions": "Nenhuma opção de entrega disponível",
+		"noPickupOptions": "Nenhuma opção de retirada disponível"
 	},
 	"modalOfferingGender": {
 		"labelReceiverGift": "Para quem vai ser o presente?",

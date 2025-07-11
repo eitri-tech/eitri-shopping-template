@@ -3,33 +3,45 @@ import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shoppi
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'
-import { simulateCart } from '../../services/freigthService'
+import { simulateCart, resolveZipCode } from '../../services/freigthService'
+import { useState, useEffect } from 'react'
+import { Button } from 'eitri-luminus'
 
 export default function Freight(props) {
-	const { cart, changeCartAddress } = useLocalShoppingCart()
+	const { cart, setNewAddress } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [zipCode, setZipCode] = useState('')
-	const [shipping, setShipping] = useState(null)
 	const [isUnavailable, setIsUnavailable] = useState(false)
 	const [messagesError, setMessagesError] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedOption, setSelectedOption] = useState('')
 	const [error, setError] = useState(false)
+	const [selectedTab, setSelectedTab] = useState('delivery') // 'delivery' ou 'pickup'
 
 	useEffect(() => {
 		if (cart) {
-			loadZipCode()
+			// loadZipCode()
 		}
 	}, [cart])
 
 	const loadZipCode = async () => {
-		const zipCode = await getZipCodeOnStorage()
-		if (!zipCode) {
-			return
+		try {
+			if (cart?.shippingData?.address) {
+				const shipping = cartShippingResolver(cart)
+				console.log('shipping', shipping)
+				//setShipping(shipping)
+				return
+			}
+			const zipCode = await getZipCodeOnStorage()
+			if (!zipCode) {
+				return
+			}
+			setZipCode(zipCode)
+			fetchFreight(zipCode)
+		} catch (error) {
+			console.error('Error fetching freight [1]', error)
 		}
-		setZipCode(zipCode)
-		fetchFreight(zipCode)
 	}
 
 	const getZipCodeOnStorage = async () => {
@@ -58,22 +70,11 @@ export default function Freight(props) {
 	const fetchFreight = async zipCode => {
 		setIsLoading(true)
 		try {
+			console.log('zipCode', zipCode)
 			setError('')
 			setZipCodeOnStorage(zipCode)
 
-			const simulatedCart = await simulateCart(zipCode, cart)
-			const shipping = cartShippingResolver({
-				shippingData: {
-					logisticsInfo: simulatedCart?.logisticsInfo
-				}
-			})
-
-			if (!shipping.shippingAvailable) {
-				setError('Entrega indisponível')
-				return
-			}
-
-			setShipping(shipping)
+			const newCart = await setNewAddress(cart, zipCode)
 		} catch (error) {
 			console.error('Error fetching freight [1]', error)
 			setError(t('freight.errorCalcFreight'))
@@ -111,81 +112,123 @@ export default function Freight(props) {
 
 	if (!cart) return null
 
+	const shipping = cartShippingResolver(cart)
+
+	// Separar opções de entrega e retirada
+	const deliveryOptions = shipping?.options?.filter(option => !option.isPickupInPoint) || []
+	const pickupOptions = shipping?.options?.filter(option => option.isPickupInPoint) || []
+
 	return (
 		<View className='p-4'>
-			<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
+			<View className='bg-white rounded shadow-sm border border-gray-300 p-4 mb-4'>
+				<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
 
-			{cart?.canEditData ? (
-				<View className='flex justify-between mt-2 gap-2 items-center'>
-					<CustomInput
-						width='60%'
-						placeholder={t('freight.labelZipCode')}
-						value={zipCode}
-						onChange={onInputZipCode}
-						variant='mask'
-						mask='99999-999'
-						inputMode='numeric'
-					/>
-					<CustomButton
-						variant='outlined'
-						isLoading={isLoading}
-						label={t('freight.txtCalculate')}
-						className='grow'
-						onPress={handleZipCodeChange}
-					/>
-				</View>
-			) : (
-				<View className='mt-2'>
-					<Text className='text-base font-medium'>{`[b]${t('freight.labelZipCode')}[/b]: ${
-						shipping?.address?.postalCode
-					}`}</Text>
-				</View>
-			)}
+				{cart?.canEditData ? (
+					<View className='flex justify-between mt-2 gap-2 items-center w-full'>
+						<View className='w-2/3'>
+							<CustomInput
+								placeholder={t('freight.labelZipCode')}
+								value={zipCode}
+								variant='mask'
+								mask='99999-999'
+								inputMode='numeric'
+								onChange={onInputZipCode}
+							/>
+						</View>
+						<View className='w-1/3'>
+							<CustomButton
+								variant='outlined'
+								isLoading={isLoading}
+								label={t('freight.txtCalculate')}
+								onPress={handleZipCodeChange}
+							/>
+						</View>
+					</View>
+				) : (
+					<View className='mt-2'>
+						<Text className='text-base font-medium'>{`${t('freight.labelZipCode')}: ${
+							shipping?.postalCode
+						}`}</Text>
+					</View>
+				)}
 
-			{error && (
-				<View className='mt-1'>
-					<Text className='text-xs text-red-600'>{error}</Text>
-				</View>
-			)}
+				{error && (
+					<View className='mt-1'>
+						<Text className='text-xs text-red-600'>{error}</Text>
+					</View>
+				)}
 
-			{shipping && shipping?.options.length > 0 && (
-				<View className='flex flex-col my-2 p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
-					{shipping?.options.map((item, index) => (
-						<View
-							key={index}
-							className='flex flex-row items-center w-full'>
-							{isUnavailable ? (
-								getMessageError(item?.label)
+				{shipping && shipping?.options.length > 0 && (
+					<>
+						{/* Tabs - agora fora da caixa com borda */}
+						<View className='flex w-full mb-0 mt-2'>
+							<View
+								className={`flex-1 py-2 text-center rounded-t-lg cursor-pointer ${
+									selectedTab === 'delivery'
+										? 'bg-primary text-white font-bold shadow'
+										: 'bg-base-200 text-neutral-700'
+								}`}
+								onClick={() => setSelectedTab('delivery')}>
+								<Text className='text-base'>{t('freight.tabDelivery') || 'Entrega'}</Text>
+							</View>
+							<View
+								className={`flex-1 py-2 text-center rounded-t-lg cursor-pointer ${
+									selectedTab === 'pickup'
+										? 'bg-primary text-white font-bold shadow'
+										: 'bg-base-200 text-neutral-700'
+								}`}
+								onClick={() => setSelectedTab('pickup')}>
+								<Text className='text-base'>{t('freight.tabPickup') || 'Retirada'}</Text>
+							</View>
+						</View>
+						<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
+							{/* Lista de opções conforme a aba */}
+							{(selectedTab === 'delivery' ? deliveryOptions : pickupOptions).length === 0 ? (
+								<Text className='text-xs text-neutral-500 w-full text-center'>
+									{selectedTab === 'delivery'
+										? t('freight.noDeliveryOptions') || 'Nenhuma opção de entrega disponível'
+										: t('freight.noPickupOptions') || 'Nenhuma opção de retirada disponível'}
+								</Text>
 							) : (
-								<>
-									{isLoading ? (
-										<View className='w-full flex items-center justify-center'>
-											<Loading />
-										</View>
-									) : (
-										<>
-											<View className='w-full flex flex-col'>
-												<Text className='font-bold'>{item?.label}</Text>
-												<Text className='text-xs text-neutral-500'>
-													{item?.shippingEstimate}
-												</Text>
-												{item.isPickupInPoint && (
-													<Text className='text-xs text-neutral-500'>
-														{item?.pickUpAddress}
-													</Text>
+								(selectedTab === 'delivery' ? deliveryOptions : pickupOptions).map((item, index) => (
+									<View
+										key={index}
+										className='flex flex-row items-center w-full'>
+										{isUnavailable ? (
+											getMessageError(item?.label)
+										) : (
+											<>
+												{isLoading ? (
+													<View className='w-full flex items-center justify-center'>
+														<Loading />
+													</View>
+												) : (
+													<>
+														<View className='w-full flex flex-col'>
+															<Text className='font-bold'>{item?.label}</Text>
+															<Text className='text-xs text-neutral-500'>
+																{item?.shippingEstimate}
+															</Text>
+															{item.isPickupInPoint && (
+																<Text className='text-xs text-neutral-500'>
+																	{item?.pickUpAddress}
+																</Text>
+															)}
+														</View>
+														<View className='flex w-3/10 justify-end p-2'>
+															<Text>{item?.price}</Text>
+														</View>
+													</>
 												)}
-											</View>
-											<View className='flex w-3/10 justify-end p-2'>
-												<Text>{item?.price}</Text>
-											</View>
-										</>
-									)}
-								</>
+											</>
+										)}
+									</View>
+								))
 							)}
 						</View>
-					))}
-				</View>
-			)}
+					</>
+				)}
+			</View>
 		</View>
 	)
 }

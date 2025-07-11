@@ -71,7 +71,6 @@ export default function CartItem(props) {
 	const handleModalRemoveItem = () => {
 		setShowModalRemoveItem(!showModalRemoveItem)
 	}
-	console.log('item', resizedImageUrl)
 
 	return (
 		<View>
