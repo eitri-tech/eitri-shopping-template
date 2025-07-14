@@ -1,6 +1,6 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 
-export default async function setFreight(payload) {
+export const setFreight = async payload => {
 	try {
 		const newCart = await Vtex.checkout.setLogisticInfo(payload)
 
@@ -67,7 +67,7 @@ const generateSelectedAddressesPayload = (selectedAddresses, address) => {
 	return [
 		{
 			addressType: 'search',
-			receiverName,
+			receiverName: '',
 			isDisposable: true,
 			postalCode: postalCode,
 			city: city,
@@ -83,7 +83,7 @@ const generateSelectedAddressesPayload = (selectedAddresses, address) => {
 		},
 		{
 			addressType: 'residential',
-			receiverName,
+			receiverName: '',
 			isDisposable: true,
 			postalCode: postalCode,
 			city: city,

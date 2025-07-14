@@ -70,9 +70,7 @@ export default function Home(props) {
 				isLoading={appIsLoading}
 			/>
 
-			<View
-				topInset
-				bottomInset>
+			<View bottomInset={'auto'}>
 				<CartItemsContent />
 
 				<Freight />

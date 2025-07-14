@@ -2,7 +2,7 @@ import { addDaysToDate, formatAmountInCents, formatDate } from './utils'
 
 export default function cartShippingResolver(cart) {
 	try {
-		if (!cart) {
+		if (!cart?.shippingData?.logisticsInfo) {
 			return null
 		}
 

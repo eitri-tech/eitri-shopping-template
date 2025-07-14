@@ -74,7 +74,7 @@ export default function HeaderContentWrapper(props) {
 			<View
 				id='header-container'
 				className={`fixed top-0 left-0 right-0 z-[9999] ${translate} transition-all duration-500 ease-in-out shadow-md w-full bg-[var(--header-background-color)]`}>
-				<View topInset />
+				<View topInset={'auto'} />
 				<View id='header'>
 					<View
 						id='header-content'
@@ -85,12 +85,12 @@ export default function HeaderContentWrapper(props) {
 				</View>
 			</View>
 			<View
-				topInset
+				topInset={'auto'}
 				className={`fixed top-0 left-0 right-0 z-[2000] w-full bg-[var(--header-background-color)]`}
 			/>
 			<HeaderOffset
 				height={_height}
-				topInset
+				topInset={'auto'}
 			/>
 		</>
 	)

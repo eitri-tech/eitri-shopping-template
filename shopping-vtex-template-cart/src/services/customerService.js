@@ -51,3 +51,11 @@ export const addToWishlist = async (productId, title, sku) => {
 		return await Vtex.wishlist.addItem(productId, title, sku)
 	}
 }
+
+export const savePostalCodeOnStorage = async postalCode => {
+	await Vtex.customer.setCustomerData('postalCode', postalCode)
+}
+
+export const getPostalCodeOnStorage = async () => {
+	return await Vtex.customer.getCustomerData('postalCode')
+}

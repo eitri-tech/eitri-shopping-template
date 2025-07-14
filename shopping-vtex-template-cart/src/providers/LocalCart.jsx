@@ -1,4 +1,4 @@
-import { setNewAddress } from '../services/freigthService'
+import { setNewAddress, setFreight } from '../services/freigthService'
 import {
 	getCart,
 	cardAdaptation,
@@ -54,6 +54,10 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setNewAddress, cart, zipCode)
 	}
 
+	const _setFreight = async (cart, zipCode) => {
+		return executeCartOperation(setFreight, cart, zipCode)
+	}
+
 	const applyCouponToCart = async coupon => {
 		return executeCartOperation(addCoupon, coupon)
 	}
@@ -76,7 +80,8 @@ export default function CartProvider({ children }) {
 				removeItem,
 				setNewAddress: _setNewAddress,
 				applyCouponToCart,
-				removeCouponToCart
+				removeCouponToCart,
+				setFreight: _setFreight
 			}}>
 			{children}
 		</LocalCart.Provider>

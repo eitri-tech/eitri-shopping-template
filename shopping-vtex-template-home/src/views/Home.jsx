@@ -2,14 +2,12 @@ import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getCmsContent } from '../services/CmsService'
 import { setLanguage, startConfigure } from '../services/AppService'
-import { useTranslation } from 'eitri-i18n'
 import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
 
 export default function Home() {
 	const { cart, startCart } = useLocalShoppingCart()
-	const { i18n } = useTranslation()
 	const [cmsContent, setCmsContent] = useState(null)
 
 	useEffect(() => {
@@ -48,7 +46,6 @@ export default function Home() {
 				return
 			}
 		}
-		setLanguage(i18n)
 		loadCms()
 		startCart()
 	}
@@ -72,11 +69,12 @@ export default function Home() {
 	return (
 		<Page
 			title='Home'
-			topInset
-			bottomInset>
+			topInset>
 			<MainHeader />
-			<HomeSkeleton show={!cmsContent} />
-			<CmsContentRender cmsContent={cmsContent} />
+			<View bottomInset={'auto'}>
+				<HomeSkeleton show={!cmsContent} />
+				<CmsContentRender cmsContent={cmsContent} />
+			</View>
 		</Page>
 	)
 }

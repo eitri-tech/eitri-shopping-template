@@ -6,9 +6,10 @@ import { View, Text, Radio } from 'eitri-luminus'
 import { simulateCart, resolveZipCode } from '../../services/freigthService'
 import { useState, useEffect } from 'react'
 import { Button } from 'eitri-luminus'
+import { savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {
-	const { cart, setNewAddress } = useLocalShoppingCart()
+	const { cart, setNewAddress, setFreight } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [zipCode, setZipCode] = useState('')
@@ -17,46 +18,17 @@ export default function Freight(props) {
 	const [isLoading, setIsLoading] = useState(false)
 	const [selectedOption, setSelectedOption] = useState('')
 	const [error, setError] = useState(false)
-	const [selectedTab, setSelectedTab] = useState('delivery') // 'delivery' ou 'pickup'
 
 	useEffect(() => {
 		if (cart) {
-			// loadZipCode()
 		}
 	}, [cart])
-
-	const loadZipCode = async () => {
-		try {
-			if (cart?.shippingData?.address) {
-				const shipping = cartShippingResolver(cart)
-				console.log('shipping', shipping)
-				//setShipping(shipping)
-				return
-			}
-			const zipCode = await getZipCodeOnStorage()
-			if (!zipCode) {
-				return
-			}
-			setZipCode(zipCode)
-			fetchFreight(zipCode)
-		} catch (error) {
-			console.error('Error fetching freight [1]', error)
-		}
-	}
-
-	const getZipCodeOnStorage = async () => {
-		return await Eitri.sharedStorage.getItem('zipCode')
-	}
-
-	const setZipCodeOnStorage = async zipCode => {
-		await Eitri.sharedStorage.setItem('zipCode', zipCode)
-	}
 
 	const onInputZipCode = e => {
 		setZipCode(e.target.value)
 	}
 
-	const handleZipCodeChange = async () => {
+	const onPressZipCodeChange = async () => {
 		if (!zipCode) {
 			return
 		}
@@ -70,9 +42,8 @@ export default function Freight(props) {
 	const fetchFreight = async zipCode => {
 		setIsLoading(true)
 		try {
-			console.log('zipCode', zipCode)
 			setError('')
-			setZipCodeOnStorage(zipCode)
+			savePostalCodeOnStorage(zipCode)
 
 			const newCart = await setNewAddress(cart, zipCode)
 		} catch (error) {
@@ -87,7 +58,6 @@ export default function Freight(props) {
 		if (selectedOption !== option.label) {
 			setSelectedOption(option.label)
 			await setCartFreight(option)
-			setSlaOptionVisible(false)
 		}
 	}
 
@@ -98,6 +68,22 @@ export default function Freight(props) {
 			console.error('setCartFreight Error', error)
 			setError(t('freight.errorEditFreight'))
 		}
+	}
+
+	const handleOptionSelect = async option => {
+		const payload = {
+			clearAddressIfPostalCodeNotFound: true,
+			logisticsInfo: option?.slas?.map(sla => {
+				return {
+					itemIndex: sla.itemIndex,
+					selectedDeliveryChannel: sla.deliveryChannel,
+					selectedSla: sla.id
+				}
+			}),
+			selectedAddresses: cart?.shippingData?.selectedAddresses
+		}
+		await setFreight(payload)
+		// onSetCartFreight(option)
 	}
 
 	const getMessageError = label => {
@@ -114,13 +100,15 @@ export default function Freight(props) {
 
 	const shipping = cartShippingResolver(cart)
 
+	// console.log('shipping', shipping)
+
 	// Separar opções de entrega e retirada
 	const deliveryOptions = shipping?.options?.filter(option => !option.isPickupInPoint) || []
 	const pickupOptions = shipping?.options?.filter(option => option.isPickupInPoint) || []
 
 	return (
-		<View className='p-4'>
-			<View className='bg-white rounded shadow-sm border border-gray-300 p-4 mb-4'>
+		<View className='px-4'>
+			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
 				<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
 
 				{cart?.canEditData ? (
@@ -140,7 +128,7 @@ export default function Freight(props) {
 								variant='outlined'
 								isLoading={isLoading}
 								label={t('freight.txtCalculate')}
-								onPress={handleZipCodeChange}
+								onPress={onPressZipCodeChange}
 							/>
 						</View>
 					</View>
@@ -160,72 +148,104 @@ export default function Freight(props) {
 
 				{shipping && shipping?.options.length > 0 && (
 					<>
-						{/* Tabs - agora fora da caixa com borda */}
-						<View className='flex w-full mb-0 mt-2'>
-							<View
-								className={`flex-1 py-2 text-center rounded-t-lg cursor-pointer ${
-									selectedTab === 'delivery'
-										? 'bg-primary text-white font-bold shadow'
-										: 'bg-base-200 text-neutral-700'
-								}`}
-								onClick={() => setSelectedTab('delivery')}>
-								<Text className='text-base'>{t('freight.tabDelivery') || 'Entrega'}</Text>
-							</View>
-							<View
-								className={`flex-1 py-2 text-center rounded-t-lg cursor-pointer ${
-									selectedTab === 'pickup'
-										? 'bg-primary text-white font-bold shadow'
-										: 'bg-base-200 text-neutral-700'
-								}`}
-								onClick={() => setSelectedTab('pickup')}>
-								<Text className='text-base'>{t('freight.tabPickup') || 'Retirada'}</Text>
-							</View>
-						</View>
-						<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
-							{/* Lista de opções conforme a aba */}
-							{(selectedTab === 'delivery' ? deliveryOptions : pickupOptions).length === 0 ? (
-								<Text className='text-xs text-neutral-500 w-full text-center'>
-									{selectedTab === 'delivery'
-										? t('freight.noDeliveryOptions') || 'Nenhuma opção de entrega disponível'
-										: t('freight.noPickupOptions') || 'Nenhuma opção de retirada disponível'}
+						{/* Opções de Entrega */}
+						{deliveryOptions.length > 0 && (
+							<View className='mt-4'>
+								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
+									{t('freight.tabDelivery') || 'Entrega'}
 								</Text>
-							) : (
-								(selectedTab === 'delivery' ? deliveryOptions : pickupOptions).map((item, index) => (
-									<View
-										key={index}
-										className='flex flex-row items-center w-full'>
-										{isUnavailable ? (
-											getMessageError(item?.label)
-										) : (
-											<>
-												{isLoading ? (
-													<View className='w-full flex items-center justify-center'>
-														<Loading />
-													</View>
-												) : (
-													<>
-														<View className='w-full flex flex-col'>
-															<Text className='font-bold'>{item?.label}</Text>
-															<Text className='text-xs text-neutral-500'>
-																{item?.shippingEstimate}
-															</Text>
-															{item.isPickupInPoint && (
+								<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
+									{deliveryOptions.map((item, index) => (
+										<View
+											key={index}
+											className='flex flex-row items-center w-full'>
+											{isUnavailable ? (
+												getMessageError(item?.label)
+											) : (
+												<>
+													{isLoading ? (
+														<View className='w-full flex items-center justify-center'>
+															<Loading />
+														</View>
+													) : (
+														<>
+															<Radio
+																className='radio-primary'
+																checked={item.isCurrent}
+																name='freight-option'
+																value={item?.label}
+																onChange={() => handleOptionSelect(item)}
+															/>
+															<View className='w-full flex flex-col flex-1 ml-3'>
+																<Text className='font-bold'>{item?.label}</Text>
 																<Text className='text-xs text-neutral-500'>
-																	{item?.pickUpAddress}
+																	{item?.shippingEstimate}
 																</Text>
-															)}
+															</View>
+															<View className='flex items-center'>
+																<Text className='font-semibold'>{item?.price}</Text>
+															</View>
+														</>
+													)}
+												</>
+											)}
+										</View>
+									))}
+								</View>
+							</View>
+						)}
+
+						{/* Opções de Retirada */}
+						{pickupOptions.length > 0 && (
+							<View className='mt-4'>
+								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
+									{t('freight.tabPickup') || 'Retirada'}
+								</Text>
+								<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
+									{pickupOptions.map((item, index) => (
+										<View
+											key={index}
+											className='flex flex-row items-center w-full'>
+											{isUnavailable ? (
+												getMessageError(item?.label)
+											) : (
+												<>
+													{isLoading ? (
+														<View className='w-full flex items-center justify-center'>
+															<Loading />
 														</View>
-														<View className='flex w-3/10 justify-end p-2'>
-															<Text>{item?.price}</Text>
-														</View>
-													</>
-												)}
-											</>
-										)}
-									</View>
-								))
-							)}
-						</View>
+													) : (
+														<>
+															<Radio
+																className='radio-primary'
+																checked={item.isCurrent}
+																name='freight-option'
+																value={item?.label}
+																onChange={() => handleOptionSelect(item)}
+															/>
+															<View className='w-full flex flex-col flex-1 ml-3'>
+																<Text className='font-bold'>{item?.label}</Text>
+																<Text className='text-xs text-neutral-500'>
+																	{item?.shippingEstimate}
+																</Text>
+																{item.isPickupInPoint && (
+																	<Text className='text-xs text-neutral-500'>
+																		{item?.pickUpAddress}
+																	</Text>
+																)}
+															</View>
+															<View className='flex items-center'>
+																<Text className='font-semibold'>{item?.price}</Text>
+															</View>
+														</>
+													)}
+												</>
+											)}
+										</View>
+									))}
+								</View>
+							</View>
+						)}
 					</>
 				)}
 			</View>
