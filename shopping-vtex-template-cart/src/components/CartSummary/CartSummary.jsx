@@ -124,6 +124,7 @@ export default function CartSummary(props) {
 				bottomInset={'auto'}
 				className={collapsed ? 'h-[111px]' : 'h-[260px]'}
 			/>
+			<View bottomInset={'auto'} />
 		</>
 	)
 }
