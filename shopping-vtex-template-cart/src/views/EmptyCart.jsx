@@ -14,28 +14,25 @@ export default function EmptyCart(props) {
 	}
 
 	return (
-		<Page
-			bottomInset
-			topInset>
-			<View className='flex-1 flex flex-col py-12 px-6 justify-center items-center'>
-				<View className='flex flex-col items-center justify-center gap-5 mb-4'>
+		<Page>
+			<View className='flex flex-1 flex-col justify-center items-center min-h-screen px-6 py-12'>
+				<View className='flex flex-col items-center gap-6 w-full max-w-xs'>
 					<Image
 						src={iconCart}
-						className='w-[50px]'
+						className='w-16 mb-2'
 					/>
-					<View className='flex flex-col justify-start self-center'>
-						<Text className='font-bold text-primary-base text-3xl text-center'>
-							{t('emptyCart.txtEmptyCart')}
-						</Text>
-						<Text className='mt-6 text-neutral-700 text-base text-center'>
-							{t('emptyCart.txtMessageList')}
-						</Text>
-					</View>
+					<Text className='font-bold text-primary-base text-2xl text-center mb-2'>
+						{t('emptyCart.txtEmptyCart')}
+					</Text>
+					<Text className='text-neutral-700 text-base text-center mb-6'>{t('emptyCart.txtMessageList')}</Text>
 					{showCloseButton && (
-						<CustomButton
-							label={t('emptyCart.labelButton')}
-							onPress={closeEitriApp}
-						/>
+						<View className='w-full mt-2'>
+							<CustomButton
+								label={t('emptyCart.labelButton')}
+								onPress={closeEitriApp}
+								className='btn-primary w-full'
+							/>
+						</View>
 					)}
 				</View>
 			</View>

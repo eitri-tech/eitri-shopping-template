@@ -70,15 +70,16 @@ export default function Home(props) {
 				isLoading={appIsLoading}
 			/>
 
-			<View bottomInset={'auto'}>
+			<View
+				bottomInset={'auto'}
+				className='py-4 flex flex-col gap-4'>
 				<CartItemsContent />
 
 				<Freight />
 
 				<Coupon />
-
-				<CartSummary />
 			</View>
+			<CartSummary />
 		</Page>
 	)
 }

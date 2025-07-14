@@ -50,7 +50,7 @@ export default function CustomButton(props) {
 				rounded
 				w-full
 				${_backgroundColor ? `${_backgroundColor}` : ''}
-				${variant === 'outlined' ? `border border border-primary` : ''}
+				${variant === 'outlined' ? `border border-primary` : ''}
 				${className || ''}
 			`}
 			{...rest}>

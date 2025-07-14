@@ -41,10 +41,10 @@ export default function CartSummary(props) {
 		<>
 			<View
 				bottomInset={'auto'}
-				className='bg-base-100 fixed bottom-0 border-t-2 border-neutral-300'>
+				className='bg-base-100 fixed bottom-0 left-0 w-full border-t-2 border-neutral-300 z-50 flex flex-col items-center'>
 				<View
 					onClick={() => setCollapsed(!collapsed)}
-					className='flex justify-center'>
+					className='flex justify-center w-full py-2 cursor-pointer'>
 					{collapsed ? (
 						<svg
 							width='24px'
@@ -75,8 +75,8 @@ export default function CartSummary(props) {
 				</View>
 
 				{!collapsed && (
-					<>
-						<View className='card-body'>
+					<View className='w-full flex justify-center'>
+						<View className='card-body w-full max-w-sm px-4'>
 							{itemsValue?.value && (
 								<View className='flex justify-between py-2'>
 									<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal')}</Text>
@@ -96,7 +96,7 @@ export default function CartSummary(props) {
 								</View>
 							)}
 							{cart?.value && (
-								<View className='flex justify-between py-2'>
+								<View className='flex justify-between py-2 border-t border-base-300 mt-2 pt-2'>
 									<Text className='text-base-content font-bold text-base'>
 										{t('cartSummary.txtTotal')}
 									</Text>
@@ -106,19 +106,24 @@ export default function CartSummary(props) {
 								</View>
 							)}
 						</View>
-					</>
+					</View>
 				)}
 
-				<View className={'h-[10px]'} />
+				<View className='h-2' />
 
-				<View className='flex w-screen justify-center px-4 items-center pb-4'>
+				<View className='flex w-full max-w-sm justify-center px-4 items-center pb-4'>
 					<CustomButton
 						label={t('cartSummary.labelFinish')}
 						onPress={goToCheckout}
+						className='btn-primary w-full text-base font-semibold py-3 rounded-lg shadow-md'
 					/>
 				</View>
 			</View>
-			<View className={collapsed ? 'h-[111px]' : 'h-[224px]'} />
+			{/* Espaço reservado para evitar sobreposição do conteúdo da página */}
+			<View
+				bottomInset={'auto'}
+				className={collapsed ? 'h-[111px]' : 'h-[260px]'}
+			/>
 		</>
 	)
 }

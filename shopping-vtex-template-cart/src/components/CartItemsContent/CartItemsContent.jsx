@@ -2,7 +2,7 @@ import CartItem from '../CartItem/CartItem'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 
 export default function CartItemsContent(props) {
-	const { cart, changeQuantity, removeItem } = useLocalShoppingCart()
+	const { cart, changeQuantity, removeItem, addItemOffer, removeItemOffer } = useLocalShoppingCart()
 
 	const hasMessage = itemEan => {
 		let message = cart.messages.filter(item => item.code === 'withoutStock' && item.fields.ean == itemEan)
@@ -25,21 +25,25 @@ export default function CartItemsContent(props) {
 		}
 	}
 
-	const onAddOfferingToCart = async (itemIndex, offeringId) => {}
+	const onAddOfferingToCart = async (itemIndex, offeringId) => {
+		await addItemOffer(itemIndex, offeringId)
+	}
 
-	const onRemoveOfferingFromCart = async (itemIndex, offeringId) => {}
+	const onRemoveOfferingFromCart = async (itemIndex, offeringId) => {
+		await removeItemOffer(itemIndex, offeringId)
+	}
 
 	return (
-		<View className='px-4'>
-			{cart?.items?.map(item => (
+		<View className='px-4 flex flex-col gap-4'>
+			{cart?.items?.map((item, index) => (
 				<CartItem
 					key={item.id}
-					onChangeQuantityItem={onChangeQuantityItem}
 					item={item}
+					onChangeQuantityItem={newQuantity => onChangeQuantityItem(newQuantity, index)}
 					message={hasMessage(item.ean)}
-					handleRemoveCartItem={handleRemoveCartItem}
-					onAddOfferingToCart={onAddOfferingToCart}
-					onRemoveOfferingFromCart={onRemoveOfferingFromCart}
+					handleRemoveCartItem={() => handleRemoveCartItem(index)}
+					onAddOfferingToCart={offeringId => onAddOfferingToCart(index, offeringId)}
+					onRemoveOfferingFromCart={offeringId => onRemoveOfferingFromCart(index, offeringId)}
 				/>
 			))}
 		</View>

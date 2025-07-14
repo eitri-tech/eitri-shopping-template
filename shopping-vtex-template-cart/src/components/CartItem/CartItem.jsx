@@ -9,19 +9,12 @@ import { useTranslation } from 'eitri-i18n'
 import { formatAmountInCents } from '../../utils/utils'
 
 export default function CartItem(props) {
-	const {
-		item,
-		onChangeQuantityItem,
-		message,
-		handleRemoveCartItem,
-		onAddOfferingToCart,
-		onRemoveOfferingFromCart,
-		locale,
-		currency
-	} = props
+	const { item, onChangeQuantityItem, message, handleRemoveCartItem, onAddOfferingToCart, onRemoveOfferingFromCart } =
+		props
 	const [loadingWishlist, setLoadingWishlist] = useState(false)
 	const [wishlistId, setWishlistId] = useState('')
 	const [showModalRemoveItem, setShowModalRemoveItem] = useState(false)
+	const [modalRemoveItemText, setModalRemoveItemText] = useState('')
 	const resizedImageUrl = item.imageUrl.replace(/\/(\d+)-\d+-\d+\//, '/$1-200-200/')
 
 	const { t } = useTranslation()
@@ -56,25 +49,33 @@ export default function CartItem(props) {
 	}
 
 	const handleQuantityOfItemsCart = quantityToUpdate => {
-		onChangeQuantityItem(item.quantity + quantityToUpdate, item.itemIndex)
+		onChangeQuantityItem(item.quantity + quantityToUpdate)
+	}
+
+	const handleRemoveCartItemIntention = () => {
+		setModalRemoveItemText(`Deseja remover ${item.name} do carrinho?`)
+		setShowModalRemoveItem(true)
 	}
 
 	const removeCartItem = confirm => {
-		if (confirm) {
-			handleModalRemoveItem()
-			handleRemoveCartItem(item.itemIndex)
-			return
-		}
-		handleModalRemoveItem()
+		handleRemoveCartItem()
 	}
 
-	const handleModalRemoveItem = () => {
-		setShowModalRemoveItem(!showModalRemoveItem)
+	const handleItemOffer = offeringId => {
+		if (offerIsBundled(offeringId)) {
+			onRemoveOfferingFromCart(offeringId)
+			return
+		}
+		onAddOfferingToCart(offeringId)
+	}
+
+	const offerIsBundled = offeringId => {
+		return item?.bundleItems?.some(o => o.id === offeringId)
 	}
 
 	return (
 		<View>
-			<View className='bg-white rounded shadow-sm border border-gray-300 p-4 mb-4'>
+			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
 				<View className='flex gap-4'>
 					<View className='flex-shrink-0'>
 						<Image
@@ -90,7 +91,9 @@ export default function CartItem(props) {
 
 						{/* Preço */}
 						<View className='mb-3'>
-							<Text className='text-lg font-bold text-gray-900'>{formatAmountInCents(item.price)}</Text>
+							<Text className='text-lg font-bold text-gray-900'>
+								{formatAmountInCents(item.priceDefinition.total)}
+							</Text>
 						</View>
 
 						{/* Seletor de Quantidade */}
@@ -99,95 +102,34 @@ export default function CartItem(props) {
 								quantity={item.quantity}
 								handleItemQuantity={handleQuantityOfItemsCart}
 							/>
-							<View onClick={handleModalRemoveItem}>
+							<View onClick={removeCartItem}>
 								<Text className='flex items-center text-gray-400 size-3'>Excluir</Text>
 							</View>
 						</View>
-
-						{/*<View className='border-t border-gray-100 pt-3'>*/}
-						{/*	<View className='flex items-center justify-between'>*/}
-						{/*		<View className='flex items-center gap-2'>*/}
-						{/*			<View>*/}
-						{/*				<Text className='text-sm font-medium text-gray-900'>Garantia Estendida</Text>*/}
-						{/*			</View>*/}
-						{/*		</View>*/}
-						{/*		<View className='flex items-center gap-2'>*/}
-						{/*			<Text className='text-sm font-medium text-green-600'>+R$ 20</Text>*/}
-						{/*			<View*/}
-						{/*				onClick={() => console.log('aqui')}*/}
-						{/*				className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${*/}
-						{/*					false ? 'bg-blue-600' : 'bg-gray-300'*/}
-						{/*				}`}>*/}
-						{/*				<View*/}
-						{/*					className={`inline-block h-3 w-3 transform rounded-full bg-white transition-transform ${*/}
-						{/*						false ? 'translate-x-5' : 'translate-x-1'*/}
-						{/*					}`}*/}
-						{/*				/>*/}
-						{/*			</View>*/}
-						{/*		</View>*/}
-						{/*	</View>*/}
-						{/*</View>*/}
-
-						{/*<Text className='text-neutral-900 font-medium text-sm'>{item.name}</Text>*/}
-						{/*<Text className='text-primary-700 font-bold text-base'>*/}
-						{/*	{formatAmountInCents(item.price, locale, currency)}*/}
-						{/*</Text>*/}
-						{/*{item?.offerings?.length > 0 &&*/}
-						{/*	!message &&*/}
-						{/*	item?.offerings*/}
-						{/*		?.filter(o => !o.isBundled)*/}
-						{/*		.map((offering, index) => (*/}
-						{/*			<Button*/}
-						{/*				key={offering.id + index}*/}
-						{/*				onClick={() => onAddOfferingToCart(item.itemIndex, offering.id)}*/}
-						{/*				className='border border-primary-700 rounded-lg p-2 flex justify-center items-center'>*/}
-						{/*				<Text className='text-sm text-primary-700 font-medium'>*/}
-						{/*					{`${t('cartItem.txtAdd')} ${offering?.name} ${offering?.price ? formatAmountInCents(offering.price, locale, currency) : ''}`}*/}
-						{/*				</Text>*/}
-						{/*			</Button>*/}
-						{/*		))}*/}
-						{/*<View className='flex justify-between h-[30%] items-center'>*/}
-						{/*	{!message && (*/}
-						{/*		<Quantity*/}
-						{/*			quantity={item.quantity}*/}
-						{/*			handleItemQuantity={handleQuantityOfItemsCart}*/}
-						{/*		/>*/}
-						{/*	)}*/}
-						{/*	{loadingWishlist ? (*/}
-						{/*		<View>*/}
-						{/*			<Loading width='30px' />*/}
-						{/*		</View>*/}
-						{/*	) : (*/}
-						{/*		<SaveButton*/}
-						{/*			handleSaveFavorite={() => handleSaveFavorite(item.id)}*/}
-						{/*			isInWishlist={!!wishlistId}*/}
-						{/*		/>*/}
-						{/*	)}*/}
-						{/*</View>*/}
 					</View>
 				</View>
 
 				{item?.offerings?.length > 0 && !message && (
 					<View className='mt-4 pt-3 border-t border-gray-300'>
-						{item?.offerings
-							?.filter(o => !o.isBundled)
-							.map((offering, index) => (
-								<View className='flex items-top justify-between gap-4'>
-									<View className='flex items-top gap-3'>
-										<Toggle
-											defaultChecked
-											name='terms'
-											value={1}
-										/>
-										<View>
-											<Text className='text-sm text-gray-700'>{offering?.name}</Text>
-										</View>
+						{item?.offerings.map(offering => (
+							<View
+								onClick={() => handleItemOffer(offering.id)}
+								className='flex items-top justify-between gap-4'>
+								<View className='flex items-top gap-3'>
+									<Toggle
+										defaultChecked={offerIsBundled(offering.id)}
+										name='terms'
+										value={1}
+									/>
+									<View>
+										<Text className='text-sm text-gray-700'>{offering?.name}</Text>
 									</View>
-									<Text className='text-sm font-medium text-gray-900'>
-										{offering?.price ? formatAmountInCents(offering.price) : ''}
-									</Text>
 								</View>
-							))}
+								<Text className='text-sm font-medium text-gray-900'>
+									{offering?.price ? formatAmountInCents(offering.price) : ''}
+								</Text>
+							</View>
+						))}
 					</View>
 				)}
 
@@ -202,35 +144,12 @@ export default function CartItem(props) {
 				)}
 			</View>
 
-			{item?.offerings?.length > 0 &&
-				item?.offerings
-					?.filter(o => o.isBundled)
-					.map((offering, index) => (
-						<View
-							key={offering.id + index}
-							className='bg-neutral-100'>
-							<View className='bg-background-color w-full h-0.5' />
-							<View className='py-2 px-6 flex justify-between items-center'>
-								<Text className='text-sm font-medium'>
-									{`${offering?.name}: ${
-										offering?.price ? formatAmountInCents(offering.price, locale, currency) : ''
-									}`}
-								</Text>
-								<Button onClick={() => onRemoveOfferingFromCart(item.itemIndex, offering.id)}>
-									<Image
-										className='h-4'
-										src={trash}
-									/>
-								</Button>
-							</View>
-						</View>
-					))}
-			{/*<ModalConfirm*/}
-			{/*	text={t('cartItem.txtRemoveCart')}*/}
-			{/*	showModal={showModalRemoveItem}*/}
-			{/*	closeModal={handleModalRemoveItem}*/}
-			{/*	removeItem={removeCartItem}*/}
-			{/*/>*/}
+			<ModalConfirm
+				text={modalRemoveItemText}
+				showModal={showModalRemoveItem}
+				closeModal={() => setShowModalRemoveItem(false)}
+				removeItem={handleRemoveCartItemIntention}
+			/>
 		</View>
 	)
 }

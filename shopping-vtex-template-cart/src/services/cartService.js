@@ -1,63 +1,6 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import adaptCart from '../adapters/CartAdapter'
 
-const resolveCustomizedOptions = item => {
-	let hasCustomizeOption = false
-	let assemblies = []
-
-	if (
-		Array.isArray(item.attachmentOfferings) &&
-		item.attachmentOfferings.length > 0 &&
-		item.attachmentOfferings.some(attachment => attachment.name.indexOf('etiquetas') > -1)
-	) {
-		hasCustomizeOption = true
-
-		const attachments = item.attachments
-
-		const attachmentsOfferingEtiquetas = item.attachmentOfferings.filter(
-			attachment => attachment.name.indexOf('etiquetas') > -1
-		)
-
-		assemblies = attachmentsOfferingEtiquetas?.map(attachmentOffering => {
-			const attachment = attachments?.find(attachment => attachment.name === attachmentOffering.name)
-
-			return {
-				required: attachmentOffering?.required,
-				name: attachmentOffering?.name,
-				inputValues: Object.keys(attachmentOffering.schema).map(key => {
-					return {
-						id: key,
-						maximumNumberOfCharacters: attachmentOffering?.schema[key].maxLength,
-						value: attachment ? attachment?.content[key] : ''
-					}
-				}),
-				isAlreadyCustomized: attachment?.content
-					? Object.keys(attachmentOffering.schema).every(key => attachment?.content[key])
-					: false
-			}
-		})
-	}
-
-	let alreadyCustomized = assemblies?.every(assembly => assembly.isAlreadyCustomized)
-
-	return {
-		hasCustomizeOption: hasCustomizeOption,
-		alreadyCustomized: alreadyCustomized,
-		customizations: assemblies
-	}
-}
-
-export const cardAdaptation = cart => {
-	const formattedCart = adaptCart(cart)
-	return {
-		...formattedCart,
-		items: formattedCart.items.map(item => ({
-			...item,
-			...resolveCustomizedOptions(item)
-		}))
-	}
-}
-
 export const getCart = async () => {
 	try {
 		return await Vtex.cart.getCurrentOrCreateCart()

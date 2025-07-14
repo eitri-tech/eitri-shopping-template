@@ -1,29 +1,27 @@
 import { CustomButton } from 'shopping-vtex-template-shared'
-import { View, Text } from 'eitri-luminus'
+import { View, Text, Modal } from 'eitri-luminus'
 export default function ModalConfirm(props) {
 	const { text, showModal, removeItem, closeModal } = props
 
+	if (!showModal) return null
+
 	return (
-		<Modal
-			show={showModal}
-			position={'center'}
-			onClose={closeModal}>
-			<View className='flex flex-col px-6 py-6 bg-accent-100 items-center rounded-md border border-neutral-300 w-4/5'>
-				<View className='flex flex-col w-full items-center justify-center'>
-					<Text className='text-center text-base font-bold'>{text}</Text>
-					<View className='w-full'>
-						<CustomButton
-							label={'Excluir'}
-							onPress={() => removeItem(true)}
-							block
-						/>
-						<CustomButton
-							variant='outlined'
-							label={'Cancelar'}
-							onPress={() => removeItem(false)}
-							block
-						/>
-					</View>
+		<Modal className='z-[9999]'>
+			<View
+				className='flex flex-col p-4 bg-base-100 items-center rounded w-11/12 max-w-xs mx-auto'
+				onClick={() => console.log('console')}>
+				<Text className='text-center text-lg font-bold mb-6 text-base-content'>{text}</Text>
+				<View className='flex flex-col gap-3 w-full'>
+					<CustomButton
+						label={'Excluir'}
+						className='btn-error btn-block'
+						onClick={removeItem}
+					/>
+					<CustomButton
+						variant='outlined'
+						label={'Cancelar'}
+						onClick={() => console.log('console')}
+					/>
 				</View>
 			</View>
 		</Modal>

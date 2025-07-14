@@ -1,7 +1,6 @@
 import { setNewAddress, setFreight } from '../services/freigthService'
 import {
 	getCart,
-	cardAdaptation,
 	addCoupon,
 	addItemOffer,
 	addItemToCart,
@@ -34,12 +33,12 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(addItemToCart, payload)
 	}
 
-	const addOffering = async (orderFormId, itemIndex, offeringId) => {
-		return executeCartOperation(addItemOffer, orderFormId, itemIndex, offeringId)
+	const _addItemOffer = async (itemIndex, offeringId) => {
+		return executeCartOperation(addItemOffer, itemIndex, offeringId)
 	}
 
-	const removeOffering = async (orderFormId, itemIndex, offeringId) => {
-		return executeCartOperation(removeItemOffer, orderFormId, itemIndex, offeringId)
+	const _removeItemOffer = async (itemIndex, offeringId) => {
+		return executeCartOperation(removeItemOffer, itemIndex, offeringId)
 	}
 
 	const changeQuantity = async (index, newQuantity) => {
@@ -74,8 +73,8 @@ export default function CartProvider({ children }) {
 				cart,
 				cartIsLoading,
 				addItem,
-				addOffering,
-				removeOffering,
+				addItemOffer: _addItemOffer,
+				removeItemOffer: _removeItemOffer,
 				changeQuantity,
 				removeItem,
 				setNewAddress: _setNewAddress,
