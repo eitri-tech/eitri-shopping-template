@@ -98,7 +98,7 @@
 		"txtWithdrawal": "RETIRADA",
 		"txtDelivery": "ENTREGA",
 		"txtNoNumber": "sem número",
-		"txtAlert": "Clique abaixo para alterar o número e complemento"
+		"txtAlert": "Clique abaixo para alterar o número"
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAGAMENTO",

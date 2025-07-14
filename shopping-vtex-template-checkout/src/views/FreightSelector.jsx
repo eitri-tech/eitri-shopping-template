@@ -30,6 +30,11 @@ export default function FreightSelector(props) {
 			return
 		}
 
+		if (!cart?.shippingData?.address?.number) {
+			navigate('AddressForm', { addressId: cart?.shippingData?.address?.addressId }, true)
+			return
+		}
+
 		if (cart?.shippingData?.logisticsInfo?.[0]) {
 			const firstLogisticInfo = cart.shippingData.logisticsInfo[0]
 			const isPickup = firstLogisticInfo.selectedDeliveryChannel === 'pickup-in-point'

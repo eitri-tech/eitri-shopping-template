@@ -123,7 +123,9 @@ export default function FinishCart() {
 			<View
 				topInset
 				bottomInset
-				className='p-4'>
+				className='p-4 pb-24'>
+				{' '}
+				{/* Adiciona padding-bottom para não sobrepor o botão */}
 				<>
 					{error.state && (
 						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
@@ -152,15 +154,16 @@ export default function FinishCart() {
 						<CartSummary />
 
 						<CartItems />
-
-						<View className='w-full'>
-							<CustomButton
-								label={t('finishCart.labelButton')}
-								onPress={runPaymentScript}
-							/>
-						</View>
 					</View>
 				</>
+			</View>
+
+			{/* Botão fixo na parte de baixo */}
+			<View className='fixed bottom-0 left-0 w-full z-10 bg-base-100 p-4 border-t border-base-200'>
+				<CustomButton
+					label={t('finishCart.labelButton')}
+					onPress={runPaymentScript}
+				/>
 			</View>
 
 			<Recaptcha

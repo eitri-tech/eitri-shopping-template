@@ -6,7 +6,7 @@ export default function SimpleCard(props) {
 	const { t } = useTranslation()
 
 	return (
-		<View className='w-full p-4 border border-neutral-700 flex flex-col rounded'>
+		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
 			<View className='flex flex-row justify-between'>
 				<View
 					onClick={onPress}

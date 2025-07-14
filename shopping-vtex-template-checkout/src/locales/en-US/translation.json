@@ -98,7 +98,7 @@
 		"txtWithdrawal": "PICKUP",
 		"txtDelivery": "DELIVERY",
 		"txtNoNumber": "no number",
-		"txtAlert": "Click below to change the number and complement"
+		"txtAlert": "Click below to change the number"
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAYMENT",

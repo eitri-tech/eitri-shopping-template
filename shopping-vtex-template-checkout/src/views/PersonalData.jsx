@@ -278,22 +278,25 @@ export default function PersonalData() {
 
 				<View className='flex-1 p-4'>
 					<View className='flex flex-col gap-4'>
-						<View className='flex w-full items-end gap-4'>
-							<CustomInput
-								autoFocus={true}
-								label={t('personalData.frmEmail')}
-								type={'email'}
-								value={personalData['email'] || ''}
-								onChange={handlePersonalDataChange('email')}
-								placeholder={t('personalData.placeholderEmail')}
-								inputMode={'email'}
-								className='w-[70%]'
-							/>
-							<CustomButton
-								label='OK'
-								className='w-[30%]'
-								onPress={findUserByEmail}
-							/>
+						<View className='flex justify-between mt-2 gap-2 items-end w-full'>
+							<View className='w-2/3'>
+								<CustomInput
+									autoFocus={true}
+									label={t('personalData.frmEmail')}
+									type={'email'}
+									value={personalData['email'] || ''}
+									onChange={handlePersonalDataChange('email')}
+									placeholder={t('personalData.placeholderEmail')}
+									inputMode={'email'}
+								/>
+							</View>
+
+							<View className='w-1/3'>
+								<CustomButton
+									label='OK'
+									onPress={findUserByEmail}
+								/>
+							</View>
 						</View>
 
 						{userDataVerified && (

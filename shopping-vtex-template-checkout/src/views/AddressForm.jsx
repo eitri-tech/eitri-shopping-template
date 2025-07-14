@@ -13,10 +13,10 @@ import { useTranslation } from 'eitri-i18n'
 import { Page } from 'eitri-luminus'
 import { resolvePostalCode } from '../services/freigthService'
 import { navigate } from '../services/navigationService'
-import { useRef, useState } from 'react'
+import { use, useRef, useState } from 'react'
 import Alert from '../components/Alert'
 
-function PostalCodeInput({ value, onChange, onSubmit, isLoading, t }) {
+function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t }) {
 	return (
 		<View className='flex gap-2 items-end'>
 			<CustomInput
@@ -154,7 +154,9 @@ function validateAddress(address, t) {
 export default function AddressForm(props) {
 	const PAGE_NAME = 'Checkout - Cadastro de Endereço'
 
-	const { cart, setNewAddress, cartIsLoading } = useLocalShoppingCart()
+	const addressId = props.location?.state?.addressId
+
+	const { cart, cartIsLoading, setLogisticInfo } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -181,6 +183,16 @@ export default function AddressForm(props) {
 	const numberInputRef = useRef(null)
 	const [touched, setTouched] = useState({})
 	const errors = validateAddress(address, t)
+
+	useEffect(() => {
+		if (addressId) {
+			const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
+			setAddress({
+				...address,
+				..._address
+			})
+		}
+	}, [addressId])
 
 	useEffect(() => {
 		sendPageView(PAGE_NAME)
@@ -230,7 +242,28 @@ export default function AddressForm(props) {
 	const submit = async () => {
 		setAddressError('')
 		try {
-			await setNewAddress(address)
+			if (addressId) {
+				const newSelectedAddresses = cart?.shippingData?.selectedAddresses?.map(selectedAddress => {
+					if (selectedAddress.addressId === addressId) {
+						return address
+					}
+					return selectedAddress
+				})
+
+				const payload = {
+					logisticsInfo: cart?.shippingData?.logisticsInfo,
+					clearAddressIfPostalCodeNotFound: false,
+					selectedAddresses: newSelectedAddresses
+				}
+				await setLogisticInfo(payload)
+			} else {
+				const payload = {
+					address,
+					clearAddressIfPostalCodeNotFound: false
+				}
+				await setLogisticInfo(payload)
+			}
+			// await setNewAddress(address)
 			navigate('FreightSelector')
 		} catch (e) {
 			if (e.response?.status === 400) {
@@ -255,7 +288,7 @@ export default function AddressForm(props) {
 	return (
 		<Page title={PAGE_NAME}>
 			<View
-				bottomInset
+				bottomInset={'auto'}
 				className='min-h-[100vh] flex flex-col'>
 				<HeaderContentWrapper
 					gap={16}

@@ -5,6 +5,11 @@ export default async function setFreight(payload) {
 	return newCart
 }
 
+export const setLogisticInfo = async payload => {
+	const newCart = await Vtex.checkout.setLogisticInfo(payload)
+	return newCart
+}
+
 export const setNewAddress = async address => {
 	try {
 		return await Vtex.checkout.setLogisticInfo({
@@ -16,8 +21,7 @@ export const setNewAddress = async address => {
 	}
 }
 
-export const updateAddress = async (cart, address) => {
-	const selectedAddresses = generateSelectedAddressesPayload(address)
+export const updateAddress = async selectedAddresses => {
 	const newCart = await Vtex.checkout.setLogisticInfo({
 		logisticsInfo: cart?.shippingData?.logisticsInfo,
 		clearAddressIfPostalCodeNotFound: false,
