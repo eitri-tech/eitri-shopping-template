@@ -10,7 +10,7 @@ import {
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
-import { Page } from 'eitri-luminus'
+import { Page, View } from 'eitri-luminus'
 import { resolvePostalCode } from '../services/freigthService'
 import { navigate } from '../services/navigationService'
 import { use, useRef, useState } from 'react'
@@ -19,31 +19,35 @@ import Alert from '../components/Alert'
 function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t }) {
 	return (
 		<View className='flex gap-2 items-end'>
-			<CustomInput
-				label={t('addNewShippingAddress.txtCalculate')}
-				inputMode='numeric'
-				placeholder='12345-678'
-				className='w-[70%]'
-				value={value}
-				onChange={onChange}
-				autoFocus={true}
-				variant='mask'
-				mask='99999-999'
-				disabled={isLoading}
-			/>
-			<CustomButton
-				className='w-[30%]'
-				label={
-					isLoading
-						? t('addNewShippingAddress.loading') || 'Aguarde...'
-						: t('addNewShippingAddress.ok') || 'OK'
-				}
-				onPress={onSubmit}
-				display='flex'
-				justifyContent='center'
-				disabled={isLoading || !value}
-				isLoading={isLoading}
-			/>
+			<View className='flex justify-between mt-2 gap-2 w-full items-end'>
+				<View className='w-2/3'>
+					<CustomInput
+						label={t('addNewShippingAddress.txtCalculate')}
+						inputMode='numeric'
+						placeholder='12345-678'
+						value={value}
+						onChange={onChange}
+						autoFocus={true}
+						variant='mask'
+						mask='99999-999'
+						disabled={isLoading}
+					/>
+				</View>
+				<View className='w-1/3'>
+					<CustomButton
+						label={
+							isLoading
+								? t('addNewShippingAddress.loading') || 'Aguarde...'
+								: t('addNewShippingAddress.ok') || 'OK'
+						}
+						onPress={onSubmit}
+						display='flex'
+						justifyContent='center'
+						disabled={isLoading || !value}
+						isLoading={isLoading}
+					/>
+				</View>
+			</View>
 		</View>
 	)
 }
@@ -309,8 +313,7 @@ export default function AddressForm(props) {
 					onDismiss={() => setAddressError('')}
 				/>
 				<View className='flex-1 flex flex-col p-4'>
-					<View className='flex flex-col gap-4 flex-1'>
-						{/* Remover texto de erro antigo */}
+					<View className='flex flex-col gap-2 flex-1'>
 						<PostalCodeInput
 							value={address?.postalCode}
 							onChange={onChangePostalCodeInput}

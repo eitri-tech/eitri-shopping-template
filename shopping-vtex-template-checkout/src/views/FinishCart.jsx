@@ -140,6 +140,8 @@ export default function FinishCart() {
 					)}
 
 					<View className='flex flex-col gap-4'>
+						<CartSummary />
+
 						{cart && <UserData />}
 
 						<DeliveryData />
@@ -150,21 +152,21 @@ export default function FinishCart() {
 								onPress={() => navigate('PaymentData', true)}
 							/>
 						)}
-
-						<CartSummary />
-
-						<CartItems />
 					</View>
 				</>
 			</View>
 
 			{/* Botão fixo na parte de baixo */}
-			<View className='fixed bottom-0 left-0 w-full z-10 bg-base-100 p-4 border-t border-base-200'>
+			<View
+				bottomInset
+				className='fixed bottom-0 left-0 w-full z-10 bg-base-100 p-4 border-t border-base-200'>
 				<CustomButton
 					label={t('finishCart.labelButton')}
 					onPress={runPaymentScript}
 				/>
 			</View>
+
+			<View className='h-[78px]' />
 
 			<Recaptcha
 				ref={recaptchaRef}

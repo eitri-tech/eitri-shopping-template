@@ -27,6 +27,11 @@ export default function AddressSelector(props) {
 	const handleAddressSelect = async address => {
 		setIsAddressLoading(true)
 		try {
+			const currentAddress = cart?.shippingData?.address
+			if (currentAddress?.addressId === address?.addressId) {
+				console.log('Address already selected')
+				return
+			}
 			await setShippingAddress(address)
 		} catch (error) {
 			console.error('Error selecting address:', error)
@@ -48,17 +53,20 @@ export default function AddressSelector(props) {
 						...address
 					}
 				})
+				.sort((a, b) => {
+					return a.street > b.street ? 1 : -1
+				})
 		}
 		return []
 	}
 
-	const availableAddresses = getAddresses()
-
 	const handleContinue = async () => {
 		if (!cart?.shippingData?.address) return
 
-		await Eitri.navigation.navigate({ path: '/FreightSelector' })
+		await navigate('FreightSelector')
 	}
+
+	const availableAddresses = getAddresses()
 
 	return (
 		<Page title={PAGE}>
@@ -74,9 +82,6 @@ export default function AddressSelector(props) {
 					<View className={`w-full`}>
 						<View className='flex flex-col gap-1 mb-4'>
 							<Text className='text-lg font-bold text-base-content'>
-								{t('addressSelector.title', 'Endereços de Entrega')}
-							</Text>
-							<Text className='text-sm text-base-content/70 mt-1'>
 								{t('addressSelector.subtitle', 'Selecione um endereço para entrega')}
 							</Text>
 						</View>
@@ -85,9 +90,15 @@ export default function AddressSelector(props) {
 							addresses={availableAddresses}
 							selectedAddress={cart?.shippingData?.address}
 							onAddressSelect={handleAddressSelect}
-							onAddNewAddress={handleAddNewAddress}
-							isLoading={isAddressLoading}
 						/>
+
+						<View className='mt-4'>
+							<CustomButton
+								outlined
+								onClick={handleAddNewAddress}
+								label={t('addressSelector.addNewAddress', 'Adicionar Novo Endereço')}
+							/>
+						</View>
 					</View>
 				</View>
 

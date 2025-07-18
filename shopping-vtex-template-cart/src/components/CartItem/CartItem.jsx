@@ -102,7 +102,7 @@ export default function CartItem(props) {
 								quantity={item.quantity}
 								handleItemQuantity={handleQuantityOfItemsCart}
 							/>
-							<View onClick={removeCartItem}>
+							<View onClick={handleRemoveCartItemIntention}>
 								<Text className='flex items-center text-gray-400 size-3'>Excluir</Text>
 							</View>
 						</View>
@@ -148,7 +148,7 @@ export default function CartItem(props) {
 				text={modalRemoveItemText}
 				showModal={showModalRemoveItem}
 				closeModal={() => setShowModalRemoveItem(false)}
-				removeItem={handleRemoveCartItemIntention}
+				removeItem={removeCartItem}
 			/>
 		</View>
 	)

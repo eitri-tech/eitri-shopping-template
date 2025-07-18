@@ -17,7 +17,7 @@ export default function CartSummary() {
 	const finalTotal = itemsTotal + shippingTotal - discountTotal
 
 	return (
-		<View className='w-full p-4 border border-neutral-700 flex flex-col rounded gap-3'>
+		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
 			{/* Totalizers breakdown */}
 			<View className='flex flex-col gap-2'>
 				{itemsTotal > 0 && (

@@ -16,15 +16,6 @@ export default function ShippingMethods(props) {
 
 	return (
 		<View {...rest}>
-			<View className='flex flex-col gap-1 mb-4'>
-				<Text className='text-lg font-bold text-base-content'>
-					{t('shippingMethods.txtSelectDelivery', 'Métodos de Entrega')}
-				</Text>
-				<Text className='text-sm text-base-content/70 mt-1'>
-					{t('shippingMethods.subtitle', 'Escolha como deseja receber seu pedido')}
-				</Text>
-			</View>
-
 			<View className='flex flex-col gap-3'>
 				{options.map(option => (
 					<>
