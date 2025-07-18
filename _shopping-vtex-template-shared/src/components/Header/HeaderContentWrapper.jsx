@@ -73,12 +73,12 @@ export default function HeaderContentWrapper(props) {
 		<>
 			<View
 				id='header-container'
-				className={`fixed top-0 left-0 right-0 z-[9999] ${translate} transition-all duration-500 ease-in-out shadow-md w-full bg-[var(--header-background-color)]`}>
+				className={`fixed top-0 left-0 right-0 z-[9999] ${translate} transition-all duration-500 ease-in-out shadow-md w-full bg-header-background`}>
 				<View topInset={'auto'} />
 				<View id='header'>
 					<View
 						id='header-content'
-						className={`min-h-[var(--header-height)] flex items-center w-screen py-[8px] px-[16px] ${className}`}
+						className={`min-h-[60px] flex items-center w-screen py-[8px] px-[16px] ${className}`}
 						{...rest}>
 						{children}
 					</View>
@@ -86,7 +86,7 @@ export default function HeaderContentWrapper(props) {
 			</View>
 			<View
 				topInset={'auto'}
-				className={`fixed top-0 left-0 right-0 z-[2000] w-full bg-[var(--header-background-color)]`}
+				className={`fixed top-0 left-0 right-0 z-[2000] w-full bg-header-background`}
 			/>
 			<HeaderOffset
 				height={_height}

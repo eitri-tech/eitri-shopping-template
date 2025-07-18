@@ -7,6 +7,7 @@ import { useLocalShoppingCart } from '../providers/LocalCart'
 import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
 import HeaderFilter from '../components/HeaderFilter/HeaderFilter'
 import searchIcon from '../assets/icons/search-normal.svg'
+import { View } from 'eitri-luminus'
 
 export default function Search(props) {
 	const incomingSearchTerm = props?.history?.location?.state?.searchTerm || props?.location?.state?.searchTerm
@@ -44,7 +45,7 @@ export default function Search(props) {
 			startCart()
 		})
 
-		Tracking.screenView('busca', 'Search')
+		// Tracking.screenView('busca', 'Search')
 	}, [])
 
 	const onScrollEnd = async () => {
@@ -60,7 +61,7 @@ export default function Search(props) {
 	}
 
 	const setSearchAndGetProducts = async incomingSearchTerm => {
-		Tracking.search(incomingSearchTerm)
+		// Tracking.search(incomingSearchTerm)
 
 		const params = {
 			facets: [],
@@ -114,10 +115,10 @@ export default function Search(props) {
 				setPageHasEnded(true)
 				return
 			} else {
-				Tracking.appsFlyerEvent('af_search', {
-					af_search_term: selectedFacets.query,
-					af_content_list: result.products.map(item => item.productId)
-				})
+				// Tracking.appsFlyerEvent('af_search', {
+				// 	af_search_term: selectedFacets.query,
+				// 	af_content_list: result.products.map(item => item.productId)
+				// })
 			}
 
 			if (page === 1) {
@@ -134,7 +135,7 @@ export default function Search(props) {
 			console.log('erro', e)
 			setIsProductLoading(false)
 			setPageHasEnded(true)
-			Tracking.error(e, 'search.getProductsByFacets')
+			// Tracking.error(e, 'search.getProductsByFacets')
 		}
 	}
 
@@ -204,11 +205,10 @@ export default function Search(props) {
 			title='Tela de busca'
 			bottomInset
 			topInset>
-			<HeaderContentWrapper scrollEffect={false}>
-				<View
-					display='flex'
-					alignItems='center'
-					gap={12}>
+			<HeaderContentWrapper
+				scrollEffect={false}
+				className='gap-3 w-full justify-between'>
+				<View className='flex items-center gap-2'>
 					<HeaderReturn iconColor='primary-500' />
 
 					<SearchInput
@@ -216,21 +216,19 @@ export default function Search(props) {
 						onSubmit={handleSearchSubmit}
 						onChange={onChangeTerm}
 					/>
+				</View>
 
-					<View
-						display='flex'
-						gap={12}>
-						<HeaderWishList
-							onPress={() => {}}
-							padding='none'
-						/>
+				<View className='flex items-center gap-3'>
+					<HeaderWishList
+						onPress={() => {}}
+						padding='none'
+					/>
 
-						<HeaderCart cart={cart} />
-					</View>
+					<HeaderCart cart={cart} />
 				</View>
 			</HeaderContentWrapper>
 
-			{searchSuggestion && searchSuggestion.length > 0 && (
+			{/* {searchSuggestion && searchSuggestion.length > 0 && (
 				<View
 					marginTop='quark'
 					width='100vw'
@@ -275,8 +273,8 @@ export default function Search(props) {
 						</View>
 					))}
 				</View>
-			)}
-
+			)} */}
+			{/* 
 			{!pristine && (
 				<View
 					padding={'small'}
@@ -334,7 +332,7 @@ export default function Search(props) {
 						/>
 					</InfiniteScroll>
 				</View>
-			)}
+			)} */}
 
 			{/* {!isProductLoading && searchResults.length === 0 && (
 				<>
@@ -349,7 +347,7 @@ export default function Search(props) {
 					/>
 				</>
 			)} */}
-
+			{/* 
 			<FacetsModal
 				show={showModal}
 				initialFilters={params}
@@ -358,7 +356,7 @@ export default function Search(props) {
 				modalReady={setFacetsModalReady}
 				onClose={() => setShowModal(false)}
 				mode={modeModal}
-			/>
+			/> */}
 		</Page>
 	)
 }

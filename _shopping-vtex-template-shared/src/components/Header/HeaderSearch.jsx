@@ -4,7 +4,7 @@ export default function HeaderSearch(props) {
 
 	return (
 		<View className='w-full'>
-			<View className='rounded-full bg-neutral-100 border border-neutral-300 border-[1px] flex py-2 pl-4 max-h-[40px] items-center w-full'>
+			<View className='rounded-full bg-neutral-100 border-neutral-300 border-[1px] flex py-2 pl-4 max-h-[40px] items-center w-full'>
 				<svg
 					viewBox='0 0 24 24'
 					fill='none'

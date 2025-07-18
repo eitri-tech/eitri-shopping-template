@@ -18,12 +18,12 @@ export default function SearchInput(props) {
 
 	const legacySearch = Vtex?.configs?.searchOptions?.legacySearch
 
-	useEffect(() => {
-		if (inputRef.current) {
-			console.log('inputRef', inputRef.current)
-			inputRef?.current?.focus()
-		}
-	}, [])
+	// useEffect(() => {
+	// 	if (inputRef.current) {
+	// 		console.log('inputRef', inputRef.current)
+	// 		inputRef?.current?.focus()
+	// 	}
+	// }, [])
 
 	useEffect(() => {
 		if (incomingValue) {
@@ -52,7 +52,8 @@ export default function SearchInput(props) {
 		}
 	}
 
-	const handleAutocomplete = async value => {
+	const handleAutocomplete = async e => {
+		const value = e.target.value
 		setSearchTerm(value)
 
 		if (legacySearch) {
@@ -78,30 +79,12 @@ export default function SearchInput(props) {
 	}
 
 	return (
-		<View
-			width='100%'
-			display='flex'
-			gap='16px'
-			position='relative'
-			alignItems='center'>
-			<View
-				borderColor='neutral-300'
-				borderWidth='hairline'
-				borderRadius='pill'
-				justifyContent='between'
-				height='40px'
-				width='100%'
-				display='flex'
-				alignItems='center'
-				backgroundColor='neutral-100'
-				paddingHorizontal='large'>
-				<View>
-					<Image
-						src={searchIcon}
-						width='16px'
-					/>
-				</View>
-
+		<View className='flex-grow'>
+			<View className='flex items-center rounded-full justify-between h-10 px-4 bg-neutral-100'>
+				<Image
+					src={searchIcon}
+					width='16px'
+				/>
 				<TextInput
 					ref={inputRef}
 					autoFocus={true}
@@ -111,35 +94,20 @@ export default function SearchInput(props) {
 					onSubmit={value => handleSearch(value)}
 					onBlur={onBlurHandler}
 					placeholder={'Pesquisar...'}
+					className='focus:outline-none !bg-transparent border-none shadow-none !p-0 m-0 max-w-[50%]'
 				/>
-
-				<View
-					display='flex'
-					gap={10}>
-					{searchTerm && (
-						<View
-							onPress={() => setSearchTerm('')}
-							padding='quark'
-							backgroundColor='neutral-900'
-							borderRadius='circular'>
-							{/* <Icon
+				{searchTerm && (
+					<View
+						onPress={() => setSearchTerm('')}
+						className='p-1 bg-neutral-900 rounded-full'>
+						{/* <Icon
 								iconKey='x'
 								color='accent-100'
 								width={16}
 								height={16}
-							/> */}
-						</View>
-					)}
-
-					{/* <Touchable onPress={navigateBack}>
-						<Icon
-							iconKey='x'
-							color='primary-500'
-							width={24}
-							height={24}
-						/>
-					</Touchable> */}
-				</View>
+							/>  */}
+					</View>
+				)}
 			</View>
 		</View>
 	)
