@@ -1,4 +1,4 @@
-import { getProductsByFacets } from '../../../services/ProductService'
+import { getProductsService } from '../../../services/ProductService'
 import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
 export default function ProductShelf(props) {
 	const { data } = props
@@ -13,42 +13,18 @@ export default function ProductShelf(props) {
 
 	const executeProductSearch = async () => {
 		setIsLoadingProducts(true)
-		let query = {}
-		if (data.term) {
-			query = { q: data.term }
-		}
-		const processedFacets = processFacets(data)
-		const processedSort = processSort(data)
-		const processedPagination = processPagination(data)
 
-		const _searchOptions = {
-			...processedSort,
-			...processedPagination,
-			...query
+		const params = {
+			facets: data.facets || [],
+			query: data.term ?? '',
+			sort: data.sort ?? '',
+			count: data.numberOfItems || 8
 		}
-		const result = await getProductsByFacets(processedFacets, _searchOptions)
+
+		const result = await getProductsService(params)
 		setCurrentProducts(result.products)
-		setSearchParams({ facets: data?.selectedFacets, ..._searchOptions })
+		setSearchParams({ facets: data?.facets, ...params })
 		setIsLoadingProducts(false)
-	}
-
-	const processFacets = shelf => {
-		if (!shelf?.selectedFacets) return ''
-
-		return shelf?.selectedFacets?.reduce((acc, facet) => {
-			acc += `/${facet.key}/${facet.value}`
-			return acc
-		}, '')
-	}
-
-	const processSort = shelf => {
-		if (!shelf?.sort || shelf?.sort === 'score_desc') return {}
-		return { sort: shelf?.sort?.replace('_', ':') }
-	}
-
-	const processPagination = shelf => {
-		const { numberOfItems } = shelf
-		return { count: numberOfItems || 8 }
 	}
 
 	return (

@@ -1,11 +1,7 @@
 import Eitri from 'eitri-bifrost'
-import { HeaderContentWrapper, HeaderCart, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
-import { autocompleteSuggestions, getProductsService } from '../services/ProductService'
+import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
 import SearchInput from '../components/SearchInput/SearchInput'
-import SearchResults from '../components/PageSearchComponents/SearchResults'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
-import HeaderFilter from '../components/HeaderFilter/HeaderFilter'
 import { View } from 'eitri-luminus'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 
@@ -21,6 +17,7 @@ export default function Search(props) {
 		window.scroll(0, 0)
 
 		if (incomingSearchTerm) {
+			setPristine(false)
 			setParams(incomingSearchTerm)
 		}
 
@@ -40,6 +37,7 @@ export default function Search(props) {
 
 	const handleSearchSubmit = async term => {
 		if (term) {
+			setPristine(false)
 			Eitri.keyboard.dismiss()
 			try {
 				const params = {
@@ -73,81 +71,54 @@ export default function Search(props) {
 				/>
 			</HeaderContentWrapper>
 
-			<View bottomInset>{params && <ProductCatalogContent params={params} />}</View>
-
-			{/*
-			{!pristine && (
-				<View
-					padding={'small'}
-					direction='column'
-					gap={12}>
-					<View
-						direction='row'
-						justifyContent='between'
-						gap={12}>
-						<View
-							onPress={() => handleFilterModal('filter')}
-							paddingVertical='extra-small'
-							backgroundColor='accent-100'
-							width='100%'
-							borderWidth='hairline'
-							borderColor='neutral-300'
-							direction='row'
-							justifyContent='center'
-							alignItems='center'
-							borderRadius='micro'>
-							<Text>Filtrar</Text>
-						</View>
-						<View
-							onPress={() => handleFilterModal('order')}
-							paddingVertical='extra-small'
-							backgroundColor='accent-100'
-							width='100%'
-							borderWidth='hairline'
-							borderColor='neutral-300'
-							direction='row'
-							justifyContent='center'
-							alignItems='center'
-							borderRadius='micro'>
-							<Text>Ordenar</Text>
-						</View>
-					</View>
-					{totalProducts && (
-						<View
-							direction='row'
-							justifyContent='between'
-							gap={12}>
-							<Text fontSize='extra-small'>
-								{`Exibindo ${
-									totalProducts > 1 ? `${totalProducts} produtos` : `${totalProducts} produto`
-								}`}
-							</Text>
-						</View>
-					)}
-					<InfiniteScroll onScrollEnd={onScrollEnd}>
-						<SearchResults
-							isLoading={isProductLoading}
-							searchResults={searchResults}
-							trackingListId={`search_${slugify(params?.query)}`}
-							trackingListName={`busca ${params?.query}`}
+			{pristine && (
+				<View className='flex flex-col items-center justify-center py-12'>
+					<svg
+						className='mb-4 text-primary'
+						width='80'
+						height='80'
+						viewBox='0 0 80 80'
+						fill='none'
+						xmlns='http://www.w3.org/2000/svg'>
+						<circle
+							cx='36'
+							cy='36'
+							r='28'
+							stroke='currentColor'
+							strokeWidth='6'
+							fill='#EEF2FF'
 						/>
-					</InfiniteScroll>
+						<rect
+							x='56'
+							y='56'
+							width='16'
+							height='6'
+							rx='3'
+							transform='rotate(45 56 56)'
+							fill='currentColor'
+						/>
+						<circle
+							cx='36'
+							cy='36'
+							r='16'
+							stroke='currentColor'
+							strokeWidth='3'
+							fill='white'
+						/>
+					</svg>
+					<Text className='text-primary text-2xl font-bold text-center mb-2'>O que você está buscando?</Text>
+					<Text className='text-base-content text-base text-center opacity-80'>
+						Nos diga o que procura e achamos pra você
+					</Text>
 				</View>
-			)} */}
+			)}
 
-			{/* {!isProductLoading && searchResults.length === 0 && (
-				<>
-					<TopSearches
-						marginTop='large'
-						onSubmit={handleSearchSubmit}
-					/>
-
-					<SearchHistory
-						marginTop='large'
-						onSubmit={handleSearchSubmit}
-					/>
-				</>
-			)} */}
+			{params && (
+				<ProductCatalogContent
+					bottomInset={'auto'}
+					params={params}
+				/>
+			)}
 		</Page>
 	)
 }

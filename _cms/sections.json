@@ -1,0 +1,1007 @@
+[
+  {
+    "name": "MultipleImageBanner",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Banners",
+      "type": "object",
+      "description": "Componentes de banners multifunção",
+      "properties": {
+        "mainTitle": {
+          "title": "Título Principal(opcional)",
+          "type": "string"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "title": "Mídia",
+            "type": "object",
+            "properties": {
+              "imageUrl": {
+                "title": "Imagem",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "videoUrl": {
+                "title": "Vídeo",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "action": {
+                "title": "Destino da ação",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "title": "Tipo de ação",
+                    "enumNames": [
+                      "Nenhum",
+                      "Abrir Link",
+                      "Abrir Produto",
+                      "Abrir Coleção",
+                      "Abrir Categoria",
+                      "Abrir Busca",
+                      "Abrir Página",
+                      "Abrir Modal",
+                      "Abrir Eitri App",
+                      "Abrir Path",
+                      "Abrir Marca",
+                      "Abrir Busca Legada"
+                    ],
+                    "enum": [
+                      "none",
+                      "link",
+                      "product",
+                      "collection",
+                      "category",
+                      "search",
+                      "page",
+                      "modal",
+                      "openEitriApp",
+                      "path",
+                      "brand",
+                      "legacySearch"
+                    ],
+                    "default": "none"
+                  },
+                  "title": {
+                    "title": "Título no header da tela de destino",
+                    "type": "string"
+                  },
+                  "value": {
+                    "title": "Valor",
+                    "type": "string"
+                  },
+                  "extraFields": {
+                    "title": "Campos Extras",
+                    "type": "array",
+                    "maxItems": 5,
+                    "items": {
+                      "title": "Campos Extras",
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "title": "Chave",
+                          "type": "string"
+                        },
+                        "value": {
+                          "title": "Valor",
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "subLabel": {
+                "title": "Título abaixo da imagem (opcional)",
+                "type": "string"
+              },
+              "sort": {
+                "title": "Sort",
+                "description": "Items order",
+                "default": "score:desc",
+                "enum": [
+                  "discount:desc",
+                  "name:asc",
+                  "name:desc",
+                  "orders:desc",
+                  "price:asc",
+                  "price:desc",
+                  "release:desc",
+                  "score:desc"
+                ],
+                "enumNames": [
+                  "Discount: higher to lower",
+                  "Name: A-Z",
+                  "Name: Z-A",
+                  "Orders: higher to lower",
+                  "Price: lower to higher",
+                  "Price: higher to lower",
+                  "Release date: newer to older",
+                  "Relevance: higher to lower"
+                ]
+              },
+              "description": {
+                "title": "Texto Descrição (opcional) ",
+                "type": "string"
+              },
+              "mktTag": {
+                "title": "Tag de Marketing (nome do evento de clique)",
+                "type": "string"
+              },
+              "extra": {
+                "title": "Informações Extras",
+                "type": "array",
+                "maxItems": 5,
+                "items": {
+                  "title": "Informação Extra",
+                  "type": "object",
+                  "properties": {
+                    "key": {
+                      "title": "Chave",
+                      "type": "string"
+                    },
+                    "value": {
+                      "title": "Valor",
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "remoteConfigKey": {
+                "title": "Chave de hiperpersonalização Eitri",
+                "type": "string",
+                "description": "Chave para hiperpersonalização Eitri"
+              }
+            }
+          }
+        },
+        "aspectRatio": {
+          "title": "Aspect Ratio da image",
+          "type": "string",
+          "default": "4:3"
+        },
+        "mode": {
+          "title": "Modo de exibição",
+          "enumNames": [
+            "Slider Hero (Carrossel)",
+            "Banner Único",
+            "Lista de banners",
+            "Lista de banners arredondados",
+            "Lista em Grade",
+            "Caber na tela",
+            "Fullscreen",
+            "Banner Video Player",
+            "BannerFashion"
+          ],
+          "enum": [
+            "SliderHero",
+            "SingleBanner",
+            "BannerList",
+            "RoundedBannerList",
+            "GridList",
+            "FitOnScreen",
+            "FullScreen",
+            "BannerVideoPlayer",
+            "BannerFashion"
+          ],
+          "default": "SliderHero"
+        },
+        "size": {
+          "title": "Dimensões (opcional)",
+          "type": "object",
+          "properties": {
+            "maxWidth": {
+              "type": "string",
+              "title": "Largura máxima"
+            },
+            "maxHeight": {
+              "type": "string",
+              "title": "Altura máxima"
+            }
+          }
+        },
+        "autoPlay": {
+          "title": "Rolar automaticamente",
+          "type": "boolean",
+          "default": true
+        },
+        "remoteConfigKey": {
+          "title": "Chave de hiperpersonalização Eitri",
+          "type": "string",
+          "description": "Chave para hiperpersonalização Eitri"
+        }
+      }
+    }
+  },
+  {
+    "name": "StreamShopBanner",
+    "requiredScopes": [],
+    "schema": {
+      "type": "object",
+      "title": "Banner da Stream Shop",
+      "properties": {
+        "content": {
+          "type": "array",
+          "title": "Banners da Stream Shop",
+          "items": {
+            "title": "Banner da Stream Shop",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "subTitle": {
+                "title": "Subtítulo",
+                "type": "string"
+              },
+              "videoUrl": {
+                "title": "Video URL",
+                "type": "string"
+              },
+              "imageUrl": {
+                "title": "Imagem",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "ProductShelf",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Produtos",
+      "description": "Add custom shelves to your store",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "numberOfItems": {
+          "type": "integer",
+          "title": "Total number of items",
+          "default": 8,
+          "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
+        },
+        "sort": {
+          "title": "Sort",
+          "description": "Items order",
+          "default": "score:desc",
+          "enum": [
+            "discount:desc",
+            "name:asc",
+            "name:desc",
+            "orders:desc",
+            "price:asc",
+            "price:desc",
+            "release:desc",
+            "score:desc"
+          ],
+          "enumNames": [
+            "Desconto: do maior para o menor",
+            "Nome: A-Z",
+            "Nome: Z-A",
+            "Pedidos: do maior para o menor",
+            "Preço: do menor para o maior",
+            "Preço: do maior para o menor",
+            "Lançamento: mais recentes primeiro",
+            "Relevância: da maior para a menor"
+          ]
+        },
+        "term": {
+          "type": "string",
+          "title": "Search term"
+        },
+        "facets": {
+          "title": "Facets",
+          "type": "array",
+          "items": {
+            "title": "Facet",
+            "type": "object",
+            "required": [
+              "key",
+              "value"
+            ],
+            "properties": {
+              "key": {
+                "title": "Key",
+                "description": "For collections use: productClusterIds",
+                "type": "string",
+                "default": "productClusterIds"
+              },
+              "value": {
+                "title": "Value",
+                "description": "E.g. For 'Most Wanted' collection, use: 140. To consult your collection ids go to Collections page",
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "mode": {
+          "title": "Modo de exibição",
+          "enumNames": [
+            "Carrossel",
+            "Scroll Horizontal"
+          ],
+          "enum": [
+            "carousel",
+            "scroll"
+          ],
+          "default": "scroll"
+        },
+        "remoteConfigKey": {
+          "title": "Chave de hiperpersonalização Eitri",
+          "type": "string",
+          "description": "Chave para hiperpersonalização Eitri"
+        }
+      }
+    }
+  },
+  {
+    "name": "ProductTiles",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Produtos com Filtros",
+      "description": "Faça filtros pre-definidos para a prateleira de produtos",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "shelfs": {
+          "title": "Prateleiras",
+          "type": "array",
+          "items": {
+            "title": "Prateleira",
+            "type": "object",
+            "required": [
+              "title",
+              "numberOfItems",
+              "sort"
+            ],
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "numberOfItems": {
+                "title": "Quantidade total de itens",
+                "type": "integer",
+                "default": 5,
+                "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
+              },
+              "itemsPerPage": {
+                "title": "Number of items per page",
+                "type": "integer",
+                "default": 5,
+                "description": "Number of items to display per page in carousel"
+              },
+              "after": {
+                "title": "After",
+                "type": "integer",
+                "default": "0",
+                "description": "Initial pagination item"
+              },
+              "sort": {
+                "title": "Sort",
+                "description": "Items order",
+                "default": "score:desc",
+                "enum": [
+                  "discount:desc",
+                  "name:asc",
+                  "name:desc",
+                  "orders:desc",
+                  "price:asc",
+                  "price:desc",
+                  "release:desc",
+                  "score:desc"
+                ],
+                "enumNames": [
+                  "Desconto: do maior para o menor",
+                  "Nome: A-Z",
+                  "Nome: Z-A",
+                  "Pedidos: do maior para o menor",
+                  "Preço: do menor para o maior",
+                  "Preço: do maior para o menor",
+                  "Lançamento: mais recentes primeiro",
+                  "Relevância: da maior para a menor"
+                ]
+              },
+              "term": {
+                "title": "Search term",
+                "type": "string"
+              },
+              "facets": {
+                "title": "Facets",
+                "type": "array",
+                "items": {
+                  "title": "Facet",
+                  "type": "object",
+                  "required": [
+                    "key",
+                    "value"
+                  ],
+                  "properties": {
+                    "key": {
+                      "title": "Key",
+                      "description": "For collections use: productClusterIds",
+                      "type": "string",
+                      "default": "productClusterIds"
+                    },
+                    "value": {
+                      "title": "Value",
+                      "description": "E.g. For 'Most Wanted' collection, use: 140. To consult your collection ids go to Collections page",
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "CategoryShelf",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Categorias",
+      "type": "object",
+      "description": "Componente de prateleira de categorias",
+      "properties": {
+        "title": {
+          "title": "Título",
+          "type": "string"
+        },
+        "shelves": {
+          "title": "Categorias",
+          "type": "array",
+          "items": {
+            "title": "Categoria",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Nome",
+                "type": "string"
+              },
+              "imageUrl": {
+                "title": "Imagem",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "width": {
+                "title": "Largura",
+                "type": "number"
+              },
+              "height": {
+                "title": "Altura",
+                "type": "number"
+              },
+              "facets": {
+                "title": "Facets de destino",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "mode": {
+          "title": "Modo de exibição",
+          "type": "string",
+          "enumNames": [
+            "Com scroll horizontal",
+            "Caber na tela"
+          ],
+          "enum": [
+            "scroll",
+            "fitOnScreen"
+          ],
+          "default": "scroll"
+        }
+      }
+    }
+  },
+  {
+    "name": "WordPressCardList",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Card de Blog WordPress",
+      "description": "Lista de cards de blog",
+      "type": "object",
+      "properties": {
+        "postUrl": {
+          "title": "Url de Posts do seu blog wordpress",
+          "description": "https://seusite.com/wp-json/wp/v2/posts?_embed",
+          "type": "string"
+        },
+        "numberOfItems": {
+          "title": "Número de Posts",
+          "type": "integer",
+          "default": 5
+        },
+        "title": {
+          "title": "Título",
+          "type": "string",
+          "default": "Confira nosso Blog"
+        }
+      }
+    }
+  },
+  {
+    "name": "ScheduleCardShelf",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Card de agenda",
+      "description": "Lista de cards de agenda",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Título",
+          "type": "string",
+          "default": "Agenda"
+        },
+        "shelves": {
+          "title": "Conteúdo",
+          "type": "array",
+          "items": {
+            "title": "Item",
+            "type": "object",
+            "properties": {
+              "date": {
+                "title": "Data",
+                "type": "string"
+              },
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "description": {
+                "title": "Descrição",
+                "type": "string"
+              },
+              "actionLink": {
+                "title": "Link",
+                "type": "string"
+              },
+              "mode": {
+                "title": "Modo de exibição",
+                "enumNames": [
+                  "Podcast",
+                  "Live",
+                  "Youtube"
+                ],
+                "enum": [
+                  "Podcast",
+                  "Live",
+                  "Youtube"
+                ],
+                "default": "Card"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "CategoryTiles",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Banners de categorias",
+      "description": "Faça filtros pre-definidos para a prateleira de categorias",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "content": {
+          "title": "Prateleiras",
+          "type": "array",
+          "items": {
+            "title": "Prateleira",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "imageUrl": {
+                "title": "Mídia",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "width": {
+                "title": "Altura da imagem",
+                "type": "integer"
+              },
+              "height": {
+                "title": "Largura da imagem",
+                "type": "integer"
+              },
+              "facets": {
+                "title": "Facets",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "CategoryTree",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Categorias com Filtros",
+      "description": "Faça filtros pre-definidos para a prateleira de categorias",
+      "type": "object",
+      "properties": {
+        "shelfs": {
+          "title": "Prateleiras",
+          "type": "array",
+          "items": {
+            "title": "Prateleira",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "showAsSimpleItem": {
+                "title": "Exibir como item simples (sem imagem e fundo colorido)",
+                "description": "Se marcado a imagem e o fundo colorido não serão exibidos",
+                "type": "boolean",
+                "default": false
+              },
+              "content": {
+                "title": "Categorias",
+                "type": "array",
+                "items": {
+                  "title": "Categoria",
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "title": "Título",
+                      "type": "string"
+                    },
+                    "thumbnail": {
+                      "title": "Mídia",
+                      "type": "string",
+                      "widget": {
+                        "ui:widget": "media-gallery"
+                      }
+                    },
+                    "color": {
+                      "title": "Cor",
+                      "type": "string",
+                      "enumNames": [
+                        "primary-100",
+                        "primary-300",
+                        "primary-500",
+                        "primary-700",
+                        "primary-900",
+                        "secondary-100",
+                        "secondary-300",
+                        "secondary-500",
+                        "secondary-700",
+                        "secondary-900",
+                        "tertiary-100",
+                        "tertiary-300",
+                        "tertiary-500",
+                        "tertiary-700",
+                        "tertiary-900",
+                        "accent-100",
+                        "accent-300",
+                        "accent-500",
+                        "accent-700",
+                        "accent-900",
+                        "neutral-100",
+                        "neutral-300",
+                        "neutral-500",
+                        "neutral-700",
+                        "neutral-900"
+                      ],
+                      "enum": [
+                        "primary-100",
+                        "primary-300",
+                        "primary-500",
+                        "primary-700",
+                        "primary-900",
+                        "secondary-100",
+                        "secondary-300",
+                        "secondary-500",
+                        "secondary-700",
+                        "secondary-900",
+                        "tertiary-100",
+                        "tertiary-300",
+                        "tertiary-500",
+                        "tertiary-700",
+                        "tertiary-900",
+                        "accent-100",
+                        "accent-300",
+                        "accent-500",
+                        "accent-700",
+                        "accent-900",
+                        "neutral-100",
+                        "neutral-300",
+                        "neutral-500",
+                        "neutral-700",
+                        "neutral-900"
+                      ]
+                    },
+                    "facets": {
+                      "title": "Facets",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "CategoryListSwipe",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Lista de categorias com swipe",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Título (opcional)",
+          "type": "string"
+        },
+        "content": {
+          "title": "Categorias",
+          "type": "array",
+          "items": {
+            "title": "Categoria",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "imageUrl": {
+                "title": "Mídia (opcional)",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "path": {
+                "title": "Caminho da categoria (apenas não tiver subcategorias)",
+                "description": "Exemplo: /categoriaA/categoriaB",
+                "type": "string"
+              },
+              "subcategories": {
+                "title": "Subcategorias",
+                "type": "array",
+                "items": {
+                  "title": "Subcategoria",
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "title": "Título",
+                      "type": "string"
+                    },
+                    "path": {
+                      "title": "Caminho da subcategoria",
+                      "description": "Exemplo: /categoriaA/categoriaB",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "LastSeenProducts",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Produtos Vistos",
+      "description": "Prateleira de produtos vistos pelo usuário",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Título",
+          "type": "string"
+        },
+        "numberOfItems": {
+          "title": "Número de itens (máximo 14)",
+          "type": "integer",
+          "default": 8
+        },
+        "mode": {
+          "title": "Modo de exibição",
+          "enumNames": [
+            "Carrossel",
+            "Scroll horizontal"
+          ],
+          "enum": [
+            "carousel",
+            "horizontalScroll"
+          ],
+          "default": "carousel"
+        }
+      }
+    }
+  },
+  {
+    "name": "RichText",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Campo de texto livre",
+      "description": "Campo de texto livre",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Título",
+          "type": "string"
+        },
+        "content": {
+          "title": "Conteúdo",
+          "type": "string",
+          "widget": {
+            "ui:widget": "draftjs-rich-text"
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "ProductInfiniteScroll",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Scroll infinito de produtos",
+      "description": "Produtos em scroll infinito",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "sort": {
+          "title": "Sort",
+          "description": "Items order",
+          "default": "score:desc",
+          "enum": [
+            "discount:desc",
+            "name:asc",
+            "name:desc",
+            "orders:desc",
+            "price:asc",
+            "price:desc",
+            "release:desc",
+            "score:desc"
+          ],
+          "enumNames": [
+            "Desconto: do maior para o menor",
+            "Nome: A-Z",
+            "Nome: Z-A",
+            "Pedidos: do maior para o menor",
+            "Preço: do menor para o maior",
+            "Preço: do maior para o menor",
+            "Lançamento: mais recentes primeiro",
+            "Relevância: da maior para a menor"
+          ]
+        },
+        "query": {
+          "type": "string",
+          "title": "Search term"
+        },
+        "facets": {
+          "title": "Facets",
+          "type": "array",
+          "items": {
+            "title": "Facet",
+            "type": "object",
+            "required": [
+              "key",
+              "value"
+            ],
+            "properties": {
+              "key": {
+                "title": "Key",
+                "description": "For collections use: productClusterIds",
+                "type": "string",
+                "default": "productClusterIds"
+              },
+              "value": {
+                "title": "Value",
+                "description": "E.g. For 'Most Wanted' collection, use: 140. To consult your collection ids go to Collections page",
+                "type": "string",
+                "default": "140"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "name": "CategoryAccordeon",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Lista de categorias com componente estilo accordeon",
+      "type": "object",
+      "properties": {
+        "title": {
+          "title": "Título (opcional)",
+          "type": "string"
+        },
+        "content": {
+          "title": "Categorias",
+          "type": "array",
+          "items": {
+            "title": "Categoria",
+            "type": "object",
+            "properties": {
+              "title": {
+                "title": "Título",
+                "type": "string"
+              },
+              "imageUrl": {
+                "title": "Mídia (opcional)",
+                "type": "string",
+                "widget": {
+                  "ui:widget": "media-gallery"
+                }
+              },
+              "path": {
+                "title": "Caminho da categoria (apenas não tiver subcategorias)",
+                "description": "Exemplo: /categoriaA/categoriaB",
+                "type": "string"
+              },
+              "subcategories": {
+                "title": "Subcategorias",
+                "type": "array",
+                "items": {
+                  "title": "Subcategoria",
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "title": "Título",
+                      "type": "string"
+                    },
+                    "path": {
+                      "title": "Caminho da subcategoria",
+                      "description": "Exemplo: /categoriaA/categoriaB",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

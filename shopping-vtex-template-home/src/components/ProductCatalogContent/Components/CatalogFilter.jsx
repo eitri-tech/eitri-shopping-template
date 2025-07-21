@@ -3,7 +3,7 @@ import { View, Text, Button, Modal } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
 import { getProductsFacetsService } from '../../../services/ProductService'
 import { CustomButton } from 'shopping-vtex-template-shared'
-import CustomModal from '../../../CustomModal/CustomModal'
+import CustomModal from '../../CustomModal/CustomModal'
 
 export default function CatalogFilter(props) {
 	const { currentFilters, onFilterChange } = props

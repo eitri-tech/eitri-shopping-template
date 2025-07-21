@@ -1,10 +1,6 @@
-import Eitri from 'eitri-bifrost'
 import { Text, View } from 'eitri-luminus'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { autocompleteSuggestions } from '../../services/ProductService'
-import { useTranslation } from 'eitri-i18n'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
-import { use } from 'react'
 
 let timeoutId
 let skipSuggestion = false
@@ -104,7 +100,7 @@ export default function SearchInput(props) {
 						strokeWidth='2'
 						strokeLinecap='round'
 						strokeLinejoin='round'
-						class='text-header-content'>
+						className='text-header-content'>
 						<circle
 							cx='11'
 							cy='11'
@@ -142,7 +138,7 @@ export default function SearchInput(props) {
 							strokeWidth='2'
 							strokeLinecap='round'
 							strokeLinejoin='round'
-							class='text-header-content'>
+							className='text-header-content'>
 							<line
 								x1='18'
 								y1='6'

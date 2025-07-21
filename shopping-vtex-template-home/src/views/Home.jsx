@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getCmsContent } from '../services/CmsService'
-import { setLanguage, startConfigure } from '../services/AppService'
+import { startConfigure } from '../services/AppService'
 import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'

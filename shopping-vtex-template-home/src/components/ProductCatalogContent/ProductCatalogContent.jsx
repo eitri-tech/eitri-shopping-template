@@ -20,7 +20,7 @@ export default function ProductCatalogContent(props) {
 	 * }
 	 * */
 
-	const { params, ...rest } = props
+	const { params, hideFilters, ...rest } = props
 
 	const [productLoading, setProductLoading] = useState(false)
 	const [products, setProducts] = useState([])
@@ -43,7 +43,6 @@ export default function ProductCatalogContent(props) {
 
 	const getProducts = async (selectedFacets, page) => {
 		try {
-			console.log('selectedFacets', selectedFacets)
 			if (productLoading || pagesHasEnded) return
 
 			setProductLoading(true)
@@ -97,37 +96,38 @@ export default function ProductCatalogContent(props) {
 	}
 
 	return (
-		<>
-			<View
-				padding={'small'}
-				direction='column'
-				gap={12}>
-				<View className='p-4 flex flex-between gap-4 w-full'>
-					<CatalogFilter
-						currentFilters={appliedFacets}
-						onFilterChange={handleFilterChange}
-					/>
-					<CatalogSort
-						currentSort={appliedFacets?.sort}
-						onSortChange={handleSortChange}
-					/>
-				</View>
-
-				{totalProducts > 0 && (
-					<View className='px-4'>
-						<Text>
-							{`Exibindo ${totalProducts > 1 ? `${totalProducts} produtos` : `${totalProducts} produto`}`}
-						</Text>
+		<View {...rest}>
+			{products.length > 0 && !hideFilters && (
+				<>
+					<View className='p-4 flex flex-between gap-4 w-full'>
+						<CatalogFilter
+							currentFilters={appliedFacets}
+							onFilterChange={handleFilterChange}
+						/>
+						<CatalogSort
+							currentSort={appliedFacets?.sort}
+							onSortChange={handleSortChange}
+						/>
 					</View>
-				)}
 
-				<InfiniteScroll onScrollEnd={onScrollEnd}>
-					<SearchResults
-						isLoading={productLoading}
-						searchResults={products}
-					/>
-				</InfiniteScroll>
-			</View>
-		</>
+					{totalProducts > 0 && (
+						<View className='px-4'>
+							<Text>
+								{`Exibindo ${
+									totalProducts > 1 ? `${totalProducts} produtos` : `${totalProducts} produto`
+								}`}
+							</Text>
+						</View>
+					)}
+				</>
+			)}
+
+			<InfiniteScroll onScrollEnd={onScrollEnd}>
+				<SearchResults
+					isLoading={productLoading}
+					searchResults={products}
+				/>
+			</InfiniteScroll>
+		</View>
 	)
 }

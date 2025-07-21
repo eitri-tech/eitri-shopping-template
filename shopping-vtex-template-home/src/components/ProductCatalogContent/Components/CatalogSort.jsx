@@ -3,7 +3,7 @@ import { View, Text } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
 import { LIST_ORDERING } from '../../../utils/lists'
 import { CustomButton } from 'shopping-vtex-template-shared'
-import CustomModal from '../../../CustomModal/CustomModal'
+import CustomModal from '../../CustomModal/CustomModal'
 
 export default function CatalogSort(props) {
 	const { currentSort, onSortChange } = props
