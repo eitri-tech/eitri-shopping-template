@@ -17,16 +17,14 @@ export default function ProductCardFullImage(props) {
 		actionLabel,
 		onPressOnCard,
 		onPressCartButton,
-		onPressOnWishlist
+		onPressOnWishlist,
+		className
 	} = props
 
 	return (
 		<View
 			onClick={onPressOnCard}
-			className={`
-				relative bg-accent-100 
-				${width ? `min-w-[${width}px] max-w-[${width}px]` : 'min-w-auto max-w-auto'} 
-			`}>
+			className={`relative bg-white rounded ${className}`}>
 			<View className={`flex flex-col w-full shadow-md rounded-lg`}>
 				<View
 					className={`relative flex flex-col w-full justify-center items-center rounded-lg  h-[240px] w-full min-h-[240px] max-h-[240px]`}>
@@ -75,17 +73,11 @@ export default function ProductCardFullImage(props) {
 						e.stopPropagation()
 						onPressCartButton()
 					}}
-					className={`
-						h-[36px] flex justify-center items-center 
-						border border-primary-700 border-[0.5px] 
-						rounded-lg
-						${loadingCartOp ? 'bg-neutral-100' : 'bg-primary-700'}
-						mx-2 mb-2
-					`}>
+					className={`mt-2 h-[36px] bg-primary w-full rounded-b flex justify-center items-center border border-primary-700 border-[0.5px] bg-primary-700 z-[99]`}>
 					{loadingCartOp ? (
 						<Loading width='36px' />
 					) : (
-						<Text className='text-background font-medium text-xs'>{actionLabel}</Text>
+						<Text className='text-primary-content font-medium text-xs'>{actionLabel}</Text>
 					)}
 				</View>
 			</View>

@@ -63,7 +63,7 @@ export default function ShelfOfProducts(props) {
 					{!isLoading &&
 						products &&
 						products.map(product => (
-							<View className={`scroll-snap-start ml-[${gap}px]`}>
+							<View className={`scroll-snap-start  ml-[${gap}px]`}>
 								<ProductCard
 									product={product}
 									key={product?.productId}

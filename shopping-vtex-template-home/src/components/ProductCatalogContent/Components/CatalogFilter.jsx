@@ -3,6 +3,7 @@ import { View, Text, Button, Modal } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
 import { getProductsFacetsService } from '../../../services/ProductService'
 import { CustomButton } from 'shopping-vtex-template-shared'
+import CustomModal from '../../../CustomModal/CustomModal'
 
 export default function CatalogFilter(props) {
 	const { currentFilters, onFilterChange } = props
@@ -32,8 +33,6 @@ export default function CatalogFilter(props) {
 	}
 
 	const handleFilterToggle = filterValue => {
-		const key = filterValue.key
-
 		const existingIndex = tempFilters?.facets?.findIndex(f => f.key === filterValue.key)
 		let newFacets
 		if (existingIndex !== -1 && existingIndex !== undefined) {
@@ -56,60 +55,35 @@ export default function CatalogFilter(props) {
 
 	return (
 		<>
-			<Button
+			<CustomButton
+				disabled={facetsLoading}
 				onClick={() => setShowModal(true)}
-				className='flex-grow btn-outline btn-sm gap-2 bg-white border-gray-300 hover:bg-gray-50 text-gray-700'>
-				<svg
-					xmlns='http://www.w3.org/2000/svg'
-					width='16'
-					height='16'
-					viewBox='0 0 24 24'
-					fill='none'
-					stroke='currentColor'
-					strokeWidth='2'
-					strokeLinecap='round'
-					strokeLinejoin='round'>
-					<path d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z' />
-				</svg>
-				<Text className='text-sm font-medium'>{t('categoryPageModal.title')}</Text>
-			</Button>
+				leftIcon={
+					<svg
+						xmlns='http://www.w3.org/2000/svg'
+						width='16'
+						height='16'
+						viewBox='0 0 24 24'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='2'
+						strokeLinecap='round'
+						strokeLinejoin='round'>
+						<path d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z' />
+					</svg>
+				}
+				label={t('categoryPageModal.title')}
+			/>
 
 			{showModal && (
-				<Modal
-					className='z-[9999] !bg-black/70 !opacity-100 modal modal-bottom'
+				<CustomModal
+					open={showModal}
 					onClose={() => setShowModal(false)}>
 					<View
 						bottomInset={'auto'}
-						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto'>
+						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
 						<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
 							<Text className='text-lg font-semibold'>{t('categoryPageModal.title')}</Text>
-							<Button
-								onClick={() => setShowModal(false)}
-								className='btn btn-ghost btn-sm'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									width='20'
-									height='20'
-									viewBox='0 0 24 24'
-									fill='none'
-									stroke='currentColor'
-									strokeWidth='2'
-									strokeLinecap='round'
-									strokeLinejoin='round'>
-									<line
-										x1='18'
-										y1='6'
-										x2='6'
-										y2='18'
-									/>
-									<line
-										x1='6'
-										y1='6'
-										x2='18'
-										y2='18'
-									/>
-								</svg>
-							</Button>
 						</View>
 
 						<View className='flex flex-col'>
@@ -151,7 +125,7 @@ export default function CatalogFilter(props) {
 							))}
 						</View>
 
-						<View className='mt-6 flex flex-row justify-between p-4 w-full border-t border-gray-200'>
+						<View className='mt-6 flex flex-row justify-between p-4 w-full border-t border-gray-200 gap-4'>
 							<CustomButton
 								outlined
 								onClick={() => {
@@ -166,7 +140,7 @@ export default function CatalogFilter(props) {
 							/>
 						</View>
 					</View>
-				</Modal>
+				</CustomModal>
 			)}
 		</>
 	)

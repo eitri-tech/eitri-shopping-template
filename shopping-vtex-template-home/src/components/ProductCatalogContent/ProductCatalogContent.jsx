@@ -7,6 +7,7 @@ import SearchResults from '../../components/PageSearchComponents/SearchResults'
 import CatalogSort from './Components/CatalogSort'
 import { getDefaultSortParam } from '../../services/helpers/resolveSortParam'
 import CatalogFilter from './Components/CatalogFilter'
+import InfiniteScroll from '../InfiniteScroll/InfiniteScroll'
 
 export default function ProductCatalogContent(props) {
 	/*
@@ -21,12 +22,10 @@ export default function ProductCatalogContent(props) {
 
 	const { params, ...rest } = props
 
-	const [initialLoading, setInitialLoading] = useState(true)
 	const [productLoading, setProductLoading] = useState(false)
-	const [windowFilter, setWindowFilter] = useState(false)
 	const [products, setProducts] = useState([])
+	const [totalProducts, setTotalProducts] = useState(0)
 	const [initialFilters, setInitialFilters] = useState(null)
-	const [hasFilters, setHasFilters] = useState(false)
 	const [appliedFacets, setAppliedFacets] = useState([]) // Filtros efetivamente usados na busca
 	const [currentPage, setCurrentPage] = useState(1)
 	const [pagesHasEnded, setPageHasEnded] = useState(false)
@@ -44,6 +43,7 @@ export default function ProductCatalogContent(props) {
 
 	const getProducts = async (selectedFacets, page) => {
 		try {
+			console.log('selectedFacets', selectedFacets)
 			if (productLoading || pagesHasEnded) return
 
 			setProductLoading(true)
@@ -60,10 +60,12 @@ export default function ProductCatalogContent(props) {
 				setProducts(prev => [...prev, ...result?.products])
 			}
 
+			setTotalProducts(result?.recordsFiltered)
 			setCurrentPage(page)
 			setProductLoading(false)
 		} catch (error) {
 			console.log('error', error)
+			setProductLoading(false)
 		}
 	}
 
@@ -111,47 +113,14 @@ export default function ProductCatalogContent(props) {
 					/>
 				</View>
 
-				{/* <View
-						direction='row'
-						justifyContent='between'
-						gap={12}>
-						<View
-							onPress={() => handleFilterModal('filter')}
-							paddingVertical='extra-small'
-							backgroundColor='accent-100'
-							width='100%'
-							borderWidth='hairline'
-							borderColor='neutral-300'
-							direction='row'
-							justifyContent='center'
-							alignItems='center'
-							borderRadius='micro'>
-							<Text>Filtrar</Text>
-						</View>
-						<View
-							onPress={() => handleFilterModal('order')}
-							paddingVertical='extra-small'
-							backgroundColor='accent-100'
-							width='100%'
-							borderWidth='hairline'
-							borderColor='neutral-300'
-							direction='row'
-							justifyContent='center'
-							alignItems='center'
-							borderRadius='micro'>
-							<Text>Ordenar</Text>
-						</View>
-					</View> */}
-				{/* {totalProducts && (
-					<View
-						direction='row'
-						justifyContent='between'
-						gap={12}>
-						<Text fontSize='extra-small'>
+				{totalProducts > 0 && (
+					<View className='px-4'>
+						<Text>
 							{`Exibindo ${totalProducts > 1 ? `${totalProducts} produtos` : `${totalProducts} produto`}`}
 						</Text>
 					</View>
-				)} */}
+				)}
+
 				<InfiniteScroll onScrollEnd={onScrollEnd}>
 					<SearchResults
 						isLoading={productLoading}

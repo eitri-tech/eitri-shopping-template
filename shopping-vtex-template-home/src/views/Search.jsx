@@ -12,27 +12,17 @@ import ProductCatalogContent from '../components/ProductCatalogContent/ProductCa
 export default function Search(props) {
 	const incomingSearchTerm = props?.history?.location?.state?.searchTerm || props?.location?.state?.searchTerm
 
-	const { cart, startCart } = useLocalShoppingCart()
+	const { startCart } = useLocalShoppingCart()
 
-	const [isProductLoading, setIsProductLoading] = useState(false)
-	const [page, setPage] = useState(1)
-
-	const [searchResults, setSearchResults] = useState([])
-	const [pagesHasEnded, setPageHasEnded] = useState(true)
 	const [params, setParams] = useState(null)
-	const [initialParams, setInitialParams] = useState(null)
 	const [pristine, setPristine] = useState(true)
-	const [searchSuggestion, setSearchSuggestion] = useState([])
-	const [totalProducts, setTotalProducts] = useState(null)
 
 	useEffect(() => {
 		window.scroll(0, 0)
 
 		if (incomingSearchTerm) {
-			setSearchAndGetProducts(incomingSearchTerm)
+			setParams(incomingSearchTerm)
 		}
-
-		startCart()
 
 		Eitri.eventBus.subscribe({
 			channel: 'onUserTappedActiveTab',
@@ -48,32 +38,6 @@ export default function Search(props) {
 		// Tracking.screenView('busca', 'Search')
 	}, [])
 
-	const onScrollEnd = async () => {
-		if (!isProductLoading && !pagesHasEnded) {
-			const newPage = page + 1
-			setPage(newPage)
-			_getProductsByFacets(params, newPage)
-		}
-	}
-
-	const setSearchAndGetProducts = async incomingSearchTerm => {
-		// Tracking.search(incomingSearchTerm)
-
-		const params = {
-			facets: [],
-			query: incomingSearchTerm,
-			sort: 'release:desc'
-		}
-
-		setParams(params)
-		setInitialParams({ ...params })
-		setPageHasEnded(false)
-		setPristine(false)
-		setPage(1)
-
-		await _getProductsByFacets(params, 1)
-	}
-
 	const handleSearchSubmit = async term => {
 		if (term) {
 			Eitri.keyboard.dismiss()
@@ -84,128 +48,19 @@ export default function Search(props) {
 					query: term
 				}
 				//saveSearchHistory(term)
-				console.log('term========>', term)
 				setParams(params)
-				// setInitialParams({ ...params })
-				// setSearchResults([])
-				// setPageHasEnded(false)
-				// setPage(1)
-				// setSearchSuggestion([])
-				// setPristine(false)
-				// await _getProductsByFacets(params, 1)
 			} catch (error) {
 				console.log('handleSearchSubmit', error)
 			}
 		}
-	}
-
-	const _getProductsByFacets = async (selectedFacets, page) => {
-		setIsProductLoading(true)
-
-		try {
-			setPristine(false)
-			const result = await getProductsService(selectedFacets, page)
-
-			setTotalProducts(result.recordsFiltered)
-			if (result?.products?.length === 0) {
-				setIsProductLoading(false)
-				setPageHasEnded(true)
-				return
-			} else {
-				// Tracking.appsFlyerEvent('af_search', {
-				// 	af_search_term: selectedFacets.query,
-				// 	af_content_list: result.products.map(item => item.productId)
-				// })
-			}
-
-			if (page === 1) {
-				// Se for a primeira página, substitui os resultados
-				setSearchResults(result?.products || [])
-			} else {
-				// Se for páginas subsequentes, adiciona aos resultados existentes
-				setSearchResults(prev => [...prev, ...result?.products])
-			}
-
-			setPageHasEnded(result?.products?.length === 0)
-			setIsProductLoading(false)
-		} catch (e) {
-			console.log('erro', e)
-			setIsProductLoading(false)
-			setPageHasEnded(true)
-			// Tracking.error(e, 'search.getProductsByFacets')
-		}
-	}
-
-	const onApplyFilter = async filters => {
-		setPage(1)
-		setSearchResults([])
-		setPageHasEnded(false)
-		setPristine(false)
-		setParams(filters)
-		await _getProductsByFacets(filters, 1)
-	}
-
-	const onClearFilter = async () => {
-		setParams(initialParams)
-		await onApplyFilter(initialParams)
-	}
-
-	const onChangeTerm = async term => {
-		if (term) {
-			try {
-				const params = {
-					sort: 'release:desc',
-					facets: [],
-					query: term
-				}
-
-				if (!term) {
-					setSearchSuggestion([])
-					return
-				}
-
-				const result = await autocompleteSuggestions(term)
-				setSearchSuggestion(result?.searches)
-
-				setSearchResults([])
-				setPageHasEnded(false)
-				setPage(1)
-			} catch (error) {
-				console.log('handleSearchSubmit', error)
-			}
-		}
-	}
-
-	const [facetsModalReady, setFacetsModalReady] = useState(false)
-	const [showModal, setShowModal] = useState(false)
-	const [modeModal, setModeModal] = useState('')
-
-	const handleFilterModal = mode => {
-		setShowModal(true)
-		setModeModal(mode)
-	}
-
-	const _onApplyFilters = async filters => {
-		await onApplyFilter(filters)
-		setShowModal(false)
-		setModeModal('')
-	}
-
-	const _onRemoveFilters = async () => {
-		await onClearFilter()
-		setShowModal(false)
-		setModeModal('')
 	}
 
 	return (
-		<Page
-			title='Tela de busca'
-			bottomInset
-			topInset>
+		<Page title='Tela de busca'>
 			<HeaderContentWrapper
 				scrollEffect={false}
 				className='gap-3 w-full justify-between relative'>
-				<HeaderReturn iconColor='primary-500' />
+				<HeaderReturn />
 
 				<SearchInput
 					incomingValue={params?.query}
@@ -218,9 +73,9 @@ export default function Search(props) {
 				/>
 			</HeaderContentWrapper>
 
-			<ProductCatalogContent params={params} />
+			<View bottomInset>{params && <ProductCatalogContent params={params} />}</View>
 
-			{/* 
+			{/*
 			{!pristine && (
 				<View
 					padding={'small'}
@@ -293,16 +148,6 @@ export default function Search(props) {
 					/>
 				</>
 			)} */}
-			{/* 
-			<FacetsModal
-				show={showModal}
-				initialFilters={params}
-				onApplyFilters={_onApplyFilters}
-				onRemoveFilters={_onRemoveFilters}
-				modalReady={setFacetsModalReady}
-				onClose={() => setShowModal(false)}
-				mode={modeModal}
-			/> */}
 		</Page>
 	)
 }
