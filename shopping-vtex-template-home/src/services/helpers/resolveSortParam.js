@@ -18,6 +18,10 @@ export const resolveSortParam = sort => {
 		case 'OrderByScoreDESC':
 			return 'score:desc'
 		default:
-			return 'orders:desc'
+			return getDefaultSortParam()
 	}
+}
+
+export const getDefaultSortParam = () => {
+	return 'release:desc'
 }

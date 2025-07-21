@@ -1,11 +1,11 @@
 import Eitri from 'eitri-bifrost'
 
 export default function HeaderReturn(props) {
-	const { backPage, onPress, width } = props
+	const { backPage, onClick, className } = props
 
 	const onBack = () => {
-		if (typeof onPress === 'function') {
-			return onPress()
+		if (typeof onClick === 'function') {
+			return onClick()
 		} else {
 			if (backPage) {
 				Eitri.navigation.back(backPage)
@@ -17,16 +17,20 @@ export default function HeaderReturn(props) {
 
 	return (
 		<View
-			className={`relative w-[25px] h-[25px] flex items-center`}
+			className={`flex items-center ${className}`}
 			onClick={onBack}>
 			<svg
 				xmlns='http://www.w3.org/2000/svg'
-				height='24px'
-				viewBox='0 -960 960 960'
-				width='24px'
-				className='text-header-content'
-				fill='currentColor'>
-				<path d='M560-240 320-480l240-240 56 56-184 184 184 184-56 56Z' />
+				width='24'
+				height='24'
+				viewBox='0 0 24 24'
+				fill='none'
+				stroke='currentColor'
+				strokeWidth='2'
+				strokeLinecap='round'
+				strokeLinejoin='round'
+				className='text-header-content'>
+				<polyline points='15 18 9 12 15 6'></polyline>
 			</svg>
 		</View>
 	)

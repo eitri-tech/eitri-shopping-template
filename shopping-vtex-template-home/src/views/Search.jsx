@@ -6,8 +6,8 @@ import SearchResults from '../components/PageSearchComponents/SearchResults'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
 import HeaderFilter from '../components/HeaderFilter/HeaderFilter'
-import searchIcon from '../assets/icons/search-normal.svg'
 import { View } from 'eitri-luminus'
+import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 
 export default function Search(props) {
 	const incomingSearchTerm = props?.history?.location?.state?.searchTerm || props?.location?.state?.searchTerm
@@ -52,12 +52,8 @@ export default function Search(props) {
 		if (!isProductLoading && !pagesHasEnded) {
 			const newPage = page + 1
 			setPage(newPage)
-			getProducts(params, newPage)
+			_getProductsByFacets(params, newPage)
 		}
-	}
-
-	const getProducts = async (params, newPage) => {
-		_getProductsByFacets(params, newPage)
 	}
 
 	const setSearchAndGetProducts = async incomingSearchTerm => {
@@ -87,15 +83,16 @@ export default function Search(props) {
 					facets: [],
 					query: term
 				}
-				saveSearchHistory(term)
+				//saveSearchHistory(term)
+				console.log('term========>', term)
 				setParams(params)
-				setInitialParams({ ...params })
-				setSearchResults([])
-				setPageHasEnded(false)
-				setPage(1)
-				setSearchSuggestion([])
-				setPristine(false)
-				await _getProductsByFacets(params, 1)
+				// setInitialParams({ ...params })
+				// setSearchResults([])
+				// setPageHasEnded(false)
+				// setPage(1)
+				// setSearchSuggestion([])
+				// setPristine(false)
+				// await _getProductsByFacets(params, 1)
 			} catch (error) {
 				console.log('handleSearchSubmit', error)
 			}
@@ -166,13 +163,13 @@ export default function Search(props) {
 					setSearchSuggestion([])
 					return
 				}
+
 				const result = await autocompleteSuggestions(term)
 				setSearchSuggestion(result?.searches)
 
 				setSearchResults([])
 				setPageHasEnded(false)
 				setPage(1)
-				await _getProductsByFacets(params, 1)
 			} catch (error) {
 				console.log('handleSearchSubmit', error)
 			}
@@ -207,73 +204,22 @@ export default function Search(props) {
 			topInset>
 			<HeaderContentWrapper
 				scrollEffect={false}
-				className='gap-3 w-full justify-between'>
-				<View className='flex items-center gap-2'>
-					<HeaderReturn iconColor='primary-500' />
+				className='gap-3 w-full justify-between relative'>
+				<HeaderReturn iconColor='primary-500' />
 
-					<SearchInput
-						incomingValue={params?.query}
-						onSubmit={handleSearchSubmit}
-						onChange={onChangeTerm}
-					/>
-				</View>
+				<SearchInput
+					incomingValue={params?.query}
+					onSubmit={handleSearchSubmit}
+				/>
 
-				<View className='flex items-center gap-3'>
-					<HeaderWishList
-						onPress={() => {}}
-						padding='none'
-					/>
-
-					<HeaderCart cart={cart} />
-				</View>
+				<HeaderWishList
+					onPress={() => {}}
+					padding='none'
+				/>
 			</HeaderContentWrapper>
 
-			{/* {searchSuggestion && searchSuggestion.length > 0 && (
-				<View
-					marginTop='quark'
-					width='100vw'
-					customColor='#fdfdfd'
-					direction='column'>
-					{searchSuggestion.map((suggestion, key) => (
-						<View
-							key={suggestion.term}
-							borderBottomWidth='hairline'
-							borderColor='neutral-300'
-							borderWidth='none'
-							width='100%'
-							paddingHorizontal='display'
-							paddingVertical='large'
-							display='flex'
-							justifyContent='between'
-							alignItems='center'
-							onClick={() => {
-								handleSearchSubmit(suggestion.term)
-							}}>
-							<View
-								display='flex'
-								gap={12}>
-								<Image
-									src={searchIcon}
-									width='16px'
-								/>
-								<Text
-									color='neutral-900'
-									fontSize='medium'
-									width='100%'>
-									{suggestion.term}
-								</Text>
-							</View>
+			<ProductCatalogContent params={params} />
 
-							<View>
-								<Image
-									src={linkIcon}
-									width='12px'
-								/>
-							</View>
-						</View>
-					))}
-				</View>
-			)} */}
 			{/* 
 			{!pristine && (
 				<View

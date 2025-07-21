@@ -6,7 +6,6 @@ export default function MainHeader() {
 	const { cart } = useLocalShoppingCart()
 
 	const navigateToSearch = () => {
-		console.log('aqui')
 		Eitri.navigation.navigate({
 			path: 'Search'
 		})
@@ -19,7 +18,7 @@ export default function MainHeader() {
 			<HeaderLogo />
 
 			<View className='flex justify-between gap-[12px]'>
-				<HeaderSearchIcon onPress={navigateToSearch} />
+				<HeaderSearchIcon onClick={navigateToSearch} />
 				<HeaderCart cart={cart} />
 			</View>
 		</HeaderContentWrapper>
