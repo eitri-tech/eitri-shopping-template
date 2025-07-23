@@ -9,11 +9,11 @@ eitri-apps:
       alias: home
       focus: true
       shared: false
-    # - path: ./shopping-vtex-template-pdp
-    #   workspace: pdp
-    #   alias: pdp
-    #   focus: false
-    #   shared: false
+    - path: ./shopping-vtex-template-pdp
+      workspace: pdp
+      alias: pdp
+      focus: false
+      shared: false
     # - path: ./shopping-vtex-template-account
     #   workspace: account
     #   alias: account

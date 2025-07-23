@@ -1,4 +1,4 @@
-import { addItemToCart, getCart, removeCartItem, cardAdaptation } from '../services/cartService'
+import { addItemToCart, getCart, removeCartItem } from '../services/cartService'
 const LocalCart = createContext({})
 export default function CartProvider({ children }) {
 	const [cart, setCart] = useState(null)

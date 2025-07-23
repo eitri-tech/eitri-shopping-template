@@ -5,6 +5,10 @@ export const getProductById = async productId => {
 	return Vtex.catalog.getProductById(productId)
 }
 
+export const getProductBySlug = async slug => {
+	return Vtex.catalog.getProductBySlug(slug)
+}
+
 export const getSimilarProducts = async productId => {
 	return Vtex.catalog.getSimilarProducts(productId)
 }

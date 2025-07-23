@@ -1,7 +1,7 @@
 import { App } from 'eitri-shopping-vtex-shared'
 
 export default function SkuSelector(props) {
-	const { product, currentSku, onSkuChange, marginTop } = props
+	const { product, currentSku, onSkuChange } = props
 	const [skuVariations, setSkuVariations] = useState([])
 
 	useEffect(() => {
@@ -81,13 +81,11 @@ export default function SkuSelector(props) {
 		return (
 			<View
 				onClick={() => handleSkuChange(sku?.field?.name, value?.name)}
-				className='flex items-center gap-2'>
-				<Radio
-					name={sku?.field?.name}
-					checked={currentSku?.[sku?.field?.name][0] === value?.name}
-					onChange={_ => {}}
-				/>
-				<Text>{value?.name}</Text>
+				className={`flex items-center gap-2 px-2 py-1 border-2 rounded ${currentSku?.[sku?.field?.name][0] === value?.name ? 'border-primary' : 'border-neutral-500'}`}>
+				<Text
+					className={`${currentSku?.[sku?.field?.name][0] === value?.name ? 'text-primary' : 'text-neutral-500'}  font-bold`}>
+					{value?.name}
+				</Text>
 			</View>
 		)
 	}

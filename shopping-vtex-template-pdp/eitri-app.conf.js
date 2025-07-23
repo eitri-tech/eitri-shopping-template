@@ -2,7 +2,7 @@ module.exports = {
 	'name': 'shopping-vtex-template-pdp',
 	'title': 'shopping-vtex-template-pdp',
 	'slug': 'shopping-vtex-template-pdp',
-	'eitri-luminus': '2.1.3',
+	'eitri-luminus': '2.3.5',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
 	'version': '0.1.1',

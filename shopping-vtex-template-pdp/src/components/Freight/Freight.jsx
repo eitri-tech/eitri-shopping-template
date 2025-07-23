@@ -5,7 +5,6 @@ import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
 export default function Freight(props) {
 	const { currentSku } = props
 	const { t } = useTranslation()
-	const [collapsed, setCollapsed] = useState(false)
 	const [zipCode, setZipCode] = useState('')
 	const [freightOptions, setFreightOptions] = useState(null)
 	const [loading, setLoading] = useState(false)

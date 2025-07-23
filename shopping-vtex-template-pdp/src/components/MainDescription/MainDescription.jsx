@@ -47,15 +47,13 @@ export default function MainDescription(props) {
 		count.current = 5
 	}
 
-	const skuNameKey = App.configs?.appConfigs?.pdp?.productNameKey ?? 'name'
-
 	const mainSeller = currentSku?.sellers?.find(seller => seller.sellerDefault) || currentSku?.sellers?.[0]
 
 	return (
 		<View className='flex flex flex-col'>
 			<View>
 				<View onClick={copyCheckoutId}>
-					<Text className='text-xl font-bold'>{currentSku[skuNameKey] || currentSku?.nameComplete}</Text>
+					<Text className='text-xl font-bold'>{product.productName}</Text>
 				</View>
 				{product?.productReference && (
 					<>
@@ -76,7 +74,7 @@ export default function MainDescription(props) {
 				)}
 				<View>
 					<Text className='text-primary font-bold text-xl'>
-						{formatPrice(currentSku?.sellers[0]?.commertialOffer?.Price)}
+						{formatPrice(mainSeller?.commertialOffer?.Price)}
 					</Text>
 				</View>
 
