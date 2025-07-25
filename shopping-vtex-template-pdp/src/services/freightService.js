@@ -8,7 +8,7 @@ export default async function fetchFreight(zipCode, currentSku) {
 
 	try {
 		const address = await Vtex.checkout.resolveZipCode(zipCode)
-		const { postalCode, city, state, street, neighborhood, country, geoCoordinates } = address
+		const { postalCode, country, geoCoordinates } = address
 
 		let cartSimulationPayload
 		let result
@@ -21,26 +21,9 @@ export default async function fetchFreight(zipCode, currentSku) {
 					seller: currentSku?.sellers[0]?.sellerId
 				}
 			],
-			shippingData: {
-				selectedAddresses: [
-					{
-						addressType: '',
-						receiverName: '',
-						addressId: '',
-						isDisposable: true,
-						postalCode: postalCode,
-						city: city,
-						state: state,
-						country: country,
-						street: street,
-						number: null,
-						neighborhood: neighborhood,
-						complement: null,
-						reference: null,
-						geoCoordinates: geoCoordinates
-					}
-				]
-			}
+			country,
+			postalCode,
+			geoCoordinates
 		}
 
 		result = await Vtex.cart.simulateCart(cartSimulationPayload)

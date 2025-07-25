@@ -1,7 +1,7 @@
-import userIcon from '../assets/icons/user.svg'
+import userIcon from '../assets/images/user.svg'
 import lockIcon from '../assets/icons/lock.svg'
 import Eitri from 'eitri-bifrost'
-import { Loading, HeaderTemplate, HEADER_TYPE, CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { Loading, HeaderContentWrapper, HeaderText, CustomButton, CustomInput } from 'shopping-vtex-template-shared'
 import {
 	doLogin,
 	getCustomerData,
@@ -13,7 +13,8 @@ import Alert from '../components/Alert/Alert'
 import { sendPageView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
-import PoweredBy from '../components/PoweredBy/PoweredBy'
+import { getLoginProviders } from '../services/StoreService'
+import SocialLogin from '../components/SocialLogin/SocialLogin'
 
 export default function SignIn(props) {
 	const redirectTo = props?.location?.state?.redirectTo
@@ -38,6 +39,8 @@ export default function SignIn(props) {
 
 	const [loadingSendingCode, setLoadingSendingCode] = useState(false)
 
+	const [loginProviders, setLoginProviders] = useState()
+
 	const { t } = useTranslation()
 
 	useEffect(() => {
@@ -47,7 +50,7 @@ export default function SignIn(props) {
 				setUsername(user.email)
 			}
 		}
-
+		loadLoginProviders()
 		loadSavedUser()
 		sendPageView('Login')
 	}, [])
@@ -59,6 +62,14 @@ export default function SignIn(props) {
 			}, 1000)
 		}
 	}, [timeOutToResentEmail])
+
+	const loadLoginProviders = async () => {
+		const providers = await getLoginProviders()
+		if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
+			setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
+		}
+		setLoginProviders(providers)
+	}
 
 	const goToPasswordReset = () => {
 		navigate(PAGES.PASSWORD_RESET, { email: username })
@@ -79,12 +90,21 @@ export default function SignIn(props) {
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 			setLoadingSendingCode(false)
 		} catch (e) {
-			console.log('erro ao enviar email', e)
 			setAlertMessage(t('signIn.errosSendAccess'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)
 			setTimeOutToResentEmail(0)
 			setLoadingSendingCode(false)
+		}
+	}
+
+	const onLoggedIn = () => {
+		if (redirectTo) {
+			navigate('/' + redirectTo)
+		} else if (closeAppAfterLogin) {
+			Eitri.close()
+		} else {
+			Eitri.navigation.back()
 		}
 	}
 
@@ -128,50 +148,63 @@ export default function SignIn(props) {
 		}
 	}
 
+	const handleGoogleLogin = async () => {
+		try {
+			onLoggedIn()
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	const handleFacebookLogin = async () => {
+		try {
+			onLoggedIn()
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
 	const resendCode = timeOutToResentEmail > 0
 
 	return (
 		<Page topInset>
+			<HeaderContentWrapper className='justify-between'>
+				<HeaderText text={t('signIn.headerText')} />
+			</HeaderContentWrapper>
+
 			<Loading
 				isLoading={loading}
 				fullScreen={true}
 			/>
 
-			<HeaderTemplate
-				headerType={HEADER_TYPE.TEXT}
-				contentText={`${t('signIn.headerText')}`}
-			/>
-
-			<View padding='large'>
-				<Text
-					block
-					fontWeight='bold'
-					fontSize='huge'>
-					{t('signIn.welcome')}
-				</Text>
+			<View className='p-4'>
+				<View className='flex flex-col gap-2'>
+					<Text className='w-full font-bold text-xl'>{t('signIn.welcome')}</Text>
+				</View>
 
 				{loginMode === LOGIN_WITH_EMAIL_AND_PASSWORD && (
 					<>
-						<View marginTop='display'>
+						<View className='mt-4'>
 							<CustomInput
 								icon={userIcon}
 								value={username}
 								placeholder={t('signIn.formName')}
-								onChange={value => setUsername(value)}
+								inputMode='email'
+								onChange={e => setUsername(e?.target?.value)}
 							/>
 						</View>
 
-						<View marginTop='large'>
+						<View className='mt-4'>
 							<CustomInput
 								placeholder={t('signIn.formPass')}
 								icon={lockIcon}
 								value={password}
 								type='password'
-								onChange={value => setPassword(value)}
+								onChange={e => setPassword(e.target.value)}
 							/>
 						</View>
 
-						<View marginTop='large'>
+						<View className='mt-4'>
 							<CustomButton
 								width='100%'
 								label={t('signIn.labelButton')}
@@ -179,7 +212,7 @@ export default function SignIn(props) {
 							/>
 						</View>
 
-						<View marginTop='large'>
+						<View className='mt-4'>
 							<CustomButton
 								width='100%'
 								variant='outlined'
@@ -188,64 +221,48 @@ export default function SignIn(props) {
 							/>
 						</View>
 
-						<View
-							marginTop='display'
-							display='flex'
-							justifyContent='center'>
+						<View className='mt-8 flex justify-center'>
 							<View onClick={goToPasswordReset}>
-								<Text
-									block
-									color='primary-500'>
-									{t('signIn.forgotPass')}
-								</Text>
+								<Text className='w-full text-primary'>{t('signIn.forgotPass')}</Text>
 							</View>
 						</View>
-						<View
-							marginTop='large'
-							display='flex'
-							justifyContent='center'>
+						<View className='mt-4 flex justify-center'>
 							<View
 								onClick={() => {
 									navigate(PAGES.SIGNUP)
 								}}>
-								<Text
-									block
-									color='primary-500'>
-									{t('signIn.noRegister')}
-								</Text>
+								<Text className='w-full text-primary'>{t('signIn.noRegister')}</Text>
 							</View>
 						</View>
 					</>
 				)}
 
 				{loginMode === LOGIN_WITH_EMAIL_AND_ACCESS_KEY && (
-					<View marginTop='display'>
+					<View className='mt-4'>
 						<CustomInput
 							icon={userIcon}
 							value={username}
-							type='email'
+							inputMode='email'
 							placeholder={t('signIn.formEmail')}
-							onChange={value => {
-								setUsername(value)
+							onChange={e => {
+								setUsername(e.target.value)
 							}}
-							showClearInput={false}
-							required={true}
 						/>
 
 						{emailCodeSent && (
 							<>
-								<View marginTop='large'>
+								<View className='mt-4'>
 									<CustomInput
 										label={t('signIn.formCodeVerification')}
 										placeholder={t('signIn.formCodeVerification')}
 										inputMode='numeric'
 										value={verificationCode}
-										onChange={text => setVerificationCode(text)}
+										onChange={e => setVerificationCode(e.target.value)}
 										height='45px'
 									/>
 								</View>
 
-								<View marginTop='large'>
+								<View className='mt-4'>
 									<CustomButton
 										label={t('signIn.labelButton')}
 										onPress={loginWithEmailAndAccessKey}
@@ -255,7 +272,7 @@ export default function SignIn(props) {
 							</>
 						)}
 
-						<View marginTop='large'>
+						<View className='mt-4'>
 							<CustomButton
 								label={
 									!emailCodeSent
@@ -269,26 +286,38 @@ export default function SignIn(props) {
 							/>
 						</View>
 
-						<View marginTop='large'>
-							<CustomButton
-								variant='outlined'
-								label={t('signIn.labelLoginWithPass')}
-								onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_PASSWORD)}
-							/>
-						</View>
+						{loginProviders?.passwordAuthentication && (
+							<View className='mt-4'>
+								<CustomButton
+									variant='outlined'
+									label={t('signIn.labelLoginWithPass')}
+									onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_PASSWORD)}
+								/>
+							</View>
+						)}
 					</View>
 				)}
-			</View>
 
+				{Eitri.canIUse('23') && (
+					<>
+						<View className='mt-8 flex justify-center mb-8 mx-2 pb-4 border-b border-tertiary-900'>
+							<Text className='text-accent-100 font-medium'>Ou</Text>
+						</View>
+
+						<SocialLogin
+							oAuthProviders={loginProviders?.oAuthProviders}
+							onGoogleLogin={handleGoogleLogin}
+							onFacebookLogin={handleFacebookLogin}
+						/>
+					</>
+				)}
+			</View>
 			<Alert
-				type='negative'
 				show={showLoginErrorAlert}
 				onDismiss={() => setShowLoginErrorAlert(false)}
-				duration={7}
+				duration={10}
 				message={alertMessage}
 			/>
-
-			<PoweredBy marginTop='huge' />
 		</Page>
 	)
 }

@@ -1,4 +1,5 @@
 import Eitri from 'eitri-bifrost'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 
 let STORE_PREFERENCES
 
@@ -16,4 +17,8 @@ export const getStorePreferences = (page, state = {}, replace = false) => {
 				reject(e)
 			})
 	})
+}
+
+export const getLoginProviders = async () => {
+	return await Vtex.store.getLoginProviders()
 }

@@ -16,8 +16,7 @@
 	"freight": {
 		"labelZipCode": "CEP",
 		"labelCalculate": "Calcular",
-		"txtCalculate": "Calcular frete de entrega",
-		"txtCalculateDeadline": "Calcule o frete e prazo de entrega estimados para sua região. Informe seu CEP:"
+		"txtCalculate": "Calcular frete",
 	},
 	"mainDescription": {
 		"txtUntil": "ou em até",

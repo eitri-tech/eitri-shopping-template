@@ -73,7 +73,7 @@ export default function HeaderContentWrapper(props) {
 		<>
 			<View
 				id='header-container'
-				className={`fixed top-0 left-0 right-0 z-[9999] ${translate} transition-all duration-500 ease-in-out shadow-md w-full bg-header-background`}>
+				className={`fixed top-0 left-0 right-0 z-[9900] ${translate} transition-all duration-500 ease-in-out shadow-md w-full backdrop-blur-sm bg-header-background`}>
 				<View topInset={'auto'} />
 				<View id='header'>
 					<View

@@ -11,13 +11,11 @@ export default function ProductCardFullImage(props) {
 		width = 148,
 		installments,
 		loadingCartOp,
-		loadingWishlistOp,
 		isOnWishlist,
 		showListItem,
 		actionLabel,
 		onPressOnCard,
 		onPressCartButton,
-		onPressOnWishlist,
 		className
 	} = props
 
@@ -25,15 +23,13 @@ export default function ProductCardFullImage(props) {
 		<View
 			onClick={onPressOnCard}
 			className={`relative bg-white rounded ${className}`}>
-			<View className={`flex flex-col w-full shadow-md rounded-lg`}>
+			<View className={`flex flex-col w-full shadow-md rounded`}>
 				<View
-					className={`relative flex flex-col w-full justify-center items-center rounded-lg  h-[240px] w-full min-h-[240px] max-h-[240px]`}>
-					<View className={`w-full h-[240px] rounded-lg flex items-center justify-center`}>
-						<Image
-							className={`object-contain h-[240px] rounded-lg`}
-							src={image}
-						/>
-					</View>
+					className={`relative flex flex-col w-full justify-center items-center rounded-lg h-[240px] w-full min-h-[240px] max-h-[240px]`}>
+					<Image
+						className={`object-contain h-full w-full rounded`}
+						src={image}
+					/>
 
 					<View className='absolute top-[8px] right-[5px] flex items-center justify-center rounded-full bg-accent-100 z-[99] '>
 						<View className='w-[30px] h-[30px] flex justify-center items-center'>

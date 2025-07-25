@@ -32,17 +32,26 @@ export default function ActionButton(props) {
 	}
 
 	return (
-		<View
-			bottomInset={'auto'}
-			className='fixed bottom-0 left-0 right-0 px-4 py-2 flex items-center justify-center bg-white shadow-md'
-			style={{ zIndex: 50 }}>
-			<CustomButton
-				onClick={handleButtonClick}
-				isLoading={isLoading}
-				backgroundColor={isAvailable ? 'primary-700' : 'neutral-300'}
-				className='rounded-pill w-full'
-				label={getButtonLabel()}
-			/>
-		</View>
+		<>
+			<View className='fixed bottom-0 left-0 right-0 z-[999] bg-white border-t border-neutral-300'>
+				<View className='p-4'>
+					<CustomButton
+						onClick={handleButtonClick}
+						isLoading={isLoading}
+						backgroundColor={isAvailable ? 'primary-700' : 'neutral-300'}
+						className='rounded-pill w-full'
+						label={getButtonLabel()}
+					/>
+				</View>
+
+				<View
+					bottomInset={'auto'}
+					className='w-full'
+				/>
+			</View>
+			<View>
+				<View className='h-[77px] w-full' />
+			</View>
+		</>
 	)
 }

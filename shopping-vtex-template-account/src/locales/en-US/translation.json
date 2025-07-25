@@ -12,6 +12,7 @@
 		"lbOrders": "Orders"
 	},
 	"passwordReset": {
+        "emailRecoveryTitle": "Enter your email to recover your password",
 		"messageRecovery": "* We will send you a message with a code to recover your password",
 		"sendButton": "Send Code",
 		"messageError": "There was an error sending the recovery code. Please try again later.",

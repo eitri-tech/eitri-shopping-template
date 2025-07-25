@@ -33,7 +33,7 @@ export default function ProductCardDefault(props) {
 
 				<View className='relative flex flex-col w-full justify-center items-center h-[160px] min-h-[160px] max-h-[160px]'>
 					<Image
-						className='max-w-full max-h-full rounded-sm'
+						className='object-contain h-full w-full rounded'
 						src={image}
 					/>
 					<View className='absolute top-[5px] right-[5px] bg-white rounded-full flex items-center justify-center h-[32px] w-[32px] z-[98]'>

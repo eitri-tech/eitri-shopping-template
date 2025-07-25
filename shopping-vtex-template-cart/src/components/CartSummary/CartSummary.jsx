@@ -41,7 +41,7 @@ export default function CartSummary(props) {
 		<>
 			<View
 				bottomInset={'auto'}
-				className='bg-base-100 fixed bottom-0 left-0 w-full border-t-2 border-neutral-300 z-50 flex flex-col items-center'>
+				className='bg-base-100 fixed bottom-0 left-0 w-full border-t border-neutral-300 z-50 flex flex-col items-center'>
 				<View
 					onClick={() => setCollapsed(!collapsed)}
 					className='flex justify-center w-full py-2 cursor-pointer'>

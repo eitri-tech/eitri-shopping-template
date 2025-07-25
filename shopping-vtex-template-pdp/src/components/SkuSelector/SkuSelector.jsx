@@ -91,7 +91,7 @@ export default function SkuSelector(props) {
 	}
 
 	return (
-		<View className={`flex flex-col gap-2`}>
+		<View className={`flex flex-col gap-2 bg-white rounded shadow-sm border border-gray-300 p-4 w-full`}>
 			{skuVariations?.map((sku, index) => (
 				<View>
 					<Text className='font-bold text-base'>{`${sku?.field?.name}`}</Text>

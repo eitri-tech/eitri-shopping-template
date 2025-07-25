@@ -57,11 +57,8 @@ export default function Home(props) {
 
 	return (
 		<Page title='Carrinho'>
-			<HeaderContentWrapper
-				gap={16}
-				scrollEffect={false}>
+			<HeaderContentWrapper>
 				{!openWithBottomBar && <HeaderReturn />}
-
 				<HeaderText text={t('home.title')} />
 			</HeaderContentWrapper>
 

@@ -1,25 +1,27 @@
 import { View, Carousel, Image } from 'eitri-luminus'
+import { useState } from 'react'
+
 export default function ImageCarousel(props) {
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const { currentSku } = props
-	const beforeChange = (currentSlide, nextSlide) => {
-		setCurrentSlide(nextSlide)
+
+	const onChange = index => {
+		setCurrentSlide(index)
 	}
-	const containerHeight = window.screen.width * 0.8
-	const imageHeight = containerHeight * 0.8
-	console.log(currentSku?.images.length)
 
 	return (
 		<View>
 			<Carousel
 				config={{
-					onChange: beforeChange
+					onChange: onChange,
+					currentSlide: currentSlide
 				}}>
 				{currentSku?.images?.slice(0, 8).map((item, index) => {
 					return (
 						<Carousel.Item key={index}>
 							<View className={`flex justify-center items-center`}>
 								<Image
+									fadeIn={500}
 									src={item.imageUrl}
 									width='100vw'
 								/>
@@ -28,18 +30,18 @@ export default function ImageCarousel(props) {
 					)
 				})}
 			</Carousel>
-			{/* {currentSku?.images?.length > 1 && (
-        <View className="flex justify-center">
-          {currentSku?.images?.slice(0, 8).map((item, index) => {
-            return (
-              <View
-                key={index}
-                className={`w-[35px] h-[8px] ${currentSlide === index ? "bg-primary-700" : "bg-neutral-300"}`}
-              />
-            )
-          })}
-        </View>
-      )} */}
+			{currentSku?.images?.length > 1 && (
+				<View className='flex justify-center gap-2'>
+					{currentSku.images.map((_, index) => (
+						<View
+							key={index}
+							className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${
+								currentSlide === index ? 'bg-primary' : 'bg-base-300'
+							} transition-[width,background-color] duration-300 ease-in-out`}
+						/>
+					))}
+				</View>
+			)}
 		</View>
 	)
 }

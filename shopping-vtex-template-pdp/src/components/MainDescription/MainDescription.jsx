@@ -50,7 +50,7 @@ export default function MainDescription(props) {
 	const mainSeller = currentSku?.sellers?.find(seller => seller.sellerDefault) || currentSku?.sellers?.[0]
 
 	return (
-		<View className='flex flex flex-col'>
+		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
 			<View>
 				<View onClick={copyCheckoutId}>
 					<Text className='text-xl font-bold'>{product.productName}</Text>

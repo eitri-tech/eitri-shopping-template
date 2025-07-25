@@ -12,6 +12,7 @@
 		"lbOrders": "Pedidos"
 	},
 	"passwordReset": {
+      "emailRecoveryTitle": "Digite seu e-mail para recuperar a senha",
 		"messageRecovery": "* Vamos te mandar uma mensagem com um código para recuperar senha",
 		"sendButton": "Enviar código",
 		"messageError": "Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.",
@@ -45,7 +46,7 @@
 		"verifyAgain": "Verifique as informaçoes e tente novamente",
 		"headerText": "Entrar",
 		"welcome": "Bem vindo de volta!",
-		"formName": "Nome de usuário ou e-mail",
+		"formName": "E-mail",
 		"formPass": "Senha",
 		"formEmail": "Email",
 		"labelButton": "Login",

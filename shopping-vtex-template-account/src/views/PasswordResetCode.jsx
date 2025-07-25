@@ -1,5 +1,10 @@
-import BigTitle from '../components/BigTitle/BigTitle'
-import { HEADER_TYPE, HeaderTemplate, CustomButton } from 'shopping-vtex-template-shared'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	CustomButton,
+	CustomInput
+} from 'shopping-vtex-template-shared'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 
@@ -19,44 +24,36 @@ export default function PasswordResetCode(props) {
 		navigate(PAGES.PASSWORD_RESET_NEW_PASS, { email: email, recoveryCode })
 	}
 
-	const onCodeFilled = value => {
-		setRecoveryCode(value)
+	const onCodeFilled = e => {
+		setRecoveryCode(e.target.value)
 	}
 
 	return (
 		<Page topInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.TEXT}
-				contentText={`${t('passwordResetCode.headerText')}`}
-			/>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('passwordResetCode.headerText')} />
+			</HeaderContentWrapper>
 
-			<View padding='large'>
-				<BigTitle
-					title={t('passwordResetCode.forgotPass')}
-					withBackAction
-				/>
-
-				<View marginTop='large'>
-					<Text block>
+			<View className='p-4 flex flex-col w-full'>
+				<View className='flex flex-col gap-2'>
+					<Text className='w-full font-bold text-xl'>{t('passwordResetCode.forgotPass')}</Text>
+					<Text className='text text-gray-600'>
 						{t('passwordResetCode.messageEmail')}
-						<Text
-							marginLeft='small'
-							fontWeight='bold'>
-							{email}
-						</Text>
+						<Text className='font-bold text-gray-700 ml-1'>{email}</Text>
 					</Text>
 				</View>
 
-				<View marginTop='large'>
-					<OTPInput
-						autoSubmit
-						maxLength={6}
+				<View className='mt-4 flex gap-1 justify-between w-full'>
+					<CustomInput
+						maxLength={RECOVERY_CODE_LENGTH}
 						onChange={onCodeFilled}
-						accept='numbers'
+						inputMode='numeric'
+						className='text-center'
 					/>
 				</View>
 
-				<View marginTop='giant'>
+				<View className='mt-8'>
 					<CustomButton
 						disabled={recoveryCode.length !== RECOVERY_CODE_LENGTH}
 						label={t('passwordResetCode.sendButton')}

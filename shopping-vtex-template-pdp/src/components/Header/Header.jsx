@@ -14,7 +14,6 @@ export default function Header() {
 	return (
 		<HeaderContentWrapper className='justify-between'>
 			<HeaderReturn />
-
 			<HeaderCart cart={cart} />
 		</HeaderContentWrapper>
 	)

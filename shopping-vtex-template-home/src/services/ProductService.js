@@ -6,10 +6,6 @@ export const autocompleteSuggestions = async value => {
 	return await Vtex.catalog.autoCompleteSuggestions(value)
 }
 
-export const getProductsByFacets = async (facets, options) => {
-	return await Vtex.catalog.getProductsByFacets(facets, options)
-}
-
 /*
  * {
  *  facets: Array<{ key: string, value: string }>

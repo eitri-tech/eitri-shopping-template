@@ -75,3 +75,11 @@ export const getWishlist = async () => {
 export const removeFromWishlist = async wishListItemId => {
 	return await Vtex.wishlist.removeItem(wishListItemId)
 }
+
+export async function loginWithGoogle() {
+	return await Vtex.customer.loginWithGoogle()
+}
+
+export async function loginWithFacebook() {
+	return await Vtex.customer.loginWithFacebook()
+}

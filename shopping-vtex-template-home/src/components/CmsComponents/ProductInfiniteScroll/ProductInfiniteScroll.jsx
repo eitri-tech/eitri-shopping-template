@@ -1,5 +1,3 @@
-import { getProductsByFacets } from '../../../services/ProductService'
-import SearchResults from '../../PageSearchComponents/SearchResults'
 import ProductCatalogContent from '../../ProductCatalogContent/ProductCatalogContent'
 
 export default function ProductInfiniteScroll(props) {

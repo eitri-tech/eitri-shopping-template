@@ -15,8 +15,7 @@ import RichContent from '../components/RichContent/RichContent'
 import DescriptionComponent from '../components/Description/DescriptionComponent'
 import Reviews from '../components/Reviews/Reviews'
 import RelatedProducts from '../components/RelatedProducts/RelatedProducts'
-import { setLanguage, startConfigure } from '../services/AppService'
-import { useTranslation } from 'eitri-i18n'
+import { startConfigure } from '../services/AppService'
 import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
 import ActionButton from '../components/ActionButton/ActionButton'
@@ -162,32 +161,36 @@ export default function Home() {
 				isLoading={isLoading}
 				fullScreen
 			/>
+
 			{product && (
 				<View bottomInset={'auto'}>
-					<ImageCarousel currentSku={currentSku} />
+					<View className='pb-4'>
+						<ImageCarousel currentSku={currentSku} />
 
-					<View className='px-4 flex flex-col gap-4'>
-						<MainDescription
-							product={product}
-							currentSku={currentSku}
-						/>
+						<View className='mt-4 px-4 flex flex-col gap-4'>
+							<MainDescription
+								product={product}
+								currentSku={currentSku}
+							/>
 
-						<SkuSelector
-							currentSku={currentSku}
-							product={product}
-							onSkuChange={onSkuChange}
-							className='mt-8'
-						/>
+							<SkuSelector
+								currentSku={currentSku}
+								product={product}
+								onSkuChange={onSkuChange}
+							/>
 
-						<Freight currentSku={currentSku} />
+							<Freight currentSku={currentSku} />
 
-						<RichContent product={product} />
+							<RichContent product={product} />
 
-						<DescriptionComponent product={product} />
+							<DescriptionComponent product={product} />
 
-						<Reviews />
+							<Reviews />
+						</View>
+
+						{configLoaded && <RelatedProducts product={product} />}
 					</View>
-					<View className='mb-8'>{configLoaded && <RelatedProducts product={product} />}</View>
+
 					<ActionButton currentSku={currentSku} />
 				</View>
 			)}

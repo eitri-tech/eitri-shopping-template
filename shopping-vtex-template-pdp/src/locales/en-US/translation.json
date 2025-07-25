@@ -16,8 +16,7 @@
 	"freight": {
 		"labelZipCode": "ZIP Code",
 		"labelCalculate": "Calculate",
-		"txtCalculate": "Calculate delivery freight",
-		"txtCalculateDeadline": "Calculate the estimated delivery freight and deadline for your region. Enter your ZIP Code:"
+		"txtCalculate": "Calculate freight"
 	},
 	"mainDescription": {
 		"txtUntil": "or up to",

@@ -2,6 +2,7 @@ import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
 import fetchFreight from '../../services/freightService'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+
 export default function Freight(props) {
 	const { currentSku } = props
 	const { t } = useTranslation()
@@ -21,9 +22,9 @@ export default function Freight(props) {
 		}
 	}
 
-	const onInputZipCode = value => {
-		console.log(value)
-		// setZipCode(value)
+	const onInputZipCode = e => {
+		const value = e.target.value
+		setZipCode(value)
 	}
 
 	const handleFreight = async zipCode => {
@@ -44,23 +45,23 @@ export default function Freight(props) {
 	}
 
 	return (
-		<View>
+		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
 			<View className='flex items-center justify-between w-full'>
 				<Text className='text-lg font-bold'>{t('freight.txtCalculate')}</Text>
 			</View>
 			<View>
-				<Text>{t('freight.txtCalculateDeadline')}</Text>
 				<View className='flex justify-between items-center w-full gap-2'>
-					<View className='w-[70%]'>
+					<View className='w-2/3'>
 						<CustomInput
 							placeholder={t('freight.labelZipCode')}
 							value={zipCode}
-							maxLength={9}
+							variant='mask'
+							mask='99999-999'
 							inputMode='numeric'
 							onChange={onInputZipCode}
 						/>
 					</View>
-					<View className='w-[30%]'>
+					<View className='w-1/3'>
 						<CustomButton
 							label='calcular'
 							variant='outlined'
@@ -68,35 +69,31 @@ export default function Freight(props) {
 						/>
 					</View>
 				</View>
-				{loading && <Skeleton className='w-full h-full' />}
-				{
-					!loading && freightOptions && freightOptions?.options?.length > 0 && (
-						<View className='flex flex flex-col my-2 py-2 border border-neutral items-center justify-between'>
-							{freightOptions?.options.map((item, index) => (
-								<View
-									key={index}
-									className='flex flex flex-col items-center w-full'>
-									<View className='flex items-center justify-between px-2 w-full'>
-										<Text className='font-bold'>{item?.label}</Text>
-										<Text>{item?.price}</Text>
-									</View>
-									<View className='flex items-center justify-between px-2 w-full'>
-										<Text className='text-neutral-content'>{item?.shippingEstimate}</Text>
-									</View>
-									{item.isPickupInPoint && (
-										<View className='flex items-center px-2 w-full'>
-											<Text className='text-neutral-content'>{item.pickUpAddress}</Text>
-										</View>
-									)}
+
+				{loading && <View className={`mt-2 w-full h-[100px] bg-gray-200 rounded animate-pulse`} />}
+
+				{!loading && freightOptions && freightOptions?.options?.length > 0 && (
+					<View className='flex flex-col items-center justify-between gap-2 mt-2'>
+						{freightOptions?.options.map((item, index) => (
+							<View
+								key={index}
+								className='flex flex flex-col items-center w-full'>
+								<View className='flex items-center justify-between w-full'>
+									<Text className='font-bold'>{item?.label}</Text>
+									<Text>{item?.price}</Text>
 								</View>
-							))}
-						</View>
-					)
-					// TODO: verificar qual vai ser o link de redirecionamento
-					// <Touchable onPress={() => console.log("Não sei meu frete clicado")}>
-					//     <Text color='secondary-300' textDecoration='underline'>Não sei meu cep</Text>
-					// </Touchable>
-				}
+								<View className='flex items-center justify-between w-full'>
+									<Text className='text-neutral-content'>{item?.shippingEstimate}</Text>
+								</View>
+								{item.isPickupInPoint && (
+									<View className='flex items-center w-full'>
+										<Text className='text-neutral-content'>{item.pickUpAddress}</Text>
+									</View>
+								)}
+							</View>
+						))}
+					</View>
+				)}
 			</View>
 		</View>
 	)

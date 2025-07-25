@@ -15,7 +15,7 @@ export default function HeaderSearchIcon(props) {
 				strokeWidth='2'
 				strokeLinecap='round'
 				strokeLinejoin='round'
-				class='text-header-content'>
+				className='text-header-content'>
 				<circle
 					cx='11'
 					cy='11'

@@ -7,7 +7,7 @@ import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
 
 export default function Home() {
-	const { cart, startCart } = useLocalShoppingCart()
+	const { startCart } = useLocalShoppingCart()
 	const [cmsContent, setCmsContent] = useState(null)
 
 	useEffect(() => {

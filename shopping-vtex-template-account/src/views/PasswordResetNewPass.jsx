@@ -1,12 +1,19 @@
-import lockIcon from '../assets/icons/lock.svg'
-import BigTitle from '../components/BigTitle/BigTitle'
-import { Loading, HeaderTemplate, HEADER_TYPE, CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+// /Users/calindra/Workspace/Eitri/eitri-shopping-template/shopping-vtex-template-account/src/views/PasswordResetNewPass.jsx
+import {
+	Loading,
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	CustomButton,
+	CustomInput
+} from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 import { setPassword } from '../services/CustomerService'
 
 export default function PasswordResetNewPass(props) {
+	const PAGE = 'Reset de senha - Nova senha'
 	const email = props?.location?.state?.email
 	const recoveryCode = props?.location?.state?.recoveryCode
 
@@ -43,86 +50,96 @@ export default function PasswordResetNewPass(props) {
 			}
 			setLoading(true)
 			await setPassword(email, recoveryCode, newPassword)
-			navigate('Home')
+			navigate(PAGES.HOME, {}, true)
 			setLoading(false)
 		} catch (e) {
-			logError(PAGE, 'Erro ao redefinir senha', e)
+			console.error(e)
+			// logError(PAGE, 'Erro ao redefinir senha', e) // logError não está definido no escopo
 			setShowErrorAlert(true)
 			setLoading(false)
 		}
 	}
 
 	const allRequirementsMet = requirements.every(req => req.valid)
-	const passwordsMatch = newPassword === confirmPassword
+	const passwordsMatch = newPassword && newPassword === confirmPassword
 
 	return (
-		<Page topInset>
+		<Page title={PAGE}>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('passwordResetNewPass.headerText')} />
+			</HeaderContentWrapper>
+
 			<Loading
 				isLoading={loading}
 				fullScreen={true}
 			/>
 
-			<HeaderTemplate
-				headerType={HEADER_TYPE.TEXT}
-				contentText={`${t('passwordResetNewPass.headerText')}`}
-			/>
+			<View className='p-4'>
+				<View className='flex flex-col gap-2'>
+					<Text className='w-full font-bold text-xl'>{t('passwordResetNewPass.forgotPass')}</Text>
+				</View>
 
-			<View padding='large'>
-				<BigTitle
-					title={t('passwordResetNewPass.forgotPass')}
-					withBackAction
-				/>
-
-				<View marginTop='large'>
+				<View className='mt-4 flex flex-col gap-2'>
 					<CustomInput
 						autoFocus
-						icon={lockIcon}
 						type='password'
-						placeholder={t('passwordResetNewPass.newPass')}
+						label={t('passwordResetNewPass.newPass')}
 						value={newPassword}
-						onChange={setNewPassword}
+						onChange={e => setNewPassword(e.target.value)}
 					/>
-				</View>
-
-				<View marginTop='large'>
 					<CustomInput
-						icon={lockIcon}
 						type='password'
-						placeholder={t('passwordResetNewPass.confirmPass')}
+						label={t('passwordResetNewPass.confirmPass')}
 						value={confirmPassword}
-						onChange={setConfirmPassword}
+						onChange={e => setConfirmPassword(e.target.value)}
 					/>
 				</View>
 
-				<View marginTop='large'>
-					<Text fontWeight='bold'>{t('passwordResetNewPass.passwordRequirements')}</Text>
-					<View marginTop='quark'>
-						{requirements.map((req, index) => (
+				<View className='mt-4'>
+					<View className='flex flex-col gap-1'>
+						{requirements.map(req => (
 							<View
 								key={req.text}
-								display='flex'
-								alignItems='center'
-								gap={6}>
-								{/*<Icon*/}
-								{/*	color={req.valid ? 'positive-700' : 'negative-700'}*/}
-								{/*	width={16}*/}
-								{/*	height={16}*/}
-								{/*	iconKey={req.valid ? 'check' : 'x'}*/}
-								{/*/>*/}
-								<Text
-									key={index}
-									color={req.valid ? 'positive-700' : 'negative-700'}>
-									{req.text}
-								</Text>
+								className={`flex items-center gap-2 transition-colors duration-300 ${
+									req.valid ? 'text-green-600' : 'text-red-600'
+								}`}>
+								{req.valid ? (
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										className='h-4 w-4 stroke-current'
+										fill='none'
+										viewBox='0 0 24 24'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											strokeWidth='2'
+											d='M5 13l4 4L19 7'
+										/>
+									</svg>
+								) : (
+									<svg
+										xmlns='http://www.w3.org/2000/svg'
+										className='h-4 w-4 stroke-current'
+										fill='none'
+										viewBox='0 0 24 24'>
+										<path
+											strokeLinecap='round'
+											strokeLinejoin='round'
+											strokeWidth='2'
+											d='M6 18L18 6M6 6l12 12'
+										/>
+									</svg>
+								)}
+								<Text className='text-sm'>{req.text}</Text>
 							</View>
 						))}
 					</View>
 				</View>
 
-				<View marginTop='large'>
+				<View className='mt-6'>
 					<CustomButton
-						width='100%'
-						disabled={!allRequirementsMet || !passwordsMatch}
+						disabled={!allRequirementsMet || !passwordsMatch || loading}
 						label={t('passwordResetNewPass.sendButton')}
 						onPress={confirmNewPassword}
 					/>

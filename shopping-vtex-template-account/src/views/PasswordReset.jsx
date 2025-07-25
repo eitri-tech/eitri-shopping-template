@@ -1,14 +1,20 @@
-import mailIcon from '../assets/icons/mail-01.svg'
-import BigTitle from '../components/BigTitle/BigTitle'
-import { sendPasswordResetCode } from '../services/CustomerService'
-import { Loading, HeaderTemplate, HEADER_TYPE, CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+// /Users/calindra/Workspace/Eitri/eitri-shopping-template/shopping-vtex-template-account/src/views/PasswordReset.jsx
+import {
+	Loading,
+	HeaderContentWrapper,
+	HeaderText,
+	CustomButton,
+	CustomInput,
+	HeaderReturn
+} from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
+import { sendPasswordResetCode } from '../services/CustomerService'
 import { sendPageView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 
 export default function PasswordReset(props) {
-	const [username, setUsername] = useState('')
+	const [username, setUsername] = useState('xeworob583@kloudis.com')
 	const [loading, setLoading] = useState(false)
 	const [showErrorAlert, setShowErrorAlert] = useState(false)
 
@@ -44,35 +50,31 @@ export default function PasswordReset(props) {
 				fullScreen={true}
 			/>
 
-			<HeaderTemplate
-				headerType={HEADER_TYPE.TEXT}
-				contentText={`${t('passwordReset.headerText')}`}
-			/>
+			<HeaderContentWrapper className=''>
+				<HeaderReturn />
+				<HeaderText text={t('passwordReset.headerText')} />
+			</HeaderContentWrapper>
 
-			<View padding='large'>
-				<BigTitle
-					title={t('passwordReset.forgotPass')}
-					withBackAction
-				/>
+			<View className='p-4 flex flex-col h-full'>
+				<View>
+					<View className='flex flex flex-col gap-2 mb-4'>
+						<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle')}</Text>
+						<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery')}</Text>
+					</View>
 
-				<View marginTop='display'>
 					<CustomInput
-						icon={mailIcon}
+						inputMode='email'
 						placeholder={t('passwordReset.setEmail')}
 						value={username}
-						onChange={setUsername}
+						onChange={e => setUsername(e.target.value)}
 					/>
 				</View>
 
-				<View marginTop='large'>
-					<Text block>{t('passwordReset.messageRecovery')}</Text>
-				</View>
-
-				<View marginTop='giant'>
+				<View className='mt-4'>
 					<CustomButton
-						width='100%'
 						label={t('passwordReset.sendButton')}
 						onPress={goToPasswordResetCode}
+						disabled={!username || loading}
 					/>
 				</View>
 			</View>

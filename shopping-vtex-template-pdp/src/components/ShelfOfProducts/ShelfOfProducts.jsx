@@ -20,7 +20,7 @@ export default function ShelfOfProducts(props) {
 		<View>
 			{title && (
 				<View className={`pl-4 flex justify-between items-center px-${paddingHorizontal || '36'}`}>
-					<Text className='font-bold'>{isLoading ? t('shelfOfProducts.loading') : title}</Text>
+					<Text className='text-lg font-bold'>{isLoading ? t('shelfOfProducts.loading') : title}</Text>
 					{searchParams && (
 						<View
 							onClick={seeMore}

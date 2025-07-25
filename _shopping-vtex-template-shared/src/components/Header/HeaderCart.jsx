@@ -37,7 +37,7 @@ export default function HeaderCart(props) {
 					strokeWidth='2'
 					strokeLinecap='round'
 					strokeLinejoin='round'
-					class='text-header-content'>
+					className='text-header-content'>
 					<circle
 						cx='9'
 						cy='21'

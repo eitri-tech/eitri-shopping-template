@@ -6,7 +6,7 @@ import ShelfOfProductsSlider from './components/ShelfOfProductsSlider'
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
 export default function ShelfOfProducts(props) {
-	const { products, title, gap, paddingHorizontal, isLoading, mode, searchParams, ...rest } = props
+	const { products, title, isLoading, mode, searchParams, ...rest } = props
 
 	const { t } = useTranslation()
 
@@ -39,7 +39,6 @@ export default function ShelfOfProducts(props) {
 				<ShelfOfProductsSlider
 					isLoading={isLoading}
 					products={products}
-					gap={gap}
 				/>
 			)}
 
@@ -54,12 +53,7 @@ export default function ShelfOfProducts(props) {
 			{mode !== 'carousel' && (
 				<View className={`flex flex-row overflow-x-scroll scroll-snap-x-mandatory gap-${gap}`}>
 					{gap && <View className={`h-[1px] w-[${gap}px]`} />}
-					{isLoading && (
-						<View className={`flex flex-row gap-2 px-4 justify-center`}>
-							<Skeleton className='w-[188px] min-h-[288px] bg-neutral'></Skeleton>
-							<Skeleton className='w-[188px] min-h-[288px] bg-neutral'></Skeleton>
-						</View>
-					)}
+					{isLoading && <View className={`mt-2 w-full h-[388px] bg-gray-200 rounded animate-pulse`} />}
 					{!isLoading &&
 						products &&
 						products.map(product => (
@@ -71,7 +65,6 @@ export default function ShelfOfProducts(props) {
 								/>
 							</View>
 						))}
-					{gap && <View className={`h-[1px] w-[${gap}px]`} />}
 				</View>
 			)}
 		</View>

@@ -14,16 +14,16 @@ eitri-apps:
       alias: pdp
       focus: false
       shared: false
-    # - path: ./shopping-vtex-template-account
-    #   workspace: account
-    #   alias: account
-    #   focus: true
-    #   shared: false
-    # - path: ./shopping-vtex-template-cart
-    #   workspace: cart
-    #   alias: cart
-    #   focus: false
-    #   shared: false
+    - path: ./shopping-vtex-template-account
+      workspace: account
+      alias: account
+      focus: true
+      shared: false
+    - path: ./shopping-vtex-template-cart
+      workspace: cart
+      alias: cart
+      focus: false
+      shared: false
     # - path: ./shopping-vtex-template-checkout
     #   workspace: checkout
     #   alias: checkout

@@ -17,15 +17,8 @@ export default function PoweredBy(props) {
 
 	return (
 		<>
-			<View
-				width='100%'
-				display='flex'
-				direction='column'
-				alignItems='center'
-				justifyContent='center'
-				gap={8}
-				{...rest}>
-				<View onPress={handlePress}>
+			<View className='flex flex-col items-center justify-center gap-8'>
+				<View onClick={handlePress}>
 					<svg
 						width='136'
 						height='16'
@@ -64,21 +57,10 @@ export default function PoweredBy(props) {
 				</View>
 			</View>
 			{showEffect && (
-				<View
-					zIndex='9998'
-					overflow='hidden'
-					position='absolute'
-					top='0'
-					left='0'
-					bottom='0'
-					right='0'
-					customColor='#1D1D1D'>
+				<View className='z-[9998] overflow-hidden absolute top-0 left-0 bottom-0 right-0 bg-[#1D1D1D]'>
 					<View
-						position='absolute'
-						right='18px'
-						top='32px'
-						zIndex='9999'
-						onPress={() => setShowEffect(false)}>
+						className='z-[9999] absolute top-[32px] right-[18px]'
+						onClick={() => setShowEffect(false)}>
 						<svg
 							width='32'
 							height='32'
@@ -106,28 +88,15 @@ export default function PoweredBy(props) {
 							</g>
 						</svg>
 					</View>
-					<View
-						position='relative'
-						width='100vw'
-						height='100vh'>
-						<View
-							position='absolute'
-							top='33%'
-							left='62%'
-							transform='translate(-50%, -50%)'
-							zIndex='0'>
+					<View className='relative h-[100vh] w-[100vw]'>
+						<View className='absolute top-[33%] left-[62%] -translate-x-1/2 -translate-y-1/2 transform z-0'>
 							<Lottie
 								height='100vh'
 								width='100vw'
-								animationData={animationData}
+								src={animationData}
 							/>
 						</View>
-						<View
-							position='absolute'
-							top='50%'
-							left='50%'
-							transform='translate(-50%, -50%)'
-							zIndex='1'>
+						<View className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform z-10'>
 							<svg
 								width='190'
 								height='81'
@@ -135,8 +104,8 @@ export default function PoweredBy(props) {
 								fill='none'
 								xmlns='http://www.w3.org/2000/svg'>
 								<path
-									fill-rule='evenodd'
-									clip-rule='evenodd'
+									fillRule='evenodd'
+									clipRule='evenodd'
 									d='M36.3578 6.96766C36.3935 7.03247 39.3158 12.3644 36.5556 19.7811C38.267 20.6582 39.1436 20.9984 40.9462 21.6209C41.6518 19.9307 44.8815 11.0905 39.9855 2.77964C39.9855 2.77964 31.7061 1.34396 24.343 2.88398C24.343 2.88398 26.4264 5.30183 28.5487 9.78905C28.5487 9.78905 21.4052 11.7485 17 18.7809L18.4195 22.832C18.4195 22.832 21.196 15.1826 34.4318 12.8747C34.4318 12.8747 33.4843 9.419 31.7659 6.68883C31.7659 6.68883 34.2494 6.38211 36.3578 6.96766ZM35.9292 20.5797C40.9646 26.6828 47.0404 26.8204 47.1144 26.8218C48.6764 25.2881 49.6545 22.9829 49.6545 22.9829C46.4317 23.1053 42.9677 22.1962 42.9677 22.1962C47.5954 9.57482 42.3671 3.34169 42.3671 3.34169L46.5826 4.13953C50.4623 11.4759 48.5819 18.6445 48.5819 18.6445C53.5265 19.0522 56.661 18.4574 56.661 18.4574C54.3079 25.6067 48.9218 32.0603 48.9218 32.0603C39.2813 32.1424 33.2494 24.9194 32.1399 23.4622C33.581 22.2122 34.3137 21.623 35.9292 20.5797ZM24.6593 26.0101C24.6593 26.0101 27.8605 20.7904 35.7214 19.5509C35.6456 17.6283 35.5122 16.6969 35.1694 14.8202C33.3509 15.0337 24.0677 16.555 19.2329 24.9006C19.2329 24.9006 22.0441 32.824 26.9971 38.4888C26.9971 38.4888 28.0809 35.486 30.947 31.4349C30.947 31.4349 36.158 36.7026 44.4429 37.0935L47.2743 33.8688C47.2743 33.8688 39.2507 35.2001 30.7475 24.7921C30.7475 24.7921 28.2032 27.3129 26.6683 30.1516C26.6683 30.1516 25.1828 28.1358 24.6579 26.0101H24.6593Z'
 									fill='#95DB00'
 								/>
