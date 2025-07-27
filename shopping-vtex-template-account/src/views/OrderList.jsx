@@ -1,11 +1,10 @@
 import Eitri from 'eitri-bifrost'
 import { Vtex } from 'eitri-shopping-vtex-shared'
-import { Loading, HeaderTemplate, HEADER_TYPE, CustomButton } from 'shopping-vtex-template-shared'
-import formatDate, { formatDateDaysMonthYear } from '../utils/Date'
-import OrderListDetails from '../components/OrderList/OrderListDetails'
-import OrderProductCard from '../components/OrderList/OrderProductCard'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, CustomButton } from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
 import { sendPageView } from '../services/TrackingService'
+import OrderCard from '../components/OrderCard/OrderCard'
+import { listOrders } from '../services/CustomerService'
 
 export default function OrderList(props) {
 	const [orders, setOrders] = useState({})
@@ -75,8 +74,8 @@ export default function OrderList(props) {
 
 	const handleOrders = async () => {
 		try {
-			const orders = await Vtex.customer.listOrders()
-			setMaxPages(orders.paging.pages)
+			const orders = await listOrders()
+			setMaxPages(orders?.paging?.pages)
 			const firstIds = orders.list.slice(0, numberItemsLoadedOnEnter)
 			const productItems = await Promise.all(
 				firstIds.map(async orderItem => {
@@ -94,73 +93,35 @@ export default function OrderList(props) {
 
 	return (
 		<ProtectedView afterLoginRedirectTo={'OrderList'}>
-			<Page
-				bottomInset
-				topInset>
-				<HeaderTemplate
-					headerType={HEADER_TYPE.RETURN_AND_TEXT}
-					viewBackButton={true}
-					contentText={'Meus Pedidos'}
+			<Page>
+				<HeaderContentWrapper>
+					<HeaderReturn />
+					<HeaderText text={'Meus Pedidos'} />
+				</HeaderContentWrapper>
+
+				<Loading
+					isLoading={isLoading}
+					fullScreen
 				/>
-				<View padding='small'>
-					{loading ? (
-						<Loading fullScreen />
-					) : (
-						<>
-							{orders && orders.length >= 1 ? (
-								orders.map((item, key) => (
-									<View
-										marginTop='medium'
-										justify='center'
-										align='left'
-										borderRadius='medium'
-										borderWidth='hairline'
-										borderColor='neutral-300'
-										key={item.orderId}>
-										<OrderListDetails
-											creationDate={formatDateDaysMonthYear(item.creationDate)}
-											order={item.orderId}
-											totalItems={item.totalItems}
-											totalValue={formatAmountInCents(item.totalValue)}
-											statusId={item.status}
-											statusDescription={item.statusDescription}
-										/>
-										<View>
-											{key < 3 && (
-												<OrderProductCard
-													productItems={productItems[key].items}
-													isLoading={true}
-													delivery={
-														item.ShippingEstimatedDateMax &&
-														formatDate(item.ShippingEstimatedDateMax)
-													}
-												/>
-											)}
-											<View
-												marginTop='small'
-												padding='small'>
-												<CustomButton
-													width='100%'
-													label={'Ver detalhes do pedido'}
-													onPress={() =>
-														Eitri.navigation.navigate({
-															path: '/OrderDetails',
-															state: { orderId: item.orderId }
-														})
-													}
-												/>
-											</View>
-										</View>
-									</View>
-								))
-							) : (
-								<NoItem
-									title='Você não possui nenhum pedido'
-									subtitle='Quando você fizer uma compra, ela será listada aqui.'
+
+				<View className='p-4'>
+					<>
+						{orders && orders.length >= 1 ? (
+							orders.map((item, key) => (
+								<OrderCard
+									key={item.orderId}
+									order={item}
+									showOrderDetails={key < 3}
 								/>
-							)}
-						</>
-					)}
+							))
+						) : (
+							<NoItem
+								title='Você não possui nenhum pedido'
+								subtitle='Quando você fizer uma compra, ela será listada aqui.'
+							/>
+						)}
+					</>
+
 					{isLoading && <Loading inline={true} />}
 				</View>
 			</Page>

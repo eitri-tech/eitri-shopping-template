@@ -1,6 +1,6 @@
 import { getWishlist, removeFromWishlist } from '../services/CustomerService'
 import WishlistItem from '../components/WishlistItem/WishlistItem'
-import { HEADER_TYPE, HeaderTemplate, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
 import { sendPageView } from '../services/TrackingService'
 
@@ -14,24 +14,28 @@ export default function Wishlist(props) {
 	}, [])
 
 	const start = async () => {
-		setIsLoading(true)
-		const result = await getWishlist().catch(e => {
+		try {
+			setIsLoading(true)
+			const result = await getWishlist()
+			console.log('result', result)
+			setWishlistItems(result)
+			setIsLoading(false)
+		} catch (e) {
 			console.log('Error:', e)
-			return []
-		})
-		setWishlistItems(result)
-		setIsLoading(false)
+			setWishlistItems([])
+			setIsLoading(false)
+		}
 	}
 
 	const onRemoveFromWishList = async id => {
+		setIsLoading(true)
 		try {
-			setIsLoading(true)
 			await removeFromWishlist(id)
-			const filtered = wishlistItems.filter(item => item.id !== id)
-			setWishlistItems(filtered)
-			setIsLoading(false)
+			setWishlistItems(prevItems => prevItems.filter(item => item.id !== id))
 		} catch (error) {
 			console.error(error)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -39,50 +43,29 @@ export default function Wishlist(props) {
 		<Page
 			bottomInset
 			topInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={'Meus favoritos'}
-			/>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={'Meus favoritos'} />
+			</HeaderContentWrapper>
+
 			<Loading
 				isLoading={isLoading}
 				fullScreen
 			/>
-			<View
-				paddingVertical='large'
-				direction='column'
-				gap='16px'>
-				{wishlistItems?.map(
-					(item, index) =>
-						index % 2 === 0 && (
-							<View
-								key={item.id}
-								display='flex'>
-								<View
-									width='50%'
-									paddingRight='nano'
-									paddingLeft='large'>
-									<WishlistItem
-										productId={wishlistItems[index].productId}
-										onRemoveFromWishlist={() => onRemoveFromWishList(wishlistItems[index].id)}
-									/>
-								</View>
-								{wishlistItems[index + 1] && (
-									<View
-										width='50%'
-										paddingLeft='nano'
-										paddingRight='large'>
-										<WishlistItem
-											productId={wishlistItems[index + 1].productId}
-											onRemoveFromWishlist={() =>
-												onRemoveFromWishList(wishlistItems[index + 1].id)
-											}
-										/>
-									</View>
-								)}
-							</View>
-						)
-				)}
+
+			{/*
+			  A implementação anterior foi refatorada para usar o sistema de grid do Tailwind.
+			  Isso simplifica o código, corrige um bug de layout com itens ímpares e é mais performático.
+			  O layout de duas colunas é mantido com espaçamento consistente.
+			*/}
+			<View className='grid grid-cols-2 gap-x-2 gap-y-4 p-4'>
+				{wishlistItems?.map(item => (
+					<WishlistItem
+						key={item.id}
+						productId={item.productId}
+						onRemoveFromWishlist={() => onRemoveFromWishList(item.id)}
+					/>
+				))}
 			</View>
 
 			{wishlistItems.length === 0 && !isLoading && (

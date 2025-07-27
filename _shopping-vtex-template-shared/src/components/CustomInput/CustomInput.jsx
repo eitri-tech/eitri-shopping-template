@@ -1,7 +1,23 @@
+import Eitri from 'eitri-bifrost'
+
 export default function CustomInput(props) {
-	const { icon, type, backgroundColor, width, label, height, onChange, value, className, ...rest } = props
+	const { icon, type, backgroundColor, width, label, height, onChange, value, className, onFocus, ...rest } = props
 
 	const [showPassword, setShowPassword] = useState(false)
+
+	const handleFocus = e => {
+		Eitri.keyboard.setVisibilityListener(status => {
+			console.log(status.code)
+			if (status.code === 'keyboardDidShow') {
+				e.target.scrollIntoView({ behavior: 'smooth' })
+			}
+			Eitri.keyboard.clearVisibilityListener()
+		})
+
+		if (typeof onFocus === 'function') {
+			onFocus(e)
+		}
+	}
 
 	return (
 		<View className='w-full'>
@@ -16,6 +32,7 @@ export default function CustomInput(props) {
 					type={showPassword ? 'text' : type || 'text'}
 					onChange={onChange}
 					value={value}
+					onFocus={handleFocus}
 					{...rest}
 				/>
 				{type === 'password' && (

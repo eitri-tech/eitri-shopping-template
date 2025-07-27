@@ -1,9 +1,16 @@
-import formatDate from '../utils/Date'
 import { getCustomerData, setCustomerData } from '../services/CustomerService'
 import { sendPageView } from '../services/TrackingService'
 import Eitri from 'eitri-bifrost'
-import { CustomButton, CustomInput, HEADER_TYPE, HeaderTemplate, Loading } from 'shopping-vtex-template-shared'
+import {
+	CustomButton,
+	CustomInput,
+	HeaderText,
+	HeaderContentWrapper,
+	Loading,
+	HeaderReturn
+} from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import formatDateMMDDYYYY from '../utils/utils'
 
 export default function EditProfile(props) {
 	const [user, setUser] = useState({})
@@ -21,14 +28,15 @@ export default function EditProfile(props) {
 			setUser({
 				...user,
 				...customerData,
-				birthDate: formatDate(customerData?.birthDate)
+				birthDate: formatDateMMDDYYYY(customerData?.birthDate)
 			})
 		}
 
 		sendPageView('Edição')
 	}, [])
 
-	const handleInputChange = (target, value) => {
+	const handleInputChange = (target, e) => {
+		const value = e.target.value
 		setUser({
 			...user,
 			[target]: value
@@ -93,21 +101,20 @@ export default function EditProfile(props) {
 	}
 
 	return (
-		<Page
-			bottomInset
-			topInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('editProfile.title')}
-			/>
+		<Page title={'Editar perfil'}>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('editProfile.title')} />
+			</HeaderContentWrapper>
 
 			<Loading
 				fullScreen
 				isLoading={isLoading}
 			/>
 
-			<View className='p-6 flex-col gap-4'>
+			<View
+				bottomInset={'auto'}
+				className='p-4 flex flex-col gap-4'>
 				<View>
 					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName')}</Text>
 					<View className='mt-1 flex gap-1.5'>
@@ -131,8 +138,9 @@ export default function EditProfile(props) {
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder='DD/MM/AAAA'
-						inputMode='numeric'
+						variant='mask'
 						mask='99/99/9999'
+						inputMode='numeric'
 						value={user?.birthDate || ''}
 						onChange={value => handleInputChange('birthDate', value)}
 					/>
@@ -145,6 +153,7 @@ export default function EditProfile(props) {
 						placeholder='(99) 99999-9999'
 						value={user?.homePhone?.replace('+55', '') || ''}
 						inputMode='numeric'
+						variant='mask'
 						onChange={value => handleInputChange('homePhone', value)}
 						mask='(99) 99999-9999'
 					/>
@@ -175,16 +184,18 @@ export default function EditProfile(props) {
 				<View>
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')}</Text>
 					<CustomInput
+						id={'teste'}
 						backgroundColor='background-color'
 						placeholder='000.000.000-00'
 						value={user.document || ''}
 						inputMode='numeric'
+						variant='mask'
 						onChange={value => handleInputChange('document', value)}
 						mask='999.999.999-99'
 					/>
 				</View>
 
-				<View>
+				<View className='pb-4'>
 					<CustomButton
 						width='100%'
 						label={t('editProfile.lbSave')}

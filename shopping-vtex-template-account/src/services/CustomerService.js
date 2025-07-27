@@ -68,7 +68,7 @@ export const setCustomerData = async profileData => {
 }
 
 export const getWishlist = async () => {
-	const result = await Vtex.wishlist.listItems(1, 50)
+	const result = await Vtex.wishlist.listItems()
 	return result?.data?.viewLists?.[0]?.data || []
 }
 
@@ -82,4 +82,12 @@ export async function loginWithGoogle() {
 
 export async function loginWithFacebook() {
 	return await Vtex.customer.loginWithFacebook()
+}
+
+export const listOrders = async () => {
+	return await Vtex.customer.listOrders()
+}
+
+export const getOrderById = async orderId => {
+	return await Vtex.customer.getOrderById(orderId)
 }

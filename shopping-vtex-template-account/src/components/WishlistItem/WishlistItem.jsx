@@ -1,6 +1,5 @@
-import ProductCardWrapper from '../ProductCardWrapper/ProductCardWrapper'
 import { getProductById } from '../../services/ProductService'
-import { removeFromWishlist } from '../../services/CustomerService'
+import ProductCard from '../ProductCard/ProductCard'
 
 export default function WishlistItem(props) {
 	const { productId, sku, title, id, onRemoveFromWishlist } = props
@@ -15,18 +14,5 @@ export default function WishlistItem(props) {
 		init()
 	}, [productId])
 
-	const _onRemoveFromWishList = async () => {
-		onRemoveFromWishlist()
-	}
-
-	return (
-		<>
-			{product && (
-				<ProductCardWrapper
-					vtexProduct={product}
-					onRemoveFromWishList={_onRemoveFromWishList}
-				/>
-			)}
-		</>
-	)
+	return <>{product && <ProductCard product={product} />}</>
 }

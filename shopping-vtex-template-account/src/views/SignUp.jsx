@@ -1,5 +1,12 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, CustomInput, HEADER_TYPE, HeaderTemplate, Loading } from 'shopping-vtex-template-shared'
+import {
+	CustomButton,
+	CustomInput,
+	HeaderText,
+	HeaderContentWrapper,
+	HeaderReturn,
+	Loading
+} from 'shopping-vtex-template-shared'
 import userIcon from '../assets/icons/user.svg'
 import CCheckbox from '../components/CCheckbox/CCheckbox'
 import { sendPageView } from '../services/TrackingService'
@@ -7,12 +14,12 @@ import { getStorePreferences } from '../services/StoreService'
 import { getSavedUser, loginWithEmailAndKey, sendAccessKeyByEmail } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
-import PoweredBy from '../components/PoweredBy/PoweredBy'
+import Alert from '../components/Alert/Alert'
 
 export default function SignUp(props) {
 	const [storeConfig, setStoreConfig] = useState(false)
 	const [termsChecked, setTermsChecked] = useState(false)
-	const [email, setEmail] = useState('')
+	const [email, setEmail] = useState('xeworob583@kloudis.com')
 	const [loading, setLoading] = useState(false)
 	const [showLoginErrorAlert, setShowLoginErrorAlert] = useState(false)
 	const [alertMessage, setAlertMessage] = useState('')
@@ -25,57 +32,6 @@ export default function SignUp(props) {
 	const resendCode = timeOutToResentEmail > 0
 
 	const { t } = useTranslation()
-
-	const sendAccessKey = async () => {
-		if (termsChecked) {
-			try {
-				if (timeOutToResentEmail > 0) {
-					return
-				}
-				setLoadingSendingCode(true)
-				await sendAccessKeyByEmail(email)
-				setEmailCodeSent(true)
-				setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
-				setLoadingSendingCode(false)
-			} catch (e) {
-				console.log('erro ao enviar email', e)
-				setAlertMessage(t('signUp.alertMessageSendEmailError'))
-				setShowLoginErrorAlert(true)
-				setEmailCodeSent(false)
-				setTimeOutToResentEmail(0)
-				setLoadingSendingCode(false)
-			}
-		} else {
-			setAlertMessage(t('signUp.alertMessageAcceptTerms'))
-			setShowLoginErrorAlert(true)
-		}
-		e
-	}
-
-	const loginWithEmailAndAccessKey = async () => {
-		const loggedIn = await loginWithEmailAndKey(email, verificationCode).catch(e => {
-			const status = e?.response?.status || 400
-			if (status >= 500) return 'ServerError'
-			return 'ExpiredCredentials'
-		})
-
-		if (loggedIn === 'WrongCredentials') {
-			setAlertMessage(t('signUp.alertMessageInvalidToken'))
-			setShowLoginErrorAlert(true)
-		} else if (loggedIn === 'ServerError') {
-			setAlertMessage(t('signUp.alertMessageServiceError'))
-			setShowLoginErrorAlert(true)
-		} else if (loggedIn === 'Success') {
-			navigate(PAGES.HOME)
-		} else {
-			setAlertMessage(t('signUp.alertMessageVerify'))
-			setShowLoginErrorAlert(true)
-		}
-	}
-
-	const back = () => {
-		Eitri.navigation.back()
-	}
 
 	useEffect(() => {
 		getStorePreferences().then(conf => {
@@ -100,6 +56,58 @@ export default function SignUp(props) {
 		}
 	}, [timeOutToResentEmail])
 
+	const sendAccessKey = async () => {
+		if (!termsChecked) {
+			setAlertMessage(t('signUp.alertMessageAcceptTerms'))
+			setShowLoginErrorAlert(true)
+			return
+		}
+
+		try {
+			if (timeOutToResentEmail > 0) return
+
+			setLoadingSendingCode(true)
+			await sendAccessKeyByEmail(email)
+			setEmailCodeSent(true)
+			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
+		} catch (e) {
+			console.log('erro ao enviar email', e)
+			setAlertMessage(t('signUp.alertMessageSendEmailError'))
+			setShowLoginErrorAlert(true)
+			setEmailCodeSent(false)
+			setTimeOutToResentEmail(0)
+		} finally {
+			setLoadingSendingCode(false)
+		}
+	}
+
+	const loginWithEmailAndAccessKey = async () => {
+		setLoading(true)
+		try {
+			const loggedIn = await loginWithEmailAndKey(email, verificationCode)
+
+			if (loggedIn === 'WrongCredentials') {
+				setAlertMessage(t('signUp.alertMessageInvalidToken'))
+				setShowLoginErrorAlert(true)
+			} else if (loggedIn === 'Success') {
+				navigate(PAGES.HOME)
+			} else {
+				setAlertMessage(t('signUp.alertMessageVerify'))
+				setShowLoginErrorAlert(true)
+			}
+		} catch (e) {
+			const status = e?.response?.status || 400
+			if (status >= 500) {
+				setAlertMessage(t('signUp.alertMessageServiceError'))
+			} else {
+				setAlertMessage(t('signUp.alertMessageVerify'))
+			}
+			setShowLoginErrorAlert(true)
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	return (
 		<Page topInset>
 			<Loading
@@ -107,84 +115,68 @@ export default function SignUp(props) {
 				fullScreen={true}
 			/>
 
-			<HeaderTemplate
-				headerType={HEADER_TYPE.TEXT}
-				contentText={t('signUp.lbRegister')}
-			/>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('signUp.lbRegister')} />
+			</HeaderContentWrapper>
 
-			<View padding='large'>
-				<Text
-					block
-					fontWeight='bold'
-					fontSize='huge'>
-					{t('signUp.lbEmailAccess')}
-				</Text>
+			<View className='p-4'>
+				<Text className='text-xl font-bold'>{t('signUp.lbEmailAccess')}</Text>
 
-				<View marginTop='display'>
+				{/* Container do formulário com espaçamento vertical consistente */}
+				<View className='mt-8 flex flex-col gap-y-4'>
 					<CustomInput
 						icon={userIcon}
 						value={email}
 						type='email'
 						placeholder='Email'
-						onChange={value => {
-							setEmail(value)
-						}}
+						onChange={e => setEmail(e.target.value)}
 						showClearInput={false}
 						required={true}
 					/>
 
-					<View marginTop='large'>
-						<CCheckbox
-							label={`${t('signUp.textTerms')}${storeConfig?.displayCompanyName ? ' ' + storeConfig?.displayCompanyName : ''}.`}
-							checked={termsChecked}
-							onChange={setTermsChecked}
-						/>
-					</View>
+					<CCheckbox
+						label={`${t('signUp.textTerms')}${storeConfig?.displayCompanyName ? ' ' + storeConfig?.displayCompanyName : ''}.`}
+						checked={termsChecked}
+						onChange={setTermsChecked}
+					/>
 
 					{emailCodeSent && (
 						<>
-							<View marginTop='large'>
-								<CustomInput
-									label={t('signUp.lbVerifyCode')}
-									placeholder={t('signUp.lbVerifyCode')}
-									inputMode='numeric'
-									value={verificationCode}
-									onChange={text => setVerificationCode(text)}
-									height='45px'
-								/>
-							</View>
+							<CustomInput
+								label={t('signUp.lbVerifyCode')}
+								placeholder={t('signUp.lbVerifyCode')}
+								inputMode='numeric'
+								value={verificationCode}
+								onChange={e => setVerificationCode(e.target.value)}
+								height='45px'
+							/>
 
-							<View marginTop='large'>
-								<CustomButton
-									label={t('signUp.lbLogin')}
-									onPress={loginWithEmailAndAccessKey}
-									disabled={!email || !verificationCode}
-									type='email'
-								/>
-							</View>
+							<CustomButton
+								label={t('signUp.lbLogin')}
+								onPress={loginWithEmailAndAccessKey}
+								disabled={!email || !verificationCode}
+								type='email'
+							/>
 						</>
 					)}
 
-					<View marginTop='large'>
-						<CustomButton
-							width='100%'
-							label={
-								!emailCodeSent
-									? t('signIn.textSendCode')
-									: `${t('signIn.textResendCode')}${resendCode ? ` (${timeOutToResentEmail})` : ''}`
-							}
-							disabled={resendCode || !email || loadingSendingCode}
-							onPress={sendAccessKey}
-						/>
-					</View>
+					<CustomButton
+						width='100%'
+						label={
+							!emailCodeSent
+								? t('signIn.textSendCode')
+								: `${t('signIn.textResendCode')}${resendCode ? ` (${timeOutToResentEmail})` : ''}`
+						}
+						disabled={resendCode || !email || loadingSendingCode}
+						onPress={sendAccessKey}
+					/>
 
-					<View marginTop='large'>
-						<CustomButton
-							variant='outlined'
-							label={t('signUp.lbBack')}
-							onPress={back}
-						/>
-					</View>
+					<CustomButton
+						variant='outlined'
+						label={t('signUp.lbBack')}
+						onPress={() => Eitri.navigation.back()}
+					/>
 				</View>
 			</View>
 
