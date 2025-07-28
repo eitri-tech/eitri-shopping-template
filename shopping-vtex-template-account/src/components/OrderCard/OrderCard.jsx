@@ -5,6 +5,7 @@ import OrderStatusBadge from '../OrderStatusBadge/OrderStatusBadge'
 import { formatDateDaysMonthYear, formatPriceInCents } from '../../utils/utils'
 import { getOrderById } from '../../services/CustomerService'
 import ImageCard from '../Image/ImageCard'
+import { navigate, PAGES } from '../../services/NavigationService'
 
 export default function OrderCard(props) {
 	const { order, showOrderDetails } = props
@@ -13,11 +14,10 @@ export default function OrderCard(props) {
 	const [orderDetail, setOrderDetails] = useState(null)
 
 	useEffect(() => {
-		// Carrega os detalhes do pedido apenas se a prop for verdadeira
 		if (showOrderDetails) {
 			loadDetails()
 		}
-	}, [order, showOrderDetails]) // Executa sempre que o pedido ou a visibilidade mudar
+	}, [order, showOrderDetails])
 
 	const loadDetails = async () => {
 		setLoadingDetails(true)
@@ -27,8 +27,15 @@ export default function OrderCard(props) {
 		} catch (e) {
 			console.error('Falha ao carregar detalhes do pedido:', e)
 		} finally {
-			// Garante que o loading seja desativado mesmo em caso de erro
 			setLoadingDetails(false)
+		}
+	}
+
+	const openOrderDetails = () => {
+		if (orderDetail) {
+			navigate(PAGES.ORDER_DETAILS, { order: orderDetail })
+		} else {
+			navigate(PAGES.ORDER_DETAILS, { order: order.orderId })
 		}
 	}
 
@@ -56,7 +63,7 @@ export default function OrderCard(props) {
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
 						Total ({`${order?.totalItems} ${order?.totalItems > 1 ? 'itens' : 'item'}`})
 					</Text>
-					<Text className='text-base font-bold text-gray-900'>{formatPriceInCents(order?.totalValue)}</Text>
+					<Text className='text-sm font-bold text-gray-900'>{formatPriceInCents(order?.totalValue)}</Text>
 				</View>
 			</View>
 
@@ -83,7 +90,7 @@ export default function OrderCard(props) {
 												{item.name}
 											</Text>
 											<Text className='text-xs text-gray-600'>
-												{`${item.quantity} un. • ${formatPriceInCents(item.price)}`}
+												{`${item.quantity} un • ${formatPriceInCents(item.price)}`}
 											</Text>
 										</View>
 									</View>
@@ -94,17 +101,11 @@ export default function OrderCard(props) {
 				</View>
 			)}
 
-			{/* Seção 5: Botão de Ação */}
 			<View className='p-4 border-t border-gray-200'>
 				<CustomButton
 					width='100%'
 					label={'Ver detalhes do pedido'}
-					onPress={() =>
-						Eitri.navigation.navigate({
-							path: '/OrderDetails',
-							state: { orderId: order.orderId }
-						})
-					}
+					onPress={openOrderDetails}
 				/>
 			</View>
 		</View>

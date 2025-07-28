@@ -84,8 +84,8 @@ export async function loginWithFacebook() {
 	return await Vtex.customer.loginWithFacebook()
 }
 
-export const listOrders = async () => {
-	return await Vtex.customer.listOrders()
+export const listOrders = async page => {
+	return await Vtex.customer.listOrders(page)
 }
 
 export const getOrderById = async orderId => {

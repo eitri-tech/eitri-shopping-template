@@ -769,10 +769,6 @@
       "title": "Lista de categorias com swipe",
       "type": "object",
       "properties": {
-        "title": {
-          "title": "Título (opcional)",
-          "type": "string"
-        },
         "content": {
           "title": "Categorias",
           "type": "array",
@@ -784,17 +780,62 @@
                 "title": "Título",
                 "type": "string"
               },
-              "imageUrl": {
-                "title": "Mídia (opcional)",
+              "icon": {
+                "title": "Ícone (opcional)",
                 "type": "string",
                 "widget": {
                   "ui:widget": "media-gallery"
                 }
               },
-              "path": {
-                "title": "Caminho da categoria (apenas não tiver subcategorias)",
-                "description": "Exemplo: /categoriaA/categoriaB",
-                "type": "string"
+              "action": {
+                "title": "Destino da ação (Opcional)",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "title": "Tipo de ação",
+                    "enumNames": [
+                      "Nenhum",
+                      "Abrir Link",
+                      "Abrir Produto",
+                      "Abrir Coleção",
+                      "Abrir Categoria",
+                      "Abrir Busca",
+                      "Abrir Página",
+                      "Abrir Eitri App",
+                      "Abrir Path",
+                      "Abrir Marca"
+                    ],
+                    "enum": [
+                      "none",
+                      "link",
+                      "product",
+                      "collection",
+                      "category",
+                      "search",
+                      "page",
+                      "openEitriApp",
+                      "path",
+                      "brand"
+                    ],
+                    "default": "none"
+                  },
+                  "value": {
+                    "title": "Valor",
+                    "type": "string"
+                  },
+                  "title": {
+                    "title": "Título no header da tela de destino",
+                    "description": "Apenas se diferente do nome da categoria",
+                    "type": "string"
+                  },
+                  "banner": {
+                    "title": "Banner de destino (opcional)",
+                    "type": "string",
+                    "widget": {
+                      "ui:widget": "media-gallery"
+                    }
+                  }
+                }
               },
               "subcategories": {
                 "title": "Subcategorias",
@@ -807,10 +848,62 @@
                       "title": "Título",
                       "type": "string"
                     },
-                    "path": {
-                      "title": "Caminho da subcategoria",
-                      "description": "Exemplo: /categoriaA/categoriaB",
-                      "type": "string"
+                    "icon": {
+                      "title": "Ícone (opcional)",
+                      "type": "string",
+                      "widget": {
+                        "ui:widget": "media-gallery"
+                      }
+                    },
+                    "action": {
+                      "title": "Destino da ação",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "title": "Tipo de ação",
+                          "enumNames": [
+                            "Nenhum",
+                            "Abrir Link",
+                            "Abrir Produto",
+                            "Abrir Coleção",
+                            "Abrir Categoria",
+                            "Abrir Busca",
+                            "Abrir Página",
+                            "Abrir Eitri App",
+                            "Abrir Path",
+                            "Abrir Marca"
+                          ],
+                          "enum": [
+                            "none",
+                            "link",
+                            "product",
+                            "collection",
+                            "category",
+                            "search",
+                            "page",
+                            "openEitriApp",
+                            "path",
+                            "brand"
+                          ],
+                          "default": "none"
+                        },
+                        "value": {
+                          "title": "Valor",
+                          "type": "string"
+                        },
+                        "title": {
+                          "title": "Título no header da tela de destino",
+                          "description": "Apenas se diferente do nome da categoria",
+                          "type": "string"
+                        },
+                        "banner": {
+                          "title": "Banner de destino (opcional)",
+                          "type": "string",
+                          "widget": {
+                            "ui:widget": "media-gallery"
+                          }
+                        }
+                      }
                     }
                   }
                 }

@@ -9,21 +9,21 @@ eitri-apps:
       alias: home
       focus: true
       shared: false
-    - path: ./shopping-vtex-template-pdp
-      workspace: pdp
-      alias: pdp
-      focus: false
-      shared: false
-    - path: ./shopping-vtex-template-account
-      workspace: account
-      alias: account
-      focus: true
-      shared: false
-    - path: ./shopping-vtex-template-cart
-      workspace: cart
-      alias: cart
-      focus: false
-      shared: false
+#    - path: ./shopping-vtex-template-pdp
+#      workspace: pdp
+#      alias: pdp
+#      focus: false
+#      shared: false
+#    - path: ./shopping-vtex-template-account
+#      workspace: account
+#      alias: account
+#      focus: true
+#      shared: false
+#    - path: ./shopping-vtex-template-cart
+#      workspace: cart
+#      alias: cart
+#      focus: false
+#      shared: false
     # - path: ./shopping-vtex-template-checkout
     #   workspace: checkout
     #   alias: checkout
@@ -52,5 +52,4 @@ eitri-apps:
 #        type: "string"
 #        value: "tabIndex=4"
 
-# application-id: 9022c0fb-885f-4a5f-b99f-7e065189b893
-application-id: 82bf8b7f-75eb-4056-83a6-ab5ce253bfa8
+application-id: 9022c0fb-885f-4a5f-b99f-7e065189b893

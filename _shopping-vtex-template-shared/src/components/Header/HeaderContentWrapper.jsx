@@ -3,7 +3,7 @@ import HeaderOffset from './HeaderOffset'
 import { DIMENSIONS } from '../../utils/constants'
 
 export default function HeaderContentWrapper(props) {
-	const { children, scrollEffect, scrollEffectMaxTranslate, height, className, ...rest } = props
+	const { children, scrollEffect, scrollEffectMaxTranslate, height, className, containerClassName, ...rest } = props
 
 	const [safeAreaTop, setSafeAreaTop] = useState(0)
 	const [translate, setTranslate] = useState('')
@@ -73,12 +73,12 @@ export default function HeaderContentWrapper(props) {
 		<>
 			<View
 				id='header-container'
-				className={`fixed top-0 left-0 right-0 z-[9900] ${translate} transition-all duration-500 ease-in-out shadow-md w-full backdrop-blur-sm bg-header-background`}>
+				className={`fixed top-0 left-0 right-0 z-[9900] ${translate} transition-all duration-500 ease-in-out shadow-md w-full backdrop-blur-sm bg-header-background ${containerClassName || ''}`}>
 				<View topInset={'auto'} />
 				<View id='header'>
 					<View
 						id='header-content'
-						className={`min-h-[60px] flex items-center w-screen py-[8px] px-[16px] ${className}`}
+						className={`min-h-[60px] flex items-center w-screen py-[8px] px-4 gap-4 ${className}`}
 						{...rest}>
 						{children}
 					</View>

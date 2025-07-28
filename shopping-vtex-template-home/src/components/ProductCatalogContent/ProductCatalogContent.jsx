@@ -20,7 +20,7 @@ export default function ProductCatalogContent(props) {
 	 * }
 	 * */
 
-	const { params, hideFilters, ...rest } = props
+	const { params, hideFilters, banner, ...rest } = props
 
 	const [productLoading, setProductLoading] = useState(false)
 	const [products, setProducts] = useState([])
@@ -97,6 +97,13 @@ export default function ProductCatalogContent(props) {
 
 	return (
 		<View {...rest}>
+			{banner && (
+				<Image
+					src={banner}
+					className='w-full object-cover'
+				/>
+			)}
+
 			{products.length > 0 && !hideFilters && (
 				<>
 					<View className='p-4 flex flex-between gap-4 w-full'>

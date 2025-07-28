@@ -12,12 +12,10 @@ export default function ProductCatalog(props) {
 
 	const { t } = useTranslation()
 
-	const [appliedFacets, setAppliedFacets] = useState(null) // Filtros efetivamente usados na busca
+	const [appliedFacets, setAppliedFacets] = useState(null)
 
 	useEffect(() => {
-		const params =
-			location.state.params ??
-			(location.state.facets ? parseLegacyPropsParams(location.state.facets) : { facets: [] })
+		const params = location.state.params
 
 		setAppliedFacets(params)
 
@@ -35,21 +33,6 @@ export default function ProductCatalog(props) {
 		Eitri.navigation.navigate({ path: 'Search' })
 	}
 
-	const parseLegacyPropsParams = input => {
-		if (!input) return {}
-
-		const segments = input.split('/')
-		const result = []
-
-		for (let i = 0; i < segments.length; i += 2) {
-			const key = segments[i]
-			const value = segments[i + 1]
-			result.push({ key: key, value: value })
-		}
-
-		return { facets: result }
-	}
-
 	return (
 		<Page title={title || t('productCatalog.title')}>
 			<>
@@ -65,6 +48,7 @@ export default function ProductCatalog(props) {
 
 				{appliedFacets && (
 					<ProductCatalogContent
+						banner={location?.state?.banner}
 						bottomInset={'auto'}
 						params={appliedFacets}
 					/>

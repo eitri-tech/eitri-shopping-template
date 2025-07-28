@@ -71,7 +71,6 @@ export default function SignUp(props) {
 			setEmailCodeSent(true)
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 		} catch (e) {
-			console.log('erro ao enviar email', e)
 			setAlertMessage(t('signUp.alertMessageSendEmailError'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)

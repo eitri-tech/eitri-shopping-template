@@ -10,6 +10,7 @@ export const PAGES = {
 	LOGIN: '/Login/Login',
 	EDIT_PROFILE: '/EditProfile',
 	ORDER_LIST: '/OrderList',
+	ORDER_DETAILS: '/OrderDetails',
 	WISH_LIST: '/WishList',
 	POINTS: '/Points'
 }

@@ -2,17 +2,28 @@
 import iconFacebook from '../../assets/images/social_facebook.svg'
 import iconGoogle from '../../assets/images/social_google.svg'
 import { useTranslation } from 'eitri-i18n'
+import { loginWithFacebook, loginWithGoogle } from '../../services/CustomerService'
 
 export default function SocialLogin(props) {
-	const { onGoogleLogin, onFacebookLogin, oAuthProviders } = props
+	const { handleSocialLogin, oAuthProviders } = props
 	const { t } = useTranslation()
+
+	const onSocialLogin = async executor => {
+		try {
+			console.log('onSocialLogin')
+			await executor()
+			handleSocialLogin()
+		} catch (e) {
+			console.log('Error on social login:', e)
+		}
+	}
 
 	return (
 		<View className='flex flex-col gap-3'>
 			{oAuthProviders?.some(p => p.providerName === 'Google') && (
 				<View
 					className='flex items-center justify-center gap-3 h-12 bg-white rounded border border-gray-300 p-2 cursor-pointer'
-					onPress={onGoogleLogin}>
+					onClick={() => onSocialLogin(loginWithGoogle)}>
 					<Image
 						src={iconGoogle}
 						width='24px'
@@ -25,7 +36,7 @@ export default function SocialLogin(props) {
 			{oAuthProviders?.some(p => p.providerName === 'Facebook') && (
 				<View
 					className='flex items-center justify-center gap-3 bg-[#3D5A98] rounded h-12 p-2 cursor-pointer'
-					onPress={onFacebookLogin}>
+					onClick={() => onSocialLogin(loginWithFacebook)}>
 					<Image
 						src={iconFacebook}
 						width='24px'

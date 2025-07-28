@@ -1,20 +1,28 @@
 import { View } from 'eitri-luminus'
 import { resolveNavigation } from '../../../services/NavigationService'
 import CategoryPageItem from './components/CategoryPageItem'
+import { processActions } from '../../../services/ResolveCmsActions'
 export default function CategoryListSwipe(props) {
 	const { data } = props
+
 	const openItem = item => {
-		resolveNavigation(item.path, item.title)
+		processActions(item)
 	}
+
 	return (
-		<View className='px-8 flex flex-col'>
+		<View className='flex flex-col p-4 gap-4'>
 			{data?.content &&
 				data?.content?.map(item => (
 					<CategoryPageItem
+						key={item.title}
 						item={item}
 						goToItem={openItem}
 					/>
 				))}
+			<View
+				bottomInset={'auto'}
+				className='w-full'
+			/>
 		</View>
 	)
 }

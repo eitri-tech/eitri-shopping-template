@@ -19,19 +19,24 @@ const DetailSection = ({ title, children }) => (
 
 export default function OrderDetails(props) {
 	const [order, setOrder] = useState(null)
-	const [isLoading, setIsLoading] = useState(true)
+	const [isLoading, setIsLoading] = useState(false)
 	const [cancelConfirmation, setCancelConfirmation] = useState(false)
 	const [cancelReason, setCancelReason] = useState('')
 
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		const orderId = props?.history?.location?.state?.orderId
-		if (!orderId) {
-			Eitri.navigation.navigate({ path: 'OrderList', replace: true })
+		const { order, orderId } = props?.history?.location?.state
+
+		if (order) {
+			setOrder(order)
+		} else if (orderId) {
+			handleOrder(orderId)
+		} else {
+			Eitri.navigation.back()
 			return
 		}
-		handleOrder(orderId)
+
 		sendPageView('Detalhes do pedido')
 	}, [])
 
@@ -42,7 +47,7 @@ export default function OrderDetails(props) {
 			setOrder(orderData)
 		} catch (error) {
 			console.error('Erro ao pegar detalhes do pedido:', error)
-			Eitri.navigation.navigate({ path: 'OrderList', replace: true })
+			Eitri.navigation.back()
 		} finally {
 			setIsLoading(false)
 		}
@@ -52,7 +57,7 @@ export default function OrderDetails(props) {
 		if (!cancelReason) return
 		setIsLoading(true)
 		try {
-			await Vtex.customer.cancelOrder(order.orderId, { reason: cancelReason })
+			await Vtex.customer.cancelOrder(order?.orderId, { reason: cancelReason })
 			Eitri.navigation.back()
 		} catch (e) {
 			console.error('Erro ao cancelar pedido', e)
@@ -68,7 +73,7 @@ export default function OrderDetails(props) {
 			return (
 				<View className='flex w-full items-center justify-between'>
 					<Text className='text-sm text-gray-700'>{payment.paymentSystemName}</Text>
-					{order.status === 'payment-pending' && (
+					{order?.status === 'payment-pending' && (
 						<View
 							className='cursor-pointer'
 							onClick={() => Eitri.openBrowser({ url: payment.url })}>
@@ -105,10 +110,14 @@ export default function OrderDetails(props) {
 		)
 	}
 
+	if (!order) {
+		return
+	}
+
 	return (
 		<ProtectedView
 			afterLoginRedirectTo={'OrderDetails'}
-			redirectState={{ orderId: props?.history?.location?.state?.orderId }}>
+			redirectState={{ orderId: order?.orderId }}>
 			<Page>
 				<HeaderContentWrapper>
 					<HeaderReturn />
@@ -124,31 +133,31 @@ export default function OrderDetails(props) {
 									<Text className='text-xs font-semibold uppercase text-gray-500'>
 										{t('orderDetails.lbOrder')}
 									</Text>
-									<Text className='text-sm font-medium text-gray-900'>{order.orderId}</Text>
+									<Text className='text-sm font-medium text-gray-900'>{order?.orderId}</Text>
 								</View>
 								<OrderStatusBadge
-									statusId={order.status}
-									statusDescription={order.statusDescription}
+									statusId={order?.status}
+									statusDescription={order?.statusDescription}
 								/>
 							</View>
 
 							<DetailSection title={t('orderDetails.lbOrderDate')}>
 								<Text className='text-sm text-gray-700'>
-									{formatDateDaysMonthYear(order.creationDate)}
+									{formatDateDaysMonthYear(order?.creationDate)}
 								</Text>
 							</DetailSection>
 
 							<DetailSection title={t('orderDetails.lbAddress')}>
 								<View className='flex flex-col'>
 									<Text className='text-sm text-gray-700'>
-										{`${order.shippingData.address.street}, ${order.shippingData.address.number}${
-											order.shippingData.address.complement
-												? ` - ${order.shippingData.address.complement}`
+										{`${order?.shippingData?.address.street}, ${order?.shippingData?.address?.number}${
+											order?.shippingData?.address.complement
+												? ` - ${order?.shippingData?.address?.complement}`
 												: ''
 										}`}
 									</Text>
 									<Text className='text-sm text-gray-700'>
-										{`${order.shippingData.address.neighborhood}, ${order.shippingData.address.city} - ${order.shippingData.address.state}, ${order.shippingData.address.postalCode}`}
+										{`${order?.shippingData?.address?.neighborhood}, ${order?.shippingData?.address?.city} - ${order?.shippingData?.address?.state}, ${order?.shippingData.address.postalCode}`}
 									</Text>
 								</View>
 							</DetailSection>
@@ -190,7 +199,7 @@ export default function OrderDetails(props) {
 										<Text className='font-bold text-gray-900'>{`${t('orderDetails.lbTotal')}:`}</Text>
 										<Text className='font-bold text-gray-900'>
 											{formatPriceInCents(
-												order.totals
+												order?.totals
 													.map(item => item.value)
 													.reduce((acc, curr) => acc + curr, 0)
 											)}

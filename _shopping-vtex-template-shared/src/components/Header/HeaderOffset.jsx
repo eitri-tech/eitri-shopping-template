@@ -3,7 +3,7 @@ export default function HeaderOffset(props) {
 
 	return (
 		<>
-			{topInset && <View topInset />}
+			{topInset && <View topInset={'auto'} />}
 			<View className={`min-h-[60px]`} />
 		</>
 	)

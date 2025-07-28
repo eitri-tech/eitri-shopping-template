@@ -148,15 +148,7 @@ export default function SignIn(props) {
 		}
 	}
 
-	const handleGoogleLogin = async () => {
-		try {
-			onLoggedIn()
-		} catch (error) {
-			console.log(error)
-		}
-	}
-
-	const handleFacebookLogin = async () => {
+	const handleSocialLogin = async () => {
 		try {
 			onLoggedIn()
 		} catch (error) {
@@ -300,14 +292,15 @@ export default function SignIn(props) {
 
 				{Eitri.canIUse('23') && (
 					<>
-						<View className='mt-8 flex justify-center mb-8 mx-2 pb-4 border-b border-tertiary-900'>
-							<Text className='text-accent-100 font-medium'>Ou</Text>
+						<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
+							<View className='h-px flex-1 bg-gray-300' />
+							<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
+							<View className='h-px flex-1 bg-gray-300' />
 						</View>
 
 						<SocialLogin
 							oAuthProviders={loginProviders?.oAuthProviders}
-							onGoogleLogin={handleGoogleLogin}
-							onFacebookLogin={handleFacebookLogin}
+							handleSocialLogin={handleSocialLogin}
 						/>
 					</>
 				)}

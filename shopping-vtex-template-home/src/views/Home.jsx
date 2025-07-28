@@ -38,7 +38,10 @@ export default function Home() {
 	}
 
 	const resolveRedirectAndCartAndCms = async () => {
-		const startParams = await Eitri.getInitializationInfos()
+		// const startParams = await Eitri.getInitializationInfos()
+		const startParams = {
+			route: 'Categories'
+		}
 		if (startParams) {
 			const openRoute = processDeepLink(startParams)
 			if (openRoute) {

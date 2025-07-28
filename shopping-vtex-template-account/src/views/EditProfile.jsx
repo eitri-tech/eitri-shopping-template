@@ -162,7 +162,9 @@ export default function EditProfile(props) {
 				<View>
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender')}</Text>
 					<View className='flex gap-4'>
-						<View className='flex-row items-center'>
+						<View
+							className='flex flex-row items-center gap-1'
+							sendFocusToInput>
 							<Radio
 								value={'male'}
 								checked={user?.gender === 'male'}
@@ -170,7 +172,9 @@ export default function EditProfile(props) {
 							/>
 							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale')}</Text>
 						</View>
-						<View className='flex-row items-center'>
+						<View
+							className='flex flex-row items-center gap-1'
+							sendFocusToInput>
 							<Radio
 								value={'female'}
 								checked={user?.gender === 'female'}
@@ -184,7 +188,6 @@ export default function EditProfile(props) {
 				<View>
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')}</Text>
 					<CustomInput
-						id={'teste'}
 						backgroundColor='background-color'
 						placeholder='000.000.000-00'
 						value={user.document || ''}
