@@ -35,7 +35,7 @@ export default function CategoryPageItem(props) {
 				onClick={() => handleItemPress(item)}
 			/>
 			<View
-				className={`flex flex-col min-h-screen h-screen overflow-y-auto  w-screen ${showSubItems ? 'fixed left-0 ' : 'absolute left-[100vw]'} top-0 transition-left duration-300 z-[9999]`}>
+				className={`flex flex-col min-h-screen h-screen w-screen fixed ${showSubItems ? 'left-0 ' : 'left-[100vw]'} top-0 transition-left duration-300 z-[9999]`}>
 				<HeaderContentWrapper
 					containerClassName={`${showSubItems ? 'left-0' : '!left-[100vw] !shadow-none'} transition-left !duration-300 !backdrop-blur-none !bg-white`}>
 					<HeaderReturn onClick={() => setShowSubItems(false)} />

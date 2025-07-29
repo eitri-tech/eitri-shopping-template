@@ -6,7 +6,6 @@ import { saveCartIdOnStorage } from '../services/cartService'
 import Freight from '../components/Freight/Freight'
 import Coupon from '../components/Coupon/Coupon'
 import CartSummary from '../components/CartSummary/CartSummary'
-import InstallmentsMsg from '../components/InstallmentsMsg/InstallmentsMsg'
 import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
 import { startConfigure } from '../services/AppService'
 import { Page } from 'eitri-luminus'
@@ -67,9 +66,7 @@ export default function Home(props) {
 				isLoading={appIsLoading}
 			/>
 
-			<View
-				bottomInset={'auto'}
-				className='py-4 flex flex-col gap-4'>
+			<View className='py-4 flex flex-col gap-4'>
 				<CartItemsContent />
 
 				<Freight />

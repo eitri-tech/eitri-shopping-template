@@ -10,7 +10,7 @@ export default function CategoryListSwipe(props) {
 	}
 
 	return (
-		<View className='flex flex-col p-4 gap-4'>
+		<View className='flex flex-col p-4 gap-4 w-screen max-w-screen overflow-x-hidden'>
 			{data?.content &&
 				data?.content?.map(item => (
 					<CategoryPageItem

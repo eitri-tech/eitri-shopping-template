@@ -76,7 +76,7 @@ export default function CartSummary(props) {
 
 				{!collapsed && (
 					<View className='w-full flex justify-center'>
-						<View className='card-body w-full max-w-sm px-4'>
+						<View className='w-full max-w-sm px-4'>
 							{itemsValue?.value && (
 								<View className='flex justify-between py-2'>
 									<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal')}</Text>
@@ -119,7 +119,6 @@ export default function CartSummary(props) {
 					/>
 				</View>
 			</View>
-			{/* Espaço reservado para evitar sobreposição do conteúdo da página */}
 			<View
 				bottomInset={'auto'}
 				className={collapsed ? 'h-[111px]' : 'h-[260px]'}

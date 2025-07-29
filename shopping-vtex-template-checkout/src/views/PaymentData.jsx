@@ -79,14 +79,14 @@ export default function PaymentData(props) {
 					</View>
 				</View>
 
-				<View
-					bottomInset
-					className='p-4'>
-					<CustomButton
-						disabled={!readyToProceed()}
-						label={t('paymentData.labelButton')}
-						onPress={submitPaymentSystemSelected}
-					/>
+				<View bottomInset={'auto'}>
+					<View className='p-4'>
+						<CustomButton
+							disabled={!readyToProceed()}
+							label={t('paymentData.labelButton')}
+							onPress={submitPaymentSystemSelected}
+						/>
+					</View>
 				</View>
 			</View>
 		</Page>

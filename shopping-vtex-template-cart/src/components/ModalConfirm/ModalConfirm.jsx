@@ -6,7 +6,11 @@ export default function ModalConfirm(props) {
 	if (!showModal) return null
 
 	return (
-		<Modal className='z-[9999]'>
+		<View
+			className='z-[9999] !bg-black/70 !opacity-100 fixed inset-0 flex items-center justify-center'
+			onClick={() => {
+				if (typeof onClose === 'function') onClose()
+			}}>
 			<View className='flex flex-col p-4 bg-base-100 items-center rounded w-11/12 max-w-xs mx-auto'>
 				<Text className='text-center text-lg font-bold mb-6 text-base-content'>{text}</Text>
 				<View className='flex flex-col gap-3 w-full'>
@@ -22,6 +26,6 @@ export default function ModalConfirm(props) {
 					/>
 				</View>
 			</View>
-		</Modal>
+		</View>
 	)
 }

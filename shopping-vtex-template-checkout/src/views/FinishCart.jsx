@@ -54,24 +54,6 @@ export default function FinishCart() {
 		sendPageView('Checkout - Home')
 	}, [cart])
 
-	const navigateToEditor = (path, canOpenWithoutLogin) => {
-		if (canOpenWithoutLogin) {
-			Eitri.navigation.navigate({
-				path: path
-			})
-		} else {
-			requestLogin().then(async () => {
-				const updatedCart = await startCart()
-				if (updatedCart.canEditData) {
-					Eitri.navigation.navigate({
-						path: path,
-						state: { cart: cart }
-					})
-				}
-			})
-		}
-	}
-
 	const runPaymentScript = async () => {
 		try {
 			setIsLoading(true)
@@ -120,10 +102,7 @@ export default function FinishCart() {
 
 			{(cartIsLoading || isLoading) && <Loading fullScreen />}
 
-			<View
-				topInset
-				bottomInset
-				className='p-4 pb-24'>
+			<View className='p-4'>
 				{' '}
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
 				<>
@@ -158,15 +137,19 @@ export default function FinishCart() {
 
 			{/* Botão fixo na parte de baixo */}
 			<View
-				bottomInset
-				className='fixed bottom-0 left-0 w-full z-10 bg-base-100 p-4 border-t border-base-200'>
-				<CustomButton
-					label={t('finishCart.labelButton')}
-					onPress={runPaymentScript}
-				/>
+				bottomInset={'auto'}
+				className='fixed bottom-0 left-0 w-full z-10 bg-white border-t border-base-200'>
+				<View className='p-4'>
+					<CustomButton
+						label={t('finishCart.labelButton')}
+						onPress={runPaymentScript}
+					/>
+				</View>
 			</View>
 
-			<View className='h-[78px]' />
+			<View bottomInset={'auto'}>
+				<View className='h-[50px] w-full' />
+			</View>
 
 			<Recaptcha
 				ref={recaptchaRef}

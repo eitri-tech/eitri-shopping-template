@@ -95,6 +95,10 @@ export default function ProductCatalogContent(props) {
 		getProducts(filters, 1)
 	}
 
+	const onFilterClear = () => {
+		handleFilterChange(initialFilters)
+	}
+
 	return (
 		<View {...rest}>
 			{banner && (
@@ -110,6 +114,7 @@ export default function ProductCatalogContent(props) {
 						<CatalogFilter
 							currentFilters={appliedFacets}
 							onFilterChange={handleFilterChange}
+							onFilterClear={onFilterClear}
 						/>
 						<CatalogSort
 							currentSort={appliedFacets?.sort}

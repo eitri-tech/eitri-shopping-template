@@ -13,7 +13,7 @@ export default function CartItemsContent(props) {
 		try {
 			changeQuantity(index, quantity)
 		} catch (e) {
-			console.erro('Error onChangeQuantityItem==>', e)
+			console.error('Error onChangeQuantityItem==>', e)
 		}
 	}
 

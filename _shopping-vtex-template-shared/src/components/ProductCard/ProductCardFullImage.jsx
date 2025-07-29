@@ -8,7 +8,6 @@ export default function ProductCardFullImage(props) {
 		image,
 		name,
 		price,
-		width = 148,
 		installments,
 		loadingCartOp,
 		isOnWishlist,
@@ -16,8 +15,14 @@ export default function ProductCardFullImage(props) {
 		actionLabel,
 		onPressOnCard,
 		onPressCartButton,
+		onPressOnWishlist,
 		className
 	} = props
+
+	const _onPressOnWishlist = e => {
+		e.stopPropagation()
+		onPressOnWishlist()
+	}
 
 	return (
 		<View
@@ -31,10 +36,10 @@ export default function ProductCardFullImage(props) {
 						src={image}
 					/>
 
-					<View className='absolute top-[8px] right-[5px] flex items-center justify-center rounded-full bg-accent-100 z-[99] '>
-						<View className='w-[30px] h-[30px] flex justify-center items-center'>
-							<WishlistIcon checked={isOnWishlist} />
-						</View>
+					<View
+						onClick={_onPressOnWishlist}
+						className='absolute top-[8px] right-[5px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
+						<WishlistIcon checked={isOnWishlist} />
 					</View>
 				</View>
 
@@ -77,8 +82,6 @@ export default function ProductCardFullImage(props) {
 					)}
 				</View>
 			</View>
-
-			<View className='absolute top-0 bottom-0 left-0 right-0' />
 		</View>
 	)
 }

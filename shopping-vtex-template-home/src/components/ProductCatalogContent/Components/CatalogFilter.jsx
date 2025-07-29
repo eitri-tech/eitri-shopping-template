@@ -6,7 +6,7 @@ import { CustomButton } from 'shopping-vtex-template-shared'
 import CustomModal from '../../CustomModal/CustomModal'
 
 export default function CatalogFilter(props) {
-	const { currentFilters, onFilterChange } = props
+	const { currentFilters, onFilterChange, onFilterClear } = props
 
 	const [showModal, setShowModal] = useState(false)
 	const [tempFilters, setTempFilters] = useState(currentFilters)
@@ -32,14 +32,13 @@ export default function CatalogFilter(props) {
 		setFacetsLoading(false)
 	}
 
-	const handleFilterToggle = filterValue => {
+	const handleFilterToggle = (filterValue, e) => {
+		e.stopPropagation()
 		const existingIndex = tempFilters?.facets?.findIndex(f => f.key === filterValue.key)
 		let newFacets
 		if (existingIndex !== -1 && existingIndex !== undefined) {
-			// Remove if exists
 			newFacets = tempFilters.facets.filter(f => f.key !== filterValue.key)
 		} else {
-			// Add if not exists
 			newFacets = [...(tempFilters?.facets || []), { key: filterValue.key, value: filterValue.value }]
 		}
 		setTempFilters({
@@ -82,21 +81,21 @@ export default function CatalogFilter(props) {
 					<View
 						bottomInset={'auto'}
 						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
-						<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
+						<View className='flex flex-row items-center justify-between border-b border-gray-200'>
 							<Text className='text-lg font-semibold'>{t('categoryPageModal.title')}</Text>
 						</View>
 
-						<View className='flex flex-col'>
+						<View className='flex flex-col gap-4 mt-4'>
 							{filterFacets.map(facet => (
 								<View
 									key={facet.key}
 									className='border-b border-gray-100'>
-									<Text className='text-base font-medium p-4 text-gray-800'>{facet.name}</Text>
-									<View className='flex flex-wrap gap-2 p-4'>
+									<Text className='text-base font-medium text-gray-800'>{facet.name}</Text>
+									<View className='flex flex-wrap gap-2 mt-4'>
 										{facet.values.map((value, index) => (
 											<View
 												key={`${facet.key}-${index}`}
-												onClick={() => handleFilterToggle(value)}
+												onClick={e => handleFilterToggle(value, e)}
 												className={`px-4 py-2 rounded-full transition-all duration-200 border-2 ${
 													value.selected
 														? 'bg-primary border-primary text-primary-content'
@@ -125,13 +124,10 @@ export default function CatalogFilter(props) {
 							))}
 						</View>
 
-						<View className='mt-6 flex flex-row justify-between p-4 w-full border-t border-gray-200 gap-4'>
+						<View className='mt-6 flex flex-row justify-between py-4 w-full border-t border-gray-200 gap-4'>
 							<CustomButton
 								outlined
-								onClick={() => {
-									// Clear all filters logic would go here
-									setShowModal(false)
-								}}
+								onClick={onFilterClear}
 								label={t('categoryPageModal.clear')}
 							/>
 							<CustomButton

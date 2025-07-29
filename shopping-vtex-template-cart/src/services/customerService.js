@@ -3,26 +3,59 @@ import Eitri from 'eitri-bifrost'
 
 let CheckLoginPromise = null
 
+export const checkWishlistItem = async productId => {
+	if (!(await isLoggedIn())) {
+		return { inList: false }
+	}
+	const result = await Vtex.wishlist.checkItem(productId)
+	const inList = result?.data?.checkList?.inList
+	if (inList) {
+		const listId = result?.data?.checkList?.listIds?.[0]
+		return { inList, listId }
+	} else {
+		return { inList }
+	}
+}
+
+export const savePostalCodeOnStorage = async postalCode => {
+	await Vtex.customer.setCustomerData('postalCode', postalCode)
+}
+
+export const getPostalCodeOnStorage = async () => {
+	return await Vtex.customer.getCustomerData('postalCode')
+}
+
 export const requestLogin = () => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
+		if (await isLoggedIn()) {
+			resolve()
+			return
+		}
+
 		Eitri.nativeNavigation.open({
 			slug: 'account',
-			initParams: { action: 'RequestLogin' }
+			initParams: { action: 'RequestLogin', closeAppAfterLogin: true }
 		})
-		CheckLoginPromise = null
-		Eitri.navigation.setOnResumeListener(resolve)
+		Eitri.navigation.setOnResumeListener(async () => {
+			if (await isLoggedIn()) {
+				resolve()
+			} else {
+				reject('User not logged in')
+			}
+		})
 	})
 }
 
 export const isLoggedIn = async () => {
-	if (CheckLoginPromise) {
-		return CheckLoginPromise
+	try {
+		return await Vtex.customer.isLoggedIn()
+	} catch (e) {
+		console.error('Erro ao buscar dados do cliente', e)
+		return false
 	}
-	CheckLoginPromise = Vtex.customer.isLoggedIn()
-	return CheckLoginPromise
 }
 
-export const checkWishlistItem = async productId => {
+export const productOnWishlist = async productId => {
 	if (!(await isLoggedIn())) {
 		return { inList: false }
 	}
@@ -41,21 +74,6 @@ export const removeItemFromWishlist = async id => {
 }
 
 export const addToWishlist = async (productId, title, sku) => {
-	if (!(await isLoggedIn())) {
-		await requestLogin()
-		if (!(await isLoggedIn())) {
-			throw new Error('User not logged in')
-		}
-		return await Vtex.wishlist.addItem(productId, title, sku)
-	} else {
-		return await Vtex.wishlist.addItem(productId, title, sku)
-	}
-}
-
-export const savePostalCodeOnStorage = async postalCode => {
-	await Vtex.customer.setCustomerData('postalCode', postalCode)
-}
-
-export const getPostalCodeOnStorage = async () => {
-	return await Vtex.customer.getCustomerData('postalCode')
+	await requestLogin()
+	return await Vtex.wishlist.addItem(productId, title, sku)
 }
