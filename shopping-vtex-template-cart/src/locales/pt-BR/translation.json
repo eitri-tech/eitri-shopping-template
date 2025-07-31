@@ -35,12 +35,12 @@
 		"errorCep": "Digite um CEP válido",
 		"errorCalcFreight": "Não foi possível calcular o frete",
 		"errorEditFreight": "Não foi possível modificar o frete",
-		"txtDelivery": "Entrega",
+		"txtDelivery": "Insira seu CEP",
 		"txtCalculate": "Calcular",
 		"labelZipCode": "CEP",
 		"txtUnknow": "Não sei meu cep",
-		"tabDelivery": "Entrega",
-		"tabPickup": "Retirada",
+		"tabDelivery": "Opções de Entrega",
+		"tabPickup": "Opções de Retirada",
 		"noDeliveryOptions": "Nenhuma opção de entrega disponível",
 		"noPickupOptions": "Nenhuma opção de retirada disponível"
 	},
@@ -58,5 +58,11 @@
 	},
 	"cartTemplate": {
 		"labelContinue": "Continuar comprando"
-	}
+	},
+   "modal": {
+      "confirm": {
+        "delete": "Excluir",
+        "cancel": "Cancelar"
+      }
+    }
 }

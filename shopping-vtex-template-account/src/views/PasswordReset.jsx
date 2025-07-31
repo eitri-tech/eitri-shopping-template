@@ -1,4 +1,3 @@
-// /Users/calindra/Workspace/Eitri/eitri-shopping-template/shopping-vtex-template-account/src/views/PasswordReset.jsx
 import {
 	Loading,
 	HeaderContentWrapper,
@@ -9,23 +8,26 @@ import {
 } from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { sendPasswordResetCode } from '../services/CustomerService'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function PasswordReset(props) {
-	const [username, setUsername] = useState('xeworob583@kloudis.com')
+	const { t } = useTranslation()
+
+	const [username, setUsername] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [showErrorAlert, setShowErrorAlert] = useState(false)
-
-	const { t } = useTranslation()
 
 	useEffect(() => {
 		const email = props?.location?.state?.email
 		if (email) {
 			setUsername(email)
 		}
-		sendPageView(t('passwordReset.recoveryPass'))
+
+		addonUserTappedActiveTabListener()
+		sendScreenView('Reset de senha - início', 'PasswordReset')
 	}, [])
 
 	const goToPasswordResetCode = async () => {

@@ -7,9 +7,8 @@ export default function CustomInput(props) {
 
 	const handleFocus = e => {
 		Eitri.keyboard.setVisibilityListener(status => {
-			console.log(status.code)
 			if (status.code === 'keyboardDidShow') {
-				e.target.scrollIntoView({ behavior: 'smooth' })
+				e.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 			}
 			Eitri.keyboard.clearVisibilityListener()
 		})

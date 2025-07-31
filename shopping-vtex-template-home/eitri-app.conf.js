@@ -2,7 +2,7 @@ module.exports = {
 	'name': 'shopping-vtex-template-home',
 	'title': 'shopping-vtex-template-home',
 	'slug': 'shopping-vtex-template-home',
-	'eitri-luminus': '2.3.5',
+	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
 	'version': '0.1.3',

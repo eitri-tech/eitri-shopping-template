@@ -32,7 +32,7 @@ export default function Categories() {
 			topInset>
 			<HeaderContentWrapper className='justify-between'>
 				<HeaderText text={t('categories.title')} />
-				<HeaderSearchIcon onPress={goToSearch} />
+				<HeaderSearchIcon onClick={goToSearch} />
 			</HeaderContentWrapper>
 
 			<Loading

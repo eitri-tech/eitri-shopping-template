@@ -6,12 +6,10 @@ import {
 	HeaderText,
 	cartShippingResolver
 } from 'shopping-vtex-template-shared'
-import ShippingMethods from '../components/Methods/ShippingMethods'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View, Text, Radio, Loading, Divider } from 'eitri-luminus'
 import AddressTypeTabs from '../components/AddressSelector/AddressTypeTabs'
-import PickupPointList from '../components/AddressSelector/PickupPointList'
 import { navigate } from '../services/navigationService'
 import { useState, useEffect } from 'react'
 

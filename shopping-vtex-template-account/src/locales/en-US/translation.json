@@ -40,7 +40,7 @@
 		"passwordRequirementsLowercase": "At least one lowercase letter"
 	},
 	"signIn": {
-		"errosSendAccess": "error sending email",
+		"errorSendAccess": "error sending email",
 		"errorInvalidUser": "Invalid Username or Password",
 		"wrongCredentials": "Incorrect Token",
 		"verifyAgain": "Check the information and try again",

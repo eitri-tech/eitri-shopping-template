@@ -30,7 +30,6 @@ export const formatDateDaysMonthYear = date => {
 export const formatDate = date => {
 	return new Date(date).toLocaleDateString('pt-br')
 }
-
 export default function formatDateMMDDYYYY(isoDate) {
 	if (!isoDate) return ''
 

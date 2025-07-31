@@ -7,6 +7,8 @@ import {
 } from 'shopping-vtex-template-shared'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
+import { sendScreenView } from '../services/TrackingService'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function PasswordResetCode(props) {
 	const [recoveryCode, setRecoveryCode] = useState('')
@@ -16,6 +18,11 @@ export default function PasswordResetCode(props) {
 	const email = props?.location?.state?.email
 
 	const { t } = useTranslation()
+
+	useEffect(() => {
+		addonUserTappedActiveTabListener()
+		sendScreenView('Reset de senha - código', 'PasswordResetCode')
+	}, [])
 
 	const goToPasswordNewPass = () => {
 		if (recoveryCode.length !== RECOVERY_CODE_LENGTH) {

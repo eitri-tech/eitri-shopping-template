@@ -1,10 +1,11 @@
-import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, CustomButton } from 'shopping-vtex-template-shared'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import OrderCard from '../components/OrderCard/OrderCard'
 import { listOrders } from '../services/CustomerService'
 import ProtectedView from '../components/ProtectedView/ProtectedView'
 import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function OrderList(props) {
 	const [orders, setOrders] = useState([])
@@ -18,7 +19,8 @@ export default function OrderList(props) {
 
 	useEffect(() => {
 		handleOrders()
-		sendPageView('Pedidos')
+		addonUserTappedActiveTabListener()
+		sendScreenView('Meus Pedidos', 'OrderList')
 	}, [])
 
 	const handleOrders = async () => {
@@ -59,26 +61,31 @@ export default function OrderList(props) {
 				/>
 
 				{!isLoading && (
-					<View className='p-4'>
-						<>
-							{orders && orders.length >= 1 ? (
-								<InfiniteScroll onScrollEnd={handleOrders}>
-									{orders.map((item, key) => (
-										<OrderCard
-											key={item.orderId}
-											order={item}
-											showOrderDetails={key < MAX_ORDERS_SHOW_DETAILS}
-										/>
-									))}
-								</InfiniteScroll>
-							) : (
-								<NoItem
-									title='Você não possui nenhum pedido'
-									subtitle='Quando você fizer uma compra, ela será listada aqui.'
-								/>
-							)}
-						</>
-					</View>
+					<>
+						<View className='p-4'>
+							<>
+								{orders && orders.length >= 1 ? (
+									<InfiniteScroll
+										onScrollEnd={handleOrders}
+										className={'flex flex-col gap-4'}>
+										{orders.map((item, key) => (
+											<OrderCard
+												key={item.orderId}
+												order={item}
+												showOrderDetails={key < MAX_ORDERS_SHOW_DETAILS}
+											/>
+										))}
+									</InfiniteScroll>
+								) : (
+									<NoItem
+										title='Você não possui nenhum pedido'
+										subtitle='Quando você fizer uma compra, ela será listada aqui.'
+									/>
+								)}
+							</>
+						</View>
+						<BottomInset />
+					</>
 				)}
 			</Page>
 		</ProtectedView>

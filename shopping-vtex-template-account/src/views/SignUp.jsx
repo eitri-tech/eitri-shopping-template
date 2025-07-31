@@ -9,17 +9,18 @@ import {
 } from 'shopping-vtex-template-shared'
 import userIcon from '../assets/icons/user.svg'
 import CCheckbox from '../components/CCheckbox/CCheckbox'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import { getStorePreferences } from '../services/StoreService'
 import { getSavedUser, loginWithEmailAndKey, sendAccessKeyByEmail } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 import Alert from '../components/Alert/Alert'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function SignUp(props) {
 	const [storeConfig, setStoreConfig] = useState(false)
 	const [termsChecked, setTermsChecked] = useState(false)
-	const [email, setEmail] = useState('xeworob583@kloudis.com')
+	const [email, setEmail] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [showLoginErrorAlert, setShowLoginErrorAlert] = useState(false)
 	const [alertMessage, setAlertMessage] = useState('')
@@ -45,7 +46,8 @@ export default function SignUp(props) {
 		}
 
 		loadSavedUser()
-		sendPageView('SignUp')
+		addonUserTappedActiveTabListener()
+		sendScreenView('Cadastro', 'SignUp')
 	}, [])
 
 	useEffect(() => {

@@ -9,6 +9,7 @@ export { default as CustomInput } from './components/CustomInput/CustomInput'
 export { default as HeaderContentWrapper } from './components/Header/HeaderContentWrapper'
 export { default as HeaderSearchIcon } from './components/Header/HeaderSearchIcon'
 export { default as HeaderWishList } from './components/Header/HeaderWishList'
+export { default as HeaderShare } from './components/Header/HeaderShare'
 
 export { default as Loading } from './components/Loading/LoadingComponent'
 export { default as Spacing } from './components/Spacing/Spacing'
@@ -17,3 +18,5 @@ export { default as ProductCardDefault } from './components/ProductCard/ProductC
 export { default as ProductCardFullImage } from './components/ProductCard/ProductCardFullImage'
 export { default as GenericError } from './components/Error/GenericError'
 export { default as cartShippingResolver } from './utils/cartShippingResolver'
+export { default as TrackingService } from './services/TrackingService'
+export { default as BottomInset } from './components/BottomInset/BottomInset'

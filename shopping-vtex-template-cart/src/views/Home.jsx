@@ -7,6 +7,7 @@ import Freight from '../components/Freight/Freight'
 import Coupon from '../components/Coupon/Coupon'
 import CartSummary from '../components/CartSummary/CartSummary'
 import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
+import ActionButton from '../components/ActionButton/ActionButton'
 import { startConfigure } from '../services/AppService'
 import { Page } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
@@ -29,7 +30,7 @@ export default function Home(props) {
 		if (cart && cart.items.length === 0) {
 			Eitri.navigation.navigate({
 				path: 'EmptyCart',
-				state: { showCloseButton: !openWithBottomBar },
+				state: { openWithBottomBar },
 				replace: true
 			})
 		}
@@ -66,14 +67,21 @@ export default function Home(props) {
 				isLoading={appIsLoading}
 			/>
 
-			<View className='py-4 flex flex-col gap-4'>
-				<CartItemsContent />
+			{cart && (
+				<>
+					<View className='py-4 flex flex-col gap-4'>
+						<CartItemsContent />
 
-				<Freight />
+						<Freight />
 
-				<Coupon />
-			</View>
-			<CartSummary />
+						<Coupon />
+
+						<CartSummary />
+					</View>
+
+					<ActionButton />
+				</>
+			)}
 		</Page>
 	)
 }

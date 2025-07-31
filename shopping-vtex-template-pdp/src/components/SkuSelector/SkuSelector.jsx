@@ -6,50 +6,63 @@ export default function SkuSelector(props) {
 
 	useEffect(() => {
 		const selectedVariations = product?.items?.reduce((acc, item) => {
-			item?.variations?.length > 0 &&
-				item?.variations?.forEach(variation => {
-					const accVar = acc.find(foundVariation => foundVariation?.field?.name === variation.name)
-					if (accVar) {
-						if (!accVar.values.some(value => value.name === variation.values?.[0])) {
-							accVar.values.push({
-								name: variation.values?.[0],
-								originalName: variation.values?.[0]
-							})
-						}
-					} else {
-						acc.push({
-							field: {
-								name: variation.name,
-								originalName: variation.name
-							},
-							values: [
-								{
-									name: variation.values?.[0],
-									originalName: variation.values?.[0]
-								}
-							]
-						})
+			if (!item?.variations?.length) return acc
+
+			item.variations.forEach(variation => {
+				// Normaliza a variação para formato objeto padrão
+				const normalizedVariation =
+					typeof variation === 'string' ? { name: variation, values: item[variation] } : variation
+
+				const { name, values } = normalizedVariation
+				if (!name || !values?.[0]) return // Guard clause para dados inválidos
+
+				// Busca variação existente no acumulador
+				let existingVariation = acc.find(v => v.field.name === name)
+
+				if (!existingVariation) {
+					// Cria nova variação se não existir
+					existingVariation = {
+						field: { name, originalName: name },
+						values: []
 					}
-				})
+					acc.push(existingVariation)
+				}
+
+				// Adiciona valor se não existir
+				const valueExists = existingVariation.values.some(v => v.name === values[0])
+				if (!valueExists) {
+					existingVariation.values.push({
+						name: values[0],
+						originalName: values[0]
+					})
+				}
+			})
+
 			return acc
 		}, [])
 		setSkuVariations(selectedVariations)
 	}, [])
 
 	const handleSkuChange = (variationToChange, valueToChange) => {
-		const variationOfCurrentSku = currentSku.variations.map(variation => ({
-			variation: variation.name,
-			value: currentSku[variation.name][0]
-		}))
-		const newDesiredVariation = variationOfCurrentSku.map(variation => {
-			if (variation.variation === variationToChange) {
-				return {
-					variation: variationToChange,
-					value: valueToChange
-				}
+		const variationOfCurrentSku = currentSku.variations.map(variation => {
+			// Normaliza a variação para formato padrão
+			const normalizedVariation =
+				typeof variation === 'string' ? { name: variation, values: currentSku[variation] } : variation
+
+			const { name, values } = normalizedVariation
+
+			return {
+				variation: name,
+				value: values?.[0] || null
 			}
-			return variation
 		})
+
+		const newDesiredVariation = variationOfCurrentSku.map(variation =>
+			variation.variation === variationToChange
+				? { variation: variationToChange, value: valueToChange }
+				: variation
+		)
+
 		onSkuChange(newDesiredVariation)
 	}
 
@@ -62,7 +75,7 @@ export default function SkuSelector(props) {
 			App.configs?.appConfigs?.pdp?.preferImageOnSkuSelectFor?.toLocaleLowerCase() ===
 			sku?.field?.name?.toLocaleLowerCase()
 		) {
-			const findSku = product.items.find(item => item[sku?.field?.name][0] === value?.name)
+			const findSku = product.items.find(item => item[sku?.field?.name]?.[0] === value?.name)
 			return (
 				<View
 					onClick={() => handleSkuChange(sku?.field?.name, value?.name)}
@@ -92,10 +105,10 @@ export default function SkuSelector(props) {
 
 	return (
 		<View className={`flex flex-col gap-2 bg-white rounded shadow-sm border border-gray-300 p-4 w-full`}>
-			{skuVariations?.map((sku, index) => (
-				<View>
-					<Text className='font-bold text-base'>{`${sku?.field?.name}`}</Text>
-					<View className='flex flex-wrap mt-1 gap-2'>
+			{skuVariations?.map(sku => (
+				<View key={sku?.field?.name}>
+					<Text className='text-lg font-semibold'>{`${sku?.field?.name}`}</Text>
+					<View className='flex flex-wrap mt-2 gap-2'>
 						{sku?.values?.map(value => renderOption(sku, value))}
 					</View>
 				</View>

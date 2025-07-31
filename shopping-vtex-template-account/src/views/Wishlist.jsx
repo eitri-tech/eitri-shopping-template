@@ -1,8 +1,9 @@
 import { getWishlist, removeFromWishlist } from '../services/CustomerService'
 import WishlistItem from '../components/WishlistItem/WishlistItem'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function Wishlist(props) {
 	const [wishlistItems, setWishlistItems] = useState([])
@@ -10,18 +11,17 @@ export default function Wishlist(props) {
 
 	useEffect(() => {
 		start()
-		sendPageView('Lista de desejos')
+		addonUserTappedActiveTabListener()
+		sendScreenView('Lista de desejos', 'Wishlist')
 	}, [])
 
 	const start = async () => {
 		try {
 			setIsLoading(true)
 			const result = await getWishlist()
-			console.log('result', result)
 			setWishlistItems(result)
 			setIsLoading(false)
 		} catch (e) {
-			console.log('Error:', e)
 			setWishlistItems([])
 			setIsLoading(false)
 		}
@@ -40,9 +40,7 @@ export default function Wishlist(props) {
 	}
 
 	return (
-		<Page
-			bottomInset
-			topInset>
+		<Page title='Wishlist'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={'Meus favoritos'} />
@@ -53,11 +51,6 @@ export default function Wishlist(props) {
 				fullScreen
 			/>
 
-			{/*
-			  A implementação anterior foi refatorada para usar o sistema de grid do Tailwind.
-			  Isso simplifica o código, corrige um bug de layout com itens ímpares e é mais performático.
-			  O layout de duas colunas é mantido com espaçamento consistente.
-			*/}
 			<View className='grid grid-cols-2 gap-x-2 gap-y-4 p-4'>
 				{wishlistItems?.map(item => (
 					<WishlistItem
@@ -67,13 +60,13 @@ export default function Wishlist(props) {
 					/>
 				))}
 			</View>
-
 			{wishlistItems.length === 0 && !isLoading && (
 				<NoItem
 					title='Você não possui nenhum item salvo'
 					subtitle='Quando você salvar um produto, ele será listado aqui.'
 				/>
 			)}
+			<BottomInset />
 		</Page>
 	)
 }

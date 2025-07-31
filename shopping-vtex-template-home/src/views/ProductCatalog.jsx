@@ -6,11 +6,10 @@ import ProductCatalogContent from '../components/ProductCatalogContent/ProductCa
 
 export default function ProductCatalog(props) {
 	const { location } = props
+	const { t } = useTranslation()
 
 	const title = location.state.title
 	const openInBottomBar = !!location.state.openInBottomBar
-
-	const { t } = useTranslation()
 
 	const [appliedFacets, setAppliedFacets] = useState(null)
 
@@ -43,7 +42,7 @@ export default function ProductCatalog(props) {
 						<HeaderText text={title || t('productCatalog.title')} />
 					</View>
 
-					<HeaderSearchIcon onPress={goToSearch} />
+					<HeaderSearchIcon onClick={goToSearch} />
 				</HeaderContentWrapper>
 
 				{appliedFacets && (

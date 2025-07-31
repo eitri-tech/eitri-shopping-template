@@ -1,40 +1,33 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
 
-let CheckLoginPromise = null
-
 export const requestLogin = () => {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
+		if (await isLoggedIn()) {
+			resolve()
+			return
+		}
+
 		Eitri.nativeNavigation.open({
 			slug: 'account',
-			initParams: { action: 'RequestLogin' }
+			initParams: { action: 'RequestLogin', closeAppAfterLogin: true }
 		})
-		CheckLoginPromise = null
-		Eitri.navigation.setOnResumeListener(resolve)
+		Eitri.navigation.setOnResumeListener(async () => {
+			if (await isLoggedIn()) {
+				resolve()
+			} else {
+				reject('User not logged in')
+			}
+		})
 	})
 }
 
 export const isLoggedIn = async () => {
-	if (CheckLoginPromise) {
-		return CheckLoginPromise
-	}
-	CheckLoginPromise = Vtex.customer.isLoggedIn()
-	return CheckLoginPromise
-}
-
-export const removeItemFromWishlist = async id => {
-	return await Vtex.wishlist.removeItem(id)
-}
-
-export const addToWishlist = async (productId, title, sku) => {
-	if (!(await isLoggedIn())) {
-		await requestLogin()
-		if (!(await isLoggedIn())) {
-			throw new Error('User not logged in')
-		}
-		return await Vtex.wishlist.addItem(productId, title, sku)
-	} else {
-		return await Vtex.wishlist.addItem(productId, title, sku)
+	try {
+		return await Vtex.customer.isLoggedIn()
+	} catch (e) {
+		console.error('Erro ao buscar dados do cliente', e)
+		return false
 	}
 }
 
@@ -50,4 +43,22 @@ export const productOnWishlist = async productId => {
 	} else {
 		return { inList }
 	}
+}
+
+export const removeItemFromWishlist = async id => {
+	return await Vtex.wishlist.removeItem(id)
+}
+
+export const addToWishlist = async (productId, title, sku) => {
+	await requestLogin()
+	return await Vtex.wishlist.addItem(productId, title, sku)
+}
+
+export const savePostalCodeOnStorage = async postalCode => {
+	return await Vtex.customer.setCustomerData('postalCode', postalCode)
+}
+
+export const loadPostalCodeFromStorage = async () => {
+	console.log('lendo do storage')
+	return await Vtex.customer.getCustomerData('postalCode')
 }

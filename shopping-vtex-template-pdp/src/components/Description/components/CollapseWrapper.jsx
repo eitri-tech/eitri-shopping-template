@@ -52,7 +52,7 @@ export default function CollapseWrapper(props) {
 				onClick={() => setCollapsed(!collapsed)}
 				className='cursor-pointer'>
 				<View className='flex items-center justify-between w-full py-2'>
-					<Text className='text-lg font-bold'>{title}</Text>
+					<Text className='text-lg font-semibold'>{title}</Text>
 					<View className='transition-transform duration-200'>
 						{collapsed ? (
 							<ChevronDownIcon

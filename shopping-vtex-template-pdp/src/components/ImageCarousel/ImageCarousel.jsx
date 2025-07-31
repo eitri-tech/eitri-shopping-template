@@ -21,6 +21,8 @@ export default function ImageCarousel(props) {
 						<Carousel.Item key={index}>
 							<View className={`flex justify-center items-center`}>
 								<Image
+									pinchZoom
+									zoomMaxScale={8}
 									fadeIn={500}
 									src={item.imageUrl}
 									width='100vw'
@@ -31,7 +33,7 @@ export default function ImageCarousel(props) {
 				})}
 			</Carousel>
 			{currentSku?.images?.length > 1 && (
-				<View className='flex justify-center gap-2'>
+				<View className='flex justify-center gap-2 mt-1'>
 					{currentSku.images.map((_, index) => (
 						<View
 							key={index}

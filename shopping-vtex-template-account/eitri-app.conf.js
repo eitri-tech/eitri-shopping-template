@@ -2,7 +2,7 @@ module.exports = {
 	'name': 'shopping-vtex-template-account',
 	'title': 'shopping-vtex-template-account',
 	'slug': 'shopping-vtex-template-account',
-	'eitri-luminus': '2.1.3',
+	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
 	'version': '0.1.0',

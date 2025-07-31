@@ -1,22 +1,33 @@
 import userIcon from '../assets/images/user.svg'
 import lockIcon from '../assets/icons/lock.svg'
 import Eitri from 'eitri-bifrost'
-import { Loading, HeaderContentWrapper, HeaderText, CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import {
+	Loading,
+	HeaderContentWrapper,
+	HeaderText,
+	CustomButton,
+	CustomInput,
+	HeaderReturn
+} from 'shopping-vtex-template-shared'
 import {
 	doLogin,
 	getCustomerData,
-	getSavedUser,
+	loadUserEmailFromStorage,
 	loginWithEmailAndKey,
+	saveUserEmailOnStorage,
 	sendAccessKeyByEmail
 } from '../services/CustomerService'
 import Alert from '../components/Alert/Alert'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 import { getLoginProviders } from '../services/StoreService'
 import SocialLogin from '../components/SocialLogin/SocialLogin'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function SignIn(props) {
+	const { t } = useTranslation()
+
 	const redirectTo = props?.location?.state?.redirectTo
 	const closeAppAfterLogin = props?.location?.state?.closeAppAfterLogin
 
@@ -27,32 +38,29 @@ export default function SignIn(props) {
 	const [username, setUsername] = useState('')
 	const [password, setPassword] = useState('')
 	const [loading, setLoading] = useState(false)
-
 	const [showLoginErrorAlert, setShowLoginErrorAlert] = useState(false)
 	const [alertMessage, setAlertMessage] = useState('')
-
 	const [loginMode, setLoginMode] = useState(LOGIN_WITH_EMAIL_AND_PASSWORD)
-
 	const [verificationCode, setVerificationCode] = useState('')
 	const [emailCodeSent, setEmailCodeSent] = useState(false)
 	const [timeOutToResentEmail, setTimeOutToResentEmail] = useState(0)
-
 	const [loadingSendingCode, setLoadingSendingCode] = useState(false)
-
 	const [loginProviders, setLoginProviders] = useState()
 
-	const { t } = useTranslation()
+	useEffect(() => {
+		loadLoginProviders()
+		addonUserTappedActiveTabListener()
+		sendScreenView('Login', 'SignIn')
+	}, [])
 
 	useEffect(() => {
-		const loadSavedUser = async () => {
-			const user = await getSavedUser()
-			if (user && user.email) {
-				setUsername(user.email)
-			}
-		}
-		loadLoginProviders()
-		loadSavedUser()
-		sendPageView('Login')
+		loadUserEmailFromStorage()
+			.then(email => {
+				if (email) {
+					setUsername(email)
+				}
+			})
+			.catch()
 	}, [])
 
 	useEffect(() => {
@@ -90,11 +98,13 @@ export default function SignIn(props) {
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 			setLoadingSendingCode(false)
 		} catch (e) {
-			setAlertMessage(t('signIn.errosSendAccess'))
+			setAlertMessage(t('signIn.errorSendAccess'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)
 			setTimeOutToResentEmail(0)
 			setLoadingSendingCode(false)
+		} finally {
+			saveUserEmailOnStorage(username)
 		}
 	}
 
@@ -123,6 +133,8 @@ export default function SignIn(props) {
 		} catch (e) {
 			setAlertMessage(t('signIn.errorInvalidUser'))
 			setShowLoginErrorAlert(true)
+		} finally {
+			saveUserEmailOnStorage(username)
 		}
 
 		setLoading(false)
@@ -160,7 +172,8 @@ export default function SignIn(props) {
 
 	return (
 		<Page topInset>
-			<HeaderContentWrapper className='justify-between'>
+			<HeaderContentWrapper>
+				<HeaderReturn />
 				<HeaderText text={t('signIn.headerText')} />
 			</HeaderContentWrapper>
 
@@ -305,6 +318,7 @@ export default function SignIn(props) {
 					</>
 				)}
 			</View>
+
 			<Alert
 				show={showLoginErrorAlert}
 				onDismiss={() => setShowLoginErrorAlert(false)}

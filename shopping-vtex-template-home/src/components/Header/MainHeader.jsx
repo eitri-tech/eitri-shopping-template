@@ -1,6 +1,7 @@
 import { HeaderCart, HeaderContentWrapper, HeaderLogo, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
+import { goToCartman } from '../../utils/utils'
 
 export default function MainHeader() {
 	const { cart } = useLocalShoppingCart()
@@ -15,7 +16,9 @@ export default function MainHeader() {
 		<HeaderContentWrapper
 			scrollEffect={true}
 			className='justify-between'>
-			<HeaderLogo />
+			<View onClick={goToCartman}>
+				<HeaderLogo />
+			</View>
 
 			<View className='flex justify-between gap-[12px]'>
 				<HeaderSearchIcon onClick={navigateToSearch} />

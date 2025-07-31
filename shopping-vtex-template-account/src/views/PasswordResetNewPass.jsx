@@ -11,6 +11,8 @@ import Alert from '../components/Alert/Alert'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
 import { setPassword } from '../services/CustomerService'
+import { sendScreenView } from '../services/TrackingService'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function PasswordResetNewPass(props) {
 	const PAGE = 'Reset de senha - Nova senha'
@@ -42,6 +44,11 @@ export default function PasswordResetNewPass(props) {
 			valid: /[a-z]/.test(newPassword)
 		}
 	]
+
+	useEffect(() => {
+		addonUserTappedActiveTabListener()
+		sendScreenView('Reset de senha - nova senha', 'PasswordResetNewPass')
+	}, [])
 
 	const confirmNewPassword = async () => {
 		try {

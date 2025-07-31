@@ -40,7 +40,7 @@
 		"passwordRequirementsLowercase": "Pelo menos uma letra minúscula"
 	},
 	"signIn": {
-		"errosSendAccess": "erro ao enviar email",
+		"errorSendAccess": "erro ao enviar email",
 		"errorInvalidUser": "Usuário ou senha inválidos",
 		"wrongCredentials": "Token incorreto",
 		"verifyAgain": "Verifique as informaçoes e tente novamente",

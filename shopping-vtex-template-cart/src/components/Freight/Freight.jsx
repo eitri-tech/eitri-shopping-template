@@ -1,12 +1,9 @@
-import Eitri from 'eitri-bifrost'
 import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'
-import { simulateCart, resolveZipCode } from '../../services/freigthService'
-import { useState, useEffect } from 'react'
-import { Button } from 'eitri-luminus'
-import { savePostalCodeOnStorage } from '../../services/customerService'
+import { useState } from 'react'
+import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {
 	const { cart, setNewAddress, setFreight } = useLocalShoppingCart()
@@ -16,13 +13,23 @@ export default function Freight(props) {
 	const [isUnavailable, setIsUnavailable] = useState(false)
 	const [messagesError, setMessagesError] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	const [selectedOption, setSelectedOption] = useState('')
 	const [error, setError] = useState(false)
 
 	useEffect(() => {
 		if (cart) {
+			if (!cart?.shippingData?.address) {
+				loadPostalCodeFromStorage().then(postalCode => {
+					if (postalCode) {
+						setZipCode(postalCode)
+						fetchFreight(postalCode)
+					}
+				})
+			} else {
+				setZipCode(cart?.shippingData?.address?.postalCode)
+				fetchFreight(cart?.shippingData?.address?.postalCode)
+			}
 		}
-	}, [cart])
+	}, [])
 
 	const onInputZipCode = e => {
 		setZipCode(e.target.value)
@@ -43,47 +50,38 @@ export default function Freight(props) {
 		setIsLoading(true)
 		try {
 			setError('')
+
 			savePostalCodeOnStorage(zipCode)
 
-			const newCart = await setNewAddress(cart, zipCode)
+			await setNewAddress(cart, zipCode)
 		} catch (error) {
-			console.error('Error fetching freight [1]', error)
+			console.error('Error fetching freight', error)
 			setError(t('freight.errorCalcFreight'))
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
-	const onSetCartFreight = async option => {
-		if (selectedOption !== option.label) {
-			setSelectedOption(option.label)
-			await setCartFreight(option)
-		}
-	}
-
-	const setCartFreight = async option => {
-		try {
-			await updateCartFreight(cart, option)
-		} catch (error) {
-			console.error('setCartFreight Error', error)
-			setError(t('freight.errorEditFreight'))
-		}
-	}
-
 	const handleOptionSelect = async option => {
-		const payload = {
-			clearAddressIfPostalCodeNotFound: true,
-			logisticsInfo: option?.slas?.map(sla => {
-				return {
-					itemIndex: sla.itemIndex,
-					selectedDeliveryChannel: sla.deliveryChannel,
-					selectedSla: sla.id
-				}
-			}),
-			selectedAddresses: cart?.shippingData?.selectedAddresses
+		try {
+			setIsLoading(true)
+			const payload = {
+				clearAddressIfPostalCodeNotFound: true,
+				logisticsInfo: option?.slas?.map(sla => {
+					return {
+						itemIndex: sla.itemIndex,
+						selectedDeliveryChannel: sla.deliveryChannel,
+						selectedSla: sla.id
+					}
+				}),
+				selectedAddresses: cart?.shippingData?.selectedAddresses
+			}
+			await setFreight(payload)
+			setIsLoading(false)
+		} catch (e) {
+			console.log('Error handleOptionSelect', e)
+			setIsLoading(false)
 		}
-		await setFreight(payload)
-		// onSetCartFreight(option)
 	}
 
 	const getMessageError = label => {
@@ -100,9 +98,6 @@ export default function Freight(props) {
 
 	const shipping = cartShippingResolver(cart)
 
-	// console.log('shipping', shipping)
-
-	// Separar opções de entrega e retirada
 	const deliveryOptions = shipping?.options?.filter(option => !option.isPickupInPoint) || []
 	const pickupOptions = shipping?.options?.filter(option => option.isPickupInPoint) || []
 
@@ -146,15 +141,17 @@ export default function Freight(props) {
 					</View>
 				)}
 
-				{shipping && shipping?.options.length > 0 && (
+				{isLoading && <View className={`mt-4 w-full h-[120px] bg-gray-200 rounded animate-pulse`} />}
+
+				{!isLoading && shipping && shipping?.options.length > 0 && (
 					<>
-						{/* Opções de Entrega */}
 						{deliveryOptions.length > 0 && (
 							<View className='mt-4'>
 								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
-									{t('freight.tabDelivery') || 'Entrega'}
+									{t('freight.tabDelivery')}
 								</Text>
-								<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
+
+								<View className='flex flex-col p-4 mt-2 border border-neutral-300 rounded items-center justify-between gap-2'>
 									{deliveryOptions.map((item, index) => (
 										<View
 											key={index}
@@ -162,32 +159,26 @@ export default function Freight(props) {
 											{isUnavailable ? (
 												getMessageError(item?.label)
 											) : (
-												<>
-													{isLoading ? (
-														<View className='w-full flex items-center justify-center'>
-															<Loading />
-														</View>
-													) : (
-														<>
-															<Radio
-																className='radio-primary'
-																checked={item.isCurrent}
-																name='freight-option'
-																value={item?.label}
-																onChange={() => handleOptionSelect(item)}
-															/>
-															<View className='w-full flex flex-col flex-1 ml-3'>
-																<Text className='font-bold'>{item?.label}</Text>
-																<Text className='text-xs text-neutral-500'>
-																	{item?.shippingEstimate}
-																</Text>
-															</View>
-															<View className='flex items-center'>
-																<Text className='font-semibold'>{item?.price}</Text>
-															</View>
-														</>
-													)}
-												</>
+												<View
+													className='flex flex-row items-center w-full'
+													sendFocusToInput>
+													<Radio
+														className='radio-primary'
+														checked={item.isCurrent}
+														name='freight-option'
+														value={item?.label}
+														onChange={() => handleOptionSelect(item)}
+													/>
+													<View className='w-full flex flex-col flex-1 ml-3'>
+														<Text className='font-bold'>{item?.label}</Text>
+														<Text className='text-xs text-neutral-500'>
+															{item?.shippingEstimate}
+														</Text>
+													</View>
+													<View className='flex items-center'>
+														<Text className='font-semibold'>{item?.price}</Text>
+													</View>
+												</View>
 											)}
 										</View>
 									))}
@@ -195,7 +186,6 @@ export default function Freight(props) {
 							</View>
 						)}
 
-						{/* Opções de Retirada */}
 						{pickupOptions.length > 0 && (
 							<View className='mt-4'>
 								<Text className='text-sm font-semibold text-neutral-700 mb-2'>

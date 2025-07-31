@@ -28,6 +28,7 @@ export default function CatalogFilter(props) {
 	const loadFacetsOptions = async selectedFacets => {
 		setFacetsLoading(true)
 		const result = await getProductsFacetsService(selectedFacets)
+		console.log('result', result)
 		setFilterFacets(result)
 		setFacetsLoading(false)
 	}
@@ -81,15 +82,13 @@ export default function CatalogFilter(props) {
 					<View
 						bottomInset={'auto'}
 						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
-						<View className='flex flex-row items-center justify-between border-b border-gray-200'>
+						<View className='flex flex-row items-center justify-between border-b border-gray-300 pb-1'>
 							<Text className='text-lg font-semibold'>{t('categoryPageModal.title')}</Text>
 						</View>
 
 						<View className='flex flex-col gap-4 mt-4'>
 							{filterFacets.map(facet => (
-								<View
-									key={facet.key}
-									className='border-b border-gray-100'>
+								<View key={facet.key}>
 									<Text className='text-base font-medium text-gray-800'>{facet.name}</Text>
 									<View className='flex flex-wrap gap-2 mt-4'>
 										{facet.values.map((value, index) => (

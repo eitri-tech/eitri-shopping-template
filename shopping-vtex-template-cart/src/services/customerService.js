@@ -17,10 +17,6 @@ export const checkWishlistItem = async productId => {
 	}
 }
 
-export const savePostalCodeOnStorage = async postalCode => {
-	await Vtex.customer.setCustomerData('postalCode', postalCode)
-}
-
 export const getPostalCodeOnStorage = async () => {
 	return await Vtex.customer.getCustomerData('postalCode')
 }
@@ -76,4 +72,14 @@ export const removeItemFromWishlist = async id => {
 export const addToWishlist = async (productId, title, sku) => {
 	await requestLogin()
 	return await Vtex.wishlist.addItem(productId, title, sku)
+}
+
+export const savePostalCodeOnStorage = async postalCode => {
+	console.log('salvando no storage', postalCode)
+	return await Vtex.customer.setCustomerData('postalCode', postalCode)
+}
+
+export const loadPostalCodeFromStorage = async () => {
+	console.log('lendo do storage')
+	return await Vtex.customer.getCustomerData('postalCode')
 }

@@ -1,8 +1,5 @@
-import ProductCarousel from '../ProductCarousel/ProductCarousel'
 import { useTranslation } from 'eitri-i18n'
 import { getWhoSawAlsoSaw } from '../../services/productService'
-import ShelfOfProducts from '../ShelfOfProducts/ShelfOfProducts'
-import ShelfOfProductsCarousel from '../ShelfOfProducts/components/ShelfOfProductsCarousel'
 import ProductCard from '../ProductCard/ProductCard'
 
 export default function RelatedProducts(props) {
@@ -20,7 +17,10 @@ export default function RelatedProducts(props) {
 		try {
 			setIsLoading(true)
 			let relatedProducts = await getWhoSawAlsoSaw(productId)
-			setRelatedProducts(relatedProducts)
+			const availableRelatedProducts = relatedProducts.filter(rp => {
+				return rp.items.some(i => i.sellers.some(s => s.commertialOffer.AvailableQuantity > 0))
+			})
+			setRelatedProducts(availableRelatedProducts)
 			return relatedProducts
 		} catch (e) {
 			console.log('loadRelatedProducts: Error', e)
@@ -34,7 +34,7 @@ export default function RelatedProducts(props) {
 	return (
 		<View className='mt-4'>
 			<View className='px-4'>
-				<Text className='text-lg font-bold'>
+				<Text className='text-lg font-semibold'>
 					{isLoading ? t('shelfOfProducts.loading') : t('productBasicTemplate.txtWhoSaw')}
 				</Text>
 			</View>

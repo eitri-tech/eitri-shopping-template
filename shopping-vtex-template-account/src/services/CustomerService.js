@@ -91,3 +91,11 @@ export const listOrders = async page => {
 export const getOrderById = async orderId => {
 	return await Vtex.customer.getOrderById(orderId)
 }
+
+export const saveUserEmailOnStorage = async email => {
+	return await Vtex.customer.setCustomerData('email', email)
+}
+
+export const loadUserEmailFromStorage = async () => {
+	return await Vtex.customer.getCustomerData('email')
+}

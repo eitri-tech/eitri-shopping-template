@@ -30,7 +30,9 @@ export default function Information(props) {
 	const specifications = buildSpecifications(product)
 
 	return (
-		<CollapseWrapper title={t('information.txtInformation')}>
+		<CollapseWrapper
+			title={t('information.txtInformation')}
+			defaultCollapsed={true}>
 			<View>
 				{specifications && (
 					<View>

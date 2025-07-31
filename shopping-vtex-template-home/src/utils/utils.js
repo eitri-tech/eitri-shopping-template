@@ -1,4 +1,5 @@
 import { App } from 'eitri-shopping-vtex-shared'
+import Eitri from 'eitri-bifrost'
 
 export const formatPrice = (price, _locale, _currency) => {
 	if (!price) return ''
@@ -7,4 +8,14 @@ export const formatPrice = (price, _locale, _currency) => {
 	const currency = _currency || App?.configs?.storePreferences?.currencyCode || 'BRL'
 
 	return price.toLocaleString(locale, { style: 'currency', currency: currency })
+}
+
+let cartmantCountdown = 10
+export const goToCartman = () => {
+	if (cartmantCountdown === 0) {
+		Eitri.navigation.navigate({ path: 'Cartman' })
+		cartmantCountdown = 7
+	} else {
+		cartmantCountdown--
+	}
 }

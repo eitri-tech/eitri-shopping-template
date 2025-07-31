@@ -35,12 +35,12 @@
 		"errorCep": "Enter a valid Zip Code",
 		"errorCalcFreight": "Unable to calculate freight",
 		"errorEditFreight": "Unable to modify freight",
-		"txtDelivery": "Delivery",
+		"txtDelivery": "Enter your postal code",
 		"txtCalculate": "Calculate",
 		"labelZipCode": "Zip Code",
 		"txtUnknow": "I don't know my Zip Code",
-		"tabDelivery": "Delivery",
-		"tabPickup": "Pickup",
+		"tabDelivery": "Delivery Options",
+		"tabPickup": "Pickup Option",
 		"noDeliveryOptions": "No delivery options available",
 		"noPickupOptions": "No pickup options available"
 	},
@@ -58,5 +58,11 @@
 	},
 	"cartTemplate": {
 		"labelContinue": "Continue shopping"
-	}
+	},
+  "modal": {
+    "confirm": {
+      "delete": "Delete",
+      "cancel": "Cancel"
+    }
+  }
 }

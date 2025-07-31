@@ -1,8 +1,9 @@
-import { Tracking } from 'shopping-vtex-template-shared'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
-export const sendPageView = async pageName => {
-	Tracking.ga.gtag('event', 'page_view', {
-		page_title: `[account] ${pageName}`,
-		page_path: pageName
-	})
+export const sendScreenView = async (friendlyScreenName, screenFilename) => {
+	try {
+		TrackingService.screenView(friendlyScreenName, screenFilename)
+	} catch (e) {
+		console.log('Error on TrackingService.screenView', e)
+	}
 }

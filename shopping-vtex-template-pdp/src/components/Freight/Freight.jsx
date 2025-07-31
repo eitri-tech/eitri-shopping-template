@@ -1,7 +1,7 @@
-import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
 import fetchFreight from '../../services/freightService'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {
 	const { currentSku } = props
@@ -11,16 +11,15 @@ export default function Freight(props) {
 	const [loading, setLoading] = useState(false)
 
 	useEffect(() => {
-		handleZipCode()
+		loadPostalCodeFromStorage()
+			.then(postalCode => {
+				if (postalCode) {
+					setZipCode(postalCode)
+					handleFreight(postalCode)
+				}
+			})
+			.catch()
 	}, [])
-
-	const handleZipCode = async () => {
-		const postalCodeStorage = await Eitri.sharedStorage.getItem('zipCode')
-		if (postalCodeStorage) {
-			setZipCode(postalCodeStorage)
-			handleFreight(postalCodeStorage)
-		}
-	}
 
 	const onInputZipCode = e => {
 		const value = e.target.value
@@ -33,24 +32,20 @@ export default function Freight(props) {
 		try {
 			let freightOpt = await fetchFreight(zipCode, currentSku)
 			setFreightOptions(freightOpt)
-			setZipCodeOnStorage(zipCode)
+			await savePostalCodeOnStorage(zipCode)
 		} catch (error) {
 			console.error('Error handleFreight', error)
 		}
 		setLoading(false)
 	}
 
-	const setZipCodeOnStorage = async zipCode => {
-		await Eitri.sharedStorage.setItem('zipCode', zipCode)
-	}
-
 	return (
 		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
 			<View className='flex items-center justify-between w-full'>
-				<Text className='text-lg font-bold'>{t('freight.txtCalculate')}</Text>
+				<Text className='text-lg font-semibold'>{t('freight.txtCalculate')}</Text>
 			</View>
 			<View>
-				<View className='flex justify-between items-center w-full gap-2'>
+				<View className='flex justify-between items-center w-full gap-2 mt-2'>
 					<View className='w-2/3'>
 						<CustomInput
 							placeholder={t('freight.labelZipCode')}
@@ -70,13 +65,13 @@ export default function Freight(props) {
 					</View>
 				</View>
 
-				{loading && <View className={`mt-2 w-full h-[100px] bg-gray-200 rounded animate-pulse`} />}
+				{loading && <View className={`mt-3 w-full h-[100px] bg-gray-200 rounded animate-pulse`} />}
 
 				{!loading && freightOptions && freightOptions?.options?.length > 0 && (
-					<View className='flex flex-col items-center justify-between gap-2 mt-2'>
-						{freightOptions?.options.map((item, index) => (
+					<View className='flex flex-col items-center justify-between gap-2 mt-3'>
+						{freightOptions?.options?.map(item => (
 							<View
-								key={index}
+								key={item?.label}
 								className='flex flex flex-col items-center w-full'>
 								<View className='flex items-center justify-between w-full'>
 									<Text className='font-bold'>{item?.label}</Text>

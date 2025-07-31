@@ -1,6 +1,9 @@
 import { CustomButton } from 'shopping-vtex-template-shared'
 import { View, Text, Modal } from 'eitri-luminus'
+import { useTranslation } from 'eitri-i18n'
+
 export default function ModalConfirm(props) {
+	const { t } = useTranslation()
 	const { text, showModal, removeItem, closeModal } = props
 
 	if (!showModal) return null
@@ -15,13 +18,13 @@ export default function ModalConfirm(props) {
 				<Text className='text-center text-lg font-bold mb-6 text-base-content'>{text}</Text>
 				<View className='flex flex-col gap-3 w-full'>
 					<CustomButton
-						label={'Excluir'}
+						label={t('modal.confirm.delete')}
 						className='btn-error btn-block'
 						onClick={removeItem}
 					/>
 					<CustomButton
 						variant='outlined'
-						label={'Cancelar'}
+						label={t('modal.confirm.cancel')}
 						onClick={closeModal}
 					/>
 				</View>

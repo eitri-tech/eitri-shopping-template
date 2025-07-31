@@ -1,13 +1,14 @@
 import Eitri from 'eitri-bifrost'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { useTranslation } from 'eitri-i18n'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'shopping-vtex-template-shared'
 import { formatDate, formatDateDaysMonthYear, formatPriceInCents } from '../utils/utils'
 import OrderStatusBadge from '../components/OrderStatusBadge/OrderStatusBadge'
 import ProtectedView from '../components/ProtectedView/ProtectedView'
-import { sendPageView } from '../services/TrackingService'
 import { getOrderById } from '../services/CustomerService'
 import ImageCard from '../components/Image/ImageCard'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { sendScreenView } from '../services/TrackingService'
 
 // Componente auxiliar para padronizar as seções de detalhes
 const DetailSection = ({ title, children }) => (
@@ -37,7 +38,8 @@ export default function OrderDetails(props) {
 			return
 		}
 
-		sendPageView('Detalhes do pedido')
+		addonUserTappedActiveTabListener()
+		sendScreenView('Detalhes do pedido', 'OrderDetails')
 	}, [])
 
 	const handleOrder = async id => {
@@ -118,7 +120,7 @@ export default function OrderDetails(props) {
 		<ProtectedView
 			afterLoginRedirectTo={'OrderDetails'}
 			redirectState={{ orderId: order?.orderId }}>
-			<Page>
+			<Page title={'Detalhes do pedido'}>
 				<HeaderContentWrapper>
 					<HeaderReturn />
 					<HeaderText text={t('orderDetails.title')} />
@@ -280,6 +282,8 @@ export default function OrderDetails(props) {
 						</View>
 					</View>
 				</View>
+
+				<BottomInset />
 			</Page>
 		</ProtectedView>
 	)

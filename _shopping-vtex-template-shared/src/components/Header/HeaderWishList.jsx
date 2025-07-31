@@ -6,7 +6,7 @@ export default function HeaderWishList(props) {
 	return (
 		<View onClick={onClick}>
 			<WishlistIcon
-				checked={filled}
+				filled={filled}
 				className={className}
 			/>
 		</View>

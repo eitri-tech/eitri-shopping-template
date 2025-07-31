@@ -37,7 +37,7 @@ export default function ProductCardDefault(props) {
 						src={image}
 					/>
 					<View className='absolute top-[5px] right-[5px] bg-white rounded-full flex items-center justify-center h-[32px] w-[32px] z-[98]'>
-						<WishlistIcon checked={isOnWishlist} />
+						<WishlistIcon filled={isOnWishlist} />
 					</View>
 				</View>
 

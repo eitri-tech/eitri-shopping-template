@@ -1,12 +1,8 @@
 import Eitri from 'eitri-bifrost'
 import { View } from 'eitri-luminus'
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import { Loading } from 'shopping-vtex-template-shared'
-import { openCart } from '../services/NavigationService'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { crash, crashLog, sendViewItem } from '../services/trackingService'
-import { getProductById, getProductBySlug, markLastViewedProduct } from '../services/productService'
-import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../services/customerService'
+import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
 import ImageCarousel from '../components/ImageCarousel/ImageCarousel'
 import MainDescription from '../components/MainDescription/MainDescription'
 import SkuSelector from '../components/SkuSelector/SkuSelector'
@@ -21,12 +17,11 @@ import { saveCartIdOnStorage } from '../services/cartService'
 import ActionButton from '../components/ActionButton/ActionButton'
 
 export default function Home() {
-	const { startCart, cart } = useLocalShoppingCart()
+	const { startCart } = useLocalShoppingCart()
+
 	const [product, setProduct] = useState(null)
 	const [isLoading, setIsLoading] = useState(null)
 	const [configLoaded, setConfigLoaded] = useState(false)
-	const [loadingWishlist, setLoadingWishlist] = useState(true)
-	const [itemWishlistId, setItemWishlistId] = useState(-1)
 	const [currentSku, setCurrentSku] = useState(null)
 
 	useEffect(() => {
@@ -65,35 +60,9 @@ export default function Home() {
 
 		await loadCart(startParams)
 
+		sendScreenView('PDP', 'home')
 		sendViewItem(product)
 		markLastViewedProduct(product)
-	}
-
-	const handleSaveFavorite = async () => {
-		setLoadingWishlist(true)
-		if (itemWishlistId === -1) {
-			try {
-				const result = await addToWishlist(product?.productId, product?.productName, product?.items[0]?.itemId)
-				setItemWishlistId(result?.data?.addToList)
-			} catch (e) {
-				console.error('handleSaveFavorite: Error', e)
-			}
-		} else {
-			await removeItemFromWishlist(itemWishlistId)
-			setItemWishlistId(-1)
-		}
-		setLoadingWishlist(false)
-	}
-
-	const handleShare = async linkText => {
-		const { host } = Vtex.configs
-		await Eitri.share.link({
-			url: `${host}/${linkText}/p`
-		})
-	}
-
-	const navigateCart = () => {
-		openCart(cart)
 	}
 
 	const loadProduct = async startParams => {
@@ -123,23 +92,8 @@ export default function Home() {
 			setConfigLoaded(true)
 		} catch (e) {
 			crashLog('Erro ao buscar configurações', e)
-			crash()
+			crashLog()
 		}
-	}
-
-	const isProductInCart = productId => {
-		return cart?.items?.some(productInCart => {
-			return productInCart.productId === productId
-		})
-	}
-
-	const checkIfIsFavorite = async productId => {
-		setLoadingWishlist(true)
-		const { inList, listId } = await productOnWishlist(productId)
-		if (inList) {
-			setItemWishlistId(listId)
-		}
-		setLoadingWishlist(false)
 	}
 
 	const onSkuChange = newDesiredVariations => {
@@ -155,7 +109,10 @@ export default function Home() {
 
 	return (
 		<Page title='Página de produto'>
-			<Header />
+			<Header
+				product={product}
+				configLoaded={configLoaded}
+			/>
 
 			<Loading
 				isLoading={isLoading}
@@ -181,7 +138,7 @@ export default function Home() {
 
 							<Freight currentSku={currentSku} />
 
-							<RichContent product={product} />
+							{/*<RichContent product={product} />*/}
 
 							<DescriptionComponent product={product} />
 

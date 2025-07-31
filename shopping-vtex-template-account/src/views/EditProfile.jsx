@@ -1,5 +1,5 @@
 import { getCustomerData, setCustomerData } from '../services/CustomerService'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import Eitri from 'eitri-bifrost'
 import {
 	CustomButton,
@@ -11,6 +11,7 @@ import {
 } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import formatDateMMDDYYYY from '../utils/utils'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function EditProfile(props) {
 	const [user, setUser] = useState({})
@@ -32,7 +33,8 @@ export default function EditProfile(props) {
 			})
 		}
 
-		sendPageView('Edição')
+		sendScreenView('Editar Perfil', 'EditProfile')
+		addonUserTappedActiveTabListener()
 	}, [])
 
 	const handleInputChange = (target, e) => {

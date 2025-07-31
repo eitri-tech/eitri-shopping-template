@@ -1,8 +1,8 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, HeaderText, Loading, HeaderContentWrapper } from 'shopping-vtex-template-shared'
+import { CustomButton, HeaderText, Loading, HeaderContentWrapper, BottomInset } from 'shopping-vtex-template-shared'
 import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
-import { sendPageView } from '../services/TrackingService'
+import { sendScreenView } from '../services/TrackingService'
 import { useTranslation } from 'eitri-i18n'
 import iconLogout from '../assets/icons/logout.svg'
 import ProfileCardButton from '../components/ProfileCardButton/ProfileCardButton'
@@ -25,6 +25,7 @@ export default function Home(props) {
 
 	useEffect(() => {
 		init()
+		sendScreenView('Perfil', 'Home')
 	}, [])
 
 	const init = async () => {
@@ -148,6 +149,8 @@ export default function Home(props) {
 			<View className='flex justify-center w-full items-center mt-8 mb-4'>
 				<PoweredBy />
 			</View>
+
+			<BottomInset />
 		</Page>
 	)
 }

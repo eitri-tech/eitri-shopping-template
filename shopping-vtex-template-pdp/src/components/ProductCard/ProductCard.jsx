@@ -1,5 +1,5 @@
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { openProduct } from '../../services/NavigationService'
+import { openCart, openProduct } from '../../services/NavigationService'
 import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../services/CustomerService'
 import { formatPrice } from '../../utils/utils'
 import { App } from 'eitri-shopping-vtex-shared'
@@ -51,9 +51,7 @@ export default function ProductCard(props) {
 	}
 
 	const getItemName = () => {
-		if (item) {
-			return item?.nameComplete || item?.name
-		}
+		return product.productName
 	}
 
 	const getItemImage = () => {
@@ -157,7 +155,7 @@ export default function ProductCard(props) {
 			setWishListId(response?.data?.addToList)
 			setLoadingWishlistOp(false)
 		} catch (error) {
-			Tracking.error(error, 'home.productCard.onAddToWishlist')
+			console.error('error on wishlist', error)
 			setIsOnWishlist(false)
 			setLoadingWishlistOp(false)
 		}
@@ -172,7 +170,6 @@ export default function ProductCard(props) {
 		} catch (error) {
 			setLoadingWishlistOp(false)
 			setIsOnWishlist(true)
-			Tracking.error(error, 'home.productCard.onRemoveFromWishlist')
 		}
 	}
 
@@ -182,30 +179,32 @@ export default function ProductCard(props) {
 	}
 
 	const onPressOnWishlist = () => {
-		if (loadingWishlistOp) return
-		if (isOnWishlist) {
-			onRemoveFromWishlist()
-		} else {
-			onAddToWishlist()
-		}
+		try {
+			if (loadingWishlistOp) return
+			if (isOnWishlist) {
+				onRemoveFromWishlist()
+			} else {
+				onAddToWishlist()
+			}
+		} catch (e) {}
 	}
 
-	// const onActionLabel = () => {
-	// 	if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-	// 		return 'Ver produto'
-	// 	}
-	// 	return isItemOnCart() ? 'Remover' : 'Adicionar'
-	// }
+	const getActionLabel = () => {
+		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
+			return 'Comprar'
+		}
+		return isItemOnCart() ? 'Ver carrinho' : 'Comprar'
+	}
 
 	const onPressCartButton = () => {
-		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-			openProduct(product)
-			return
-		}
 		if (loadingCartOp) return
 		if (isItemOnCart()) {
-			removeFromCart()
+			openCart()
 		} else {
+			if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
+				openProduct(product)
+				return
+			}
 			addToCart()
 		}
 	}
@@ -233,7 +232,7 @@ export default function ProductCard(props) {
 		loadingWishlistOp: loadingWishlistOp,
 		loadingCartOp: loadingCartOp,
 		itemQuantity: itemQuantity,
-		actionLabel: 'Comprar',
+		actionLabel: getActionLabel(),
 		onPressOnCard: onPressOnCard,
 		onPressCartButton: onPressCartButton,
 		onPressOnWishlist: onPressOnWishlist,

@@ -3,7 +3,7 @@ import Eitri from 'eitri-bifrost'
 import { Loading } from 'shopping-vtex-template-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
-import { setLanguage, startConfigure } from '../services/AppService'
+import { startConfigure } from '../services/AppService'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
@@ -55,10 +55,8 @@ export default function Home() {
 	}
 
 	return (
-		<View
-			topInset
-			bottomInset>
+		<Page>
 			<Loading fullScreen />
-		</View>
+		</Page>
 	)
 }

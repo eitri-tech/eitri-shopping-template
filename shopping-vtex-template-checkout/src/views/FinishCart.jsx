@@ -1,17 +1,22 @@
 import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { CustomButton, Loading, HeaderContentWrapper, HeaderReturn, HeaderText } from 'shopping-vtex-template-shared'
+import {
+	CustomButton,
+	BottomInset,
+	Loading,
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText
+} from 'shopping-vtex-template-shared'
 import { clearCart, startPayment } from '../services/cartService'
 import Recaptcha from '../services/Recaptcha'
 import UserData from '../components/FinishCart/UserData'
 import SelectedPaymentData from '../components/FinishCart/SelectedPaymentData'
 import DeliveryData from '../components/FinishCart/DeliveryData'
-import { requestLogin } from '../services/navigationService'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
-import CartItems from '../components/CartItems/CartItems'
 
 export default function FinishCart() {
 	const { cart, cardInfo, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
@@ -136,20 +141,21 @@ export default function FinishCart() {
 			</View>
 
 			{/* Botão fixo na parte de baixo */}
-			<View
-				bottomInset={'auto'}
-				className='fixed bottom-0 left-0 w-full z-10 bg-white border-t border-base-200'>
-				<View className='p-4'>
-					<CustomButton
-						label={t('finishCart.labelButton')}
-						onPress={runPaymentScript}
-					/>
+			<View>
+				<View className='fixed bottom-0 left-0 w-full z-10 bg-white border-t border-gray-300'>
+					<View className='p-4'>
+						<CustomButton
+							label={t('finishCart.labelButton')}
+							onPress={runPaymentScript}
+						/>
+					</View>
+					<BottomInset />
 				</View>
-			</View>
 
-			<View bottomInset={'auto'}>
 				<View className='h-[50px] w-full' />
 			</View>
+
+			<BottomInset />
 
 			<Recaptcha
 				ref={recaptchaRef}

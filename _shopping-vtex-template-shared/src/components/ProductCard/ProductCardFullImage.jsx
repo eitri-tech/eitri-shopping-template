@@ -39,13 +39,13 @@ export default function ProductCardFullImage(props) {
 					<View
 						onClick={_onPressOnWishlist}
 						className='absolute top-[8px] right-[5px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
-						<WishlistIcon checked={isOnWishlist} />
+						<WishlistIcon filled={isOnWishlist} />
 					</View>
 				</View>
 
 				<View className={`w-full p-2`}>
-					<View className='mt-2 w-full flex justify-between gap-4'>
-						<Text className='line-clamp-2 font-medium text-xs break-words'>{name}</Text>
+					<View className='mt-2 w-full flex justify-between gap-4 h-[40]px]'>
+						<Text className='line-clamp-2 font-medium text-sm break-words'>{name}</Text>
 					</View>
 
 					<View className='flex flex-col gap-2 mt-1'>
@@ -59,7 +59,7 @@ export default function ProductCardFullImage(props) {
 							</>
 						)}
 
-						<Text className='font-bold text-primary-700 text-sm'>{price}</Text>
+						<Text className='font-bold text-primary-700 text'>{price}</Text>
 
 						{installments ? (
 							<Text className='font-bold text-neutral-500 text-xs'>{installments}</Text>

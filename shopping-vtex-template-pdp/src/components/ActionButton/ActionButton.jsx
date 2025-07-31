@@ -1,8 +1,7 @@
-import { CustomButton } from 'shopping-vtex-template-shared'
+import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart } from '../../services/NavigationService'
-import { formatAmount } from '../../utils/utils'
 
 export default function ActionButton(props) {
 	const { addItem, cart } = useLocalShoppingCart()
@@ -33,7 +32,7 @@ export default function ActionButton(props) {
 
 	return (
 		<>
-			<View className='fixed bottom-0 left-0 right-0 z-[999] bg-white border-t border-neutral-300'>
+			<View className='fixed bottom-0 left-0 right-0 z-[999] bg-white border-t border-gray-300'>
 				<View className='p-4'>
 					<CustomButton
 						onClick={handleButtonClick}
@@ -44,10 +43,7 @@ export default function ActionButton(props) {
 					/>
 				</View>
 
-				<View
-					bottomInset={'auto'}
-					className='w-full'
-				/>
+				<BottomInset />
 			</View>
 			<View>
 				<View className='h-[77px] w-full' />
