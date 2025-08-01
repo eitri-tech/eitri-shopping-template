@@ -1,6 +1,6 @@
 import { Text, View } from 'eitri-luminus'
 export default function SingleBanner(props) {
-	const { data, onPress } = props
+	const { data, onClick } = props
 	const imagesList = data.images
 	return (
 		<View className='relative '>
@@ -13,11 +13,11 @@ export default function SingleBanner(props) {
 			{imagesList && imagesList[0] && (
 				<View
 					key={imagesList[0].imageUrl}
-					onClick={() => onPress(imagesList[0])}
+					onClick={() => onClick(imagesList[0])}
 					className='px-4 flex flex-row w-full'>
 					<Image
 						src={imagesList[0].imageUrl}
-						className='w-full h-full'
+						className='w-full h-full rounded'
 					/>
 				</View>
 			)}

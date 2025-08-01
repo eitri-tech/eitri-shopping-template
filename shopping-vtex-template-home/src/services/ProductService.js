@@ -14,7 +14,31 @@ export const autocompleteSuggestions = async value => {
  * }
  *
  * */
+
 export const getProductsService = async (params, page) => {
+	const PAGE_SIZE = 12
+
+	let from = 1
+	let to = PAGE_SIZE
+
+	if (page) {
+		from = (page - 1) * PAGE_SIZE + 1
+		to = page * PAGE_SIZE
+	}
+
+	const options = {
+		fullText: params?.query || params?.q || '',
+		selectedFacets: params?.facets,
+		orderBy: resolveSortParam(params.sort, true),
+		from,
+		to,
+		hideUnavailableItems: true
+	}
+
+	return await Vtex.searchGraphql.productSearch(options)
+}
+
+export const getProductsServiceRest = async (params, page) => {
 	const facetsPath = params?.facets?.map(facet => `${facet.key}/${facet.value}`).join('/')
 	const options = {
 		query: params?.query || params?.q || '',
@@ -28,6 +52,16 @@ export const getProductsService = async (params, page) => {
 }
 
 export const getProductsFacetsService = async params => {
+	const options = {
+		fullText: params?.query || params?.q || '',
+		selectedFacets: params?.facets,
+		hideUnavailableItems: true
+	}
+
+	return await Vtex.searchGraphql.facets(options)
+}
+
+export const getProductsFacetsServiceRest = async params => {
 	const facetsPath = params?.facets?.map(facet => `${facet.key}/${facet.value}`).join('/')
 	const options = {
 		query: params?.query || params?.q || ''
@@ -39,30 +73,28 @@ export const getProductsFacetsService = async params => {
 }
 
 const formatPriceRangeFacet = facetQueryResult => {
-	return facetQueryResult.facets
-		.filter(facet => !facet.hidden)
-		.map(facet => {
-			if (facet.type === 'PRICERANGE') {
-				return {
-					...facet,
-					values: facet.values.map(value => {
-						return {
-							...value,
-							name: `De ${value?.range?.from?.toLocaleString('pt-br', {
-								style: 'currency',
-								currency: 'BRL'
-							})} à ${value.range.to.toLocaleString('pt-br', {
-								style: 'currency',
-								currency: 'BRL'
-							})}`,
-							value: `${value.range.from}:${value.range.to}`
-						}
-					})
-				}
-			} else {
-				return facet
+	return facetQueryResult.facets.map(facet => {
+		if (facet.type === 'PRICERANGE') {
+			return {
+				...facet,
+				values: facet.values.map(value => {
+					return {
+						...value,
+						name: `De ${value?.range?.from?.toLocaleString('pt-br', {
+							style: 'currency',
+							currency: 'BRL'
+						})} à ${value.range.to.toLocaleString('pt-br', {
+							style: 'currency',
+							currency: 'BRL'
+						})}`,
+						value: `${value.range.from}:${value.range.to}`
+					}
+				})
 			}
-		})
+		} else {
+			return facet
+		}
+	})
 }
 
 export const getProductById = async productId => {

@@ -1,5 +1,5 @@
 export default function BlogCard(props) {
-	const { postImg, post, handleClick, width, textWidth, imgHeight } = props
+	const { postImg, post, handleClick, width, textWidth } = props
 
 	const category = post?._embedded['wp:term'][0][0].name.toUpperCase()
 	const author = post?._embedded?.author[0].name
@@ -9,14 +9,14 @@ export default function BlogCard(props) {
 	return (
 		<View
 			key={post.id}
-			className={`mb-6 min-h-[290px] ${width ? `w-[${width}px]` : 'w-[283px]'}`}
+			className={`min-h-[290px] w-[283px]`}
 			onClick={handleClick}>
-			<View className='flex flex-col w-full rounded-2xl shadow-lg'>
+			<View className='flex flex-col w-full rounded-2xl shadow-md'>
 				<View className='relative'>
-					<View className='min-h-[150px]'>
+					<View className=''>
 						<Image
 							src={postImg}
-							className={`w-full ${imgHeight ? '' : 'h-[168px]'} rounded-t-2xl`}
+							className={`w-full h-[168px] rounded object-cover object-top`}
 							alt={post.title.rendered}
 						/>
 					</View>
@@ -25,14 +25,17 @@ export default function BlogCard(props) {
 					</View>
 				</View>
 				<View className='flex flex-col h-full p-4'>
-					<Text className='my-[4px] mb-[4px] !text-[12px] font-bold leading-tight'>
-						{post.title.rendered}
-					</Text>
+					<View className='h-[48px]'>
+						<Text className='line-clamp-2 font-bold'>{post.title.rendered}</Text>
+					</View>
 
-					<Text
-						className={`line-clamp-3 max-w-[${textWidth || '231px'}] text-support-01 text-xs mb-[4px] font-normal`}>
-						{excerpt}
-					</Text>
+					<View>
+						<Text
+							className={`line-clamp-3 max-w-[${textWidth || '231px'}] text-support-01 text-sm mb-[4px] font-normal`}>
+							{excerpt}
+						</Text>
+					</View>
+
 					<Text className='!text-[10px] mt-auto'>{`Publicado ${author ? `por ${author}` : ''} em ${publishedDate}`}</Text>
 				</View>
 			</View>

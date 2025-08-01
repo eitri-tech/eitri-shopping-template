@@ -15,7 +15,6 @@ export default function ProductCatalog(props) {
 
 	useEffect(() => {
 		const params = location.state.params
-
 		setAppliedFacets(params)
 
 		if (!openInBottomBar) {
@@ -48,7 +47,6 @@ export default function ProductCatalog(props) {
 				{appliedFacets && (
 					<ProductCatalogContent
 						banner={location?.state?.banner}
-						bottomInset={'auto'}
 						params={appliedFacets}
 					/>
 				)}

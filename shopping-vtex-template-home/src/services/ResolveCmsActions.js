@@ -22,7 +22,7 @@ const handleCollectionAction = (value, title, banner) => {
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: {
-			facets: [{ key: 'productClusterIds', value: value }],
+			params: { facets: [{ key: 'productClusterIds', value: value }] },
 			title,
 			banner
 		}
@@ -56,6 +56,7 @@ const handleProductAction = value => {
 }
 
 export const processActions = sliderData => {
+	console.log('processActions >> sliderData >>', sliderData)
 	const action = sliderData?.action
 	switch (action?.type) {
 		case 'legacySearch':

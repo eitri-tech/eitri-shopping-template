@@ -12,8 +12,8 @@ import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View } from 'eitri-luminus'
 import { resolvePostalCode } from '../services/freigthService'
-import { navigate } from '../services/navigationService'
-import { use, useRef, useState } from 'react'
+import { navigate, requestLogin } from '../services/navigationService'
+import { useRef, useState } from 'react'
 import Alert from '../components/Alert'
 
 function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t }) {
@@ -160,7 +160,7 @@ export default function AddressForm(props) {
 
 	const addressId = props.location?.state?.addressId
 
-	const { cart, cartIsLoading, setLogisticInfo } = useLocalShoppingCart()
+	const { cart, cartIsLoading, setLogisticInfo, startCart } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
@@ -190,17 +190,29 @@ export default function AddressForm(props) {
 
 	useEffect(() => {
 		if (addressId) {
-			const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
-			setAddress({
-				...address,
-				..._address
-			})
+			init(addressId)
 		}
 	}, [addressId])
 
 	useEffect(() => {
 		sendPageView(PAGE_NAME)
 	}, [])
+
+	const init = async addressId => {
+		try {
+			if (!cart.canEditData) {
+				await requestLogin()
+				await startCart()
+			}
+			const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
+			setAddress({
+				...address,
+				..._address
+			})
+		} catch (e) {
+			Eitri.navigation.back()
+		}
+	}
 
 	const handleAddressChange = (key, e) => {
 		const { value } = e.target

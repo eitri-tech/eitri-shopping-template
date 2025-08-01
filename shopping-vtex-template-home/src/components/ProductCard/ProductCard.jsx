@@ -111,8 +111,10 @@ export default function ProductCard(props) {
 		try {
 			setLoadingCartOp(true)
 			const newCart = await addItem({ ...item, quantity: itemQuantity })
-			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
+			const itemIndex = newCart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
+			console.log('itemIndex', itemIndex)
 			if (itemIndex > -1) {
+				console.log('itemIndex2')
 				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
 				setItemQuantity(cart?.items?.[itemIndex].quantity)
 			}
@@ -129,10 +131,6 @@ export default function ProductCard(props) {
 		await removeItem(index)
 		setItemInCart(null)
 		setLoadingCartOp(false)
-	}
-
-	const isItemOnCart = () => {
-		return !!itemInCart
 	}
 
 	const onChangeQuantity = async newQuantity => {
@@ -190,15 +188,12 @@ export default function ProductCard(props) {
 	}
 
 	const getActionLabel = () => {
-		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-			return 'Comprar'
-		}
-		return isItemOnCart() ? 'Ver carrinho' : 'Comprar'
+		return itemInCart ? 'Ver carrinho' : 'Comprar'
 	}
 
 	const onPressCartButton = () => {
 		if (loadingCartOp) return
-		if (isItemOnCart()) {
+		if (itemInCart) {
 			openCart()
 		} else {
 			if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
@@ -227,7 +222,7 @@ export default function ProductCard(props) {
 		showListItem: App?.configs?.appConfigs?.productCard?.showListPrice ?? true,
 		price: formatPrice(sellerDefault?.commertialOffer.Price),
 		installments: formatInstallments(sellerDefault),
-		isInCart: isItemOnCart(),
+		isInCart: itemInCart,
 		isOnWishlist: isOnWishlist,
 		loadingWishlistOp: loadingWishlistOp,
 		loadingCartOp: loadingCartOp,

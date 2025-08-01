@@ -19,7 +19,6 @@ export default function ProductCatalogContent(props) {
 	 *  sort: string
 	 * }
 	 * */
-
 	const { params, hideFilters, banner, ...rest } = props
 
 	const [productLoading, setProductLoading] = useState(false)
@@ -30,9 +29,12 @@ export default function ProductCatalogContent(props) {
 	const [currentPage, setCurrentPage] = useState(1)
 	const [pagesHasEnded, setPageHasEnded] = useState(false)
 
+	const [minPriceRange, setMinPriceRange] = useState(null)
+	const [maxPriceRange, setMaxPriceRange] = useState(null)
+
 	useEffect(() => {
 		if (params) {
-			params.sort = params.sort || getDefaultSortParam()
+			params.sort = params.sort || getDefaultSortParam(true)
 
 			setInitialFilters(params)
 			setAppliedFacets(params)
@@ -112,6 +114,10 @@ export default function ProductCatalogContent(props) {
 				<>
 					<View className='p-4 flex flex-between gap-4 w-full'>
 						<CatalogFilter
+							minPriceRange={minPriceRange}
+							setMinPriceRange={setMinPriceRange}
+							maxPriceRange={maxPriceRange}
+							setMaxPriceRange={setMaxPriceRange}
 							currentFilters={appliedFacets}
 							onFilterChange={handleFilterChange}
 							onFilterClear={onFilterClear}
