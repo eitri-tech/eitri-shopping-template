@@ -14,11 +14,11 @@ module.exports = {
 	'eitri-app-dependencies': {
 		'shopping-vtex-template-shared': {
 			isEitriAppShared: true,
-			version: '0.1.3'
+			version: '0.1.5'
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
-			version: '1.2.1'
+			version: '1.2.3'
 		},
 		'i18n': {
 			version: '14.1.2'

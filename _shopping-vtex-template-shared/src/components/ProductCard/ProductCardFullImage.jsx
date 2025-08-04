@@ -44,7 +44,7 @@ export default function ProductCardFullImage(props) {
 				</View>
 
 				<View className={`w-full p-2`}>
-					<View className='mt-2 w-full flex justify-between gap-4 h-[40]px]'>
+					<View className='mt-2 w-full flex justify-between gap-4 h-[40px]'>
 						<Text className='line-clamp-2 font-medium text-sm break-words'>{name}</Text>
 					</View>
 

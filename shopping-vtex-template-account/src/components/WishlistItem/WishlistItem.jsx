@@ -13,7 +13,7 @@ export default function WishlistItem(props) {
 	const init = async () => {
 		try {
 			const product = await getProductById(productId)
-			console.log(product)
+			console.log('productId', productId)
 			setProduct(product)
 		} catch (e) {
 			console.error('Erro ao buscar produto', e)

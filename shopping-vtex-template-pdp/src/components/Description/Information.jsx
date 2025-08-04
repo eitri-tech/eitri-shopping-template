@@ -1,19 +1,19 @@
-import { Spacing, Divisor } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import CollapseWrapper from './components/CollapseWrapper'
+import { App } from 'eitri-shopping-vtex-shared'
+
 export default function Information(props) {
 	const { product } = props
 	const { t } = useTranslation()
 
 	const buildSpecifications = product => {
-		let result = {}
-		const isExcluded = name => ['Conteudo Enriquecido', 'sellerId'].includes(name)
-		if (product?.allSpecifications) {
-			product?.allSpecifications?.forEach(element => {
-				if (!isExcluded(element)) {
-					result[element] = product[element]
-				}
-			})
+		let result = []
+
+		const hiddenProperties = App?.configs?.appConfigs?.pdp?.hiddenProperties
+
+		const isExcluded = name => hiddenProperties?.includes(name)
+		if (product?.properties) {
+			return product?.properties?.filter(element => !isExcluded(element.name))
 		} else {
 			// Quando o produto vem através do intelligenceSearch a forma de pegar as especificações são diferente
 			let allSpecifications = product?.specificationGroups?.find(
@@ -27,6 +27,7 @@ export default function Information(props) {
 		}
 		return [result]
 	}
+
 	const specifications = buildSpecifications(product)
 
 	return (
@@ -34,37 +35,21 @@ export default function Information(props) {
 			title={t('information.txtInformation')}
 			defaultCollapsed={true}>
 			<View>
-				{specifications && (
-					<View>
-						{specifications.map((specification, index) => (
-							<View key={index}>
-								{Object.entries(specification).map(([key, value]) => (
-									<View
-										key={key}
-										className='mb-1'>
-										<View>
-											<Text className='font-bold text-neutral-content mr-1'>{`${key}: `}</Text>
-										</View>
-										{value.length > 1 ? (
-											<View>
-												{value.map((item, index) => (
-													<View
-														key={index}
-														className='flex flex-col'>
-														<Text className='mr-1'>{item}</Text>
-													</View>
-												))}
-											</View>
-										) : (
-											<Text>{value}</Text>
-										)}
-									</View>
-								))}
-							</View>
-						))}
-						<Spacing height='20px' />
+				{specifications?.map((specification, index) => (
+					<View
+						key={specification.name}
+						className='mb-1'>
+						<View>
+							<Text className='font-bold text-neutral-content mr-1'>{`${specification.name}: `}</Text>
+						</View>
+
+						<View
+							key={index}
+							className='flex flex-col'>
+							<HTMLRender html={specification.values.join(', ')} />
+						</View>
 					</View>
-				)}
+				))}
 			</View>
 		</CollapseWrapper>
 	)

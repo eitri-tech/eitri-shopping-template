@@ -73,13 +73,18 @@ export default function SignIn(props) {
 	}, [timeOutToResentEmail])
 
 	const loadLoginProviders = async () => {
-		setLoadingLoginProviders(true)
-		const providers = await getLoginProviders()
-		if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
-			setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
+		try {
+			setLoadingLoginProviders(true)
+			const providers = await getLoginProviders()
+			if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
+				setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
+			}
+			setLoginProviders(providers)
+			setLoadingLoginProviders(false)
+		} catch (e) {
+			console.error('Erro ao carregar provedores de login', e)
+			setLoadingLoginProviders(false)
 		}
-		setLoginProviders(providers)
-		setLoadingLoginProviders(false)
 	}
 
 	const goToPasswordReset = () => {
@@ -306,20 +311,22 @@ export default function SignIn(props) {
 					</View>
 				)}
 
-				{Eitri.canIUse('23') && (
-					<>
-						<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
-							<View className='h-px flex-1 bg-gray-300' />
-							<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
-							<View className='h-px flex-1 bg-gray-300' />
-						</View>
+				{Eitri.canIUse('23') &&
+					loginProviders?.oAuthProviders &&
+					loginProviders?.oAuthProviders?.length > 0 && (
+						<>
+							<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
+								<View className='h-px flex-1 bg-gray-300' />
+								<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
+								<View className='h-px flex-1 bg-gray-300' />
+							</View>
 
-						<SocialLogin
-							oAuthProviders={loginProviders?.oAuthProviders}
-							handleSocialLogin={handleSocialLogin}
-						/>
-					</>
-				)}
+							<SocialLogin
+								oAuthProviders={loginProviders?.oAuthProviders}
+								handleSocialLogin={handleSocialLogin}
+							/>
+						</>
+					)}
 			</View>
 
 			<Alert

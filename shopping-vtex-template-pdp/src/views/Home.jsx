@@ -15,6 +15,7 @@ import { startConfigure } from '../services/AppService'
 import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
 import ActionButton from '../components/ActionButton/ActionButton'
+import { getProductById, getProductBySlug } from '../services/productService'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
@@ -71,7 +72,7 @@ export default function Home() {
 				return await getProductById(startParams.productId)
 			}
 			if (startParams.slug) {
-				return await getProductBySlug(startParams.productId)
+				return await getProductBySlug(startParams.slug)
 			}
 		} catch (e) {
 			console.error('loadProduct: Error', e)

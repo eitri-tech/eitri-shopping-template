@@ -64,7 +64,7 @@ export default function FinishCart() {
 		}
 	}, [cart])
 
-	const runPaymentScript = async () => {
+	const runPaymentScript = async isRetry => {
 		try {
 			setIsLoading(true)
 
@@ -91,10 +91,10 @@ export default function FinishCart() {
 			Eitri.navigation.navigate('../ExternalProviderOrder', { paymentResult })
 		} catch (error) {
 			const errorCode = error.response?.data?.error?.code
-			if (errorCode === 'CHK003' || errorCode === 'CHK0087') {
+			if (!isRetry && (errorCode === 'CHK003' || errorCode === 'CHK0087' || errorCode === 'ORD062')) {
 				try {
 					await requestLogin()
-					await runPaymentScript()
+					await runPaymentScript(true)
 				} catch (e) {}
 			}
 
@@ -146,7 +146,7 @@ export default function FinishCart() {
 				<>
 					{error.state && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text color='text-sm text-red-600 font-medium'>
+							<Text className='text-sm text-red-600 font-medium'>
 								{error.message || 'Houve um erro ao fechar o pedido'}
 							</Text>
 						</View>
@@ -176,8 +176,6 @@ export default function FinishCart() {
 					)}
 
 					<View className='flex flex-col gap-4'>
-						<CartSummary />
-
 						{cart && <UserData />}
 
 						{unavailableItems.length === 0 && (
@@ -190,6 +188,8 @@ export default function FinishCart() {
 								/>
 							</>
 						)}
+
+						<CartSummary />
 					</View>
 				</>
 			</View>

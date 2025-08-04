@@ -2,19 +2,15 @@ import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
 
 export const getProductById = async productId => {
-	return Vtex.catalog.getProductById(productId)
+	return Vtex.searchGraphql.product({
+		identifier: { field: 'id', value: productId }
+	})
 }
 
 export const getProductBySlug = async slug => {
-	return Vtex.catalog.getProductBySlug(slug)
-}
-
-export const getSimilarProducts = async productId => {
-	return Vtex.catalog.getSimilarProducts(productId)
-}
-
-export const getSearchProducts = async productId => {
-	return Vtex.catalog.getSearchProducts(productId)
+	return Vtex.searchGraphql.product({
+		identifier: { field: 'slug', value: slug }
+	})
 }
 
 export const getWhoSawAlsoSaw = async productId => {
@@ -44,17 +40,4 @@ export const markLastViewedProduct = async product => {
 	} else {
 		await Eitri.sharedStorage.setItemJson(key, [{ productId: product.productId, date: new Date().toISOString() }])
 	}
-}
-
-export const findSpecificationValue = (product, specificationName) => {
-	if (product[specificationName]) {
-		return product[specificationName]
-	}
-
-	const specification = product?.specificationGroups?.reduce((acc, specificationGroup) => {
-		if (acc) return acc
-		return specificationGroup?.specifications?.find(spec => spec.name === specificationName)
-	}, null)
-
-	return specification?.values ?? ''
 }

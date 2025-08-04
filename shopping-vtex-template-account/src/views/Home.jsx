@@ -4,7 +4,6 @@ import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerServi
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
 import { useTranslation } from 'eitri-i18n'
-import iconLogout from '../assets/icons/logout.svg'
 import ProfileCardButton from '../components/ProfileCardButton/ProfileCardButton'
 import { startConfigure } from '../services/AppService'
 import PoweredBy from '../components/PoweredBy/PoweredBy'
@@ -140,10 +139,6 @@ export default function Home(props) {
 					<CustomButton
 						variant='outlined'
 						label={t('home.labelLeave')}
-						iconKey='log-out'
-						icon={iconLogout}
-						iconPosition='right'
-						iconJustify='between'
 						onPress={_doLogout}
 					/>
 				</View>
