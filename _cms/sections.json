@@ -39,17 +39,14 @@
                     "title": "Tipo de ação",
                     "enumNames": [
                       "Nenhum",
-                      "Abrir Link",
-                      "Abrir Produto",
-                      "Abrir Coleção",
-                      "Abrir Categoria",
-                      "Abrir Busca",
-                      "Abrir Página",
-                      "Abrir Modal",
-                      "Abrir Eitri App",
-                      "Abrir Path",
-                      "Abrir Marca",
-                      "Abrir Busca Legada"
+                      "Abrir Link Externo",
+                      "Abrir Produto (id ou slug)",
+                      "Abrir Coleção (Id da coleção)",
+                      "Abrir Categoria (cate1/cat2/cat3...)",
+                      "Abrir Busca (termo de busca)",
+                      "Abrir Landing Page (nome da landing page)",
+                      "Abrir Path do Site",
+                      "Abrir Marca"
                     ],
                     "enum": [
                       "none",
@@ -59,98 +56,49 @@
                       "category",
                       "search",
                       "page",
-                      "modal",
-                      "openEitriApp",
                       "path",
-                      "brand",
-                      "legacySearch"
+                      "brand"
                     ],
                     "default": "none"
-                  },
-                  "title": {
-                    "title": "Título no header da tela de destino",
-                    "type": "string"
                   },
                   "value": {
                     "title": "Valor",
                     "type": "string"
                   },
-                  "extraFields": {
-                    "title": "Campos Extras",
-                    "type": "array",
-                    "maxItems": 5,
-                    "items": {
-                      "title": "Campos Extras",
-                      "type": "object",
-                      "properties": {
-                        "key": {
-                          "title": "Chave",
-                          "type": "string"
-                        },
-                        "value": {
-                          "title": "Valor",
-                          "type": "string"
-                        }
-                      }
-                    }
+                  "sort": {
+                    "title": "Sort",
+                    "description": "Items order",
+                    "default": "score:desc",
+                    "enum": [
+                      "discount:desc",
+                      "name:asc",
+                      "name:desc",
+                      "orders:desc",
+                      "price:asc",
+                      "price:desc",
+                      "release:desc",
+                      "score:desc"
+                    ],
+                    "enumNames": [
+                      "Desconto: do maior para o menor",
+                      "Nome: A-Z",
+                      "Nome: Z-A",
+                      "Pedidos: do maior para o menor",
+                      "Preço: do menor para o maior",
+                      "Preço: do maior para o menor",
+                      "Lançamento: do mais novo para o mais antigo",
+                      "Relevância: do maior para o menor"
+                    ]
+                  },
+                  "title": {
+                    "title": "Título (opcional)",
+                    "type": "string"
                   }
                 }
-              },
-              "subLabel": {
-                "title": "Título abaixo da imagem (opcional)",
-                "type": "string"
-              },
-              "sort": {
-                "title": "Sort",
-                "description": "Items order",
-                "default": "score:desc",
-                "enum": [
-                  "discount:desc",
-                  "name:asc",
-                  "name:desc",
-                  "orders:desc",
-                  "price:asc",
-                  "price:desc",
-                  "release:desc",
-                  "score:desc"
-                ],
-                "enumNames": [
-                  "Discount: higher to lower",
-                  "Name: A-Z",
-                  "Name: Z-A",
-                  "Orders: higher to lower",
-                  "Price: lower to higher",
-                  "Price: higher to lower",
-                  "Release date: newer to older",
-                  "Relevance: higher to lower"
-                ]
-              },
-              "description": {
-                "title": "Texto Descrição (opcional) ",
-                "type": "string"
               },
               "mktTag": {
                 "title": "Tag de Marketing (nome do evento de clique)",
                 "type": "string"
-              },
-              "extra": {
-                "title": "Informações Extras",
-                "type": "array",
-                "maxItems": 5,
-                "items": {
-                  "title": "Informação Extra",
-                  "type": "object",
-                  "properties": {
-                    "key": {
-                      "title": "Chave",
-                      "type": "string"
-                    },
-                    "value": {
-                      "title": "Valor",
-                      "type": "string"
-                    }
-                  }
-                }
               },
               "remoteConfigKey": {
                 "title": "Chave de hiperpersonalização Eitri",
@@ -160,10 +108,15 @@
             }
           }
         },
+        "autoPlay": {
+          "title": "Rolar automaticamente",
+          "type": "boolean",
+          "default": true
+        },
         "aspectRatio": {
-          "title": "Aspect Ratio da image",
+          "title": "Aspect Ratio da image (4:3)",
           "type": "string",
-          "default": "4:3"
+          "default": ""
         },
         "mode": {
           "title": "Modo de exibição",
@@ -173,10 +126,7 @@
             "Lista de banners",
             "Lista de banners arredondados",
             "Lista em Grade",
-            "Caber na tela",
-            "Fullscreen",
-            "Banner Video Player",
-            "BannerFashion"
+            "Caber na tela"
           ],
           "enum": [
             "SliderHero",
@@ -184,10 +134,7 @@
             "BannerList",
             "RoundedBannerList",
             "GridList",
-            "FitOnScreen",
-            "FullScreen",
-            "BannerVideoPlayer",
-            "BannerFashion"
+            "FitOnScreen"
           ],
           "default": "SliderHero"
         },
@@ -205,10 +152,97 @@
             }
           }
         },
-        "autoPlay": {
-          "title": "Rolar automaticamente",
-          "type": "boolean",
-          "default": true
+        "remoteConfigKey": {
+          "title": "Chave de hiperpersonalização Eitri",
+          "type": "string",
+          "description": "Chave para hiperpersonalização Eitri"
+        }
+      }
+    }
+  },
+  {
+    "name": "ProductShelf",
+    "requiredScopes": [],
+    "schema": {
+      "title": "Prateleira de Produtos",
+      "description": "Add custom shelves to your store",
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "title": "Title"
+        },
+        "term": {
+          "type": "string",
+          "title": "Termo de busca dos produtos (opcional)"
+        },
+        "facets": {
+          "title": "Facets",
+          "type": "array",
+          "items": {
+            "title": "Facet",
+            "type": "object",
+            "required": [
+              "key",
+              "value"
+            ],
+            "properties": {
+              "key": {
+                "title": "Key",
+                "description": "Para coleção use: productClusterIds",
+                "type": "string",
+                "default": "productClusterIds"
+              },
+              "value": {
+                "title": "Value",
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        },
+        "mode": {
+          "title": "Modo de exibição",
+          "enumNames": [
+            "Carrossel",
+            "Scroll Horizontal"
+          ],
+          "enum": [
+            "carousel",
+            "scroll"
+          ],
+          "default": "scroll"
+        },
+        "sort": {
+          "title": "Sort",
+          "description": "Items order",
+          "default": "score:desc",
+          "enum": [
+            "discount:desc",
+            "name:asc",
+            "name:desc",
+            "orders:desc",
+            "price:asc",
+            "price:desc",
+            "release:desc",
+            "score:desc"
+          ],
+          "enumNames": [
+            "Desconto: do maior para o menor",
+            "Nome: A-Z",
+            "Nome: Z-A",
+            "Pedidos: do maior para o menor",
+            "Preço: do menor para o maior",
+            "Preço: do maior para o menor",
+            "Lançamento: mais recentes primeiro",
+            "Relevância: da maior para a menor"
+          ]
+        },
+        "numberOfItems": {
+          "type": "integer",
+          "title": "Total number of items",
+          "default": 8,
+          "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
         },
         "remoteConfigKey": {
           "title": "Chave de hiperpersonalização Eitri",
@@ -258,99 +292,6 @@
     }
   },
   {
-    "name": "ProductShelf",
-    "requiredScopes": [],
-    "schema": {
-      "title": "Prateleira de Produtos",
-      "description": "Add custom shelves to your store",
-      "type": "object",
-      "properties": {
-        "title": {
-          "type": "string",
-          "title": "Title"
-        },
-        "numberOfItems": {
-          "type": "integer",
-          "title": "Total number of items",
-          "default": 8,
-          "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
-        },
-        "sort": {
-          "title": "Sort",
-          "description": "Items order",
-          "default": "score:desc",
-          "enum": [
-            "discount:desc",
-            "name:asc",
-            "name:desc",
-            "orders:desc",
-            "price:asc",
-            "price:desc",
-            "release:desc",
-            "score:desc"
-          ],
-          "enumNames": [
-            "Desconto: do maior para o menor",
-            "Nome: A-Z",
-            "Nome: Z-A",
-            "Pedidos: do maior para o menor",
-            "Preço: do menor para o maior",
-            "Preço: do maior para o menor",
-            "Lançamento: mais recentes primeiro",
-            "Relevância: da maior para a menor"
-          ]
-        },
-        "term": {
-          "type": "string",
-          "title": "Search term"
-        },
-        "facets": {
-          "title": "Facets",
-          "type": "array",
-          "items": {
-            "title": "Facet",
-            "type": "object",
-            "required": [
-              "key",
-              "value"
-            ],
-            "properties": {
-              "key": {
-                "title": "Key",
-                "description": "For collections use: productClusterIds",
-                "type": "string",
-                "default": "productClusterIds"
-              },
-              "value": {
-                "title": "Value",
-                "description": "E.g. For 'Most Wanted' collection, use: 140. To consult your collection ids go to Collections page",
-                "type": "string",
-                "default": ""
-              }
-            }
-          }
-        },
-        "mode": {
-          "title": "Modo de exibição",
-          "enumNames": [
-            "Carrossel",
-            "Scroll Horizontal"
-          ],
-          "enum": [
-            "carousel",
-            "scroll"
-          ],
-          "default": "scroll"
-        },
-        "remoteConfigKey": {
-          "title": "Chave de hiperpersonalização Eitri",
-          "type": "string",
-          "description": "Chave para hiperpersonalização Eitri"
-        }
-      }
-    }
-  },
-  {
     "name": "ProductTiles",
     "requiredScopes": [],
     "schema": {
@@ -359,42 +300,48 @@
       "type": "object",
       "properties": {
         "title": {
-          "title": "Title",
+          "title": "Título da prateleira",
           "type": "string"
         },
-        "shelfs": {
+        "shelves": {
           "title": "Prateleiras",
           "type": "array",
           "items": {
             "title": "Prateleira",
             "type": "object",
-            "required": [
-              "title",
-              "numberOfItems",
-              "sort"
-            ],
             "properties": {
               "title": {
-                "title": "Título",
-                "type": "string"
+                "type": "string",
+                "title": "Title"
               },
-              "numberOfItems": {
-                "title": "Quantidade total de itens",
-                "type": "integer",
-                "default": 5,
-                "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
+              "term": {
+                "type": "string",
+                "title": "Termo de busca dos produtos (opcional)"
               },
-              "itemsPerPage": {
-                "title": "Number of items per page",
-                "type": "integer",
-                "default": 5,
-                "description": "Number of items to display per page in carousel"
-              },
-              "after": {
-                "title": "After",
-                "type": "integer",
-                "default": "0",
-                "description": "Initial pagination item"
+              "facets": {
+                "title": "Facets",
+                "type": "array",
+                "items": {
+                  "title": "Facet",
+                  "type": "object",
+                  "required": [
+                    "key",
+                    "value"
+                  ],
+                  "properties": {
+                    "key": {
+                      "title": "Key",
+                      "description": "Para coleção use: productClusterIds",
+                      "type": "string",
+                      "default": "productClusterIds"
+                    },
+                    "value": {
+                      "title": "Value",
+                      "type": "string",
+                      "default": ""
+                    }
+                  }
+                }
               },
               "sort": {
                 "title": "Sort",
@@ -421,97 +368,29 @@
                   "Relevância: da maior para a menor"
                 ]
               },
-              "term": {
-                "title": "Search term",
-                "type": "string"
+              "numberOfItems": {
+                "type": "integer",
+                "title": "Total number of items",
+                "default": 8,
+                "description": "Total number of items. The quantity may be smaller if the query returns fewer products."
               },
-              "facets": {
-                "title": "Facets",
-                "type": "array",
-                "items": {
-                  "title": "Facet",
-                  "type": "object",
-                  "required": [
-                    "key",
-                    "value"
-                  ],
-                  "properties": {
-                    "key": {
-                      "title": "Key",
-                      "description": "For collections use: productClusterIds",
-                      "type": "string",
-                      "default": "productClusterIds"
-                    },
-                    "value": {
-                      "title": "Value",
-                      "description": "E.g. For 'Most Wanted' collection, use: 140. To consult your collection ids go to Collections page",
-                      "type": "string",
-                      "default": ""
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  {
-    "name": "CategoryShelf",
-    "requiredScopes": [],
-    "schema": {
-      "title": "Prateleira de Categorias",
-      "type": "object",
-      "description": "Componente de prateleira de categorias",
-      "properties": {
-        "title": {
-          "title": "Título",
-          "type": "string"
-        },
-        "shelves": {
-          "title": "Categorias",
-          "type": "array",
-          "items": {
-            "title": "Categoria",
-            "type": "object",
-            "properties": {
-              "title": {
-                "title": "Nome",
-                "type": "string"
-              },
-              "imageUrl": {
-                "title": "Imagem",
+              "remoteConfigKey": {
+                "title": "Chave de hiperpersonalização Eitri",
                 "type": "string",
-                "widget": {
-                  "ui:widget": "media-gallery"
-                }
-              },
-              "width": {
-                "title": "Largura",
-                "type": "number"
-              },
-              "height": {
-                "title": "Altura",
-                "type": "number"
-              },
-              "facets": {
-                "title": "Facets de destino",
-                "type": "string"
+                "description": "Chave para hiperpersonalização Eitri"
               }
             }
           }
         },
         "mode": {
           "title": "Modo de exibição",
-          "type": "string",
           "enumNames": [
-            "Com scroll horizontal",
-            "Caber na tela"
+            "Carrossel",
+            "Scroll Horizontal"
           ],
           "enum": [
-            "scroll",
-            "fitOnScreen"
+            "carousel",
+            "scroll"
           ],
           "default": "scroll"
         }
@@ -601,54 +480,6 @@
     }
   },
   {
-    "name": "CategoryTiles",
-    "requiredScopes": [],
-    "schema": {
-      "title": "Banners de categorias",
-      "description": "Faça filtros pre-definidos para a prateleira de categorias",
-      "type": "object",
-      "properties": {
-        "title": {
-          "title": "Title",
-          "type": "string"
-        },
-        "content": {
-          "title": "Prateleiras",
-          "type": "array",
-          "items": {
-            "title": "Prateleira",
-            "type": "object",
-            "properties": {
-              "title": {
-                "title": "Título",
-                "type": "string"
-              },
-              "imageUrl": {
-                "title": "Mídia",
-                "type": "string",
-                "widget": {
-                  "ui:widget": "media-gallery"
-                }
-              },
-              "width": {
-                "title": "Altura da imagem",
-                "type": "integer"
-              },
-              "height": {
-                "title": "Largura da imagem",
-                "type": "integer"
-              },
-              "facets": {
-                "title": "Facets",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  {
     "name": "CategoryTree",
     "requiredScopes": [],
     "schema": {
@@ -656,7 +487,7 @@
       "description": "Faça filtros pre-definidos para a prateleira de categorias",
       "type": "object",
       "properties": {
-        "shelfs": {
+        "shelves": {
           "title": "Prateleiras",
           "type": "array",
           "items": {
@@ -692,66 +523,74 @@
                       }
                     },
                     "color": {
-                      "title": "Cor",
+                      "title": "Cor de fundo Tailwind (opcional)",
                       "type": "string",
-                      "enumNames": [
-                        "primary-100",
-                        "primary-300",
-                        "primary-500",
-                        "primary-700",
-                        "primary-900",
-                        "secondary-100",
-                        "secondary-300",
-                        "secondary-500",
-                        "secondary-700",
-                        "secondary-900",
-                        "tertiary-100",
-                        "tertiary-300",
-                        "tertiary-500",
-                        "tertiary-700",
-                        "tertiary-900",
-                        "accent-100",
-                        "accent-300",
-                        "accent-500",
-                        "accent-700",
-                        "accent-900",
-                        "neutral-100",
-                        "neutral-300",
-                        "neutral-500",
-                        "neutral-700",
-                        "neutral-900"
-                      ],
-                      "enum": [
-                        "primary-100",
-                        "primary-300",
-                        "primary-500",
-                        "primary-700",
-                        "primary-900",
-                        "secondary-100",
-                        "secondary-300",
-                        "secondary-500",
-                        "secondary-700",
-                        "secondary-900",
-                        "tertiary-100",
-                        "tertiary-300",
-                        "tertiary-500",
-                        "tertiary-700",
-                        "tertiary-900",
-                        "accent-100",
-                        "accent-300",
-                        "accent-500",
-                        "accent-700",
-                        "accent-900",
-                        "neutral-100",
-                        "neutral-300",
-                        "neutral-500",
-                        "neutral-700",
-                        "neutral-900"
-                      ]
+                      "default": "primary"
                     },
-                    "facets": {
-                      "title": "Facets",
-                      "type": "string"
+                    "action": {
+                      "title": "Destino da ação",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "title": "Tipo de ação",
+                          "enumNames": [
+                            "Nenhum",
+                            "Abrir Link Externo",
+                            "Abrir Produto (id ou slug)",
+                            "Abrir Coleção (Id da coleção)",
+                            "Abrir Categoria (cate1/cat2/cat3...)",
+                            "Abrir Busca (termo de busca)",
+                            "Abrir Landing Page (nome da landing page)",
+                            "Abrir Path do Site",
+                            "Abrir Marca"
+                          ],
+                          "enum": [
+                            "none",
+                            "link",
+                            "product",
+                            "collection",
+                            "category",
+                            "search",
+                            "page",
+                            "path",
+                            "brand"
+                          ],
+                          "default": "none"
+                        },
+                        "value": {
+                          "title": "Valor",
+                          "type": "string"
+                        },
+                        "sort": {
+                          "title": "Sort",
+                          "description": "Items order",
+                          "default": "score:desc",
+                          "enum": [
+                            "discount:desc",
+                            "name:asc",
+                            "name:desc",
+                            "orders:desc",
+                            "price:asc",
+                            "price:desc",
+                            "release:desc",
+                            "score:desc"
+                          ],
+                          "enumNames": [
+                            "Desconto: do maior para o menor",
+                            "Nome: A-Z",
+                            "Nome: Z-A",
+                            "Pedidos: do maior para o menor",
+                            "Preço: do menor para o maior",
+                            "Preço: do maior para o menor",
+                            "Lançamento: do mais novo para o mais antigo",
+                            "Relevância: do maior para o menor"
+                          ]
+                        },
+                        "title": {
+                          "title": "Título (opcional)",
+                          "type": "string"
+                        }
+                      }
                     }
                   }
                 }
@@ -795,14 +634,13 @@
                     "title": "Tipo de ação",
                     "enumNames": [
                       "Nenhum",
-                      "Abrir Link",
-                      "Abrir Produto",
-                      "Abrir Coleção",
-                      "Abrir Categoria",
-                      "Abrir Busca",
-                      "Abrir Página",
-                      "Abrir Eitri App",
-                      "Abrir Path",
+                      "Abrir Link Externo",
+                      "Abrir Produto (id ou slug)",
+                      "Abrir Coleção (Id da coleção)",
+                      "Abrir Categoria (cate1/cat2/cat3...)",
+                      "Abrir Busca (termo de busca)",
+                      "Abrir Landing Page (nome da landing page)",
+                      "Abrir Path do Site",
                       "Abrir Marca"
                     ],
                     "enum": [
@@ -813,7 +651,6 @@
                       "category",
                       "search",
                       "page",
-                      "openEitriApp",
                       "path",
                       "brand"
                     ],
@@ -823,9 +660,33 @@
                     "title": "Valor",
                     "type": "string"
                   },
+                  "sort": {
+                    "title": "Sort",
+                    "description": "Items order",
+                    "default": "score:desc",
+                    "enum": [
+                      "discount:desc",
+                      "name:asc",
+                      "name:desc",
+                      "orders:desc",
+                      "price:asc",
+                      "price:desc",
+                      "release:desc",
+                      "score:desc"
+                    ],
+                    "enumNames": [
+                      "Desconto: do maior para o menor",
+                      "Nome: A-Z",
+                      "Nome: Z-A",
+                      "Pedidos: do maior para o menor",
+                      "Preço: do menor para o maior",
+                      "Preço: do maior para o menor",
+                      "Lançamento: do mais novo para o mais antigo",
+                      "Relevância: do maior para o menor"
+                    ]
+                  },
                   "title": {
-                    "title": "Título no header da tela de destino",
-                    "description": "Apenas se diferente do nome da categoria",
+                    "title": "Título (opcional)",
                     "type": "string"
                   },
                   "banner": {
@@ -1067,27 +928,68 @@
                   "ui:widget": "media-gallery"
                 }
               },
-              "path": {
-                "title": "Caminho da categoria (apenas não tiver subcategorias)",
-                "description": "Exemplo: /categoriaA/categoriaB",
-                "type": "string"
-              },
-              "subcategories": {
-                "title": "Subcategorias",
-                "type": "array",
-                "items": {
-                  "title": "Subcategoria",
-                  "type": "object",
-                  "properties": {
-                    "title": {
-                      "title": "Título",
-                      "type": "string"
-                    },
-                    "path": {
-                      "title": "Caminho da subcategoria",
-                      "description": "Exemplo: /categoriaA/categoriaB",
-                      "type": "string"
-                    }
+              "action": {
+                "title": "Destino da ação",
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "title": "Tipo de ação",
+                    "enumNames": [
+                      "Nenhum",
+                      "Abrir Link Externo",
+                      "Abrir Produto (id ou slug)",
+                      "Abrir Coleção (Id da coleção)",
+                      "Abrir Categoria (cate1/cat2/cat3...)",
+                      "Abrir Busca (termo de busca)",
+                      "Abrir Landing Page (nome da landing page)",
+                      "Abrir Path do Site",
+                      "Abrir Marca"
+                    ],
+                    "enum": [
+                      "none",
+                      "link",
+                      "product",
+                      "collection",
+                      "category",
+                      "search",
+                      "page",
+                      "path",
+                      "brand"
+                    ],
+                    "default": "none"
+                  },
+                  "value": {
+                    "title": "Valor",
+                    "type": "string"
+                  },
+                  "sort": {
+                    "title": "Sort",
+                    "description": "Items order",
+                    "default": "score:desc",
+                    "enum": [
+                      "discount:desc",
+                      "name:asc",
+                      "name:desc",
+                      "orders:desc",
+                      "price:asc",
+                      "price:desc",
+                      "release:desc",
+                      "score:desc"
+                    ],
+                    "enumNames": [
+                      "Desconto: do maior para o menor",
+                      "Nome: A-Z",
+                      "Nome: Z-A",
+                      "Pedidos: do maior para o menor",
+                      "Preço: do menor para o maior",
+                      "Preço: do maior para o menor",
+                      "Lançamento: do mais novo para o mais antigo",
+                      "Relevância: do maior para o menor"
+                    ]
+                  },
+                  "title": {
+                    "title": "Título (opcional)",
+                    "type": "string"
                   }
                 }
               }

@@ -11,9 +11,9 @@ export default function ProductTiles(props) {
 	const [cachedProducts, setCachedProducts] = useState({})
 
 	useEffect(() => {
-		if (data?.shelfs) {
-			setShelves(data.shelfs)
-			setCurrentShelf(data.shelfs[0])
+		if (data?.shelves) {
+			setShelves(data.shelves)
+			setCurrentShelf(data.shelves[0])
 		}
 	}, [data])
 

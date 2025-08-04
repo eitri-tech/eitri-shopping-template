@@ -9,10 +9,10 @@ export default function CategoryTree(props) {
 	const [currentShelf, setCurrentShelf] = useState(null)
 	const legacySearch = Vtex?.configs?.searchOptions?.legacySearch
 	useEffect(() => {
-		if (data?.shelfs) {
-			setCurrentShelf(data.shelfs[0])
+		if (data?.shelves) {
+			setCurrentShelf(data.shelves[0])
 		}
-	}, [data?.shelfs])
+	}, [data?.shelves])
 	const onChooseShelf = shelf => {
 		setCurrentShelf(shelf)
 	}
@@ -32,9 +32,9 @@ export default function CategoryTree(props) {
 	}
 	return (
 		<>
-			{(data.shelfs?.length > 1 || (data.shelfs?.length === 1 && data.shelfs[0].title)) && (
+			{(data.shelves?.length > 1 || (data.shelves?.length === 1 && data.shelves[0].title)) && (
 				<View className='overflow-x-auto flex px-8'>
-					{data.shelfs?.map(shelf => (
+					{data.shelves?.map(shelf => (
 						<>
 							{shelf.title && (
 								<View
@@ -46,10 +46,7 @@ export default function CategoryTree(props) {
 									}
 									borderColor={shelf.title === currentShelf?.title ? 'secondary-500' : 'neutral-300'}
 									className='py-1 border'>
-									<Text
-										color={shelf.title === currentShelf?.title ? 'secondary-500' : 'neutral-300'}
-										contentColor
-										fontFamily='Baloo 2'>
+									<Text color={shelf.title === currentShelf?.title ? 'secondary-500' : 'neutral-300'}>
 										{shelf.title}
 									</Text>
 								</View>

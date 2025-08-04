@@ -1,15 +1,6 @@
 import { openBrand, resolveNavigation } from './NavigationService'
 import Eitri from 'eitri-bifrost'
 
-const handleLegacySearchAction = (value, title) => {
-	Eitri.navigation.navigate({
-		path: 'ProductCatalog',
-		state: {
-			facets: value,
-			title: title
-		}
-	})
-}
 const handleSearchAction = value => {
 	Eitri.navigation.navigate({
 		path: 'Search',
@@ -56,12 +47,8 @@ const handleProductAction = value => {
 }
 
 export const processActions = sliderData => {
-	console.log('processActions >> sliderData >>', sliderData)
 	const action = sliderData?.action
 	switch (action?.type) {
-		case 'legacySearch':
-			handleLegacySearchAction(action.value, action.title || sliderData.title)
-			break
 		case 'search':
 			handleSearchAction(action.value)
 			break
