@@ -2,7 +2,7 @@ import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shoppi
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {
@@ -14,6 +14,7 @@ export default function Freight(props) {
 	const [messagesError, setMessagesError] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState(false)
+	const [isEditingZipCode, setIsEditingZipCode] = useState(false)
 
 	useEffect(() => {
 		if (cart) {
@@ -36,14 +37,24 @@ export default function Freight(props) {
 	}
 
 	const onPressZipCodeChange = async () => {
-		if (!zipCode) {
-			return
+		try {
+			if (!zipCode) {
+				return
+			}
+			if (!(zipCode.length == 8 || zipCode.length == 9)) {
+				setError(t('freight.errorCep'))
+				return
+			}
+			fetchFreight(zipCode)
+		} catch (e) {
+			console.error('Error onPressZipCodeChange', e)
 		}
-		if (!(zipCode.length == 8 || zipCode.length == 9)) {
-			setError(t('freight.errorCep'))
-			return
-		}
-		fetchFreight(zipCode)
+	}
+
+	const onPressEditZipCode = () => {
+		setIsEditingZipCode(true)
+		setZipCode('')
+		setError('')
 	}
 
 	const fetchFreight = async zipCode => {
@@ -97,7 +108,6 @@ export default function Freight(props) {
 	if (!cart) return null
 
 	const shipping = cartShippingResolver(cart)
-
 	const deliveryOptions = shipping?.options?.filter(option => !option.isPickupInPoint) || []
 	const pickupOptions = shipping?.options?.filter(option => option.isPickupInPoint) || []
 
@@ -106,38 +116,42 @@ export default function Freight(props) {
 			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
 				<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
 
-				{cart?.canEditData ? (
-					<View className='flex justify-between mt-2 gap-2 items-center w-full'>
-						<View className='w-2/3'>
-							<CustomInput
-								placeholder={t('freight.labelZipCode')}
-								value={zipCode}
-								variant='mask'
-								mask='99999-999'
-								inputMode='numeric'
-								onChange={onInputZipCode}
-							/>
+				{cart?.canEditData || isEditingZipCode ? (
+					<>
+						<View className='flex justify-between mt-2 gap-2 items-center w-full'>
+							<View className='w-2/3'>
+								<CustomInput
+									placeholder={t('freight.labelZipCode')}
+									value={zipCode}
+									variant='mask'
+									mask='99999-999'
+									inputMode='numeric'
+									onChange={onInputZipCode}
+								/>
+							</View>
+							<View className='w-1/3'>
+								<CustomButton
+									variant='outlined'
+									isLoading={isLoading}
+									label={t('freight.txtCalculate')}
+									onPress={onPressZipCodeChange}
+								/>
+							</View>
 						</View>
-						<View className='w-1/3'>
-							<CustomButton
-								variant='outlined'
-								isLoading={isLoading}
-								label={t('freight.txtCalculate')}
-								onPress={onPressZipCodeChange}
-							/>
-						</View>
-					</View>
+					</>
 				) : (
-					<View className='mt-2'>
-						<Text className='text-base font-medium'>{`${t('freight.labelZipCode')}: ${
-							shipping?.postalCode
-						}`}</Text>
+					<View className='mt-2 flex flex-row items-center gap-4'>
+						<Text className='text-base font-medium'>{`Receber em ${shipping?.postalCode}`}</Text>
+
+						<View onClick={onPressEditZipCode}>
+							<Text className='text-sm text-primary font-bold'>alterar</Text>
+						</View>
 					</View>
 				)}
 
-				{error && (
-					<View className='mt-1'>
-						<Text className='text-xs text-red-600'>{error}</Text>
+				{!shipping?.shippingAvailable && (
+					<View className='mt-2 p-2 bg-red-50 border border-red-200 rounded'>
+						<Text className='text-sm text-red-600 font-medium'>Entrega indisponível</Text>
 					</View>
 				)}
 

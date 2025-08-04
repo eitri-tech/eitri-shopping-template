@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { CustomInput, Loading, CustomButton } from 'shopping-vtex-template-shared'
 import { Button } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { View, Text } from 'eitri-luminus'
 
 export default function GiftCardInput(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
@@ -51,29 +53,24 @@ export default function GiftCardInput(props) {
 
 	return (
 		<View>
-			<Text
-				fontSize='small'
-				fontWeight='bold'
-				className='mb-2'>
-				Adicionar vale presente
-			</Text>
-			<View
-				marginTop='nano'
-				alignItems='center'
-				direction='row'
-				gap='10px'
-				className='flex flex-row gap-2 mb-4'>
-				<CustomInput
-					placeholder='Insira o código do vale presente'
-					value={redemptionCode}
-					onChange={setRedemptionCode}
-				/>
-				<CustomButton
-					label='Adicionar'
-					className='grow'
-					onPress={addGiftCard}
-				/>
+			<Text className='text-sm font-bold mb-2'>Adicionar vale presente</Text>
+			<View className='flex justify-between mt-2 gap-2 items-end w-full'>
+				<View className='w-2/3'>
+					<CustomInput
+						placeholder='Insira o código do vale presente'
+						value={redemptionCode}
+						onChange={setRedemptionCode}
+					/>
+				</View>
+				<View className='w-1/3'>
+					<CustomButton
+						label='Adicionar'
+						className='grow'
+						onPress={addGiftCard}
+					/>
+				</View>
 			</View>
+
 			<View className='flex flex-col gap-2'>
 				{isLoading && (
 					<View className='flex justify-center my-2'>
@@ -84,29 +81,18 @@ export default function GiftCardInput(props) {
 					cart?.giftCards?.length > 0 &&
 					cart?.giftCards?.map(gift => (
 						<View
-							paddingVertical='small'
-							paddingHorizontal='extra-small'
-							borderWidth='hairline'
-							borderColor='neutral-400'
-							borderRadius='small'
-							gap={20}
 							key={gift.id}
-							direction='row'
-							justifyContent='between'
-							marginTop='extra-small'
-							className='flex flex-row items-center justify-between'>
-							<View
-								gap={5}
-								direction='row'>
+							className='py-2 px-1 border border-gray-400 rounded-sm flex flex-row items-center justify-between mt-1 gap-5'>
+							<View className='flex flex-row gap-1'>
 								<Text className='text-sm'>{`${gift.redemptionCode} - ${gift.formattedValue}`} </Text>
 							</View>
 							<View className='flex flex-row items-center justify-between'>
 								<Text className='text-xs font-bold'>{gift.name}</Text>
-								<Button onClick={() => removeGiftCart(gift.id)}>
-									<Text className='text-xs font-bold text-primary-500'>
+								<CustomButton onClick={() => removeGiftCart(gift.id)}>
+									<Text className='text-xs font-bold text-blue-500'>
 										{t('giftCardInput.txtRemove')}
 									</Text>
-								</Button>
+								</CustomButton>
 							</View>
 						</View>
 					))}

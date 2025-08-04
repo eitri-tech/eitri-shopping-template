@@ -98,7 +98,7 @@
 		"txtWithdrawal": "RETIRADA",
 		"txtDelivery": "ENTREGA",
 		"txtNoNumber": "sem número",
-		"txtAlert": "Clique abaixo para alterar o número"
+		"txtAlert": "Suas informações de endereço estão incompletas. Por favor clique aqui para atualizá-las."
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAGAMENTO",

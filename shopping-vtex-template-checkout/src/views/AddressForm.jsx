@@ -12,7 +12,7 @@ import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View } from 'eitri-luminus'
 import { resolvePostalCode } from '../services/freigthService'
-import { navigate, requestLogin } from '../services/navigationService'
+import { navigate, navigateBack, requestLogin } from '../services/navigationService'
 import { useRef, useState } from 'react'
 import Alert from '../components/Alert'
 
@@ -176,9 +176,10 @@ export default function AddressForm(props) {
 		number: '',
 		complement: '',
 		reference: '',
-		receiverName: cart?.clientProfileData
-			? `${cart?.clientProfileData.firstName} ${cart?.clientProfileData.lastName}`
-			: '',
+		receiverName:
+			cart?.clientProfileData && !cart?.clientProfileData?.firstName?.includes('***')
+				? `${cart?.clientProfileData.firstName} ${cart?.clientProfileData.lastName}`
+				: '',
 		addressQuery: '',
 		addressType: 'residential',
 		isDisposable: false
@@ -202,13 +203,21 @@ export default function AddressForm(props) {
 		try {
 			if (!cart.canEditData) {
 				await requestLogin()
-				await startCart()
+				const newCart = await startCart()
+				const _address = newCart?.shippingData?.selectedAddresses?.find(
+					address => address.addressId === addressId
+				)
+				setAddress({
+					...address,
+					..._address
+				})
+			} else {
+				const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
+				setAddress({
+					...address,
+					..._address
+				})
 			}
-			const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
-			setAddress({
-				...address,
-				..._address
-			})
 		} catch (e) {
 			Eitri.navigation.back()
 		}
@@ -279,8 +288,7 @@ export default function AddressForm(props) {
 				}
 				await setLogisticInfo(payload)
 			}
-			// await setNewAddress(address)
-			navigate('FreightSelector')
+			navigateBack()
 		} catch (e) {
 			if (e.response?.status === 400) {
 				setAddressError(t('addNewShippingAddress.errorAddress'))

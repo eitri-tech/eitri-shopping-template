@@ -14,10 +14,7 @@ export const setNewAddress = async (cart, zipCode) => {
 	try {
 		const address = await Vtex.checkout.resolveZipCode(zipCode)
 
-		const { street, neighborhood, city, state, country, geoCoordinates, postalCode } = address
-
 		const selectedAddresses = generateSelectedAddressesPayload(cart?.shippingData?.selectedAddresses, address)
-
 		return await Vtex.checkout.setLogisticInfo({
 			logisticsInfo: cart?.shippingData?.logisticsInfo,
 			clearAddressIfPostalCodeNotFound: false,

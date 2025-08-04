@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { View } from 'eitri-luminus'
-import { Loading } from 'shopping-vtex-template-shared'
+import { Loading, BottomInset } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
 import ImageCarousel from '../components/ImageCarousel/ImageCarousel'
@@ -98,8 +98,12 @@ export default function Home() {
 
 	const onSkuChange = newDesiredVariations => {
 		const productSku = product.items.find(item => {
-			return newDesiredVariations.every(
-				newDesiredVariation => item[newDesiredVariation.variation][0] === newDesiredVariation.value
+			return item.variations.every(variation =>
+				newDesiredVariations.some(
+					newDesiredVariation =>
+						variation?.name === newDesiredVariation.variation &&
+						variation?.values?.[0] === newDesiredVariation.value
+				)
 			)
 		})
 		if (productSku) {
@@ -120,7 +124,7 @@ export default function Home() {
 			/>
 
 			{product && (
-				<View bottomInset={'auto'}>
+				<View>
 					<View className='pb-4'>
 						<ImageCarousel currentSku={currentSku} />
 
@@ -149,6 +153,8 @@ export default function Home() {
 					</View>
 
 					<ActionButton currentSku={currentSku} />
+
+					<BottomInset />
 				</View>
 			)}
 		</Page>

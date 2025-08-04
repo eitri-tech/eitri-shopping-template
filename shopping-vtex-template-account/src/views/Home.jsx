@@ -26,6 +26,9 @@ export default function Home(props) {
 	useEffect(() => {
 		init()
 		sendScreenView('Perfil', 'Home')
+		Eitri.navigation.setOnResumeListener(() => {
+			init()
+		})
 	}, [])
 
 	const init = async () => {

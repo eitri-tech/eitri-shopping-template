@@ -4,7 +4,8 @@ import {
 	HeaderReturn,
 	HeaderContentWrapper,
 	HeaderText,
-	cartShippingResolver
+	cartShippingResolver,
+	BottomInset
 } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
@@ -28,10 +29,10 @@ export default function FreightSelector(props) {
 			return
 		}
 
-		if (!cart?.shippingData?.address?.number) {
-			navigate('AddressForm', { addressId: cart?.shippingData?.address?.addressId }, true)
-			return
-		}
+		// if (!cart?.shippingData?.address?.number) {
+		// 	navigate('AddressForm', { addressId: cart?.shippingData?.address?.addressId }, true)
+		// 	return
+		// }
 
 		if (cart?.shippingData?.logisticsInfo?.[0]) {
 			const firstLogisticInfo = cart.shippingData.logisticsInfo[0]
@@ -45,7 +46,7 @@ export default function FreightSelector(props) {
 	}, [cart])
 
 	const submit = async () => {
-		navigate('FinishCart')
+		navigate('FinishCart', {}, true)
 	}
 
 	const onSelectFreightOption = async freightOption => {
@@ -184,24 +185,21 @@ export default function FreightSelector(props) {
 						)}
 					</View>
 
-					<View className='px-4 pt-4'>
+					<View className='pt-4'>
 						<CustomButton
-							width='100%'
 							label={'Alterar endereço de entrega'}
 							outlined
-							onPress={() => navigate('AddressSelector')}
+							onPress={() => navigate('AddressSelector', {}, true)}
 						/>
 					</View>
 				</View>
 
 				<View className='p-4'>
 					<CustomButton
-						width='100%'
-						marginTop='large'
 						label={t('addNewShippingAddress.labelButton')}
-						fontSize='medium'
 						onPress={submit}
 					/>
+					<BottomInset />
 				</View>
 			</View>
 		</Page>

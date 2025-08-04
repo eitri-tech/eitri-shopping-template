@@ -6,7 +6,8 @@ import {
 	HeaderReturn,
 	HeaderContentWrapper,
 	HeaderText,
-	CustomInput
+	CustomInput,
+	BottomInset
 } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getUserByEmail, registerToNotify } from '../services/cartService'
@@ -337,14 +338,13 @@ export default function PersonalData() {
 					</View>
 				</View>
 
-				<View
-					bottomInset
-					className='p-4'>
+				<View className='p-4'>
 					<CustomButton
 						disabled={!isDataFilled}
 						label={t('personalData.labelButton')}
 						onPress={setUserData}
 					/>
+					<BottomInset />
 				</View>
 			</View>
 		</Page>

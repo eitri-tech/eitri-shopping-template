@@ -18,7 +18,10 @@ export const getSearchProducts = async productId => {
 }
 
 export const getWhoSawAlsoSaw = async productId => {
-	return Vtex.catalog.getWhoSawAlsoSaw(productId)
+	return Vtex.searchGraphql.productRecommendations({
+		identifier: { field: 'id', value: productId },
+		type: 'view'
+	})
 }
 
 export const markLastViewedProduct = async product => {

@@ -16,7 +16,7 @@ export default function ImageCarousel(props) {
 					onChange: onChange,
 					currentSlide: currentSlide
 				}}>
-				{currentSku?.images?.slice(0, 8).map((item, index) => {
+				{currentSku?.images?.map((item, index) => {
 					return (
 						<Carousel.Item key={index}>
 							<View className={`flex justify-center items-center`}>
@@ -33,15 +33,17 @@ export default function ImageCarousel(props) {
 				})}
 			</Carousel>
 			{currentSku?.images?.length > 1 && (
-				<View className='flex justify-center gap-2 mt-1'>
-					{currentSku.images.map((_, index) => (
-						<View
-							key={index}
-							className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${
-								currentSlide === index ? 'bg-primary' : 'bg-base-300'
-							} transition-[width,background-color] duration-300 ease-in-out`}
-						/>
-					))}
+				<View className='flex justify-center mt-2 w-full'>
+					<View className='flex justify-center flex flex-wrap gap-2 max-w-[90%]'>
+						{currentSku.images.map((_, index) => (
+							<View
+								key={index}
+								className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${
+									currentSlide === index ? 'bg-primary' : 'bg-base-300'
+								} transition-[width,background-color] duration-300 ease-in-out`}
+							/>
+						))}
+					</View>
 				</View>
 			)}
 		</View>

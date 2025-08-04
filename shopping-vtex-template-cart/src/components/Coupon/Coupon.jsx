@@ -1,12 +1,11 @@
 import Eitri from 'eitri-bifrost'
 import { View, Text, Button } from 'eitri-luminus'
-import { Spacing, Loading, CustomInput, CustomButton } from 'shopping-vtex-template-shared'
+import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { addCoupon, removeCoupon } from '../../services/cartService'
 
 export default function Coupon(props) {
-	const { cart } = useLocalShoppingCart()
+	const { cart, addCoupon, removeCoupon } = useLocalShoppingCart()
 
 	const [coupon, setCoupon] = useState('')
 	const [appliedCoupon, setAppliedCoupon] = useState('')
@@ -70,7 +69,7 @@ export default function Coupon(props) {
 							<View className='flex my-2 py-4 px-2 border border-neutral-300 rounded-lg w-[90%]'>
 								<Text>{appliedCoupon}</Text>
 							</View>
-							<Button
+							<CustomButton
 								onClick={onPressRemoveCoupon}
 								className='px-4'>
 								<svg
@@ -96,7 +95,7 @@ export default function Coupon(props) {
 										</clipPath>
 									</defs>
 								</svg>
-							</Button>
+							</CustomButton>
 						</>
 					) : (
 						<>
@@ -105,8 +104,7 @@ export default function Coupon(props) {
 									<CustomInput
 										placeholder={t('coupon.labelInsertCode')}
 										value={coupon}
-										onChange={value => inputOnChange(value)}
-										maxLength={9}
+										onChange={e => inputOnChange(e.target.value)}
 									/>
 								</View>
 								<View className='w-1/3'>
@@ -122,7 +120,7 @@ export default function Coupon(props) {
 					)}
 				</View>
 				{couponTextAlert && (
-					<View className='px-4'>
+					<View className='mt-1'>
 						<Text className={invalidCoupon ? 'text-error' : 'text-success'}>{couponTextAlert}</Text>
 					</View>
 				)}

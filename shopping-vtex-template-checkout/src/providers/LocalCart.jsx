@@ -1,4 +1,10 @@
-import { getCart, addUserData, selectPaymentOption, removeClientData } from '../services/cartService'
+import {
+	getCart,
+	addUserData,
+	selectPaymentOption,
+	removeClientData,
+	removeItemFromCart
+} from '../services/cartService'
 import setFreight, {
 	setNewAddress,
 	updateAddress,
@@ -62,6 +68,10 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setLogisticInfo, payload)
 	}
 
+	const _removeCartItem = async index => {
+		return executeCartOperation(removeItemFromCart, index)
+	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -77,6 +87,7 @@ export default function CartProvider({ children }) {
 				setShippingAddress: _setShippingAddress,
 				removeClientData: _removeClientData,
 				setLogisticInfo: _setLogisticInfo,
+				removeCartItem: _removeCartItem,
 				selectedPaymentData,
 				setSelectedPaymentData,
 				cartIsLoading,

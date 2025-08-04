@@ -12,14 +12,18 @@ export default function DeliveryData(props) {
 	const { cart } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
-	const onPressMainAction = async () => {
-		navigate('FreightSelector')
-	}
-
 	const shippingAddress = getShippingAddress(cart)
 	const shippingOptions = cartShippingResolver(cart)
 
 	const selectedShippingOption = shippingOptions?.options?.find(s => s.isCurrent)
+
+	const onPressMainAction = async () => {
+		navigate('FreightSelector')
+	}
+
+	const onPressHandleNumber = async () => {
+		navigate('AddressForm', { addressId: shippingAddress.addressId })
+	}
 
 	return (
 		<SimpleCard
@@ -177,8 +181,10 @@ export default function DeliveryData(props) {
 
 							{/* Alert for missing number */}
 							{!shippingAddress?.number && (
-								<View className='bg-red-50 p-3 rounded-lg border-l-4 border-red-400'>
-									<View className='flex flex-row items-start gap-2'>
+								<View
+									onClick={onPressHandleNumber}
+									className='bg-red-50 p-3 rounded-lg border-l-4 border-red-400'>
+									<View className='flex flex-row items-center gap-2'>
 										<svg
 											width='16'
 											height='16'

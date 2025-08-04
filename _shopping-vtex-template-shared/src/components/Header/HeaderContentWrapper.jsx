@@ -78,7 +78,7 @@ export default function HeaderContentWrapper(props) {
 				<View id='header'>
 					<View
 						id='header-content'
-						className={`min-h-[60px] flex items-center w-screen py-[8px] px-4 gap-4 ${className}`}
+						className={`min-h-[60px] flex items-center w-screen py-[8px] px-4 gap-3 ${className}`}
 						{...rest}>
 						{children}
 					</View>

@@ -35,7 +35,7 @@
 		"errorCep": "Digite um CEP válido",
 		"errorCalcFreight": "Não foi possível calcular o frete",
 		"errorEditFreight": "Não foi possível modificar o frete",
-		"txtDelivery": "Insira seu CEP",
+		"txtDelivery": "Entrega",
 		"txtCalculate": "Calcular",
 		"labelZipCode": "CEP",
 		"txtUnknow": "Não sei meu cep",

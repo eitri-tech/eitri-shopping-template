@@ -140,12 +140,12 @@ export default function CreditCard(props) {
 				/>
 				<View className='flex gap-2 w-full flex-row'>
 					<CustomInput
-						color='accent-100'
 						label='Validade'
 						placeholder={'DD/MM'}
 						value={cardInfo?.expirationDate}
 						onChange={text => handleCardDataChange('expirationDate', text)}
 						inputMode='numeric'
+						variant='mask'
 						mask='99/99'
 					/>
 					<CustomInput
@@ -166,6 +166,7 @@ export default function CreditCard(props) {
 						required={true}
 						disabled={!installmentOptions?.length}
 						placeholder='Parcelamento'
+						className={'w-full'}
 						onChange={selectInstallment}
 						value={1}>
 						{installmentOptions?.map((option, index) => (

@@ -41,6 +41,9 @@ export const openAccount = async product => {
 }
 
 export const navigate = (path, state = {}, replace = false) => {
-	console.log('navigate===>', path, state, replace)
 	Eitri.navigation.navigate({ path, state, replace })
+}
+
+export const navigateBack = () => {
+	Eitri.navigation.back()
 }

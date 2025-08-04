@@ -1,5 +1,11 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
+import {
+	CustomButton,
+	HeaderReturn,
+	HeaderContentWrapper,
+	HeaderText,
+	BottomInset
+} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
@@ -63,7 +69,7 @@ export default function AddressSelector(props) {
 	const handleContinue = async () => {
 		if (!cart?.shippingData?.address) return
 
-		await navigate('FreightSelector')
+		await navigate('FreightSelector', {}, true)
 	}
 
 	const availableAddresses = getAddresses()
@@ -71,9 +77,7 @@ export default function AddressSelector(props) {
 	return (
 		<Page title={PAGE}>
 			<View className='min-h-[100vh] flex flex-col'>
-				<HeaderContentWrapper
-					gap={16}
-					scrollEffect={false}>
+				<HeaderContentWrapper>
 					<HeaderReturn />
 					<HeaderText text={t('addNewShippingAddress.title')} />
 				</HeaderContentWrapper>
@@ -110,6 +114,7 @@ export default function AddressSelector(props) {
 						disabled={!cart?.shippingData?.address || isAddressLoading}
 						onPress={handleContinue}
 					/>
+					<BottomInset />
 				</View>
 			</View>
 		</Page>

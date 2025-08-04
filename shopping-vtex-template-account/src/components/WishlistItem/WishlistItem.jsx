@@ -2,17 +2,23 @@ import { getProductById } from '../../services/ProductService'
 import ProductCard from '../ProductCard/ProductCard'
 
 export default function WishlistItem(props) {
-	const { productId, sku, title, id, onRemoveFromWishlist } = props
+	const { productId } = props
 
 	const [product, setProduct] = useState(null)
 
 	useEffect(() => {
-		const init = async () => {
-			const product = await getProductById(productId)
-			setProduct(product)
-		}
-		init()
+		init(productId)
 	}, [productId])
+
+	const init = async () => {
+		try {
+			const product = await getProductById(productId)
+			console.log(product)
+			setProduct(product)
+		} catch (e) {
+			console.error('Erro ao buscar produto', e)
+		}
+	}
 
 	return <>{product && <ProductCard product={product} />}</>
 }

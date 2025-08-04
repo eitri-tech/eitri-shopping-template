@@ -57,12 +57,12 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setFreight, cart, zipCode)
 	}
 
-	const applyCouponToCart = async coupon => {
-		return executeCartOperation(addCoupon, coupon)
+	const _removeCoupon = async () => {
+		return executeCartOperation(removeCoupon)
 	}
 
-	const removeCouponToCart = async () => {
-		return executeCartOperation(removeCoupon)
+	const _addCoupon = async coupon => {
+		return executeCartOperation(addCoupon, coupon)
 	}
 
 	return (
@@ -78,9 +78,9 @@ export default function CartProvider({ children }) {
 				changeQuantity,
 				removeItem,
 				setNewAddress: _setNewAddress,
-				applyCouponToCart,
-				removeCouponToCart,
-				setFreight: _setFreight
+				removeCoupon: _removeCoupon,
+				setFreight: _setFreight,
+				addCoupon: _addCoupon
 			}}>
 			{children}
 		</LocalCart.Provider>

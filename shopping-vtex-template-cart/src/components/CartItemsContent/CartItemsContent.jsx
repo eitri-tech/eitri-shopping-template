@@ -4,22 +4,27 @@ import { useLocalShoppingCart } from '../../providers/LocalCart'
 export default function CartItemsContent(props) {
 	const { cart, changeQuantity, removeItem, addItemOffer, removeItemOffer } = useLocalShoppingCart()
 
+	const [cartItems, setCartItems] = useState([])
+
+	useEffect(() => {
+		if (cart) {
+			setCartItems([...cart?.items])
+		}
+	}, [cart])
+
 	const hasMessage = itemEan => {
 		let message = cart.messages.filter(item => item.code === 'withoutStock' && item.fields.ean == itemEan)
 		return message[0] || null
 	}
 
 	const onChangeQuantityItem = async (quantity, index) => {
-		try {
-			changeQuantity(index, quantity)
-		} catch (e) {
-			console.error('Error onChangeQuantityItem==>', e)
-		}
+		await changeQuantity(index, quantity)
 	}
 
 	const handleRemoveCartItem = async index => {
 		try {
-			removeItem(index)
+			setCartItems([...cartItems.splice(index, 1)])
+			await removeItem(index)
 		} catch (error) {
 			console.error('Cart: handleRemoveCartItem Error', error)
 		}
@@ -35,9 +40,9 @@ export default function CartItemsContent(props) {
 
 	return (
 		<View className='px-4 flex flex-col gap-4'>
-			{cart?.items?.map((item, index) => (
+			{cartItems?.map((item, index) => (
 				<CartItem
-					key={item.id}
+					key={item.uniqueId}
 					item={item}
 					onChangeQuantityItem={newQuantity => onChangeQuantityItem(newQuantity, index)}
 					message={hasMessage(item.ean)}

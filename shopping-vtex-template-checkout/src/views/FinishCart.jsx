@@ -17,9 +17,11 @@ import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
+import { requestLogin } from '../services/customerService'
 
 export default function FinishCart() {
-	const { cart, cardInfo, selectedPaymentData, startCart, cartIsLoading } = useLocalShoppingCart()
+	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState({ state: false, message: '' })
@@ -34,7 +36,9 @@ export default function FinishCart() {
 
 	let interval
 
-	const { t } = useTranslation()
+	useEffect(() => {
+		sendPageView('Checkout - Home')
+	}, [])
 
 	useEffect(() => {
 		if (recaptchaIsReady) {
@@ -54,9 +58,10 @@ export default function FinishCart() {
 			const unavailableItems = cart?.items?.filter(item => item.availability !== 'available')
 			if (unavailableItems.length > 0) {
 				setUnavailableItems(unavailableItems)
+			} else {
+				setUnavailableItems([])
 			}
 		}
-		sendPageView('Checkout - Home')
 	}, [cart])
 
 	const runPaymentScript = async () => {
@@ -85,16 +90,45 @@ export default function FinishCart() {
 
 			Eitri.navigation.navigate('../ExternalProviderOrder', { paymentResult })
 		} catch (error) {
+			const errorCode = error.response?.data?.error?.code
+			if (errorCode === 'CHK003' || errorCode === 'CHK0087') {
+				try {
+					await requestLogin()
+					await runPaymentScript()
+				} catch (e) {}
+			}
+
 			setError({
 				state: true,
-				message: t('finishCart.errorOrder')
+				message: error.response?.data?.error?.message
 			})
-		} finally {
+
 			setIsLoading(false)
 			const tenSeconds = 30000
 			setTimeout(() => {
 				setError({ state: false, message: '' })
 			}, tenSeconds)
+		}
+	}
+
+	const isReadyToPay = () => {
+		return (
+			unavailableItems.length === 0 &&
+			cart?.items?.length > 0 &&
+			cart?.shippingData?.address &&
+			cart?.shippingData?.address?.number
+		)
+	}
+
+	const removeUnavailableItem = async uItem => {
+		try {
+			setIsLoading(true)
+			const index = cart.items.findIndex(item => item.uniqueId === uItem.uniqueId)
+			await removeCartItem(index)
+			setIsLoading(false)
+		} catch (e) {
+			console.error('Error on removeUnavailableItem', e)
+			setIsLoading(false)
 		}
 	}
 
@@ -108,18 +142,36 @@ export default function FinishCart() {
 			{(cartIsLoading || isLoading) && <Loading fullScreen />}
 
 			<View className='p-4'>
-				{' '}
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
 				<>
 					{error.state && (
-						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
-							<Text color='neutral-100'>{error.message}</Text>
+						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
+							<Text color='text-sm text-red-600 font-medium'>
+								{error.message || 'Houve um erro ao fechar o pedido'}
+							</Text>
 						</View>
 					)}
 
 					{unavailableItems.length > 0 && (
-						<View className='flex flex-col gap-4 bg-negative-700 p-2 mb-2 rounded-sm'>
-							<Text color='neutral-100'>{t('finishCart.errorItems')}</Text>
+						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
+							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems')}</Text>
+
+							{unavailableItems.map(uItem => (
+								<View
+									className='flex items-center justify-between gap-2 mt-2'
+									key={uItem.uniqueId}>
+									<View className='flex items-center gap-2'>
+										<Image
+											src={uItem.imageUrl}
+											className='w-[60px] rounded'
+										/>
+										<Text className='text-sm font-medium'>{uItem.name}</Text>
+									</View>
+									<View onClick={() => removeUnavailableItem(uItem)}>
+										<Text className='text-sm text-red-600 font-medium'>Excluir</Text>
+									</View>
+								</View>
+							))}
 						</View>
 					)}
 
@@ -128,13 +180,15 @@ export default function FinishCart() {
 
 						{cart && <UserData />}
 
-						<DeliveryData />
-
 						{unavailableItems.length === 0 && (
-							<SelectedPaymentData
-								selectedPaymentData={selectedPaymentData}
-								onPress={() => navigate('PaymentData', true)}
-							/>
+							<>
+								<DeliveryData />
+
+								<SelectedPaymentData
+									selectedPaymentData={selectedPaymentData}
+									onPress={() => navigate('PaymentData', true)}
+								/>
+							</>
 						)}
 					</View>
 				</>
@@ -145,6 +199,7 @@ export default function FinishCart() {
 				<View className='fixed bottom-0 left-0 w-full z-10 bg-white border-t border-gray-300'>
 					<View className='p-4'>
 						<CustomButton
+							disabled={!isReadyToPay()}
 							label={t('finishCart.labelButton')}
 							onPress={runPaymentScript}
 						/>

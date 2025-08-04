@@ -1,12 +1,15 @@
 import { View, Text } from 'eitri-luminus'
+import { useTranslation } from 'eitri-i18n'
+import { navigate } from '../../services/navigationService'
 
 export default function AddressCard({ address, isSelected = false, onClick, showBusinessHours = false, title = null }) {
 	const isPickupPoint = address?.friendlyName
 
+	const { t } = useTranslation()
+
 	const formatBusinessHours = businessHours => {
 		if (!businessHours || businessHours.length === 0) return ''
 
-		const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 		const today = new Date().getDay()
 
 		const todayHours = businessHours.find(h => h.DayOfWeek === today)
@@ -15,6 +18,10 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 		}
 
 		return 'Horário disponível'
+	}
+
+	const editAddress = () => {
+		navigate('AddressForm', { addressId: address.addressId })
 	}
 
 	return (
@@ -32,7 +39,9 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 					</Text>
 
 					<Text className='text-sm text-base-content/70 mb-1'>
-						{isPickupPoint ? `${address.address.street}, ${address.address.number}` : address.street}
+						{isPickupPoint
+							? `${address.address.street}, ${address.address.number}`
+							: `${address.street} • ${address.number}`}
 					</Text>
 
 					<Text className='text-sm text-base-content/70 mb-1'>
@@ -50,6 +59,12 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 							{formatBusinessHours(address.businessHours)}
 						</Text>
 					)}
+
+					<View
+						onClick={editAddress}
+						className='mt-2'>
+						<Text className='uppercase text-xs text-primary-700'>Editar</Text>
+					</View>
 				</View>
 
 				{isSelected && (

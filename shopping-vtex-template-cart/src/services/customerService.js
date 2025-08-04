@@ -75,11 +75,9 @@ export const addToWishlist = async (productId, title, sku) => {
 }
 
 export const savePostalCodeOnStorage = async postalCode => {
-	console.log('salvando no storage', postalCode)
 	return await Vtex.customer.setCustomerData('postalCode', postalCode)
 }
 
 export const loadPostalCodeFromStorage = async () => {
-	console.log('lendo do storage')
 	return await Vtex.customer.getCustomerData('postalCode')
 }

@@ -1,7 +1,6 @@
 import { View, Text, Image } from 'eitri-luminus'
-import trash from '../../assets/images/trash-01.svg'
 import Quantity from '../Quantity/Quantity'
-import { Loading, HeaderWishList } from 'shopping-vtex-template-shared'
+import { HeaderWishList, Loading } from 'shopping-vtex-template-shared'
 import { addToWishlist, checkWishlistItem, removeItemFromWishlist } from '../../services/customerService'
 import ModalConfirm from '../ModalConfirm/ModalConfirm'
 import { useTranslation } from 'eitri-i18n'
@@ -15,6 +14,7 @@ export default function CartItem(props) {
 	const [wishlistId, setWishlistId] = useState('')
 	const [showModalRemoveItem, setShowModalRemoveItem] = useState(false)
 	const [modalRemoveItemText, setModalRemoveItemText] = useState('')
+	const [loadingItemQuantity, setLoadingItemQuantity] = useState(false)
 
 	const resizedImageUrl = item.imageUrl.replace(/\/(\d+)-\d+-\d+\//, '/$1-200-200/')
 
@@ -46,8 +46,14 @@ export default function CartItem(props) {
 		}
 	}
 
-	const handleQuantityOfItemsCart = quantityToUpdate => {
-		onChangeQuantityItem(item.quantity + quantityToUpdate)
+	const handleQuantityOfItemsCart = async quantityToUpdate => {
+		try {
+			setLoadingItemQuantity(true)
+			await onChangeQuantityItem(item.quantity + quantityToUpdate)
+			setLoadingItemQuantity(false)
+		} catch (e) {
+			setLoadingItemQuantity(false)
+		}
 	}
 
 	const handleRemoveCartItemIntention = () => {
@@ -84,6 +90,16 @@ export default function CartItem(props) {
 					</View>
 
 					<View className='flex-1 min-w-0'>
+						{item.availability !== 'available' && (
+							<View className='mb-2 p-2 bg-red-50 border border-red-200 rounded'>
+								<Text className='text-sm text-red-600 font-medium'>
+									{item.availability === 'cannotBeDelivered'
+										? t('cartItem.cannotBeDelivered', 'Este item não pode ser entregue')
+										: t('cartItem.notAvailable', 'Este item não está disponível')}
+								</Text>
+							</View>
+						)}
+
 						<View className='flex justify-between items-start mb-2'>
 							<Text className='text-sm font-medium text-gray-900 pr-2'>{item.name}</Text>
 						</View>
@@ -98,10 +114,17 @@ export default function CartItem(props) {
 						{/* Seletor de Quantidade */}
 						<View className='flex items-center gap-2 justify-between'>
 							<View className='flex items-center gap-2'>
-								<Quantity
-									quantity={item.quantity}
-									handleItemQuantity={handleQuantityOfItemsCart}
-								/>
+								{loadingItemQuantity ? (
+									<View className='w-[101px] h-[37px] flex justify-center items-center'>
+										<Loading />
+									</View>
+								) : (
+									<Quantity
+										quantity={item.quantity}
+										handleItemQuantity={handleQuantityOfItemsCart}
+									/>
+								)}
+
 								<HeaderWishList
 									onClick={handleSaveFavorite}
 									className='text-gray-400'

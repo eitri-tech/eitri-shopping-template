@@ -98,7 +98,7 @@
 		"txtWithdrawal": "PICKUP",
 		"txtDelivery": "DELIVERY",
 		"txtNoNumber": "no number",
-		"txtAlert": "Click below to change the number"
+		"txtAlert": "Your address information is incomplete. Please click here to update it."
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAYMENT",

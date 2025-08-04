@@ -46,6 +46,7 @@ export default function SignIn(props) {
 	const [timeOutToResentEmail, setTimeOutToResentEmail] = useState(0)
 	const [loadingSendingCode, setLoadingSendingCode] = useState(false)
 	const [loginProviders, setLoginProviders] = useState()
+	const [loadingLoginProviders, setLoadingLoginProviders] = useState(false)
 
 	useEffect(() => {
 		loadLoginProviders()
@@ -72,11 +73,13 @@ export default function SignIn(props) {
 	}, [timeOutToResentEmail])
 
 	const loadLoginProviders = async () => {
+		setLoadingLoginProviders(true)
 		const providers = await getLoginProviders()
 		if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
 			setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
 		}
 		setLoginProviders(providers)
+		setLoadingLoginProviders(false)
 	}
 
 	const goToPasswordReset = () => {
@@ -178,7 +181,7 @@ export default function SignIn(props) {
 			</HeaderContentWrapper>
 
 			<Loading
-				isLoading={loading}
+				isLoading={loadingLoginProviders}
 				fullScreen={true}
 			/>
 

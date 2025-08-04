@@ -6,13 +6,7 @@ export const getCart = async () => {
 }
 
 export const startPayment = async (cart, cardInfo, recaptchaToken, siteKey) => {
-	try {
-		const result = await Vtex.checkout.pay(cart, cardInfo, recaptchaToken, siteKey)
-
-		return result
-	} catch (error) {
-		console.log('Erro ao iniciar pagamento', error)
-	}
+	return await Vtex.checkout.pay(cart, cardInfo, recaptchaToken, siteKey)
 }
 
 export const getUserByEmail = async email => {
@@ -48,4 +42,8 @@ export const registerToNotify = async userProfileId => {
 	} catch (e) {
 		console.log('erro on registerToNotify', e)
 	}
+}
+
+export const removeItemFromCart = async index => {
+	return await Vtex.cart.removeItem(index)
 }

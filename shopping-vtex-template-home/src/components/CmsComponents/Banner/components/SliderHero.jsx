@@ -44,23 +44,15 @@ export default function SliderHero(props) {
 					))}
 			</Carousel>
 			{imagesList.length > 1 && (
-				<View className='flex justify-center gap-2'>
-					{imagesList &&
-						Array.from(
-							{
-								length: imagesList.length
-							},
-							(_, index) => (
-								<View
-									key={index}
-									className={`${
-										currentSlide === index ? 'w-[36px]' : 'w-[12px]'
-									} h-[6px] rounded-lg ${
-										currentSlide === index ? 'bg-primary' : 'bg-base-300'
-									} transition-[width,background-color] duration-300 ease-in-out"`}
-								/>
-							)
-						)}
+				<View className='flex justify-center gap-2 mt-2'>
+					{imagesList.map((_, index) => (
+						<View
+							key={index}
+							className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${
+								currentSlide === index ? 'bg-primary' : 'bg-base-300'
+							} transition-[width,background-color] duration-300 ease-in-out"`}
+						/>
+					))}
 				</View>
 			)}
 		</View>
