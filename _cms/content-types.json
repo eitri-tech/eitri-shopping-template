@@ -9,7 +9,8 @@
   {
     "id": "categories",
     "name": "Página de Categorias",
-    "configurationSchemaSets": ["categories"],
+    "scopes": ["categories"],
+    "configurationSchemaSets": [],
     "isSingleton": true
   },
   {
