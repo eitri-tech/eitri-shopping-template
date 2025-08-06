@@ -1,7 +1,19 @@
 import { Text, View } from 'eitri-luminus'
 export default function SingleBanner(props) {
 	const { data, onClick } = props
+
 	const imagesList = data.images
+
+	let proportionalHeight = 'auto'
+
+	if (data?.aspectRatio) {
+		try {
+			const [aspectWidth, aspectHeight] = data?.aspectRatio?.split(':')?.map(Number)
+			const screenWidth = window.innerWidth
+			proportionalHeight = screenWidth * (aspectHeight / aspectWidth)
+		} catch (e) {}
+	}
+
 	return (
 		<View className='relative '>
 			{data.mainTitle && (
@@ -14,6 +26,7 @@ export default function SingleBanner(props) {
 				<View
 					key={imagesList[0].imageUrl}
 					onClick={() => onClick(imagesList[0])}
+					height={proportionalHeight}
 					className='px-4 flex flex-row w-full'>
 					<Image
 						src={imagesList[0].imageUrl}

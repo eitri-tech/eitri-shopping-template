@@ -18,7 +18,7 @@ export default function ProductShelf(props) {
 			facets: data.facets || [],
 			query: data.term ?? '',
 			sort: data.sort ?? '',
-			count: data.numberOfItems || 8
+			to: data.numberOfItems || 8
 		}
 
 		const result = await getProductsService(params)

@@ -39,6 +39,17 @@ export const openProductById = async productId => {
 	}
 }
 
+export const openProductBySlug = async slug => {
+	try {
+		Eitri.nativeNavigation.open({
+			slug: 'pdp',
+			initParams: { slug }
+		})
+	} catch (e) {
+		console.error('navigate to PDP: Error trying to open PDP', e)
+	}
+}
+
 export const normalizePath = path => {
 	let pathComponents = decodeURIComponent(path).split('?')
 	let pathData = pathComponents[0].split('/').filter(Boolean)

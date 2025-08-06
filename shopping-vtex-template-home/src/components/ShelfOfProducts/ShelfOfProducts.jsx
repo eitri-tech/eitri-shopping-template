@@ -35,6 +35,13 @@ export default function ShelfOfProducts(props) {
 				</View>
 			)}
 
+			{mode === 'scroll' && (
+				<ShelfOfProductsSlider
+					isLoading={isLoading}
+					products={products}
+				/>
+			)}
+
 			{mode === 'carousel' && (
 				<ShelfOfProductsSlider
 					isLoading={isLoading}
@@ -50,23 +57,23 @@ export default function ShelfOfProducts(props) {
 			{/*	/>*/}
 			{/*)}*/}
 
-			{mode !== 'carousel' && (
-				<View className={`flex flex-row overflow-x-scroll scroll-snap-x-mandatory gap-${gap}`}>
-					{gap && <View className={`h-[1px] w-[${gap}px]`} />}
-					{isLoading && <View className={`mt-2 w-full h-[388px] bg-gray-200 rounded animate-pulse`} />}
-					{!isLoading &&
-						products &&
-						products.map(product => (
-							<View className={`scroll-snap-start  ml-[${gap}px]`}>
-								<ProductCard
-									product={product}
-									key={product?.productId}
-									width='188px'
-								/>
-							</View>
-						))}
-				</View>
-			)}
+			{/*{mode !== 'carousel' && (*/}
+			{/*	<View className={`flex flex-row overflow-x-scroll scroll-snap-x-mandatory gap-${gap}`}>*/}
+			{/*		{gap && <View className={`h-[1px] w-[${gap}px]`} />}*/}
+			{/*		{isLoading && <View className={`mt-2 w-full h-[388px] bg-gray-200 rounded animate-pulse`} />}*/}
+			{/*		{!isLoading &&*/}
+			{/*			products &&*/}
+			{/*			products.map(product => (*/}
+			{/*				<View className={`scroll-snap-start  ml-[${gap}px]`}>*/}
+			{/*					<ProductCard*/}
+			{/*						product={product}*/}
+			{/*						key={product?.productId}*/}
+			{/*						width='188px'*/}
+			{/*					/>*/}
+			{/*				</View>*/}
+			{/*			))}*/}
+			{/*	</View>*/}
+			{/*)}*/}
 		</View>
 	)
 }

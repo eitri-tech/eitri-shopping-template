@@ -22,23 +22,32 @@ export default function ProductTiles(props) {
 	}, [currentShelf])
 
 	const executeProductSearch = async shelf => {
-		if (cachedProducts[shelf.title]) {
-			setCurrentProducts(cachedProducts[shelf.title])
-			return
+		try {
+			if (cachedProducts[shelf.title]) {
+				setCurrentProducts(cachedProducts[shelf.title])
+				return
+			}
+
+			setIsLoadingProducts(true)
+
+			const params = {
+				facets: shelf.facets || [],
+				query: shelf.term ?? '',
+				sort: shelf.sort ?? '',
+				to: shelf.numberOfItems || 8
+			}
+
+			const result = await getProductsService(params)
+
+			setCurrentProducts(result.products)
+			setIsLoadingProducts(false)
+			setCachedProducts({
+				...cachedProducts,
+				[shelf.title]: result.products
+			})
+		} catch (e) {
+			console.error('executeProductSearch.error', e)
 		}
-
-		setIsLoadingProducts(true)
-
-		const params = {
-			facets: data.facets || [],
-			query: data.term ?? '',
-			sort: data.sort ?? '',
-			count: data.numberOfItems || 8
-		}
-
-		const result = await getProductsService(params)
-		setCurrentProducts(result.products)
-		setIsLoadingProducts(false)
 	}
 
 	const onChooseShelf = shelf => {
@@ -52,12 +61,12 @@ export default function ProductTiles(props) {
 					<Text className='font-bold'>{data?.title}</Text>
 				</View>
 			)}
-			<View className='overflow-x-auto flex px-4 gap-2'>
+			<View className='overflow-x-auto flex px-4 gap-2 mb-1'>
 				{shelves?.map(shelf => (
 					<View
 						key={shelf.title}
 						onClick={() => onChooseShelf(shelf)}
-						className={`py-1 px-3 border min-w-fit rounded-full ${
+						className={`py-1 px-3 border min-w-fit rounded ${
 							shelf.title === currentShelf.title ? 'border-primary' : 'border-neutral-400'
 						}`}>
 						<Text className={`${shelf.title === currentShelf.title ? 'text-primary' : 'text-neutral-400'}`}>
@@ -67,7 +76,7 @@ export default function ProductTiles(props) {
 				))}
 			</View>
 			<ShelfOfProducts
-				mode='carousel'
+				mode={data.mode || 'scroll'}
 				isLoading={isLoadingProducts}
 				products={currentProducts}
 			/>

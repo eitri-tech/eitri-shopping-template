@@ -2,6 +2,7 @@ import { Text, View } from 'eitri-luminus'
 export default function GridList(props) {
 	const { data, onPress } = props
 	const imagesList = data?.images
+
 	return (
 		<View>
 			{data?.mainTitle && (
@@ -9,12 +10,12 @@ export default function GridList(props) {
 					<Text className='font-bold'>{data.mainTitle}</Text>
 				</View>
 			)}
-			<View className='flex flex-wrap px-4 justify-between'>
+			<View className='grid grid-cols-2 gap-2 px-4'>
 				{imagesList?.map(image => (
 					<View
 						key={image.imageUrl}
 						onClick={() => onPress(image)}
-						className='w-[calc(50%-8px)]' // Adjust for two items per row with spacing
+						className='' // Adjust for two items per row with spacing
 					>
 						<Image
 							src={image.imageUrl}

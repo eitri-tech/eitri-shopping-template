@@ -1,4 +1,4 @@
-import { openBrand, resolveNavigation } from './NavigationService'
+import { openBrand, openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
 import Eitri from 'eitri-bifrost'
 
 const handleSearchAction = value => {
@@ -43,7 +43,11 @@ const handleCategoryAction = (value, title, banner) => {
 	Eitri.navigation.navigate({ path: 'ProductCatalog', state: { params, title, banner } })
 }
 const handleProductAction = value => {
-	openProductById(value)
+	if (/^\d+$/.test(value)) {
+		openProductById(value)
+	} else {
+		openProductBySlug(value)
+	}
 }
 
 export const processActions = sliderData => {

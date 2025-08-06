@@ -1,19 +1,23 @@
 import { Text, View } from 'eitri-luminus'
 export default function FitOnScreen(props) {
-	const { data, onPress } = props
+	const { data, onClick } = props
+
 	return (
 		<View>
 			{data?.mainTitle && (
 				<View className='px-4'>
-					<Text className='font-bold'>{data.mainTitle}</Text>
+					<Text className='font-bold text-lg'>{data.mainTitle}</Text>
 				</View>
 			)}
-			<View className='flex justify-between px-4 overflow-scroll'>
+			<View className='flex justify-between px-4 gap-2'>
 				{data?.images?.map(image => (
 					<View
 						key={image.imageUrl}
-						onClick={() => onPress(image)}>
-						<Image src={image.imageUrl} />
+						onClick={() => onClick(image)}>
+						<Image
+							src={image.imageUrl}
+							className={'rounded'}
+						/>
 					</View>
 				))}
 			</View>

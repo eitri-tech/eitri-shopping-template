@@ -10,6 +10,16 @@ export default function SliderHero(props) {
 		setCurrentSlide(i)
 	}
 
+	let proportionalHeight = 'auto'
+
+	if (data?.aspectRatio) {
+		try {
+			const [aspectWidth, aspectHeight] = data?.aspectRatio?.split(':')?.map(Number)
+			const screenWidth = window.innerWidth
+			proportionalHeight = screenWidth * (aspectHeight / aspectWidth)
+		} catch (e) {}
+	}
+
 	return (
 		<View className='relative'>
 			{data.mainTitle && (
@@ -20,8 +30,8 @@ export default function SliderHero(props) {
 			<Carousel
 				config={{
 					onChange: onChange,
-					autoPlay: true,
-					interval: 4000,
+					autoPlay: data.autoPlay ?? true,
+					interval: 6000,
 					loop: true,
 					currentSlide: currentSlide
 				}}>
@@ -33,10 +43,12 @@ export default function SliderHero(props) {
 							<View
 								onClick={() => {
 									onClick(image)
-								}}>
+								}}
+								height={proportionalHeight}
+								width='100%'>
 								<Image
 									fadeIn={1000}
-									className='w-full'
+									className='w-full h-full'
 									src={image.imageUrl}
 								/>
 							</View>

@@ -30,8 +30,8 @@ export const getProductsService = async (params, page) => {
 		fullText: params?.query || params?.q || '',
 		selectedFacets: params?.facets,
 		orderBy: resolveSortParam(params.sort, true),
-		from,
-		to,
+		from: params?.from || from,
+		to: params?.to || to,
 		hideUnavailableItems: true
 	}
 

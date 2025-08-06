@@ -5,6 +5,7 @@ import { startConfigure } from '../services/AppService'
 import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
+import { BottomInset } from 'shopping-vtex-template-shared'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
@@ -71,9 +72,10 @@ export default function Home() {
 			title='Home'
 			topInset>
 			<MainHeader />
-			<View bottomInset={'auto'}>
+			<View>
 				<HomeSkeleton show={!cmsContent} />
 				<CmsContentRender cmsContent={cmsContent} />
+				<BottomInset />
 			</View>
 		</Page>
 	)
