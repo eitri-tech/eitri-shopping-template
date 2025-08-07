@@ -4,6 +4,8 @@ const path = require('path')
 
 const MANAGER_URL = 'https://api.eitri.tech/eitri-manager-api/v2/revisions?eitriAppId='
 const BLIND_GUARDIAN_URL = 'https://api.eitri.tech/blind-guardian-api/v2/o/auth'
+const DEV_ENV_ID = ''
+const PROD_ENV_ID = ''
 
 const credentials = {
 	client_id: process.env.EITRI_CLI_CLIENT_ID,
@@ -105,6 +107,14 @@ async function publishProject(project, directoryPath, sharedVersion = false, mes
 
 	// Executa o comando dentro do diretório do projeto
 	execSync(`eitri push-version -m '${message}' ${sharedVersion ? '--shared' : ''}`, { stdio: 'inherit' })
+	
+	// Publica versão em dev e prod
+	if (DEV_ENV_ID) {
+		execSync(`eitri publish -e ${DEV_ENV_ID}`, { stdio: 'inherit' })
+	}
+	if (PROD_ENV_ID) {
+		execSync(`eitri publish -e ${PROD_ENV_ID}`, { stdio: 'inherit' })
+	}
 
 	// Volta para o diretório original (opcional)
 	process.chdir(directoryPath)
