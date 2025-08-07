@@ -1,9 +1,9 @@
+import { View } from 'eitri-luminus'
 import ProductCard from '../../ProductCard/ProductCard'
-import ProductCardLoading from './ProductCardLoading'
-import { View, Carousel } from 'eitri-luminus'
+import { CustomCarousel } from 'shopping-vtex-template-shared'
 
 export default function ShelfOfProductsCarousel(props) {
-	const { isLoading, products, gap, locale, currency } = props
+	const { isLoading, products } = props
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const products_per_page = 2
 
@@ -21,38 +21,42 @@ export default function ShelfOfProductsCarousel(props) {
 	return (
 		<>
 			{isLoading ? (
-				<ProductCardLoading gap={gap} />
+				<View className='flex overflow-x-auto'>
+					<View className='flex gap-4 px-4 py-2'>
+						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
+						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
+						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
+					</View>
+				</View>
 			) : (
-				<Swiper
-					config={{
-						onChange: handleScroll
-					}}>
-					{productsPage.map((page, index) => (
-						<Swiper.Item key={page?.[0]?.productId || index}>
-							<View className='flex w-full bg-primary h-[400px]'>
-								{/*<ProductCard*/}
-								{/*	product={page[0]}*/}
-								{/*	className='max-w-[50%]'*/}
-								{/*/>*/}
-								{/*{page.length > 1 && (*/}
-								{/*	<ProductCard*/}
-								{/*		product={page[1]}*/}
-								{/*		className='max-w-[50%]'*/}
-								{/*	/>*/}
-								{/*)}*/}
+				<>
+					<CustomCarousel
+						autoPlay={false}
+						loop={true}
+						onSlideChange={handleScroll}>
+						{productsPage.map((page, index) => (
+							<View
+								key={page?.[0]?.productId || index}
+								className='grid grid-cols-2 gap-2 px-4 py-2'>
+								<ProductCard product={page[0]} />
+								{page.length > 1 && <ProductCard product={page[1]} />}
 							</View>
-						</Swiper.Item>
-					))}
-				</Swiper>
+						))}
+					</CustomCarousel>
+					{productsPage.length > 1 && (
+						<View className='flex justify-center gap-2 mt-2'>
+							{productsPage.map((_, index) => (
+								<View
+									key={index}
+									className={`${currentSlide === index ? 'w-[36px]' : 'w-[12px]'} h-[6px] rounded-lg ${
+										currentSlide === index ? 'bg-primary' : 'bg-base-300'
+									} transition-[width,background-color] duration-300 ease-in-out"`}
+								/>
+							))}
+						</View>
+					)}
+				</>
 			)}
-			<View className='mt-8 flex justify-center gap-2'>
-				{productsPage.map((_, index) => (
-					<View
-						key={index}
-						className={`w-8 h-[6px] ${currentSlide === index ? 'bg-green-700' : 'bg-neutral-300'}`}
-					/>
-				))}
-			</View>
 		</>
 	)
 }

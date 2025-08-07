@@ -1,4 +1,5 @@
-import { Text, View, Carousel, Image } from 'eitri-luminus'
+import { Text, View, Image } from 'eitri-luminus'
+import { CustomCarousel } from 'shopping-vtex-template-shared'
 
 export default function SliderHero(props) {
 	const { data, onClick } = props
@@ -27,17 +28,14 @@ export default function SliderHero(props) {
 					<Text className='font-bold mb-8'>{data.mainTitle}</Text>
 				</View>
 			)}
-			<Carousel
-				config={{
-					onChange: onChange,
-					autoPlay: data.autoPlay ?? true,
-					interval: 6000,
-					loop: true,
-					currentSlide: currentSlide
-				}}>
+			<CustomCarousel
+				onSlideChange={onChange}
+				autoPlay={data.autoPlay ?? true}
+				interval={6000}
+				loop={true}>
 				{imagesList &&
 					imagesList.map(image => (
-						<Carousel.Item
+						<View
 							className='w-full flex justify-center snap-x snap-always'
 							key={`image_${image.imageUrl}`}>
 							<View
@@ -52,9 +50,9 @@ export default function SliderHero(props) {
 									src={image.imageUrl}
 								/>
 							</View>
-						</Carousel.Item>
+						</View>
 					))}
-			</Carousel>
+			</CustomCarousel>
 			{imagesList.length > 1 && (
 				<View className='flex justify-center gap-2 mt-2'>
 					{imagesList.map((_, index) => (
