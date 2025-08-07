@@ -17,7 +17,7 @@ export default function ProductInfiniteScroll(props) {
 	return (
 		<View>
 			{data?.title && (
-				<View className='flex justify-between items-center'>
+				<View className='flex justify-between items-center px-4'>
 					<Text className='font-bold text-xl'>{data?.title}</Text>
 				</View>
 			)}

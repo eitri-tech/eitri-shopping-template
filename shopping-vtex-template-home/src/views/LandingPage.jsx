@@ -1,3 +1,4 @@
+import Eitri from 'eitri-bifrost'
 import {
 	Loading,
 	HeaderContentWrapper,

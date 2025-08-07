@@ -9,7 +9,7 @@ export default function FitOnScreen(props) {
 					<Text className='font-bold text-lg'>{data.mainTitle}</Text>
 				</View>
 			)}
-			<View className='flex justify-between px-4 gap-2'>
+			<View className={`flex justify-between ${data?.images.length > 1 ? 'px-4' : ''} gap-2`}>
 				{data?.images?.map(image => (
 					<View
 						key={image.imageUrl}

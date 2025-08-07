@@ -30,7 +30,7 @@ export default function ProductCardFullImage(props) {
 			className={`relative bg-white rounded ${className}`}>
 			<View className={`flex flex-col w-full shadow-md rounded`}>
 				<View
-					className={`relative flex flex-col w-full justify-center items-center rounded-lg h-[240px] w-full min-h-[240px] max-h-[240px]`}>
+					className={`relative flex flex-col w-full justify-center items-center rounded-lg h-[240px] min-h-[240px] max-h-[240px]`}>
 					<Image
 						className={`object-contain h-full w-full rounded`}
 						src={image}
@@ -74,7 +74,7 @@ export default function ProductCardFullImage(props) {
 						e.stopPropagation()
 						onPressCartButton()
 					}}
-					className={`mt-2 h-[36px] bg-primary w-full rounded-b flex justify-center items-center border border-primary-700 border-[0.5px] bg-primary-700 z-[99]`}>
+					className={`mt-2 h-[36px] bg-primary w-full rounded-b flex justify-center items-center border-primary-700 border-[0.5px] bg-primary-700 z-[99]`}>
 					{loadingCartOp ? (
 						<Loading width='36px' />
 					) : (
