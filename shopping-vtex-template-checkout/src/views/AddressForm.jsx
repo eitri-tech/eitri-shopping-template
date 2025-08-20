@@ -227,7 +227,7 @@ export default function AddressForm(props) {
 		const { value } = e.target
 		setAddress({
 			...address,
-			[key]: key === 'receiverName' ? value.replace(/[^a-zA-Z\s]/g, '') : value
+			[key]: key === 'receiverName' ? value.replace(/[^\p{L}\s]/gu, '') : value
 		})
 	}
 
@@ -288,7 +288,7 @@ export default function AddressForm(props) {
 				}
 				await setLogisticInfo(payload)
 			}
-			navigateBack()
+			navigate('PaymentData', {}, true)
 		} catch (e) {
 			if (e.response?.status === 400) {
 				setAddressError(t('addNewShippingAddress.errorAddress'))
