@@ -227,7 +227,7 @@ export default function AddressForm(props) {
 		const { value } = e.target
 		setAddress({
 			...address,
-			[key]: key === 'receiverName' ? value.replace(/[^a-zA-Z\s]/g, '') : value
+			[key]: key === 'receiverName' ? value.replace(/[^\p{L}\s]/gu, '') : value
 		})
 	}
 
