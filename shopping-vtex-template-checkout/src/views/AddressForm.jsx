@@ -288,7 +288,7 @@ export default function AddressForm(props) {
 				}
 				await setLogisticInfo(payload)
 			}
-			navigateBack()
+			navigate('PaymentData', {}, true)
 		} catch (e) {
 			if (e.response?.status === 400) {
 				setAddressError(t('addNewShippingAddress.errorAddress'))
