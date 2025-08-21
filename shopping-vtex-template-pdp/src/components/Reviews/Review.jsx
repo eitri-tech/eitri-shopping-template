@@ -1,4 +1,4 @@
-import { Divisor } from 'shopping-vtex-template-shared'
+import { Divisor } from 'eitri-shopping-montreal-shared'
 import Rating from '../Rating/Rating'
 import { useTranslation } from 'eitri-i18n'
 export default function Review(props) {

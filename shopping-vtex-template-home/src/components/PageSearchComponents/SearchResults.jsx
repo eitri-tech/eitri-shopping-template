@@ -1,4 +1,4 @@
-import { Loading } from 'shopping-vtex-template-shared'
+import { Loading } from 'eitri-shopping-montreal-shared'
 import { View, Text, Image } from 'eitri-luminus'
 import ProductCard from '../ProductCard/ProductCard'
 import { useTranslation } from 'eitri-i18n'

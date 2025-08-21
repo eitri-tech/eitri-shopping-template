@@ -1,4 +1,4 @@
-import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shopping-vtex-template-shared'
+import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'eitri-shopping-montreal-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'

@@ -1,4 +1,4 @@
-import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
+import { CustomButton, BottomInset } from 'eitri-shopping-montreal-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart } from '../../services/NavigationService'

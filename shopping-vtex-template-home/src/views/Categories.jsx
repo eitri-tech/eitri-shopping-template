@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { Loading, HeaderContentWrapper, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderSearchIcon } from 'eitri-shopping-montreal-shared'
 import { getCmsContent } from '../services/CmsService'
 import { useTranslation } from 'eitri-i18n'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'

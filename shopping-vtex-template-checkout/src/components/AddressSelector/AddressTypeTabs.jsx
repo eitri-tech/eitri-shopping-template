@@ -1,5 +1,5 @@
 import { View, Text } from 'eitri-luminus'
-import { CustomButton } from 'shopping-vtex-template-shared'
+import { CustomButton } from 'eitri-shopping-montreal-shared'
 
 export default function AddressTypeTabs({ selectedTab, onTabChange }) {
 	return (

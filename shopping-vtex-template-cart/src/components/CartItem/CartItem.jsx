@@ -1,6 +1,6 @@
 import { View, Text, Image } from 'eitri-luminus'
 import Quantity from '../Quantity/Quantity'
-import { HeaderWishList, Loading } from 'shopping-vtex-template-shared'
+import { HeaderWishList, Loading } from 'eitri-shopping-montreal-shared'
 import { addToWishlist, checkWishlistItem, removeItemFromWishlist } from '../../services/customerService'
 import ModalConfirm from '../ModalConfirm/ModalConfirm'
 import { useTranslation } from 'eitri-i18n'

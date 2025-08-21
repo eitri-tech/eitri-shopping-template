@@ -1,4 +1,4 @@
-import { Spacing } from 'shopping-vtex-template-shared'
+import { Spacing } from 'eitri-shopping-montreal-shared'
 import ProductCard from '../ProductCard/ProductCard'
 export default function ProductCarousel(props) {
 	const [currentSlide, setCurrentSlide] = useState(0)

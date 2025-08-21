@@ -3,7 +3,7 @@ import CardIcon from '../../Icons/CardIcons/CardIcon'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import GroupsWrapper from './GroupsWrapper'
 import Card from '../../Icons/MethodIcons/Card'
-import { CustomInput } from 'shopping-vtex-template-shared'
+import { CustomInput } from 'eitri-shopping-montreal-shared'
 import { View, Text, Checkbox } from 'eitri-luminus'
 import CreditCardBillingAddress from './Components/CreditCardBillingAddress'
 

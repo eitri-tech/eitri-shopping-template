@@ -31,25 +31,25 @@ eitri-apps:
       shared: false
 bottom-tab-view-simulation:
   eitri-apps:
-    - slug: "shopping-vtex-template-home"
+    - slug: "home"
       title: "Inicio"
       initialization-params:
         type: "string"
         value: "tabIndex=0"
-    - slug: "shopping-vtex-template-home"
+    - slug: "home"
       title: "Categorias"
       initialization-params:
         type: "string"
         value: "tabIndex=1&route=Categories"
-    - slug: "shopping-vtex-template-cart"
+    - slug: "cart"
       title: "Sacola"
       initialization-params:
         type: "string"
         value: "tabIndex=2"
-    - slug: "shopping-vtex-template-account"
+    - slug: "account"
       title: "Perfil"
       initialization-params:
         type: "string"
         value: "tabIndex=4"
 
-application-id: 9022c0fb-885f-4a5f-b99f-7e065189b893
+application-id: e5a15d24-819f-492c-a403-cdd41c4fc124

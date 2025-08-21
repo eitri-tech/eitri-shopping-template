@@ -5,7 +5,7 @@ import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { getShippingAddress } from '../../utils/getShippingAddress'
 import { navigate } from '../../services/navigationService'
-import { cartShippingResolver } from 'shopping-vtex-template-shared'
+import { cartShippingResolver } from 'eitri-shopping-montreal-shared'
 import { View, Text } from 'eitri-luminus'
 
 export default function DeliveryData(props) {

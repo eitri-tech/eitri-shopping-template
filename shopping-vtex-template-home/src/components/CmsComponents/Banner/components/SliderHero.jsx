@@ -1,5 +1,5 @@
 import { Text, View, Image } from 'eitri-luminus'
-import { CustomCarousel } from 'shopping-vtex-template-shared'
+import { CustomCarousel } from 'eitri-shopping-montreal-shared'
 
 export default function SliderHero(props) {
 	const { data, onClick } = props

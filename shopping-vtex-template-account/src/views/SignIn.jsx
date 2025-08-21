@@ -8,7 +8,7 @@ import {
 	CustomButton,
 	CustomInput,
 	HeaderReturn
-} from 'shopping-vtex-template-shared'
+} from 'eitri-shopping-montreal-shared'
 import {
 	doLogin,
 	getCustomerData,

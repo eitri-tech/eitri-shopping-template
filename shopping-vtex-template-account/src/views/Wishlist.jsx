@@ -1,6 +1,6 @@
 import { getWishlist, removeFromWishlist } from '../services/CustomerService'
 import WishlistItem from '../components/WishlistItem/WishlistItem'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'eitri-shopping-montreal-shared'
 import NoItem from '../components/NoItem/NoItem'
 import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'

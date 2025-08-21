@@ -1,5 +1,5 @@
 import { View, Text, Button } from 'eitri-luminus'
-import { CustomButton, Spacing, Divisor } from 'shopping-vtex-template-shared'
+import { CustomButton, Spacing, Divisor } from 'eitri-shopping-montreal-shared'
 import { useTranslation } from 'eitri-i18n'
 import { formatAmountInCents } from '../../utils/utils'
 import { useLocalShoppingCart } from '../../providers/LocalCart'

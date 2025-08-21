@@ -1,6 +1,6 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
-import { Loading } from 'shopping-vtex-template-shared'
+import { Loading } from 'eitri-shopping-montreal-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
 import { startConfigure } from '../services/AppService'

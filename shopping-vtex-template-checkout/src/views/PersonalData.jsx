@@ -8,7 +8,7 @@ import {
 	HeaderText,
 	CustomInput,
 	BottomInset
-} from 'shopping-vtex-template-shared'
+} from 'eitri-shopping-montreal-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { getUserByEmail, registerToNotify } from '../services/cartService'
 import { sendPageView } from '../services/trackingService'

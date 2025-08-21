@@ -7,7 +7,7 @@ import {
 	HeaderContentWrapper,
 	HeaderReturn,
 	HeaderText
-} from 'shopping-vtex-template-shared'
+} from 'eitri-shopping-montreal-shared'
 import { clearCart, startPayment } from '../services/cartService'
 import Recaptcha from '../services/Recaptcha'
 import UserData from '../components/FinishCart/UserData'

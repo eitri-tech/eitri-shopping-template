@@ -1,28 +1,28 @@
 module.exports = {
-	'name': 'shopping-vtex-template-pdp',
-	'title': 'shopping-vtex-template-pdp',
-	'slug': 'shopping-vtex-template-pdp',
-	'eitri-luminus': '2.3.6',
-	'eitri-bifrost': '3.10.0',
-	'eitri-commons': '2.1.2',
-	'version': '0.1.1',
-	'public-key': '9ae6c9a8-6959-4c42-ae39-dcc3ea07e6d8',
-	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
-	'id': '27bb23a4-8598-4d7e-87f2-e83b87dda152',
-	'organizationId': 'cf5660ee-bf90-42cd-9a43-9d2c69ee3c89',
-	'organization': {},
-	'eitri-app-dependencies': {
-		'shopping-vtex-template-shared': {
-			isEitriAppShared: true,
-			version: '0.1.5'
-		},
-		'eitri-shopping-vtex-shared': {
-			isEitriAppShared: true,
-			version: '1.2.3'
-		},
-		'i18n': {
-			version: '14.1.2'
-		}
-	},
-	'type': 'module'
+  "name": "eitri-shopping-montreal-pdp",
+  "title": "eitri-shopping-montreal-pdp",
+  "slug": "eitri-shopping-montreal-pdp",
+  "eitri-luminus": "2.3.6",
+  "eitri-bifrost": "3.10.0",
+  "eitri-commons": "2.1.2",
+  "version": "0.1.0",
+  "public-key": "2dd41f67-1558-459d-a646-d07b2518ec20",
+  "applicationId": "e5a15d24-819f-492c-a403-cdd41c4fc124",
+  "id": "56d79170-dee3-4a2f-a7d2-4ec77bf9a9cb",
+  "organizationId": "cf5660ee-bf90-42cd-9a43-9d2c69ee3c89",
+  "organization": {},
+  "eitri-app-dependencies": {
+    "eitri-shopping-vtex-shared": {
+      "isEitriAppShared": true,
+      "version": "1.2.3"
+    },
+    "i18n": {
+      "version": "14.1.2"
+    },
+    "eitri-shopping-montreal-shared": {
+      "isEitriAppShared": true,
+      "version": "0.1.0"
+    }
+  },
+  "type": "module"
 }

@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'eitri-shopping-montreal-shared'
 import SearchInput from '../components/SearchInput/SearchInput'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { View } from 'eitri-luminus'

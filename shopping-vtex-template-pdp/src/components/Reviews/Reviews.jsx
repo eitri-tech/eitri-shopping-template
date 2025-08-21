@@ -1,4 +1,4 @@
-import { Divisor, Loading, Spacing } from 'shopping-vtex-template-shared'
+import { Divisor, Loading, Spacing } from 'eitri-shopping-montreal-shared'
 import Review from './Review'
 import { useTranslation } from 'eitri-i18n'
 export default function Reviews(props) {

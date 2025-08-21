@@ -1,4 +1,4 @@
-import { Loading } from 'shopping-vtex-template-shared'
+import { Loading } from 'eitri-shopping-montreal-shared'
 export default function ProductCardLoading(props) {
 	const { width, gap } = props
 	return (

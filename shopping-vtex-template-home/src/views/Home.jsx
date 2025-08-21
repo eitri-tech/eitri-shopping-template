@@ -5,7 +5,7 @@ import { startConfigure } from '../services/AppService'
 import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
-import { BottomInset } from 'shopping-vtex-template-shared'
+import { BottomInset } from 'eitri-shopping-montreal-shared'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()

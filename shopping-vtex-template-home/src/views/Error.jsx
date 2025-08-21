@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { GenericError } from 'shopping-vtex-template-shared'
+import { GenericError } from 'eitri-shopping-montreal-shared'
 export default function Error() {
 	const navigateToHome = () => {
 		Eitri.navigation.navigate({

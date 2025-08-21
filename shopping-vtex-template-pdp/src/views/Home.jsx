@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { View } from 'eitri-luminus'
-import { Loading, BottomInset } from 'shopping-vtex-template-shared'
+import { Loading, BottomInset } from 'eitri-shopping-montreal-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
 import ImageCarousel from '../components/ImageCarousel/ImageCarousel'

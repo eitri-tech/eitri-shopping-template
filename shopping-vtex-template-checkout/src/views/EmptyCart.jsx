@@ -1,4 +1,4 @@
-import { CustomButton, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
+import { CustomButton, HeaderReturn, HeaderContentWrapper, HeaderText } from 'eitri-shopping-montreal-shared'
 import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
 import { useTranslation } from 'eitri-i18n'

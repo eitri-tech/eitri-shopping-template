@@ -1,6 +1,6 @@
 import { View } from 'eitri-luminus'
 import ProductCard from '../../ProductCard/ProductCard'
-import { CustomCarousel } from 'shopping-vtex-template-shared'
+import { CustomCarousel } from 'eitri-shopping-montreal-shared'
 
 export default function ShelfOfProductsCarousel(props) {
 	const { isLoading, products } = props

@@ -1,4 +1,4 @@
-import { Spacing, Divisor } from 'shopping-vtex-template-shared'
+import { Spacing, Divisor } from 'eitri-shopping-montreal-shared'
 import { useTranslation } from 'eitri-i18n'
 import CollapseWrapper from './components/CollapseWrapper'
 export default function Description(props) {

@@ -1,5 +1,5 @@
 import { View, Text } from 'eitri-luminus'
-import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
+import { CustomInput, CustomButton } from 'eitri-shopping-montreal-shared'
 import { useLocalShoppingCart } from '../../../../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
 import { useState, useEffect } from 'react'

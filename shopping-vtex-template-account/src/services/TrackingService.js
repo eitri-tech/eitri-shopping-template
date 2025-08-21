@@ -1,4 +1,4 @@
-import { TrackingService } from 'shopping-vtex-template-shared'
+import { TrackingService } from 'eitri-shopping-montreal-shared'
 
 export const sendScreenView = async (friendlyScreenName, screenFilename) => {
 	try {

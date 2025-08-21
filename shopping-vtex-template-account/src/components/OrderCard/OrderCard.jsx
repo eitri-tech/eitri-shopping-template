@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { useState, useEffect } from 'react'
-import { CustomButton } from 'shopping-vtex-template-shared'
+import { CustomButton } from 'eitri-shopping-montreal-shared'
 import OrderStatusBadge from '../OrderStatusBadge/OrderStatusBadge'
 import { formatDateDaysMonthYear, formatPriceInCents } from '../../utils/utils'
 import { getOrderById } from '../../services/CustomerService'

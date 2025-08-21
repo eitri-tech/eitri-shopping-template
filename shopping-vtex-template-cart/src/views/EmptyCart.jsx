@@ -8,7 +8,7 @@ import {
 	HeaderText,
 	CustomButton,
 	BottomInset
-} from 'shopping-vtex-template-shared'
+} from 'eitri-shopping-montreal-shared'
 
 export default function EmptyCart(props) {
 	const openWithBottomBar = props?.location?.state?.openWithBottomBar

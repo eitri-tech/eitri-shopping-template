@@ -2,7 +2,7 @@ import { openProduct } from '../../services/NavigationService'
 import { removeFromWishlist } from '../../services/CustomerService'
 import { formatPrice } from '../../utils/utils'
 import { App } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
+import { ProductCardFullImage, ProductCardDefault } from 'eitri-shopping-montreal-shared'
 import { useTranslation } from 'eitri-i18n'
 
 export default function ProductCard(props) {

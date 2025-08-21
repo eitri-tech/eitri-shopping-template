@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { View, Text, Button, Modal } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
 import { getProductsFacetsService } from '../../../services/ProductService'
-import { CustomButton, BottomInset, CustomCheckbox } from 'shopping-vtex-template-shared'
+import { CustomButton, BottomInset, CustomCheckbox } from 'eitri-shopping-montreal-shared'
 import CustomModal from '../../CustomModal/CustomModal'
 import PriceRange from './PriceRange'
 

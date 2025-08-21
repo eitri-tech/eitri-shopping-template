@@ -1,6 +1,6 @@
 import { useTranslation } from 'eitri-i18n'
 import fetchFreight from '../../services/freightService'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { CustomButton, CustomInput } from 'eitri-shopping-montreal-shared'
 import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {

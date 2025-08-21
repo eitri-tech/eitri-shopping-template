@@ -4,7 +4,7 @@ import {
 	HeaderReturn,
 	HeaderShare,
 	HeaderWishList
-} from 'shopping-vtex-template-shared'
+} from 'eitri-shopping-montreal-shared'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
