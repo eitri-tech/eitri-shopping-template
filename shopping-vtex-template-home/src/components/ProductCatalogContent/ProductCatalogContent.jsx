@@ -39,6 +39,8 @@ export default function ProductCatalogContent(props) {
 			setInitialFilters(params)
 			setAppliedFacets(params)
 			setProducts([])
+			setPageHasEnded(false)
+
 			getProducts(params, currentPage)
 		}
 	}, [params])

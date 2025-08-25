@@ -18,8 +18,8 @@ export const autocompleteSuggestions = async value => {
 export const getProductsService = async (params, page) => {
 	const PAGE_SIZE = 12
 
-	let from = 1
-	let to = PAGE_SIZE
+	let from = params?.from || 1
+	let to = page?.to || PAGE_SIZE
 
 	if (page) {
 		from = (page - 1) * PAGE_SIZE + 1

@@ -13,7 +13,7 @@ export default function ProtectedView(props) {
 
 			if (!logged) {
 				Eitri.navigation.navigate({
-					path: 'Login',
+					path: 'SignIn',
 					replace: true,
 					state: { redirectTo: afterLoginRedirectTo, redirectState: redirectState }
 				})
