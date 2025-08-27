@@ -1,4 +1,3 @@
-import Card from '../../Icons/MethodIcons/Card'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import Boleto from '../../Icons/MethodIcons/Boleto'
 import GroupsWrapper from './GroupsWrapper'

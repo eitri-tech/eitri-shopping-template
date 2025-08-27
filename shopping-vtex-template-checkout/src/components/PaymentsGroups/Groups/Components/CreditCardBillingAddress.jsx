@@ -1,20 +1,18 @@
-import { View, Text } from 'eitri-luminus'
-import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
+import { Text, View } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../../../../providers/LocalCart'
-import { useTranslation } from 'eitri-i18n'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { resolvePostalCode } from '../../../../services/freigthService'
+import { CustomInput } from 'shopping-vtex-template-shared'
 
 export default function CreditCardBillingAddress() {
 	const { cart, cardInfo, setCardInfo } = useLocalShoppingCart()
-	const { t } = useTranslation()
 
 	const [useShippingAddress, setUseShippingAddress] = useState(true)
 
 	useEffect(() => {
 		const userAddress = cart?.shippingData?.address
 		if (userAddress && userAddress?.addressType === 'residential') {
-			setCardInfo({ ...cardInfo, addressId: userAddress.addressId })
+			setCardInfo({ ...cardInfo, address: userAddress })
 		}
 	}, [])
 
@@ -73,9 +71,8 @@ export default function CreditCardBillingAddress() {
 	}
 
 	const getShippingAddressLabel = () => {
-		const userAddress = cart?.shippingData?.address
-		if (userAddress) {
-			return `${userAddress.street}, ${userAddress.number} - ${userAddress.neighborhood}, ${userAddress.city}`
+		if (cardInfo) {
+			return `${cardInfo.address?.street}, ${cardInfo.address?.number} - ${cardInfo.address?.neighborhood}, ${cardInfo.address?.city}`
 		}
 		return 'endereço de entrega'
 	}

@@ -83,6 +83,7 @@ export default function cartShippingResolver(cart) {
 			postalCode: cart.shippingData?.address?.postalCode,
 			shippingAvailable: !(cheapers.length === 0 && fasters.length === 0 && pickUpInPoints.length === 0),
 			selectedAddresses,
+			address: cart.shippingData?.address,
 			options
 		}
 
@@ -152,9 +153,12 @@ function getFormattedTotalPrice(slas) {
 }
 
 function getMaximumDeliveryDate(slas) {
-	const maximumDate = slas.reduce((acc, current) => {
-		return acc > current.shippingEstimateDate ? acc : current.shippingEstimateDate
-	}, new Date(1970, 1, 1))
+	const maximumDate = slas.reduce(
+		(acc, current) => {
+			return acc > current.shippingEstimateDate ? acc : current.shippingEstimateDate
+		},
+		new Date(1970, 1, 1)
+	)
 
 	return formatDate(maximumDate)
 }

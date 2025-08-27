@@ -40,7 +40,7 @@ export default function CardIcon(props) {
 			src={icon}
 			width={width}
 			height={height}
-			className={`aspect-[39/25] rounded-sm ${className}`}
+			className={`aspect-[39/25] rounded ${className}`}
 		/>
 	)
 }

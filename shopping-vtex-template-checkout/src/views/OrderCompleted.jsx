@@ -1,75 +1,76 @@
-import { Page, View, Text } from 'eitri-luminus'
-import { sendPageView } from '../services/trackingService'
-import { Spacing, CustomButton, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
+import Eitri from 'eitri-bifrost'
 import { goHome, openAccount } from '../services/navigationService'
 import { useTranslation } from 'eitri-i18n'
+import { trackScreenView } from '../services/Tracking'
+import { Page, Text, View } from 'eitri-luminus'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	CustomButton,
+	BottomInset
+} from 'shopping-vtex-template-shared'
 
 export default function OrderCompleted(props) {
 	const orderId = props.location?.state?.orderId
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		sendPageView('OrderCompleted')
+		requestAppReview()
+		trackScreenView(`checkout_pedido_realizado`, 'checkout.orderCompleted')
 	}, [])
 
+	const requestAppReview = async () => {
+		try {
+			await Eitri.appStore.requestInAppReview()
+			console.log('Solicitação de avaliação enviada com sucesso!')
+		} catch (error) {
+			console.error('Erro ao solicitar avaliação do app:', error)
+		}
+	}
+
 	return (
-		<Page topInset>
-			<HeaderTemplate
-				headerType={HEADER_TYPE.RETURN_AND_TEXT}
-				viewBackButton={true}
-				contentText={t('orderCompleted.title')}
-			/>
-			<View className='p-10 flex flex-col mt-4 gap-5'>
-				<View className='flex flex-col w-full items-center justify-center'>
-					<svg
-						height='45px'
-						width='45px'
-						viewBox='0 0 310.277 310.277'
-						fill='#000000'>
-						<g>
-							<path
-								style={{ fill: '#12805C' }}
-								d='M155.139,0C69.598,0,0,69.598,0,155.139c0,85.547,69.598,155.139,155.139,155.139 c85.547,0,155.139-69.592,155.139-155.139C310.277,69.598,240.686,0,155.139,0z M144.177,196.567L90.571,142.96l8.437-8.437 l45.169,45.169l81.34-81.34l8.437,8.437L144.177,196.567z'
-							/>
-						</g>
-					</svg>
-					<Spacing height={15} />
-					<Text className='w-full text-center text-4xl font-bold'>
-						{t('orderCompleted.txtCongratulation')}
-					</Text>
+		<Page>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={'Pedido concluído'} />
+			</HeaderContentWrapper>
+
+			<View className='p-4'>
+				{/* Payment Confirmation Section */}
+				<View className='bg-white rounded p-4'>
+					<View className='flex flex-col items-center justify-center mb-4 gap-2'>
+						<View className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center'>
+							<Text className='text-2xl'>✓</Text>
+						</View>
+						<Text className='text-xl font-bold text-gray-800 text-center'>Pronto, compra feita!</Text>
+					</View>
+
+					<View className='flex flex-col items-center'>
+						<Text className='text-gray-600 text-center text'>
+							Enviamos uma confirmação com os detalhes do seu pedido para seu email
+						</Text>
+					</View>
+
+					<View className='flex flex-col items-center mt-4'>
+						<Text className='text-gray-600 text-center text-sm'>Seu código de pedido é</Text>
+						<Text className='text-gray-800 font-bold text-center text-lg'>{orderId}</Text>
+					</View>
 				</View>
 
-				<View className='my-4'>
-					<Text className='text-lg w-full text-center'>{t('orderCompleted.txtOrderSuccessful')}</Text>
-				</View>
-
-				<View className='bg-neutral-100 px-4 py-6 mt-2 flex justify-center items-center'>
-					<Text className='text-lg font-bold'>{t('orderCompleted.txtOrderNumber')}</Text>
-					&nbsp;
-					<Text className='text-sm'>{orderId}</Text>
-				</View>
-
-				<Text className='text-lg text-center'>{t('orderCompleted.txtOrderFollow')}</Text>
-
-				<View className='flex flex-col justify-center items-center'>
+				<View className='flex flex-col gap-4 mt-6'>
 					<CustomButton
-						borderRadius='pill'
-						marginTop='large'
-						label={t('orderCompleted.labelSeeOrders')}
-						onPress={openAccount}
-						block
+						label='Ver meus pedidos'
+						onClick={openAccount}
 					/>
-					<Spacing height={15} />
 					<CustomButton
-						borderRadius='pill'
-						marginTop='large'
-						label={t('orderCompleted.labelBack')}
-						onPress={goHome}
-						backgroundColor='accent-100'
-						color='primary-700'
-						block
+						outlined
+						label='Voltar ao início'
+						onClick={goHome}
 					/>
 				</View>
+
+				<BottomInset />
 			</View>
 		</Page>
 	)

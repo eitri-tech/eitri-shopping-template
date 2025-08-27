@@ -1,31 +1,22 @@
-import { Page, View, Text } from 'eitri-luminus'
-import { CustomButton, Loading, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
+import { Page, View } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import PaymentMethods from '../components/Methods/PaymentMethods'
-import { sendPageView } from '../services/trackingService'
-import { useTranslation } from 'eitri-i18n'
-import GiftCardInput from '../components/GiftCardInput/GiftCardInput'
-import { formatAmountInCents } from '../utils/utils'
-import { navigate } from '../services/navigationService'
+import { trackScreenView } from '../services/Tracking'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
 
 export default function PaymentData(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
 
-	const { t } = useTranslation()
-
 	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
-		sendPageView('Dados de pagamento')
+		trackScreenView(`checkout_dados_pagamento`, 'checkout.paymentData')
 	}, [])
 
-	const submitPaymentSystemSelected = async () => {
-		navigate('FinishCart')
-	}
-
-	const handlePaymentOptionsChange = async (paymentMethod, silentMode = false) => {
+	const handlePaymentOptionsChange = async paymentMethod => {
 		try {
-			!silentMode && setIsLoading(true)
+			setIsLoading(true)
 			const payload = {
 				payments: Array.isArray(paymentMethod) ? paymentMethod : [paymentMethod],
 				giftCards: cart.paymentData.giftCards
@@ -34,15 +25,8 @@ export default function PaymentData(props) {
 		} catch (error) {
 			console.log('Erro ao selecionar método de pagamento', error)
 		} finally {
-			!silentMode && setIsLoading(false)
+			setIsLoading(false)
 		}
-	}
-
-	const readyToProceed = () => {
-		if (cart?.paymentData?.payments?.length === 0 && cart?.paymentData?.giftCards?.length === 0) {
-			return false
-		}
-		return true
 	}
 
 	if (!cart) {
@@ -51,44 +35,21 @@ export default function PaymentData(props) {
 
 	return (
 		<Page title='Checkout - Dados de pagamento'>
-			<View className='min-h-[100vh] flex flex-col'>
-				<HeaderContentWrapper
-					gap={16}
-					scrollEffect={false}>
-					<HeaderReturn />
-					<HeaderText text={t('paymentData.title')} />
-				</HeaderContentWrapper>
+			<HeaderContentWrapper>
+				<HeaderReturn />
+			</HeaderContentWrapper>
 
-				<Loading
-					fullScreen
-					isLoading={isLoading}
-				/>
+			<LoadingComponent
+				fullScreen
+				isLoading={isLoading}
+			/>
 
-				<View className='flex-1 p-4 flex flex-col gap-4'>
-					<View className='flex flex-row justify-between items-center'>
-						<Text className='text-xs font-bold'>{t('paymentData.txtTotalPayment')}</Text>
-						<Text className='text-sm font-bold text-primary-700'>{formatAmountInCents(cart.value)}</Text>
-					</View>
-
-					<View>
-						<GiftCardInput onPressAddGiftCard={handlePaymentOptionsChange} />
-					</View>
-
-					<View className='flex flex-col gap-4 py-4'>
-						<PaymentMethods onSelectPaymentMethod={handlePaymentOptionsChange} />
-					</View>
-				</View>
-
-				<View bottomInset={'auto'}>
-					<View className='p-4'>
-						<CustomButton
-							disabled={!readyToProceed()}
-							label={t('paymentData.labelButton')}
-							onPress={submitPaymentSystemSelected}
-						/>
-					</View>
-				</View>
+			<View className='flex-1 p-4 flex flex-col gap-4'>
+				<Text className='text-xl font-bold'>Escolha como pagar</Text>
+				<PaymentMethods onSelectPaymentMethod={handlePaymentOptionsChange} />
 			</View>
+
+			<BottomInset />
 		</Page>
 	)
 }

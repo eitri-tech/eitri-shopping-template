@@ -1,4 +1,4 @@
-import { View, Text, Loading, Skeleton } from 'eitri-luminus'
+import { Loading, Skeleton, Text, View } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
 
 export default function PickupPointList({ options, onSelectFreightOption, loading }) {
@@ -59,7 +59,7 @@ export default function PickupPointList({ options, onSelectFreightOption, loadin
 								key={i}
 								className='h-[72px] w-full rounded-lg mb-2'
 							/>
-					  ))
+						))
 					: options.map((option, index) => (
 							<PickupPointCard
 								key={option.label || index}
@@ -67,7 +67,7 @@ export default function PickupPointList({ options, onSelectFreightOption, loadin
 								isSelected={!!option.isCurrent}
 								onClick={() => handlePickupChange(option)}
 							/>
-					  ))}
+						))}
 			</View>
 		</View>
 	)

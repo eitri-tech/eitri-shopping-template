@@ -1,5 +1,5 @@
 import { useTranslation } from 'eitri-i18n'
-import { View, Text, Skeleton } from 'eitri-luminus'
+import { Skeleton, Text, View } from 'eitri-luminus'
 
 export default function ShippingMethods(props) {
 	const { onSelectFreightOption, options, loading = false, ...rest } = props
