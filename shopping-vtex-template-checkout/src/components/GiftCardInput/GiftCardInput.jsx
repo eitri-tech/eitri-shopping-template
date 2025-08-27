@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { CustomInput, Loading, CustomButton } from 'eitri-shopping-montreal-shared'
-import { Button } from 'eitri-shopping-montreal-shared'
+import { CustomInput, Loading, CustomButton } from 'shopping-vtex-template-shared'
+import { Button } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { View, Text } from 'eitri-luminus'
 

@@ -1,4 +1,4 @@
-import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'eitri-shopping-montreal-shared'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
 import { sendScreenView } from '../services/TrackingService'
 import OrderCard from '../components/OrderCard/OrderCard'

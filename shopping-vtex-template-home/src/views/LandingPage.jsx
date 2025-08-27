@@ -5,7 +5,7 @@ import {
 	HeaderReturn,
 	HeaderText,
 	HeaderSearchIcon
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import { getCmsContent } from '../services/CmsService'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 

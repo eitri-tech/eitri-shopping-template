@@ -1,4 +1,4 @@
-import { HeaderCart, HeaderContentWrapper, HeaderLogo, HeaderSearchIcon } from 'eitri-shopping-montreal-shared'
+import { HeaderCart, HeaderContentWrapper, HeaderLogo, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import Eitri from 'eitri-bifrost'
 import { goToCartman } from '../../utils/utils'

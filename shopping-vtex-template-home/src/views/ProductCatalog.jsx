@@ -1,4 +1,4 @@
-import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'eitri-shopping-montreal-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'

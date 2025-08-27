@@ -1,6 +1,6 @@
 import { Page, View, Text } from 'eitri-luminus'
 import { sendPageView } from '../services/trackingService'
-import { Spacing, CustomButton, HeaderTemplate, HEADER_TYPE } from 'eitri-shopping-montreal-shared'
+import { Spacing, CustomButton, HeaderTemplate, HEADER_TYPE } from 'shopping-vtex-template-shared'
 import { goHome, openAccount } from '../services/navigationService'
 import { useTranslation } from 'eitri-i18n'
 

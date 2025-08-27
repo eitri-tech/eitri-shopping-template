@@ -1,6 +1,6 @@
 import { navigate, PAGES } from '../../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
-import { CustomButton } from 'eitri-shopping-montreal-shared'
+import { CustomButton } from 'shopping-vtex-template-shared'
 
 export default function LoginCard(props) {
 	const { t } = useTranslation()

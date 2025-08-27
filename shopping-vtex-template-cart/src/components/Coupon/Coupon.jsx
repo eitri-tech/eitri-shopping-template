@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { View, Text, Button } from 'eitri-luminus'
-import { CustomInput, CustomButton } from 'eitri-shopping-montreal-shared'
+import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 

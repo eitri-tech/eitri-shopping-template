@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Divisor } from 'eitri-shopping-montreal-shared'
+import { Divisor } from 'shopping-vtex-template-shared'
 
 // Componente SVG para ícone de seta para baixo (collapsed)
 const ChevronDownIcon = ({ width = 24, height = 24, color = '#000' }) => (

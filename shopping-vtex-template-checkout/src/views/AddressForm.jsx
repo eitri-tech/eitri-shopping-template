@@ -6,7 +6,7 @@ import {
 	HeaderContentWrapper,
 	HeaderText,
 	CustomInput
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'

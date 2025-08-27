@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { useTranslation } from 'eitri-i18n'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'eitri-shopping-montreal-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'shopping-vtex-template-shared'
 import { formatDate, formatDateDaysMonthYear, formatPriceInCents } from '../utils/utils'
 import OrderStatusBadge from '../components/OrderStatusBadge/OrderStatusBadge'
 import ProtectedView from '../components/ProtectedView/ProtectedView'

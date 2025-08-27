@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { sendPageView } from '../services/trackingService'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'eitri-shopping-montreal-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import Freight from '../components/Freight/Freight'
 import Coupon from '../components/Coupon/Coupon'

@@ -6,7 +6,7 @@ import {
 	HeaderText,
 	cartShippingResolver,
 	BottomInset
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View, Text, Radio, Loading, Divider } from 'eitri-luminus'

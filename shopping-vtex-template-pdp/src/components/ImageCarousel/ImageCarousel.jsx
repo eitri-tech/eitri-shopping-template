@@ -1,6 +1,6 @@
 import { View, Carousel, Image } from 'eitri-luminus'
 import { useState } from 'react'
-import { CustomCarousel } from 'eitri-shopping-montreal-shared'
+import { CustomCarousel } from 'shopping-vtex-template-shared'
 
 export default function ImageCarousel(props) {
 	const [currentSlide, setCurrentSlide] = useState(0)

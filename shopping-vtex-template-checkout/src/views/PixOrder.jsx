@@ -1,6 +1,6 @@
 import pixImg from '../assets/images/pix.png'
 import Eitri from 'eitri-bifrost'
-import { CustomButton } from 'eitri-shopping-montreal-shared'
+import { CustomButton } from 'shopping-vtex-template-shared'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { clearCart } from '../services/cartService'
 import { useLocalShoppingCart } from '../providers/LocalCart'

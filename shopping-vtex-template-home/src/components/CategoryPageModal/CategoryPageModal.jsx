@@ -1,7 +1,7 @@
 import CollapsableView from './components/CollapsableView'
 import SelectableTouchable from './components/SelectableTouchable'
 import { Text, View, Radio } from 'eitri-luminus'
-import { Loading } from 'eitri-shopping-montreal-shared'
+import { Loading } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 export default function CategoryPageModal(props) {
 	const {

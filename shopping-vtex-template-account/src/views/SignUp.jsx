@@ -6,7 +6,7 @@ import {
 	HeaderContentWrapper,
 	HeaderReturn,
 	Loading
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import userIcon from '../assets/icons/user.svg'
 import CCheckbox from '../components/CCheckbox/CCheckbox'
 import { sendScreenView } from '../services/TrackingService'

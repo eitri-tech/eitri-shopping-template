@@ -6,7 +6,7 @@ import {
 	HeaderText,
 	CustomButton,
 	CustomInput
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { navigate, PAGES } from '../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'

@@ -5,7 +5,7 @@ import {
 	CustomButton,
 	CustomInput,
 	HeaderReturn
-} from 'eitri-shopping-montreal-shared'
+} from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { sendPasswordResetCode } from '../services/CustomerService'
 import { sendScreenView } from '../services/TrackingService'

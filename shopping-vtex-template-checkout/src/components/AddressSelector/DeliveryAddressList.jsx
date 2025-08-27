@@ -1,5 +1,5 @@
 import { View, Text, Skeleton } from 'eitri-luminus'
-import { CustomButton } from 'eitri-shopping-montreal-shared'
+import { CustomButton } from 'shopping-vtex-template-shared'
 import AddressCard from './AddressCard'
 import { useTranslation } from 'eitri-i18n'
 

@@ -1,4 +1,4 @@
-import { HeaderReturn, HeaderContentWrapper, HeaderText } from 'eitri-shopping-montreal-shared'
+import { HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
 import CategoryTitle from './CategoryTitle'
 

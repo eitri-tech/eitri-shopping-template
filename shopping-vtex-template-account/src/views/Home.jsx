@@ -1,5 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, HeaderText, Loading, HeaderContentWrapper, BottomInset } from 'eitri-shopping-montreal-shared'
+import { CustomButton, HeaderText, Loading, HeaderContentWrapper, BottomInset } from 'shopping-vtex-template-shared'
 import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'

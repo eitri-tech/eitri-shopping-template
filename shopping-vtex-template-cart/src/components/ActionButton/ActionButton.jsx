@@ -1,5 +1,5 @@
 import { View } from 'eitri-luminus'
-import { CustomButton, BottomInset } from 'eitri-shopping-montreal-shared'
+import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { navigateToCheckout } from '../../services/navigationService'

@@ -1,4 +1,4 @@
-import { Loading } from 'eitri-shopping-montreal-shared'
+import { Loading } from 'shopping-vtex-template-shared'
 import { Text, View, Skeleton } from 'eitri-luminus'
 import ProductCard from '../ProductCard/ProductCard'
 import ShelfOfProductsCarousel from './components/ShelfOfProductsCarousel'

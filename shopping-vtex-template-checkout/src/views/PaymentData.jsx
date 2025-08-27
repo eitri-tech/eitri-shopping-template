@@ -1,5 +1,5 @@
 import { Page, View, Text } from 'eitri-luminus'
-import { CustomButton, Loading, HeaderReturn, HeaderContentWrapper, HeaderText } from 'eitri-shopping-montreal-shared'
+import { CustomButton, Loading, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import PaymentMethods from '../components/Methods/PaymentMethods'
 import { sendPageView } from '../services/trackingService'

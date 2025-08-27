@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { View, Text, TextInput } from 'eitri-luminus'
-import { CustomInput } from 'eitri-shopping-montreal-shared'
+import { CustomInput } from 'shopping-vtex-template-shared'
 import { formatPrice } from '../../../utils/utils'
 
 export default function PriceRange({
