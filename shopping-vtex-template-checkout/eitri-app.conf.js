@@ -5,7 +5,7 @@ module.exports = {
 	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
-	'version': '0.1.1',
+	'version': '0.1.2',
 	'public-key': '3563e2d0-5e21-474e-9588-016069973f90',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
 	'id': '39f5f3f5-8943-4c20-b95b-86b4a090a6ef',
@@ -14,7 +14,7 @@ module.exports = {
 	'eitri-app-dependencies': {
 		'shopping-vtex-template-shared': {
 			isEitriAppShared: true,
-			version: '0.1.4'
+			version: '0.1.7'
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
