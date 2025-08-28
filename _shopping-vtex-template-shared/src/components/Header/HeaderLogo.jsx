@@ -30,7 +30,7 @@ export default function HeaderLogo(props) {
 		<View className='max-h-[40px] max-w-[150px] flex items-center'>
 			<Image
 				src={urlLogo}
-				className='w-full h-full'
+				className='max-h-[40px] max-w-[150px]'
 			/>
 		</View>
 	)
