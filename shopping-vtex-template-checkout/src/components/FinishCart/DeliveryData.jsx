@@ -5,8 +5,8 @@ import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { getShippingAddress } from '../../utils/getShippingAddress'
 import { navigate } from '../../services/navigationService'
+import { Text, View } from 'eitri-luminus'
 import { cartShippingResolver } from 'shopping-vtex-template-shared'
-import { View, Text } from 'eitri-luminus'
 
 export default function DeliveryData(props) {
 	const { cart } = useLocalShoppingCart()
@@ -18,7 +18,7 @@ export default function DeliveryData(props) {
 	const selectedShippingOption = shippingOptions?.options?.find(s => s.isCurrent)
 
 	const onPressMainAction = async () => {
-		navigate('FreightSelector')
+		navigate('ShippingMethods')
 	}
 
 	const onPressHandleNumber = async () => {
@@ -41,7 +41,10 @@ export default function DeliveryData(props) {
 								<Text className='text-sm font-medium text-neutral-900'>
 									{selectedShippingOption.label}
 								</Text>
-								<Text className='text-sm font-bold text-green-600'>{selectedShippingOption.price}</Text>
+								<Text
+									className={`text-sm font-bold ${selectedShippingOption.price === 'Grátis' ? 'text-green-600' : ''}`}>
+									{selectedShippingOption.price}
+								</Text>
 							</View>
 
 							{/* Pickup Estimate */}
@@ -130,7 +133,10 @@ export default function DeliveryData(props) {
 								<Text className='text-sm font-medium text-neutral-900'>
 									{selectedShippingOption.label}
 								</Text>
-								<Text className='text-sm font-bold text-green-600'>{selectedShippingOption.price}</Text>
+								<Text
+									className={`text-sm font-bold ${selectedShippingOption.price === 'Grátis' ? 'text-green-600' : ''}`}>
+									{selectedShippingOption.price}
+								</Text>
 							</View>
 
 							{/* Delivery Estimate */}

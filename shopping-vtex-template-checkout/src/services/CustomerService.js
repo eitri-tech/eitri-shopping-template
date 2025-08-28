@@ -1,12 +1,14 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
-import Eitri from 'eitri-bifrost'
 
-export const saveUserEmailOnStorage = async email => {
-	return await Vtex.customer.setCustomerData('email', email)
-}
-
-export const loadUserEmailFromStorage = async () => {
-	return await Vtex.customer.getCustomerData('email')
+export const getCustomerData = async () => {
+	try {
+		const isLogged = await Vtex.customer.isLoggedIn()
+		if (!isLogged) return null
+		const result = await Vtex.customer.getCustomerProfile()
+		return result?.data?.profile
+	} catch (e) {
+		return null
+	}
 }
 
 export const requestLogin = () => {
@@ -38,4 +40,12 @@ export const isLoggedIn = async () => {
 		console.error('Erro ao buscar dados do cliente', e)
 		return false
 	}
+}
+
+export async function sendAccessKeyByEmail(email) {
+	return await Vtex.customer.sendAccessKeyByEmail(email)
+}
+
+export async function loginWithEmailAndKey(email, verificationCode) {
+	return await Vtex.customer.loginWithEmailAndAccessKey(email, verificationCode)
 }

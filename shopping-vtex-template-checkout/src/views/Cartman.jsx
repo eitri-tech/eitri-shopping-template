@@ -11,7 +11,7 @@ export default function Cartman() {
 	const getCart = async () => {
 		try {
 			const cart = await Vtex.cart.getCartIfExists()
-			console.log('cart========>', cart.orderFormId)
+			console.log('cart========>', cart)
 			setCart(cart)
 		} catch (error) {
 			console.log('Erro ao buscar carrinho', error)
@@ -24,21 +24,27 @@ export default function Cartman() {
 	}
 
 	const addRandomItem = async () => {
-		const products = await Vtex.catalog.legacyParamsSearch('fq=P:%5B0%2520TO%252099999%5D&_from=0&_to=49')
-		const product = products[Math.floor(Math.random() * products.length)]
-		const sku = product.items[0]
-		const result = await Vtex.cart.addItem(sku)
-		setCart(result)
+		try {
+			const products = await Vtex.catalog.legacyParamsSearch('fq=P:%5B0%2520TO%252099999%5D&_from=0&_to=49')
+			const product = products[Math.floor(Math.random() * products.length)]
+			const sku = product.items[0]
+			const result = await Vtex.cart.addItem(sku)
+			setCart(result)
+		} catch (e) {
+			console.log('e', e)
+		}
 	}
 
 	const goToHome = async () => {
 		Eitri.navigation.navigate({ path: 'Home', replace: true })
-		return
 	}
 
 	const clearCart = async () => {
 		await Vtex.cart.clearCart()
-		return
+	}
+
+	const userLogout = async () => {
+		await Vtex.customer.logout()
 	}
 
 	return (
@@ -72,6 +78,11 @@ export default function Cartman() {
 					className='btn-primary w-full'
 					onClick={goToHome}>
 					Ir pra Home
+				</Button>
+				<Button
+					className='btn-primary w-full'
+					onClick={userLogout}>
+					Logout Usuário
 				</Button>
 			</View>
 		</Page>

@@ -1,57 +1,34 @@
-import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import {
-	CustomButton,
-	BottomInset,
-	Loading,
-	HeaderContentWrapper,
-	HeaderReturn,
-	HeaderText
-} from 'shopping-vtex-template-shared'
 import { clearCart, startPayment } from '../services/cartService'
 import Recaptcha from '../services/Recaptcha'
 import UserData from '../components/FinishCart/UserData'
 import SelectedPaymentData from '../components/FinishCart/SelectedPaymentData'
 import DeliveryData from '../components/FinishCart/DeliveryData'
-import { sendPageView } from '../services/trackingService'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
-import { requestLogin } from '../services/customerService'
+import { sendLogError, trackScreenView } from '../services/Tracking'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import OtpLogin from '../components/OtpLogin/OtpLogin'
+import { ERROR_MAP } from '../utils/vtexErrorMap'
+import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
 
-export default function FinishCart() {
+export default function CheckoutReview() {
 	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [error, setError] = useState({ state: false, message: '' })
-	const [recaptchaIsReady, setRecaptchaIsReady] = useState(false)
 	const [unavailableItems, setUnavailableItems] = useState([])
+	const [showOtpLogin, setShowOtpLogin] = useState(false)
 
 	const recaptchaRef = useRef()
 
-	const RECAPTCHA_SITE_KEY = '6LcKXBMqAAAAAKsqevXXI4ZWr1enrPNrf25pmUs-'
-
-	let captchaToken = null
-
-	let interval
+	const RECAPTCHA_SITE_KEY = '6LfnCR8mAAAAAGfsca_MuJ4oXTWJWOJ4TkPFOXzT'
 
 	useEffect(() => {
-		sendPageView('Checkout - Home')
+		trackScreenView(`checkout_finaliza_pedido`, 'checkout.finishCart')
 	}, [])
-
-	useEffect(() => {
-		if (recaptchaIsReady) {
-			;(async () => {
-				captchaToken = await recaptchaRef?.current?.getRecaptchaToken()
-				interval = setInterval(async () => {
-					captchaToken = await recaptchaRef?.current?.getRecaptchaToken()
-				}, 60000)
-			})()
-		}
-
-		return () => clearInterval(interval)
-	}, [recaptchaIsReady])
 
 	useEffect(() => {
 		if (cart && cart?.items?.length > 0) {
@@ -64,19 +41,25 @@ export default function FinishCart() {
 		}
 	}, [cart])
 
-	const runPaymentScript = async isRetry => {
+	const runPaymentScript = async () => {
 		try {
 			setIsLoading(true)
 
-			if (selectedPaymentData?.groupName === 'creditCardPaymentGroup' && !captchaToken) {
-				captchaToken = await recaptchaRef?.current?.getRecaptchaToken()
+			const captchaToken = await recaptchaRef?.current?.getRecaptchaToken()
+
+			const payload = {
+				fields: cardInfo,
+				captchaToken: captchaToken,
+				captchaSiteKey: RECAPTCHA_SITE_KEY,
+				savePersonalData: true,
+				optinNewsLetter: false
 			}
 
-			const paymentResult = await startPayment(cart, cardInfo, captchaToken, RECAPTCHA_SITE_KEY)
+			const paymentResult = await startPayment(cart, payload)
 
 			if (paymentResult.status === 'completed') {
 				clearCart()
-				Eitri.navigation.navigate('../OrderCompleted', {
+				navigate('OrderCompleted', {
 					orderId: paymentResult.orderId,
 					orderValue: cart.value
 				})
@@ -84,30 +67,34 @@ export default function FinishCart() {
 			}
 
 			if (paymentResult?.paymentAuthorizationAppCollection?.[0]?.appName === 'vtex.pix-payment') {
-				Eitri.navigation.navigate({ path: '../PixOrder', state: { paymentResult } })
+				navigate('PixOrder', { paymentResult })
 				return
 			}
 
-			Eitri.navigation.navigate('../ExternalProviderOrder', { paymentResult })
+			navigate('ExternalProviderOrder', { paymentResult })
 		} catch (error) {
+			console.error('Error on runPaymentScript', error)
+
 			const errorCode = error.response?.data?.error?.code
-			if (!isRetry && (errorCode === 'CHK003' || errorCode === 'CHK0087' || errorCode === 'ORD062')) {
-				try {
-					await requestLogin()
-					await runPaymentScript(true)
-				} catch (e) {}
+			if (errorCode === 'CHK003' || errorCode === 'CHK0087' || errorCode === 'ORD062') {
+				setShowOtpLogin(true)
+				return
 			}
+
+			sendLogError(error, cart?.orderFormId, '', cart?.clientProfileData?.email, 'runPaymentScript')
 
 			setError({
 				state: true,
-				message: error.response?.data?.error?.message
+				message:
+					ERROR_MAP[errorCode] || error.response?.data?.error?.message || 'Houve um erro ao fechar pedido'
 			})
 
 			setIsLoading(false)
-			const tenSeconds = 30000
 			setTimeout(() => {
 				setError({ state: false, message: '' })
-			}, tenSeconds)
+			}, 5000)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -132,26 +119,30 @@ export default function FinishCart() {
 		}
 	}
 
+	const handleLogged = async () => {
+		setShowOtpLogin(false)
+		runPaymentScript()
+	}
+
 	return (
 		<Page title='Checkout - Home'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('home.title')} />
 			</HeaderContentWrapper>
 
-			{(cartIsLoading || isLoading) && <Loading fullScreen />}
+			<LoadingComponent
+				text={'Estamos preparando a sua compra'}
+				fullScreen
+				isLoading={cartIsLoading || isLoading}
+			/>
 
 			<View className='p-4'>
+				<View className='mb-2'>
+					<Text className='text-xl font-bold'>Revise e confirme</Text>
+				</View>
+
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
 				<>
-					{error.state && (
-						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text className='text-sm text-red-600 font-medium'>
-								{error.message || 'Houve um erro ao fechar o pedido'}
-							</Text>
-						</View>
-					)}
-
 					{unavailableItems.length > 0 && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
 							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems')}</Text>
@@ -176,6 +167,8 @@ export default function FinishCart() {
 					)}
 
 					<View className='flex flex-col gap-4'>
+						<CartSummary />
+
 						{cart && <UserData />}
 
 						{unavailableItems.length === 0 && (
@@ -188,11 +181,20 @@ export default function FinishCart() {
 								/>
 							</>
 						)}
-
-						<CartSummary />
 					</View>
 				</>
 			</View>
+
+			{error.message && (
+				<View className='fixed bottom-[90px] left-0 w-full'>
+					<View className='p-4 bg-red-50 border border-red-200 rounded'>
+						<Text className='text-sm text-red-600 font-medium'>
+							{error.message || 'Houve um erro ao fechar o pedido'}
+						</Text>
+					</View>
+					<BottomInset />
+				</View>
+			)}
 
 			{/* Botão fixo na parte de baixo */}
 			<View>
@@ -215,7 +217,12 @@ export default function FinishCart() {
 			<Recaptcha
 				ref={recaptchaRef}
 				siteKey={RECAPTCHA_SITE_KEY}
-				onRecaptchaReady={() => setRecaptchaIsReady(true)}
+			/>
+
+			<OtpLogin
+				open={showOtpLogin}
+				onClose={() => setShowOtpLogin(false)}
+				onLogged={handleLogged}
 			/>
 		</Page>
 	)

@@ -1,7 +1,7 @@
 import { formatAmountInCents } from '../../utils/utils'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
-import { View, Text } from 'eitri-luminus'
+import { Text, View } from 'eitri-luminus'
 
 export default function CartSummary() {
 	const { t } = useTranslation()
@@ -18,8 +18,23 @@ export default function CartSummary() {
 
 	return (
 		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
+			<View className='flex flex-row justify-start items-center mb-2 gap-2 flex-wrap'>
+				{cart?.items?.map(item => (
+					<View
+						key={item.id}
+						className='w-12 h-12 p-1 rounded-full overflow-hidden border'>
+						<Image
+							src={item.imageUrl}
+							width='100%'
+							height='100%'
+							className='object-cover'
+						/>
+					</View>
+				))}
+			</View>
+
 			{/* Totalizers breakdown */}
-			<View className='flex flex-col gap-2'>
+			<View className='flex flex-col gap-1 pb-2'>
 				{itemsTotal > 0 && (
 					<View className='flex flex-row justify-between items-center'>
 						<Text className='text-neutral-600 text-sm'>
@@ -49,7 +64,7 @@ export default function CartSummary() {
 			</View>
 
 			{/* Final total */}
-			<View className='flex flex-row w-full justify-between items-center pt-2 border-t border-neutral-300'>
+			<View className='flex flex-row w-full justify-between items-center pt-3 border-t border-neutral-300'>
 				<Text className='text-neutral-700 font-bold'>{t('finishCart.txtTotal')}</Text>
 				<Text className='font-bold text-primary-700'>{formatAmountInCents(finalTotal)}</Text>
 			</View>

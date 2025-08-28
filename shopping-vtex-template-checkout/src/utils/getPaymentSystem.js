@@ -1,7 +1,8 @@
 import { formatAmountInCents } from './utils'
 
 export const getPaymentSystem = cart => {
-	const paymentData = JSON.parse(JSON.stringify(cart.paymentData))
+	if (!cart?.paymentData) return
+	const paymentData = JSON.parse(JSON.stringify(cart?.paymentData))
 
 	return paymentData?.paymentSystems?.reduce((acc, paymentSystem) => {
 		const group = acc?.find(group => group.groupName === paymentSystem.groupName)

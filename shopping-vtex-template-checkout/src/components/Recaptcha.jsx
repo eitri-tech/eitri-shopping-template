@@ -1,4 +1,4 @@
-import { renderCaptchaButtonScript, getToken } from '../services/getCaptcha.js'
+import { getToken, renderCaptchaButtonScript } from '../services/getCaptcha.js'
 
 export default function Recaptcha(props) {
 	const { token, setToken, visibleButton } = props

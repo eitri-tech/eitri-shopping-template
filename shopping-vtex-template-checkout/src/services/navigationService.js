@@ -29,11 +29,22 @@ export const goHome = () => {
 	Eitri.exposedApis.appState.goHome()
 }
 
-export const openAccount = async product => {
+export const openAccount = async () => {
 	try {
 		Eitri.nativeNavigation.open({
 			slug: 'account',
-			initParams: { action: 'OrderList' }
+			initParams: { route: 'OrderList' }
+		})
+	} catch (e) {
+		console.error('navigate to cart: Error trying to open cart', e)
+	}
+}
+
+export const openCart = async () => {
+	try {
+		Eitri.nativeNavigation.open({
+			slug: 'cart',
+			replace: true
 		})
 	} catch (e) {
 		console.error('navigate to cart: Error trying to open cart', e)

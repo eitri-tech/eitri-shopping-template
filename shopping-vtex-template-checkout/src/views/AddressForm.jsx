@@ -1,52 +1,51 @@
 import Eitri from 'eitri-bifrost'
-import {
-	CustomButton,
-	Loading,
-	HeaderReturn,
-	HeaderContentWrapper,
-	HeaderText,
-	CustomInput
-} from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { sendPageView } from '../services/trackingService'
+import { trackScreenView } from '../services/Tracking'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View } from 'eitri-luminus'
 import { resolvePostalCode } from '../services/freigthService'
-import { navigate, navigateBack, requestLogin } from '../services/navigationService'
+import { navigate, requestLogin } from '../services/navigationService'
 import { useRef, useState } from 'react'
-import Alert from '../components/Alert'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import FixedBottom from '../components/FixedBottom/FixedBottom'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	CustomButton,
+	BottomInset,
+	CustomInput
+} from 'shopping-vtex-template-shared'
 
 function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t }) {
 	return (
-		<View className='flex gap-2 items-end'>
-			<View className='flex justify-between mt-2 gap-2 w-full items-end'>
-				<View className='w-2/3'>
-					<CustomInput
-						label={t('addNewShippingAddress.txtCalculate')}
-						inputMode='numeric'
-						placeholder='12345-678'
-						value={value}
-						onChange={onChange}
-						autoFocus={true}
-						variant='mask'
-						mask='99999-999'
-						disabled={isLoading}
-					/>
-				</View>
-				<View className='w-1/3'>
-					<CustomButton
-						label={
-							isLoading
-								? t('addNewShippingAddress.loading') || 'Aguarde...'
-								: t('addNewShippingAddress.ok') || 'OK'
-						}
-						onPress={onSubmit}
-						display='flex'
-						justifyContent='center'
-						disabled={isLoading || !value}
-						isLoading={isLoading}
-					/>
-				</View>
+		<View className='flex justify-between gap-2 w-full items-end'>
+			<View className='w-2/3'>
+				<CustomInput
+					label={t('addNewShippingAddress.txtCalculate')}
+					inputMode='numeric'
+					placeholder='12345-678'
+					value={value}
+					onChange={onChange}
+					autoFocus={true}
+					variant='mask'
+					mask='99999-999'
+					disabled={isLoading}
+				/>
+			</View>
+			<View className='w-1/3'>
+				<CustomButton
+					label={
+						isLoading
+							? t('addNewShippingAddress.loading') || 'Aguarde...'
+							: t('addNewShippingAddress.ok') || 'OK'
+					}
+					onPress={onSubmit}
+					display='flex'
+					justifyContent='center'
+					disabled={isLoading || !value}
+					isLoading={isLoading}
+				/>
 			</View>
 		</View>
 	)
@@ -196,7 +195,7 @@ export default function AddressForm(props) {
 	}, [addressId])
 
 	useEffect(() => {
-		sendPageView(PAGE_NAME)
+		trackScreenView(PAGE_NAME)
 	}, [])
 
 	const init = async addressId => {
@@ -227,7 +226,7 @@ export default function AddressForm(props) {
 		const { value } = e.target
 		setAddress({
 			...address,
-			[key]: key === 'receiverName' ? value.replace(/[^\p{L}\s]/gu, '') : value
+			[key]: key === 'receiverName' ? value.replace(/[^a-zA-Z\s]/g, '') : value
 		})
 	}
 
@@ -288,7 +287,7 @@ export default function AddressForm(props) {
 				}
 				await setLogisticInfo(payload)
 			}
-			navigate('PaymentData', {}, true)
+			navigate('FreightResolver', {}, true)
 		} catch (e) {
 			if (e.response?.status === 400) {
 				setAddressError(t('addNewShippingAddress.errorAddress'))
@@ -297,7 +296,6 @@ export default function AddressForm(props) {
 			}
 			setAddressError(t('addNewShippingAddress.errorDefault'))
 			console.error('Error on submit', e)
-			return
 		}
 	}
 
@@ -311,80 +309,71 @@ export default function AddressForm(props) {
 
 	return (
 		<Page title={PAGE_NAME}>
-			<View
-				bottomInset={'auto'}
-				className='min-h-[100vh] flex flex-col'>
-				<HeaderContentWrapper
-					gap={16}
-					scrollEffect={false}>
-					<HeaderReturn />
-					<HeaderText text={t('addNewShippingAddress.title')} />
-				</HeaderContentWrapper>
-				<Loading
-					fullScreen
-					isLoading={cartIsLoading}
+			<HeaderContentWrapper>
+				<HeaderReturn />
+				<HeaderText text={t('addNewShippingAddress.title')} />
+			</HeaderContentWrapper>
+
+			<LoadingComponent
+				fullScreen
+				isLoading={cartIsLoading}
+			/>
+
+			<View className='flex flex-col gap-2 p-4 m-4 bg-white rounded shadow-sm border border-gray-300'>
+				<PostalCodeInput
+					value={address?.postalCode}
+					onChange={onChangePostalCodeInput}
+					onSubmit={submitZipCode}
+					isLoading={isLoading}
+					t={t}
 				/>
-				{/* Feedback visual de erro com Alert */}
-				<Alert
-					message={addressError}
-					type='negative'
-					duration={3}
-					show={!!addressError}
-					onDismiss={() => setAddressError('')}
-				/>
-				<View className='flex-1 flex flex-col p-4'>
-					<View className='flex flex-col gap-2 flex-1'>
-						<PostalCodeInput
-							value={address?.postalCode}
-							onChange={onChangePostalCodeInput}
-							onSubmit={submitZipCode}
-							isLoading={isLoading}
-							t={t}
-						/>
-						{isLoading && (
-							<View>
-								<Text>{t('addNewShippingAddress.loading') || 'Aguarde...'}</Text>
-							</View>
-						)}
-						<AddressFields
-							address={address}
-							handleAddressChange={handleAddressChange}
-							t={t}
-							numberInputRef={numberInputRef}
-							touched={touched}
-							errors={errors}
-							onBlur={onBlur}
-						/>
+				{isLoading && (
+					<View>
+						<Text>{t('addNewShippingAddress.loading') || 'Aguarde...'}</Text>
 					</View>
-				</View>
-				<View className='p-4'>
-					<CustomButton
-						width='100%'
-						marginTop='large'
-						label={
-							isLoading
-								? t('addNewShippingAddress.loading') || 'Aguarde...'
-								: t('addNewShippingAddress.labelButton')
-						}
-						fontSize='medium'
-						disabled={!isValidAddress() || isLoading}
-						onPress={() => {
-							// Marca todos os campos como tocados ao tentar submeter
-							setTouched({
-								postalCode: true,
-								street: true,
-								neighborhood: true,
-								city: true,
-								state: true,
-								receiverName: true,
-								number: true
-							})
-							submit()
-						}}
-						isLoading={isLoading}
-					/>
-				</View>
+				)}
+				<AddressFields
+					address={address}
+					handleAddressChange={handleAddressChange}
+					t={t}
+					numberInputRef={numberInputRef}
+					touched={touched}
+					errors={errors}
+					onBlur={onBlur}
+				/>
 			</View>
+
+			<FixedBottom
+				className='flex flex-col align-center gap-4'
+				offSetHeight={77}>
+				<CustomButton
+					width='100%'
+					marginTop='large'
+					label={
+						isLoading
+							? t('addNewShippingAddress.loading') || 'Aguarde...'
+							: t('addNewShippingAddress.labelButton')
+					}
+					fontSize='medium'
+					disabled={!isValidAddress() || isLoading}
+					onPress={() => {
+						// Marca todos os campos como tocados ao tentar submeter
+						setTouched({
+							postalCode: true,
+							street: true,
+							neighborhood: true,
+							city: true,
+							state: true,
+							receiverName: true,
+							number: true
+						})
+						submit()
+					}}
+					isLoading={isLoading}
+				/>
+			</FixedBottom>
+
+			<BottomInset />
 		</Page>
 	)
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, useImperativeHandle } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
 
 const Recaptcha = forwardRef((props, ref) => {
 	const { onRecaptchaReady, siteKey } = props

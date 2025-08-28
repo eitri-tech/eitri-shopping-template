@@ -1,15 +1,18 @@
+import { createContext, useContext, useState } from 'react'
 import {
-	getCart,
+	addItem,
 	addUserData,
-	selectPaymentOption,
+	generateNewCart,
+	getCart,
 	removeClientData,
-	removeItemFromCart
+	removeItemFromCart,
+	selectPaymentOption
 } from '../services/cartService'
 import setFreight, {
+	setLogisticInfo,
 	setNewAddress,
-	updateAddress,
 	setShippingAddress,
-	setLogisticInfo
+	updateAddress
 } from '../services/freigthService'
 
 const LocalCart = createContext({})
@@ -30,6 +33,14 @@ export default function CartProvider({ children }) {
 
 	const startCart = async () => {
 		return executeCartOperation(getCart)
+	}
+
+	const _generateNewCart = async () => {
+		return executeCartOperation(generateNewCart)
+	}
+
+	const _addItem = async payload => {
+		return executeCartOperation(addItem, payload)
 	}
 
 	const addPersonalData = async (userData, orderFormId) => {
@@ -53,6 +64,12 @@ export default function CartProvider({ children }) {
 	}
 
 	const _selectPaymentOption = async payload => {
+		if (cart?.paymentData?.giftCards?.length > 0) {
+			await selectPaymentOption({
+				payments: [],
+				giftCards: []
+			})
+		}
 		return executeCartOperation(selectPaymentOption, payload)
 	}
 
@@ -72,6 +89,10 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(removeItemFromCart, index)
 	}
 
+	const setPaymentOption = async payload => {
+		return executeCartOperation(selectPaymentOption, payload)
+	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -88,6 +109,9 @@ export default function CartProvider({ children }) {
 				removeClientData: _removeClientData,
 				setLogisticInfo: _setLogisticInfo,
 				removeCartItem: _removeCartItem,
+				setPaymentOption: setPaymentOption,
+				generateNewCart: _generateNewCart,
+				addItem: _addItem,
 				selectedPaymentData,
 				setSelectedPaymentData,
 				cartIsLoading,

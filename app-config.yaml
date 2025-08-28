@@ -4,52 +4,52 @@ eitri-apps:
       alias: shared
       focus: false
       shared: true
-    - path: ./shopping-vtex-template-home
-      workspace: home
-      alias: home
-      focus: true
-      shared: false
-    - path: ./shopping-vtex-template-pdp
-      workspace: pdp
-      alias: pdp
-      focus: false
-      shared: false
-    - path: ./shopping-vtex-template-account
-      workspace: account
-      alias: account
-      focus: false
-      shared: false
-    - path: ./shopping-vtex-template-cart
-      workspace: cart
-      alias: cart
-      focus: false
-      shared: false
+#    - path: ./shopping-vtex-template-home
+#      workspace: home
+#      alias: home
+#      focus: true
+#      shared: false
+#    - path: ./shopping-vtex-template-pdp
+#      workspace: pdp
+#      alias: pdp
+#      focus: false
+#      shared: false
+#    - path: ./shopping-vtex-template-account
+#      workspace: account
+#      alias: account
+#      focus: false
+#      shared: false
+#    - path: ./shopping-vtex-template-cart
+#      workspace: cart
+#      alias: cart
+#      focus: false
+#      shared: false
     - path: ./shopping-vtex-template-checkout
       workspace: checkout
       alias: checkout
-      focus: false
+      focus: true
       shared: false
-bottom-tab-view-simulation:
-  eitri-apps:
-    - slug: "shopping-vtex-template-home"
-      title: "Inicio"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=0"
-    - slug: "shopping-vtex-template-home"
-      title: "Categorias"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=1&route=Categories"
-    - slug: "shopping-vtex-template-cart"
-      title: "Sacola"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=2"
-    - slug: "shopping-vtex-template-account"
-      title: "Perfil"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=4"
+#bottom-tab-view-simulation:
+#  eitri-apps:
+#    - slug: "shopping-vtex-template-home"
+#      title: "Inicio"
+#      initialization-params:
+#        type: "string"
+#        value: "tabIndex=0"
+#    - slug: "shopping-vtex-template-home"
+#      title: "Categorias"
+#      initialization-params:
+#        type: "string"
+#        value: "tabIndex=1&route=Categories"
+#    - slug: "shopping-vtex-template-cart"
+#      title: "Sacola"
+#      initialization-params:
+#        type: "string"
+#        value: "tabIndex=2"
+#    - slug: "shopping-vtex-template-account"
+#      title: "Perfil"
+#      initialization-params:
+#        type: "string"
+#        value: "tabIndex=4"
 
 application-id: 2e3a464a-2763-41e0-a90f-318f4148bf54

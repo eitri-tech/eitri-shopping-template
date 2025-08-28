@@ -1,11 +1,16 @@
-import { CustomButton, HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
 import { useTranslation } from 'eitri-i18n'
 import { goToCartman } from '../utils/utils'
+import { trackScreenView } from '../services/Tracking'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, CustomButton } from 'shopping-vtex-template-shared'
 
 export default function EmptyCart() {
 	const { t } = useTranslation()
+
+	useEffect(() => {
+		trackScreenView(`checkout_vazio`, 'checkout.emptyCart')
+	}, [])
 
 	return (
 		<Page title='Checkout - Carrinho Vazio'>
