@@ -7,8 +7,14 @@ export default function ActionButton(props) {
 	const { addItem, cart } = useLocalShoppingCart()
 	const { t } = useTranslation()
 	const { currentSku } = props
-	const isAvailable = currentSku?.sellers[0]?.commertialOffer?.AvailableQuantity > 0
+	const [isAvailable, setIsAvailable] = useState(true)
 	const [isLoading, setLoading] = useState(false)
+
+	useEffect(() => {
+		const mainSeller = currentSku.sellers.find(seller => seller.sellerDefault)
+		const isAvailable = mainSeller?.commertialOffer?.AvailableQuantity > 0
+		setIsAvailable(isAvailable)
+	}, [currentSku])
 
 	const isItemOnCart = () => {
 		return cart?.items?.some(cartItem => cartItem.id === currentSku?.itemId)
