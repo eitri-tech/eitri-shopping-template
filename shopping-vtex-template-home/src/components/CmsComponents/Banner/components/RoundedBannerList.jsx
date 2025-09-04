@@ -37,24 +37,18 @@ export default function RoundedBannerList(props) {
 							<View
 								key={slider.imageUrl}
 								className='flex flex-col items-center'>
-								<View // Adicionado key para melhor performance e para seguir as boas práticas do React
-									key={slider.imageUrl}
+								<View
 									style={{
 										backgroundImage: `url(${slider.imageUrl})`,
 										...getBannerDimensions(),
 										backgroundSize: 'cover'
 									}}
-									className={'rounded-full'}
+									className='rounded-full shadow-md'
 									onClick={() => onClick(slider)}
 								/>
 								{slider?.action?.title && (
-									<View
-										style={{
-											...getBannerDimensions(),
-											height: 'initial'
-										}}
-										className='pt-1'>
-										<Text className='font-bold text-center line-clamp-2'>
+									<View className='pt-1'>
+										<Text className='font-bold text-center line-clamp-2 leading-4'>
 											{slider?.action?.title}
 										</Text>
 									</View>
