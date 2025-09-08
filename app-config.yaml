@@ -27,7 +27,7 @@ eitri-apps:
     - path: ./shopping-vtex-template-checkout
       workspace: checkout
       alias: checkout
-      focus: true
+      focus: false
       shared: false
 bottom-tab-view-simulation:
   eitri-apps:
@@ -37,19 +37,24 @@ bottom-tab-view-simulation:
         type: "string"
         value: "tabIndex=0"
     - slug: "shopping-vtex-template-home"
-      title: "Dashboard"
+      title: "Categorias"
       initialization-params:
         type: "string"
-        value: "tabIndex=1&route=Dashboard"
+        value: "tabIndex=1&route=Categories"
     - slug: "shopping-vtex-template-cart"
-      title: "Sacola"
+      title: "Carrinho"
       initialization-params:
         type: "string"
         value: "tabIndex=2"
-    - slug: "shopping-vtex-template-account"
-      title: "Conta"
+    - slug: "shopping-vtex-template-home"
+      title: "Ofertas"
       initialization-params:
         type: "string"
-        value: "tabIndex=3"
+        value: "tabIndex=3&route=LandingPage"
+    - slug: "shopping-vtex-template-account"
+      title: "Perfil"
+      initialization-params:
+        type: "string"
+        value: "tabIndex=4"
 
-application-id: 7224282b-53b6-4fda-81d2-7c7639ba5eb7
+application-id: 8ab9e4ec-ceca-453a-8c7e-120494b8350f
