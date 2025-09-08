@@ -18,6 +18,9 @@ export default function FitOnScreen(props) {
 							src={image.imageUrl}
 							className={'rounded'}
 						/>
+						{image.action?.title && (
+							<Text className='text-center mt-2'>{image.action.title}</Text>
+						)}
 					</View>
 				))}
 			</View>
