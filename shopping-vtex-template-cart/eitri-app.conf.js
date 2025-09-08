@@ -5,7 +5,7 @@ module.exports = {
 	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
-	'version': '0.1.4',
+	'version': '0.1.5',
 	'public-key': 'bc73268a-539e-4023-a491-979809dc5240',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
 	'id': 'c300a2ab-d656-4afb-a4b7-514c15dc7405',
