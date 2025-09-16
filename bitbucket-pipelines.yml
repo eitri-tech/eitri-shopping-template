@@ -14,14 +14,7 @@ pipelines:
       - step:
           name: Sincronizar com GitHub
           script:
-            - eval $(ssh-agent -s)
-            - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-            - mkdir -p ~/.ssh
-            - chmod 700 ~/.ssh
-            - echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-            - chmod 644 ~/.ssh/known_hosts
-
             - echo "Iniciando sincronização com o repositório GitHub..."
             - git remote add github git@github.com:eitri-tech/eitri-shopping-template.git
-            - git push github --mirror
+            - git push github
             - echo "Sincronização com GitHub finalizada com sucesso!"
