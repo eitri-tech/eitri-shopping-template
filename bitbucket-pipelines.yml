@@ -1,6 +1,3 @@
-clone:
-  depth: full
-
 pipelines:
   branches:
     main:
@@ -16,9 +13,8 @@ pipelines:
 
       - step:
           name: Sincronizar com GitHub
-          image: git
           script:
             - echo "Iniciando sincronização com o repositório GitHub..."
             - git remote add github git@github.com:eitri-tech/eitri-shopping-template.git
-            - git push github main --force
+            - git push github
             - echo "Sincronização com GitHub finalizada com sucesso!"
