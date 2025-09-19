@@ -1,5 +1,5 @@
 eitri-apps:
-    - path: ./_shopping-vtex-template-shared
+    - path: ./shopping-vtex-template-shared
       workspace: shared
       alias: shared
       focus: false
