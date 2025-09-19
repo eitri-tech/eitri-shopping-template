@@ -1,11 +1,11 @@
 {
     "ecommerceProvider": "VTEX",
     "providerInfo": {
-        "account": "polishop",
-        "host": "https://www.polishop.com.br",
-        "faststore": "polishop-eitri-app",
-        "domain": "https://www.polishop.com.br",
-        "vtexCmsUrl": "https://polishop.myvtex.com/"
+        "account": "mundoverde",
+        "domain": "https://www.mundoverde.com.br",
+        "faststore": "mundoverde",
+        "host": "https://www.mundoverde.com.br",
+        "vtexCmsUrl": "https://eitripartnerbr.myvtex.com/"
     },
     "appConfigs": {
         "useScrollEffect": true,
