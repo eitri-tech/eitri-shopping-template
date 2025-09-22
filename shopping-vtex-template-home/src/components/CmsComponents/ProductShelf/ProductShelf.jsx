@@ -29,7 +29,7 @@ export default function ProductShelf(props) {
 
 	return (
 		<ShelfOfProducts
-			mode='carousel'
+			mode={data.mode || 'scroll'}
 			title={data?.title}
 			isLoading={isLoadingProducts}
 			products={currentProducts}

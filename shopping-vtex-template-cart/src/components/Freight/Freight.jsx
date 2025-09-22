@@ -117,28 +117,26 @@ export default function Freight(props) {
 				<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
 
 				{cart?.canEditData || isEditingZipCode ? (
-					<>
-						<View className='flex justify-between mt-2 gap-2 items-center w-full'>
-							<View className='w-2/3'>
-								<CustomInput
-									placeholder={t('freight.labelZipCode')}
-									value={zipCode}
-									variant='mask'
-									mask='99999-999'
-									inputMode='numeric'
-									onChange={onInputZipCode}
-								/>
-							</View>
-							<View className='w-1/3'>
-								<CustomButton
-									variant='outlined'
-									isLoading={isLoading}
-									label={t('freight.txtCalculate')}
-									onPress={onPressZipCodeChange}
-								/>
-							</View>
+					<View className='flex justify-between mt-2 gap-2 items-center w-full'>
+						<View className='w-2/3'>
+							<CustomInput
+								placeholder={t('freight.labelZipCode')}
+								value={zipCode}
+								variant='mask'
+								mask='99999-999'
+								inputMode='numeric'
+								onChange={onInputZipCode}
+							/>
 						</View>
-					</>
+						<View className='w-1/3'>
+							<CustomButton
+								variant='outlined'
+								isLoading={isLoading}
+								label={t('freight.txtCalculate')}
+								onPress={onPressZipCodeChange}
+							/>
+						</View>
+					</View>
 				) : (
 					<View className='mt-2 flex flex-row items-center gap-4'>
 						<Text className='text-base font-medium'>{`Receber em ${shipping?.postalCode}`}</Text>
@@ -149,7 +147,7 @@ export default function Freight(props) {
 					</View>
 				)}
 
-				{!shipping?.shippingAvailable && (
+				{shipping?.address && !shipping?.shippingAvailable && (
 					<View className='mt-2 p-2 bg-red-50 border border-red-200 rounded'>
 						<Text className='text-sm text-red-600 font-medium'>Entrega indisponível</Text>
 					</View>

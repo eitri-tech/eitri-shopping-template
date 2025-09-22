@@ -12,6 +12,7 @@ import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
 import { ERROR_MAP } from '../utils/vtexErrorMap'
 import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
+import Eitri from 'eitri-bifrost'
 
 export default function CheckoutReview() {
 	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
@@ -21,10 +22,18 @@ export default function CheckoutReview() {
 	const [error, setError] = useState({ state: false, message: '' })
 	const [unavailableItems, setUnavailableItems] = useState([])
 	const [showOtpLogin, setShowOtpLogin] = useState(false)
+	const [recaptchaSiteKey, setRecaptchaSiteKey] = useState('')
 
 	const recaptchaRef = useRef()
 
-	const RECAPTCHA_SITE_KEY = '6LfnCR8mAAAAAGfsca_MuJ4oXTWJWOJ4TkPFOXzT'
+	useEffect(() => {
+		Eitri.environment.getRemoteConfigs().then(rc => {
+			const recaptchaSiteKey = rc?.appConfigs?.checkout?.recaptchaKey
+			if (recaptchaSiteKey) {
+				setRecaptchaSiteKey(recaptchaSiteKey)
+			}
+		})
+	}, [])
 
 	useEffect(() => {
 		trackScreenView(`checkout_finaliza_pedido`, 'checkout.finishCart')
@@ -50,7 +59,7 @@ export default function CheckoutReview() {
 			const payload = {
 				fields: cardInfo,
 				captchaToken: captchaToken,
-				captchaSiteKey: RECAPTCHA_SITE_KEY,
+				captchaSiteKey: recaptchaSiteKey,
 				savePersonalData: true,
 				optinNewsLetter: false
 			}
@@ -214,10 +223,12 @@ export default function CheckoutReview() {
 
 			<BottomInset />
 
-			<Recaptcha
-				ref={recaptchaRef}
-				siteKey={RECAPTCHA_SITE_KEY}
-			/>
+			{recaptchaSiteKey && (
+				<Recaptcha
+					ref={recaptchaRef}
+					siteKey={recaptchaSiteKey}
+				/>
+			)}
 
 			<OtpLogin
 				open={showOtpLogin}

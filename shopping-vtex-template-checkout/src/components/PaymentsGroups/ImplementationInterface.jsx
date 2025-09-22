@@ -21,17 +21,6 @@ export default function ImplementationInterface(props) {
 		externalPayment => externalPayment.externalGroupName === groupName
 	)
 
-	Eitri.environment
-		.getRemoteConfigs()
-		.then(res => {
-			console.log('res', res)
-		})
-		.catch(err => {
-			console.log('err', err)
-		})
-
-	console.log('externalPayment', App.configs.appConfigs)
-	console.log('externalPaymentRc', groupName)
 	if ((!groupName || !PAYMENT_GROUPS_IMPLEMENTATION[groupName]) && !externalPaymentRc) {
 		return null
 	}

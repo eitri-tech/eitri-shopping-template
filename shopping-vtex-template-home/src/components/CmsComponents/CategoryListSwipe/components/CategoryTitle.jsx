@@ -4,7 +4,7 @@ export default function CategoryTitle(props) {
 	return (
 		<View
 			onClick={onClick}
-			className='p-4 flex justify-between items-center shadow-md'>
+			className='p-4 flex justify-between items-center shadow-md bg-white'>
 			<View className='flex items-center gap-4'>
 				{icon && (
 					<Image

@@ -44,7 +44,7 @@ export default function CategoryPageItem(props) {
 				<View
 					bottomInset={'auto'}
 					className='bg-base-100 flex-1'>
-					<View className='flex flex-col p-4'>
+					<View className='flex flex-col p-4 gap-4'>
 						{item?.action && (
 							<CategoryTitle
 								icon={item.icon}

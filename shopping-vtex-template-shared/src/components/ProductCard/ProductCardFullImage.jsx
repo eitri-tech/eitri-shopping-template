@@ -30,7 +30,7 @@ export default function ProductCardFullImage(props) {
 			className={`relative bg-white rounded ${className}`}>
 			<View className={`flex flex-col w-full shadow-md rounded`}>
 				<View
-					className={`relative flex flex-col w-full justify-center items-center rounded-lg h-[240px] min-h-[240px] max-h-[240px]`}>
+					className={`relative flex flex-col w-full justify-center items-center rounded-t h-[240px] min-h-[240px] max-h-[240px]`}>
 					<Image
 						className={`object-contain h-full w-full rounded`}
 						src={image}
@@ -38,8 +38,11 @@ export default function ProductCardFullImage(props) {
 
 					<View
 						onClick={_onPressOnWishlist}
-						className='absolute top-[8px] right-[5px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
-						<WishlistIcon filled={isOnWishlist} />
+						className='absolute top-[6px] p-2 right-[5px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
+						<WishlistIcon
+							filled={isOnWishlist}
+							size={'24'}
+						/>
 					</View>
 				</View>
 
