@@ -25,8 +25,6 @@ export default function Search(props) {
 				facets: [],
 				query: incomingSearchTerm
 			}
-			console.log('Search.jsx: Termo recebido do banner:', incomingSearchTerm)
-			console.log('Search.jsx: Parâmetros criados:', searchParams)
 			setParams(searchParams)
 		}
 

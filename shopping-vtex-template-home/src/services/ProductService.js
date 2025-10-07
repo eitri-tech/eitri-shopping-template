@@ -20,13 +20,11 @@ export const getProductsService = async (params, page) => {
 
 	// Validar se params está presente e é um objeto válido
 	if (!params || typeof params !== 'object') {
-		console.error('Invalid params provided to getProductsService:', params)
 		throw new Error('Invalid parameters provided to getProductsService')
 	}
 
 	// Validar se facets é um array válido quando presente
 	if (params.facets !== undefined && !Array.isArray(params.facets)) {
-		console.error('Invalid selectedFacets provided to getProducts:', params.facets)
 		throw new Error('Invalid selectedFacets provided to getProducts')
 	}
 
@@ -99,13 +97,11 @@ export const getProductsFacetsService = async params => {
 	
 	// Validar e garantir estrutura do resultado
 	if (!result || typeof result !== 'object') {
-		console.error('getProductsFacetsService: Resultado inválido da API:', result)
 		return { facets: [] }
 	}
 	
 	// Garantir que facets seja sempre um array
 	if (!Array.isArray(result.facets)) {
-		console.error('getProductsFacetsService: facets não é um array:', result)
 		return { facets: [] }
 	}
 

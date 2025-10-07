@@ -40,7 +40,6 @@ export default function CatalogFilter(props) {
 			
 			// Validar se result tem a estrutura esperada
 			if (!result || !result.facets || !Array.isArray(result.facets)) {
-				console.error('loadFacetsOptions: Resultado inválido do serviço:', result)
 				setFacetsLoading(false)
 				return
 			}
@@ -53,12 +52,7 @@ export default function CatalogFilter(props) {
 			setFilterFacets(filteredFacets || [])
 			setFacetsLoading(false)
 		} catch (e) {
-			console.error('Erro ao buscar facets:', {
-				error: e,
-				selectedFacets,
-				errorMessage: e?.message,
-				errorStack: e?.stack
-			})
+			console.error('Erro ao buscar facets', e)
 			setFacetsLoading(false)
 		}
 	}
@@ -66,17 +60,13 @@ export default function CatalogFilter(props) {
 	const resolvePriceRangeReceivedFacet = priceRangeFacet => {
 		if (minPriceRange && maxPriceRange) {
 			// Uma vez configurado, nao precisa atualizar
-			console.log('return resolvePriceRangeReceivedFacet')
 			return
 		}
 
 		// Verificar se priceRangeFacet existe e tem valores
 		if (!priceRangeFacet || !priceRangeFacet.values || !Array.isArray(priceRangeFacet.values)) {
-			console.log('resolvePriceRangeReceivedFacet: priceRangeFacet inválido ou sem valores')
 			return
 		}
-
-		console.log('execute resolvePriceRangeReceivedFacet')
 
 		let min = Infinity
 		let max = 0

@@ -79,13 +79,7 @@ export default function ProductCatalogContent(props) {
 			setCurrentPage(page)
 			setProductLoading(false)
 		} catch (error) {
-			console.error('ProductCatalogContent.getProducts error:', {
-				error,
-				selectedFacets,
-				page,
-				errorMessage: error?.message,
-				errorResponse: error?.response?.data
-			})
+			console.log('error', error)
 			setProductLoading(false)
 		}
 	}

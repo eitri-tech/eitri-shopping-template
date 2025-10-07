@@ -17,8 +17,6 @@ export default function ProductCatalog(props) {
 
 	useEffect(() => {
 		const params = location.state.params
-		console.log('ProductCatalog: Parâmetros recebidos:', params)
-		console.log('ProductCatalog: State completo:', location.state)
 		setAppliedFacets(params)
 
 		if (!openInBottomBar) {
