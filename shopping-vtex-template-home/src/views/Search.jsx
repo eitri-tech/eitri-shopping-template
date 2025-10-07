@@ -1,8 +1,9 @@
 import Eitri from 'eitri-bifrost'
+import { useState, useEffect } from 'react'
 import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
 import SearchInput from '../components/SearchInput/SearchInput'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { View } from 'eitri-luminus'
+import { View, Text, Page } from 'eitri-luminus'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 
 export default function Search(props) {
@@ -18,7 +19,15 @@ export default function Search(props) {
 
 		if (incomingSearchTerm) {
 			setPristine(false)
-			setParams(incomingSearchTerm)
+			// Criar objeto de parâmetros correto quando vem do banner
+			const searchParams = {
+				sort: 'release:desc',
+				facets: [],
+				query: incomingSearchTerm
+			}
+			console.log('Search.jsx: Termo recebido do banner:', incomingSearchTerm)
+			console.log('Search.jsx: Parâmetros criados:', searchParams)
+			setParams(searchParams)
 		}
 
 		Eitri.eventBus.subscribe({

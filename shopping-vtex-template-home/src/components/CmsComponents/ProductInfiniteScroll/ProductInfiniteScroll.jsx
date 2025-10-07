@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { View, Text } from 'eitri-luminus'
 import ProductCatalogContent from '../../ProductCatalogContent/ProductCatalogContent'
 
 export default function ProductInfiniteScroll(props) {
@@ -6,13 +8,41 @@ export default function ProductInfiniteScroll(props) {
 	const [params, setParams] = useState(null)
 
 	useEffect(() => {
-		const params = {
-			facets: data.facets || [],
-			query: data.term ?? '',
-			sort: data.sort ?? ''
+		console.log('ProductInfiniteScroll: Dados recebidos:', data)
+		
+		if (data) {
+			// Garantir que facets seja sempre um array válido
+			let facets = []
+			if (Array.isArray(data.facets)) {
+				facets = data.facets
+			} else if (data.facets && typeof data.facets === 'object') {
+				// Se facets não for array mas for um objeto, tentar converter
+				console.warn('ProductInfiniteScroll: facets não é um array, convertendo:', data.facets)
+				facets = []
+			}
+
+			// Verificar diferentes possíveis propriedades para o termo de busca
+			const searchTerm = data.term || data.query || data.search || data.searchTerm || data.keyword || ''
+			
+			console.log('ProductInfiniteScroll: Termo de busca identificado:', {
+				term: data.term,
+				query: data.query,
+				search: data.search,
+				searchTerm: data.searchTerm,
+				keyword: data.keyword,
+				finalTerm: searchTerm
+			})
+
+			const searchParams = {
+				facets: facets,
+				query: searchTerm,
+				sort: data.sort ?? ''
+			}
+			
+			console.log('ProductInfiniteScroll: Setting params:', searchParams)
+			setParams(searchParams)
 		}
-		setParams(data)
-	}, [])
+	}, [data])
 
 	return (
 		<View>
@@ -21,10 +51,12 @@ export default function ProductInfiniteScroll(props) {
 					<Text className='font-bold text-xl'>{data?.title}</Text>
 				</View>
 			)}
-			<ProductCatalogContent
-				params={params}
-				hideFilters
-			/>
+			{params && (
+				<ProductCatalogContent
+					params={params}
+					hideFilters
+				/>
+			)}
 		</View>
 	)
 }

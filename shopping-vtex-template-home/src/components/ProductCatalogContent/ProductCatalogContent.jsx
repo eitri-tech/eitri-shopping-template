@@ -34,20 +34,32 @@ export default function ProductCatalogContent(props) {
 
 	useEffect(() => {
 		if (params) {
-			params.sort = params.sort || getDefaultSortParam(true)
+			// Criar uma cópia limpa dos parâmetros para evitar mutação
+			const cleanParams = {
+				...params,
+				sort: params.sort || getDefaultSortParam(true),
+				facets: Array.isArray(params.facets) ? params.facets : []
+			}
 
-			setInitialFilters(params)
-			setAppliedFacets(params)
+			setInitialFilters(cleanParams)
+			setAppliedFacets(cleanParams)
 			setProducts([])
 			setPageHasEnded(false)
 
-			getProducts(params, currentPage)
+			getProducts(cleanParams, currentPage)
 		}
 	}, [params])
 
 	const getProducts = async (selectedFacets, page) => {
 		try {
 			if (productLoading || pagesHasEnded) return
+
+			// Validar parâmetros antes de fazer a requisição
+			if (!selectedFacets || typeof selectedFacets !== 'object') {
+				console.error('Invalid selectedFacets provided to getProducts')
+				setProductLoading(false)
+				return
+			}
 
 			setProductLoading(true)
 
@@ -67,7 +79,13 @@ export default function ProductCatalogContent(props) {
 			setCurrentPage(page)
 			setProductLoading(false)
 		} catch (error) {
-			console.log('error', error)
+			console.error('ProductCatalogContent.getProducts error:', {
+				error,
+				selectedFacets,
+				page,
+				errorMessage: error?.message,
+				errorResponse: error?.response?.data
+			})
 			setProductLoading(false)
 		}
 	}
