@@ -90,7 +90,8 @@ export const sendLogError = async (error, orderId, userId, email, method) => {
 				error: {
 					message: error?.response?.message || '',
 					data: JSON.stringify(error?.response?.data || {})
-				}
+				},
+				rawError: error
 			},
 			userId: userId || ''
 		}

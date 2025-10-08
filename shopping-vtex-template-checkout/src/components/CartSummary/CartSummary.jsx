@@ -7,14 +7,8 @@ export default function CartSummary() {
 	const { t } = useTranslation()
 	const { cart } = useLocalShoppingCart()
 
-	// Extract totalizers from cart
-	const totalizers = cart?.totalizers || []
-	const itemsTotal = totalizers.find(t => t.id === 'Items')?.value || 0
-	const shippingTotal = totalizers.find(t => t.id === 'Shipping')?.value || 0
-	const discountTotal = totalizers.find(t => t.id === 'discount')?.value || 0
-
 	// Calculate final total
-	const finalTotal = itemsTotal + shippingTotal - discountTotal
+	const finalTotal = cart?.totalizers?.reduce((acc, totalizer) => acc + totalizer.value, 0)
 
 	return (
 		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
@@ -35,32 +29,14 @@ export default function CartSummary() {
 
 			{/* Totalizers breakdown */}
 			<View className='flex flex-col gap-1 pb-2'>
-				{itemsTotal > 0 && (
-					<View className='flex flex-row justify-between items-center'>
-						<Text className='text-neutral-600 text-sm'>
-							{totalizers.find(t => t.id === 'Items')?.name || 'Total dos Itens'}
-						</Text>
-						<Text className='text-neutral-700 font-medium'>{formatAmountInCents(itemsTotal)}</Text>
+				{cart?.totalizers?.map(totalizer => (
+					<View
+						key={totalizer.id}
+						className='flex flex-row justify-between items-center'>
+						<Text className='text-neutral-600 text-sm'>{totalizer.name}</Text>
+						<Text className='text-neutral-700 font-medium'>{formatAmountInCents(totalizer.value)}</Text>
 					</View>
-				)}
-
-				{shippingTotal > 0 && (
-					<View className='flex flex-row justify-between items-center'>
-						<Text className='text-neutral-600 text-sm'>
-							{totalizers.find(t => t.id === 'Shipping')?.name || 'Total do Frete'}
-						</Text>
-						<Text className='text-neutral-700 font-medium'>{formatAmountInCents(shippingTotal)}</Text>
-					</View>
-				)}
-
-				{discountTotal > 0 && (
-					<View className='flex flex-row justify-between items-center'>
-						<Text className='text-neutral-600 text-sm'>
-							{totalizers.find(t => t.id === 'discount')?.name || 'Desconto'}
-						</Text>
-						<Text className='text-red-600 font-medium'>-{formatAmountInCents(discountTotal)}</Text>
-					</View>
-				)}
+				))}
 			</View>
 
 			{/* Final total */}
