@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react'
-import { View, Page } from 'eitri-luminus'
 import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 
 import Eitri from 'eitri-bifrost'
