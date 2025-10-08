@@ -1,9 +1,8 @@
 import Eitri from 'eitri-bifrost'
-import { useState, useEffect } from 'react'
 import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
 import SearchInput from '../components/SearchInput/SearchInput'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { View, Text, Page } from 'eitri-luminus'
+import { View } from 'eitri-luminus'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 
 export default function Search(props) {
