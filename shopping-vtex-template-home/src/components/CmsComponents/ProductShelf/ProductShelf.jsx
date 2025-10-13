@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react'
 import { getProductsService } from '../../../services/ProductService'
 import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
-
 export default function ProductShelf(props) {
 	const { data } = props
 
@@ -14,30 +12,19 @@ export default function ProductShelf(props) {
 	}, [])
 
 	const executeProductSearch = async () => {
-		try {
-			setIsLoadingProducts(true)
+		setIsLoadingProducts(true)
 
-			const params = {
-				facets: data.facets || [],
-				query: data.term ?? '',
-				sort: data.sort ?? '',
-				to: data.numberOfItems || 8
-			}
-
-			const result = await getProductsService(params)
-
-			if (result && result.products && Array.isArray(result.products)) {
-				setCurrentProducts(result.products)
-			} else {
-				setCurrentProducts([])
-			}
-			setSearchParams({ facets: data?.facets, ...params })
-		} catch (error) {
-			console.error('Erro ao buscar produtos na ProductShelf:', error)
-			setCurrentProducts([])
-		} finally {
-			setIsLoadingProducts(false)
+		const params = {
+			facets: data.facets || [],
+			query: data.term ?? '',
+			sort: data.sort ?? '',
+			to: data.numberOfItems || 8
 		}
+
+		const result = await getProductsService(params)
+		setCurrentProducts(result.products)
+		setSearchParams({ facets: data?.facets, ...params })
+		setIsLoadingProducts(false)
 	}
 
 	return (
