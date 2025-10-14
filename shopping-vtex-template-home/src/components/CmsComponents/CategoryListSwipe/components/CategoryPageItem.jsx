@@ -43,7 +43,7 @@ export default function CategoryPageItem(props) {
 				</HeaderContentWrapper>
 				<View
 					bottomInset={'auto'}
-					className='bg-base-100 flex-1'>
+					className='bg-base-100 flex-1 overflow-y-auto'>
 					<View className='flex flex-col p-4 gap-4'>
 						{item?.action && (
 							<CategoryTitle
