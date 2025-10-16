@@ -37,26 +37,36 @@ export default function CatalogFilter(props) {
 		try {
 			setFacetsLoading(true)
 			const result = await getProductsFacetsService(selectedFacets)
-			const priceFacet = result?.facets?.find(f => f.type === 'PRICERANGE')
-			const filteredFacets = result?.facets?.filter(f => f.type !== 'PRICERANGE')
+			
+			// Validar se result tem a estrutura esperada
+			if (!result || !result.facets || !Array.isArray(result.facets)) {
+				setFacetsLoading(false)
+				return
+			}
+
+			const priceFacet = result.facets.find(f => f.type === 'PRICERANGE')
+			const filteredFacets = result.facets.filter(f => f.type !== 'PRICERANGE')
 
 			resolvePriceRangeReceivedFacet(priceFacet)
 
-			setFilterFacets(filteredFacets)
+			setFilterFacets(filteredFacets || [])
 			setFacetsLoading(false)
 		} catch (e) {
 			console.error('Erro ao buscar facets', e)
+			setFacetsLoading(false)
 		}
 	}
 
 	const resolvePriceRangeReceivedFacet = priceRangeFacet => {
 		if (minPriceRange && maxPriceRange) {
 			// Uma vez configurado, nao precisa atualizar
-			console.log('return resolvePriceRangeReceivedFacet')
 			return
 		}
 
-		console.log('execute resolvePriceRangeReceivedFacet')
+		// Verificar se priceRangeFacet existe e tem valores
+		if (!priceRangeFacet || !priceRangeFacet.values || !Array.isArray(priceRangeFacet.values)) {
+			return
+		}
 
 		let min = Infinity
 		let max = 0

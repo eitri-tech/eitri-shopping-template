@@ -18,6 +18,16 @@ export const autocompleteSuggestions = async value => {
 export const getProductsService = async (params, page) => {
 	const PAGE_SIZE = 12
 
+	// Validar se params está presente e é um objeto válido
+	if (!params || typeof params !== 'object') {
+		throw new Error('Invalid parameters provided to getProductsService')
+	}
+
+	// Validar se facets é um array válido quando presente
+	if (params.facets !== undefined && !Array.isArray(params.facets)) {
+		throw new Error('Invalid selectedFacets provided to getProducts')
+	}
+
 	let from = params?.from || 1
 	let to = page?.to || PAGE_SIZE
 
@@ -26,14 +36,24 @@ export const getProductsService = async (params, page) => {
 		to = page * PAGE_SIZE
 	}
 
+	// Garantir que selectedFacets seja um array válido ou null
+	const selectedFacets = Array.isArray(params?.facets) ? params.facets : null
+
 	const options = {
 		fullText: params?.query || params?.q || '',
-		selectedFacets: params?.facets,
-		orderBy: resolveSortParam(params.sort, true),
+		selectedFacets: selectedFacets,
+		orderBy: resolveSortParam(params?.sort, true),
 		from: params?.from || from,
 		to: params?.to || to,
 		hideUnavailableItems: true
 	}
+
+	// Remover propriedades undefined/null que podem causar problemas no GraphQL
+	Object.keys(options).forEach(key => {
+		if (options[key] === undefined) {
+			delete options[key]
+		}
+	})
 
 	return await Vtex.searchGraphql.productSearch(options)
 }
@@ -52,13 +72,40 @@ export const getProductsServiceRest = async (params, page) => {
 }
 
 export const getProductsFacetsService = async params => {
+	// Validar se params está presente e é um objeto válido
+	if (!params || typeof params !== 'object') {
+		throw new Error('Invalid parameters provided to getProductsFacetsService')
+	}
+
+	// Garantir que selectedFacets seja um array válido ou null
+	const selectedFacets = Array.isArray(params?.facets) ? params.facets : null
+
 	const options = {
 		fullText: params?.query || params?.q || '',
-		selectedFacets: params?.facets,
+		selectedFacets: selectedFacets,
 		hideUnavailableItems: true
 	}
 
-	return await Vtex.searchGraphql.facets(options)
+	// Remover propriedades undefined que podem causar problemas no GraphQL
+	Object.keys(options).forEach(key => {
+		if (options[key] === undefined) {
+			delete options[key]
+		}
+	})
+
+	const result = await Vtex.searchGraphql.facets(options)
+	
+	// Validar e garantir estrutura do resultado
+	if (!result || typeof result !== 'object') {
+		return { facets: [] }
+	}
+	
+	// Garantir que facets seja sempre um array
+	if (!Array.isArray(result.facets)) {
+		return { facets: [] }
+	}
+
+	return result
 }
 
 export const getProductsFacetsServiceRest = async params => {

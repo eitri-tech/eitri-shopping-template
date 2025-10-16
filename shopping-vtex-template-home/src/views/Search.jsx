@@ -18,7 +18,13 @@ export default function Search(props) {
 
 		if (incomingSearchTerm) {
 			setPristine(false)
-			setParams(incomingSearchTerm)
+			// Criar objeto de parâmetros correto quando vem do banner
+			const searchParams = {
+				sort: 'release:desc',
+				facets: [],
+				query: incomingSearchTerm
+			}
+			setParams(searchParams)
 		}
 
 		Eitri.eventBus.subscribe({
