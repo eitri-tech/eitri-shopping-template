@@ -41,7 +41,7 @@ export default function CreditCard(props) {
 				hasDefaultBillingAddress: true
 			}
 		])
-		trackAddPaymentInfo(cart, paymentSystem.name)
+		//trackAddPaymentInfo(cart, paymentSystem.name)
 		navigate('Installments', { paymentSystem })
 	}
 
