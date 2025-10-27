@@ -12,13 +12,13 @@ import { trackBeginCheckout, trackScreenView } from '../services/Tracking'
 import { navigate } from '../services/navigationService'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 
+let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData, generateNewCart, addItem } = useLocalShoppingCart()
 	const { getCustomer, setCheckoutProfile } = useCustomer()
 
 	useEffect(() => {
 		init()
-		trackScreenView(`checkout_home`, 'checkout.home')
 	}, [])
 
 	const init = async () => {
@@ -63,10 +63,15 @@ export default function Home(props) {
 		// console.log('cart=====>', cart?.orderFormId)
 
 		if (!cart || cart.items.length === 0) {
+			trackScreenView(`checkout_home`, 'checkout.home')
 			return navigate('EmptyCart')
 		}
 
-		trackBeginCheckout(cart)
+		if (pristine) {
+			trackScreenView(`checkout_home`, 'checkout.home')
+			trackBeginCheckout(cart)
+			pristine = false
+		}
 
 		const destination = cartHasCustomerData(cart) ? 'FreightResolver' : 'PersonalData'
 

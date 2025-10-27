@@ -7,13 +7,15 @@ import DeliveryData from '../components/FinishCart/DeliveryData'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
-import { sendLogError, trackScreenView } from '../services/Tracking'
+import { sendLogError, trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
 import { ERROR_MAP } from '../utils/vtexErrorMap'
 import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
 
+let selectedShipping = null
+let selectedPayment = null
 export default function CheckoutReview() {
 	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
 	const { t } = useTranslation()
@@ -47,8 +49,36 @@ export default function CheckoutReview() {
 			} else {
 				setUnavailableItems([])
 			}
+
+			sendTrackingPayment(cart)
+			sendTrackingShipping(cart)
 		}
 	}, [cart])
+
+	const sendTrackingPayment = async (cart) => {
+		try {
+			const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
+			const paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
+			if (paymentType && (!selectedPayment || selectedPayment !== paymentType)) {
+				trackAddPaymentInfo(cart, paymentType)
+				selectedPayment = paymentType
+			}
+		} catch (e) {
+			console.error('Error on tracking', e)
+		}
+	}
+
+	const sendTrackingShipping = async (cart) => {
+		try {
+			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
+			if (shippingTier && (!selectedShipping || selectedShipping !== shippingTier)) {
+				trackShippingInfo(cart)
+				selectedShipping = shippingTier
+			}
+		} catch (e) {
+			console.error('Error on tracking', e)
+		}
+	}
 
 	const runPaymentScript = async () => {
 		try {

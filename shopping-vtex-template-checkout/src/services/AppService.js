@@ -14,3 +14,7 @@ export const startConfigure = async () => {
 		gaVerbose: false
 	})
 }
+
+export const autoTriggerGAEvents = () => {
+	return App?.configs?.appConfigs?.autoTriggerGAEvents ?? true
+}
