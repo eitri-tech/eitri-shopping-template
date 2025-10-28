@@ -45,7 +45,7 @@ export const trackBeginCheckout = cart => {
 			af_quantity: cart.items.map(item => item.quantity)
 		})
 	} catch (e) {
-		console.log('Error on tracking', e)
+		console.log('Error on trackBeginCheckout', e)
 	}
 }
 
@@ -79,7 +79,7 @@ export const trackAddPaymentInfo = (cart, paymentType) => {
 			payment_type: paymentType || ''
 		})
 	} catch (e) {
-		console.log('Error on tracking', e)
+		console.log('Error on trackAddPaymentInfo', e)
 	}
 }
 
@@ -101,7 +101,7 @@ export const trackShippingInfo = async cart => {
 					quantity: item.quantity
 				}
 			})
-			Tracking.event('add_shipping_info', {
+			TrackingService.event('add_shipping_info', {
 				currency: 'BRL',
 				shipping_tier: shippingTier?.selectedSla ? shippingTier.selectedSla : '',
 				value: value,
@@ -110,7 +110,7 @@ export const trackShippingInfo = async cart => {
 			})
 		}
 
-		Tracking.inngageEvent('add_shipping_info', {
+		TrackingService.inngageEvent('add_shipping_info', {
 			currency: 'BRL',
 			shipping_tier: shippingTier?.selectedSla ? shippingTier.selectedSla : '',
 			value: value,
@@ -120,7 +120,7 @@ export const trackShippingInfo = async cart => {
 				.join(';')
 		})
 	} catch (e) {
-		console.log('Error on tracking', e)
+		console.log('Error on trackShippingInfo', e)
 	}
 }
 

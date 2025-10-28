@@ -64,7 +64,7 @@ export default function CheckoutReview() {
 				selectedPayment = paymentType
 			}
 		} catch (e) {
-			console.error('Error on tracking', e)
+			console.error('Error on sendTrackingPayment', e)
 		}
 	}
 
@@ -76,7 +76,7 @@ export default function CheckoutReview() {
 				selectedShipping = shippingTier
 			}
 		} catch (e) {
-			console.error('Error on tracking', e)
+			console.error('Error on sendTrackingShipping', e)
 		}
 	}
 
