@@ -52,7 +52,7 @@ export default function GiftCard(props) {
 				loadCardValue(newCart)
 				setRedemptionCode('')
 				setIsLoading(false)
-				trackAddPaymentInfo(newCart, 'Vale Presente')
+				//trackAddPaymentInfo(newCart, 'Vale Presente')
 			} else {
 				setError('Código Invalido')
 				setIsLoading(false)

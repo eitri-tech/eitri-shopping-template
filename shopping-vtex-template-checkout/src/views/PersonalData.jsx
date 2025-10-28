@@ -240,12 +240,13 @@ export default function PersonalData() {
 	const findUserByEmail = async () => {
 		setIsLoading(true)
 		const client = await getUserByEmail(personalData.email)
+		registerToNotify({
+			customerId: client?.userProfileId || '',
+			email: personalData.email || ''
+		})
+
 		if (client.userProfileId) {
 			const updatedCart = await addCustomerData({ email: personalData.email }, cart.orderFormId)
-			registerToNotify({
-				customerId: client.userProfileId || '',
-				email: personalData.email || ''
-			})
 			if (cartHasCustomerData(updatedCart)) {
 				navigate('FreightResolver', {}, true)
 			}

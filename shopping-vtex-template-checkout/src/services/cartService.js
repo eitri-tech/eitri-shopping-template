@@ -44,9 +44,9 @@ export const removeClientData = async () => {
 	return await getCart()
 }
 
-export const registerToNotify = async userProfileId => {
+export const registerToNotify = async userPayload => {
 	try {
-		Eitri.exposedApis.session.notifyLogin({ customerId: userProfileId })
+		Eitri.exposedApis.session.notifyLogin(userPayload)
 	} catch (e) {
 		console.log('erro on registerToNotify', e)
 	}

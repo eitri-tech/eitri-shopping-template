@@ -22,7 +22,7 @@ export default function InstantPayment(props) {
 				hasDefaultBillingAddress: true
 			}
 		])
-		trackAddPaymentInfo(cart, 'Pix')
+		//trackAddPaymentInfo(cart, 'Pix')
 		navigate('CheckoutReview')
 	}
 

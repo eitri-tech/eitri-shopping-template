@@ -22,7 +22,7 @@ export default function ExternalPayment(props) {
 				hasDefaultBillingAddress: true
 			}
 		])
-		trackAddPaymentInfo(cart, paymentSystem.name)
+		//trackAddPaymentInfo(cart, paymentSystem.name)
 		navigate('CheckoutReview')
 	}
 
