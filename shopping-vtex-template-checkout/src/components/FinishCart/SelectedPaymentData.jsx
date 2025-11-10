@@ -6,6 +6,7 @@ import { Image, Text, View } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import CardIcon from '../Icons/CardIcons/CardIcon'
 import pixImage from '../../assets/images/pix.png'
+import googlePayImage from '../../assets/images/GPay_Acceptance_Mark_800.png'
 
 function CreditCardVisual({ cardInfo, cardName }) {
 	const { t } = useTranslation()
@@ -149,6 +150,19 @@ export default function SelectedPaymentData(props) {
 											className='w-[130px] object-contain'
 										/>
 										<Text className='text-sm'>Aprovação imediata</Text>
+									</View>
+								)
+							}
+
+							if (groupName === 'WH Google PayPaymentGroup') {
+								return (
+									<View
+										key={payment.paymentSystem}
+										className='flex flex-col gap-4 p-4 justify-center items-center'>
+										<Image
+											src={googlePayImage}
+											className='w-[130px] object-contain'
+										/>
 									</View>
 								)
 							}

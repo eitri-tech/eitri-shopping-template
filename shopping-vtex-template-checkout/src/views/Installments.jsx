@@ -9,8 +9,9 @@ import { navigate } from '../services/navigationService'
 
 export default function Installments(props) {
 	const paymentSystem = props.location?.state?.paymentSystem
+	const description = props.location?.state?.description
 
-	const { cart, cardInfo, selectPaymentOption, setCardInfo } = useLocalShoppingCart()
+	const { cart, cardInfo, selectPaymentOption } = useLocalShoppingCart()
 
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -75,9 +76,13 @@ export default function Installments(props) {
 							iconKey={paymentSystem?.name}
 						/>
 					</View>
-					<Text className='text font-bold text-neutral-900'>
-						{`${paymentSystem?.name || 'Cartão de Crédito'} com final ${cardInfo?.cardNumber?.slice(-4)}`}
-					</Text>
+					{paymentSystem?.groupName === 'WH Google PayPaymentGroup' ? (
+						<Text className='text font-bold text-neutral-900'>{description || 'Google Pay'}</Text>
+					) : (
+						<Text className='text font-bold text-neutral-900'>
+							{`${paymentSystem?.name || 'Cartão de Crédito'} com final ${cardInfo?.cardNumber?.slice(-4)}`}
+						</Text>
+					)}
 				</View>
 
 				<View className='flex flex-col gap-3'>

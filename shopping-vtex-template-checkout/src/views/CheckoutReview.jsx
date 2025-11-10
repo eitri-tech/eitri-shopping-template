@@ -7,7 +7,7 @@ import DeliveryData from '../components/FinishCart/DeliveryData'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
-import { sendLogError, trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
+import { trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
 import { ERROR_MAP } from '../utils/vtexErrorMap'
@@ -55,7 +55,7 @@ export default function CheckoutReview() {
 		}
 	}, [cart])
 
-	const sendTrackingPayment = async (cart) => {
+	const sendTrackingPayment = async cart => {
 		try {
 			const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
 			const paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
@@ -68,7 +68,7 @@ export default function CheckoutReview() {
 		}
 	}
 
-	const sendTrackingShipping = async (cart) => {
+	const sendTrackingShipping = async cart => {
 		try {
 			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
 			if (shippingTier && (!selectedShipping || selectedShipping !== shippingTier)) {
@@ -119,8 +119,6 @@ export default function CheckoutReview() {
 				setShowOtpLogin(true)
 				return
 			}
-
-			sendLogError(error, cart?.orderFormId, '', cart?.clientProfileData?.email, 'runPaymentScript')
 
 			setError({
 				state: true,

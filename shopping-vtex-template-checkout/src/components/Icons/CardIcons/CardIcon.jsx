@@ -4,6 +4,7 @@ import HipercardSvg from './Networks/Hipercard.svg'
 import EloSvg from './Networks/Elo.svg'
 import DinersSvg from './Networks/Diners.svg'
 import AmericanExpressSvg from './Networks/AmericanExpress.svg'
+import GooglePayIcon from './../../../assets/images/GPay_Acceptance_Mark_800.png'
 
 export default function CardIcon(props) {
 	const iconKey = props.iconKey
@@ -29,6 +30,16 @@ export default function CardIcon(props) {
 
 	if (iconKey === 'Diners') {
 		icon = DinersSvg
+	}
+
+	if (iconKey === 'WH Google Pay') {
+		icon = GooglePayIcon
+		return (
+			<Image
+				src={icon}
+				className={`w-[100px] rounded ${className}`}
+			/>
+		)
 	}
 
 	if (!icon) {

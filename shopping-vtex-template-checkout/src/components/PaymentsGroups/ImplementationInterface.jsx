@@ -4,15 +4,17 @@ import BankInvoice from './Groups/BankInvoice'
 import InstantPayment from './Groups/InstantPayment'
 import GiftCard from './Groups/GiftCard'
 import Eitri from 'eitri-bifrost'
+import GooglePay from '@/components/PaymentsGroups/Groups/GooglePay'
 
 export default function ImplementationInterface(props) {
-	const { groupName, systemGroup, paymentSystems, onSelectPaymentMethod } = props
+	const { groupName, systemGroup, onSelectPaymentMethod } = props
 
 	const PAYMENT_GROUPS_IMPLEMENTATION = {
-		creditCardPaymentGroup: CreditCard,
-		bankInvoicePaymentGroup: BankInvoice,
-		instantPaymentPaymentGroup: InstantPayment,
-		giftCardPaymentGroup: GiftCard
+		'creditCardPaymentGroup': CreditCard,
+		'bankInvoicePaymentGroup': BankInvoice,
+		'instantPaymentPaymentGroup': InstantPayment,
+		'giftCardPaymentGroup': GiftCard,
+		'WH Google PayPaymentGroup': GooglePay
 	}
 
 	const externalPaymentsImplementation = App.configs.appConfigs?.externalPayments ?? []
@@ -29,7 +31,6 @@ export default function ImplementationInterface(props) {
 		return (
 			<ExternalPayment
 				systemGroup={systemGroup}
-				paymentSystems={paymentSystems}
 				groupName={groupName}
 				externalPaymentRc={externalPaymentRc}
 				onSelectPaymentMethod={onSelectPaymentMethod}
@@ -44,5 +45,5 @@ export default function ImplementationInterface(props) {
 	const Implementation = PAYMENT_GROUPS_IMPLEMENTATION[groupName]
 
 	/*prettier-ignore*/
-	return React.createElement(Implementation, { paymentSystems, groupName, systemGroup, onSelectPaymentMethod })
+	return React.createElement(Implementation, { groupName, systemGroup, onSelectPaymentMethod })
 }
