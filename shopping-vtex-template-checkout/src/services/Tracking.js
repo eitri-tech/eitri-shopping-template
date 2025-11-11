@@ -58,7 +58,6 @@ export const trackAddPaymentInfo = (cart, paymentType) => {
 
 		// evento enviado automaticamente pelo Vtex service se autoTriggerGAEvents() for true
 		if (!autoTriggerGAEvents()) {
-				
 			const totalizer = cart?.totalizers?.find(i => i.id === 'Items')
 			const value = totalizer?.value ? totalizer.value / 100 : cart.value ? cart.value / 100 : ''
 
@@ -92,7 +91,6 @@ export const trackShippingInfo = async cart => {
 		// evento enviado automaticamente pelo Vtex service se autoTriggerGAEvents() for true
 		if (!autoTriggerGAEvents()) {
 			const items = cart.items.map(item => {
-
 				return {
 					item_id: `${item.productId}_${item.id}`,
 					item_name: item.name,
@@ -124,27 +122,38 @@ export const trackShippingInfo = async cart => {
 	}
 }
 
-export const sendLogError = async (error, orderId, userId, email, method) => {
+export const sendLogError = async (error, method, data = {}, _cart) => {
 	try {
-		const environment = await Eitri.environment.getName()
-		if (environment === 'dev') return
+		const device = await Eitri.device.getInfos()
+
+		const cart = _cart
 
 		const payload = {
-			origin: 'APP-SHOPPING',
-			eventName: `${window.__eitriAppConf?.slug}-error`,
+			origin: 'APP-SHOPPING-ERROR',
+			eventName: `${window.__eitriAppConf?.slug}`,
 			data: {
-				app: 'checkout',
+				application: window.__eitriAppConf?.application || '',
+				slug: window.__eitriAppConf?.slug,
 				applicationId: window.__eitriAppConf?.applicationId,
+				version: window.__eitriAppConf?.version,
+				device,
 				method: method || '',
-				cartId: orderId || '',
-				userEmail: email || '',
+				email: cart?.clientProfileData?.email,
+				cartId: cart?.orderFormId,
 				error: {
-					message: error?.response?.message || '',
-					data: JSON.stringify(error?.response?.data || {})
+					message: error?.message,
+					stack: error?.stack,
+					name: error?.name,
+					...error
 				},
-				rawError: error
-			},
-			userId: userId || ''
+				...data
+			}
+		}
+
+		const environment = await Eitri.environment.getName()
+		if (environment === 'dev') {
+			console.log('===sendLogError===', payload)
+			return
 		}
 
 		Eitri.http.post('https://api.eitri.tech/analytics/event', payload, {
@@ -152,6 +161,6 @@ export const sendLogError = async (error, orderId, userId, email, method) => {
 			'application-id': window.__eitriAppConf?.applicationId
 		})
 	} catch (e) {
-		console.error('Erro ao setar user', e)
+		console.error('Erro sendLogError', e)
 	}
 }
