@@ -47,6 +47,7 @@ export default function SignIn(props) {
 	const [loadingSendingCode, setLoadingSendingCode] = useState(false)
 	const [loginProviders, setLoginProviders] = useState()
 	const [loadingLoginProviders, setLoadingLoginProviders] = useState(false)
+	const [canUseSocialLogin, setCanUseSocialLogin] = useState(false)
 
 	useEffect(() => {
 		loadLoginProviders()
@@ -78,6 +79,10 @@ export default function SignIn(props) {
 			const providers = await getLoginProviders()
 			if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
 				setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
+			}
+			const { applicationData } = await Eitri.getConfigs()
+			if (applicationData?.platform === 'android') {
+				setCanUseSocialLogin(true)
 			}
 			setLoginProviders(providers)
 			setLoadingLoginProviders(false)
@@ -311,7 +316,7 @@ export default function SignIn(props) {
 					</View>
 				)}
 
-				{Eitri.canIUse('23') &&
+				{ (Eitri.canIUse('23') && canUseSocialLogin) &&
 					loginProviders?.oAuthProviders &&
 					loginProviders?.oAuthProviders?.length > 0 && (
 						<>
