@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { cartHasCustomerData, getUserByEmail, registerToNotify } from '../services/cartService'
+import { cartHasCustomerData, registerToNotify } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
 import { trackScreenView } from '../services/Tracking'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
@@ -17,9 +17,12 @@ import { useEffect, useState } from 'react'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
 import { navigate } from '../services/navigationService'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
+import { useCustomer } from '@/providers/Customer'
 
 export default function PersonalData() {
 	const { cart, addCustomerData } = useLocalShoppingCart()
+	const { getUserByEmail } = useCustomer()
+
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)

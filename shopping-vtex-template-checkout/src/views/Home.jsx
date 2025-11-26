@@ -1,10 +1,5 @@
 import Eitri from 'eitri-bifrost'
-import {
-	addLoggedCustomerToCart,
-	cartHasCustomerData,
-	getUserByEmail,
-	saveCartIdOnStorage
-} from '../services/cartService'
+import { addLoggedCustomerToCart, cartHasCustomerData, saveCartIdOnStorage } from '../services/cartService'
 import { startConfigure } from '../services/AppService'
 import { useCustomer } from '../providers/Customer'
 import { useLocalShoppingCart } from '../providers/LocalCart'
@@ -15,7 +10,7 @@ import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData, generateNewCart, addItem } = useLocalShoppingCart()
-	const { getCustomer, setCheckoutProfile } = useCustomer()
+	const { getCustomer, setCheckoutProfile, getUserByEmail } = useCustomer()
 
 	useEffect(() => {
 		init()
@@ -87,8 +82,8 @@ export default function Home(props) {
 	}
 
 	const loadCheckoutProfile = async email => {
-		const client = await getUserByEmail(email)
-		setCheckoutProfile(client)
+		if (!email) return
+		await getUserByEmail(email)
 	}
 
 	const assertNotNullGift = async cart => {

@@ -13,6 +13,7 @@ import {
 	CustomInput,
 	BottomInset
 } from 'shopping-vtex-template-shared'
+import { navigate } from '@/services/navigationService'
 
 export default function PixOrder(props) {
 	const [timeOut, setTimeOut] = useState(10 * 60)
