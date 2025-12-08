@@ -22,8 +22,10 @@ export default function ProductShelf(props) {
 		}
 
 		const result = await getProductsService(params)
-		setCurrentProducts(result.products)
-		setSearchParams({ facets: data?.facets, ...params })
+		if (result) {
+			setCurrentProducts(result.products)
+			setSearchParams({ facets: data?.facets, ...params })
+		}
 		setIsLoadingProducts(false)
 	}
 

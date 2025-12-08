@@ -243,6 +243,7 @@ export default function PersonalData() {
 	const findUserByEmail = async () => {
 		setIsLoading(true)
 		const client = await getUserByEmail(personalData.email)
+
 		registerToNotify({
 			customerId: client?.userProfileId || '',
 			email: personalData.email || ''

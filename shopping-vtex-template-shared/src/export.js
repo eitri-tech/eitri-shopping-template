@@ -19,6 +19,8 @@ export { default as ProductCardDefault } from './components/ProductCard/ProductC
 export { default as ProductCardFullImage } from './components/ProductCard/ProductCardFullImage'
 export { default as GenericError } from './components/Error/GenericError'
 export { default as cartShippingResolver } from './utils/cartShippingResolver'
+export { default as shippingResolver } from './utils/shippingResolver'
+export { default as productGroupShippingResolver } from './utils/productGroupShippingResolver'
 export { default as TrackingService } from './services/TrackingService'
 export { default as BottomInset } from './components/BottomInset/BottomInset'
 export { default as CustomCarousel } from './components/CustomCarousel/CustomCarousel'

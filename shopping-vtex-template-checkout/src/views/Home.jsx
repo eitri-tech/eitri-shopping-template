@@ -10,7 +10,7 @@ import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData, generateNewCart, addItem } = useLocalShoppingCart()
-	const { getCustomer, setCheckoutProfile, getUserByEmail } = useCustomer()
+	const { getCustomer, getUserByEmail } = useCustomer()
 
 	useEffect(() => {
 		init()
@@ -53,7 +53,7 @@ export default function Home(props) {
 	}
 
 	const handleNavigation = async cart => {
-		// navigate('Cartman')
+		// navigate('CheckoutReview')
 		// return
 		// console.log('cart=====>', cart?.orderFormId)
 
@@ -69,7 +69,7 @@ export default function Home(props) {
 		}
 
 		const destination = cartHasCustomerData(cart) ? 'FreightResolver' : 'PersonalData'
-
+		console.log('destination', destination)
 		return navigate(destination, {}, true)
 	}
 

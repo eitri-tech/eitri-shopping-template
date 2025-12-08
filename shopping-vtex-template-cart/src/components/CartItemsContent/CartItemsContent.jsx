@@ -23,7 +23,7 @@ export default function CartItemsContent(props) {
 
 	const handleRemoveCartItem = async index => {
 		try {
-			setCartItems([...cartItems.splice(index, 1)])
+			setCartItems([...cartItems.slice(0, index), ...cartItems.slice(index + 1)])
 			await removeItem(index)
 		} catch (error) {
 			console.error('Cart: handleRemoveCartItem Error', error)
