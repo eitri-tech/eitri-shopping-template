@@ -6,11 +6,10 @@ export default function FreightResolver(props) {
 	const { cart } = useLocalShoppingCart()
 
 	useEffect(() => {
-		console.log('aquiiii')
 		if (!cart?.shippingData?.address) {
 			navigate('AddressForm', {}, true)
 		} else {
-			if (!cart?.shippingData?.address?.number) {
+			if (cart?.shippingData?.address?.addressType === 'residential' && !cart?.shippingData?.address?.number) {
 				navigate('AddressForm', { addressId: cart?.shippingData?.address?.addressId }, true)
 				return
 			}

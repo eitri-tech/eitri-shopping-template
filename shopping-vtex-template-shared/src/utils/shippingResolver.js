@@ -1,4 +1,4 @@
-import { addDaysToDate, addHoursToDate, addMinutesToDate, formatAmountInCents, formatShippingEstimate } from './utils'
+import { formatAmountInCents, formatShippingEstimate, getShippingEstimate } from './utils'
 
 // Constantes
 const FREE_SHIPPING_LABEL = 'Grátis'
@@ -96,12 +96,13 @@ function groupSlasByType(allSlas) {
 				id: sla.id,
 				name: sla.name,
 				addressId: sla.addressId,
-				isPickupInPoint: isPickupDelivery(sla.deliveryChannel),
-				pickupStoreInfo: sla.pickupStoreInfo ? { ...sla.pickupStoreInfo } : null,
+				isPickupInPoint: sla.deliveryChannel === 'pickup-in-point',
+				pickupStoreInfo: sla.pickupStoreInfo ? JSON.parse(JSON.stringify(sla.pickupStoreInfo)) : null,
 				pickupPointId: sla.pickupPointId,
 				pickupDistance: sla.pickupDistance,
 				price: sla.price,
 				formattedShippingEstimate: formatShippingEstimate(sla),
+				shippingEstimateDate: getShippingEstimate(sla),
 				slas: [
 					{
 						itemIndex: sla.itemIndex,
@@ -119,21 +120,21 @@ function groupSlasByType(allSlas) {
 // 3. Enriquece dados com informações completas
 function enrichShippingOptions(groupedSlas, items, selectedAddresses, pickupPoints) {
 	return groupedSlas.map(group => {
-		const address = group.isPickupInPoint
-			? group.pickupStoreInfo?.address
-				? { ...group.pickupStoreInfo.address }
-				: null
-			: selectedAddresses?.find(addr => addr.addressId === group.addressId) || null
+		let deliveryAddress = !group.isPickupInPoint
+			? (() => {
+					const address = selectedAddresses?.find(addr => addr.addressId === group.addressId)
+					return address ? JSON.parse(JSON.stringify(address)) : null
+				})()
+			: null
 
 		const pickupPoint = pickupPoints?.find(point => point.id === group.pickupPointId)
 		const allItemsCovered = group.slas.length === items.length
 
 		return {
 			...group,
-			name: group.isPickupInPoint ? group.pickupStoreInfo?.friendlyName : group.name,
-			price: formatPrice(group.price),
+			formatedPrice: formatPrice(group.price),
 			fulfillsAllItems: allItemsCovered,
-			address,
+			deliveryAddress: deliveryAddress,
 			businessHours: pickupPoint?.businessHours,
 			products: group.slas.map(slaItem => {
 				const productData = getProductData(items, slaItem.itemIndex)

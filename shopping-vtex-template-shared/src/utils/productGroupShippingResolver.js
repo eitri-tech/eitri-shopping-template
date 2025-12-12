@@ -1,11 +1,4 @@
-import {
-	addDaysToDate,
-	addHoursToDate,
-	addMinutesToDate,
-	formatAmountInCents,
-	formatDate,
-	formatShippingEstimate
-} from './utils'
+import { formatAmountInCents, formatShippingEstimate } from './utils'
 
 export default function productGroupShippingResolver(cart) {
 	try {
@@ -13,36 +6,19 @@ export default function productGroupShippingResolver(cart) {
 			return null
 		}
 
-		const groupedByProduct = groupProductsBySlas(cart.shippingData.logisticsInfo)
+		const groupedByProduct = groupProductsBySlas(cart.shippingData.logisticsInfo, cart.items, cart)
+		const shippingGroups = enrichShippingGroups(groupedByProduct, cart)
 
-		// console.log('groupedByProduct==>', groupedByProduct)
-
-		const withProducts = groupedByProduct?.map(group => {
-			return {
-				...group,
-				items: group?.items.map(item => {
-					return {
-						...item,
-						itemIndex: item?.itemIndex,
-						name: cart?.items[item?.itemIndex]?.name,
-						quantity: cart?.items[item?.itemIndex]?.quantity,
-						imageUrl: cart?.items[item?.itemIndex]?.imageUrl
-					}
-				})
-			}
-		})
-
-		const richData = enrichedData(withProducts)
-
-		return richData
+		return shippingGroups
 	} catch (error) {
-		console.error('Error on cartShippingResolver', error)
-
+		console.error('Error on productGroupShippingResolver', error)
 		throw error
 	}
 }
 
-// Função para criar uma chave única baseada nos IDs dos SLAs
+/**
+ * Cria uma chave única baseada nos IDs dos SLAs ordenados
+ */
 function createSlaKey(slas) {
 	return slas
 		.map(sla => sla.id)
@@ -50,17 +26,28 @@ function createSlaKey(slas) {
 		.join('|')
 }
 
-// Função principal para agrupar produtos por SLAs
-function groupProductsBySlas(logisticsInfo) {
+/**
+ * Agrupa produtos por SLAs idênticos e adiciona informações dos produtos
+ */
+function groupProductsBySlas(logisticsInfo, cartItems, cart) {
 	const groups = new Map()
 
-	logisticsInfo.forEach(item => {
-		const slaKey = createSlaKey(item.slas)
+	logisticsInfo.forEach(logisticItem => {
+		const slaKey = createSlaKey(logisticItem.slas)
 
 		if (!groups.has(slaKey)) {
 			groups.set(slaKey, {
-				slas: item.slas.map(sla => ({
+				slas: logisticItem.slas.map(sla => ({
 					...sla,
+					isPickupInPoint: sla.deliveryChannel === 'pickup-in-point',
+					deliveryAddress:
+						sla.deliveryChannel === 'delivery'
+							? cart?.shippingData?.availableAddresses?.find(
+									address =>
+										address.addressType === 'residential' &&
+										address.addressId === logisticItem.addressId
+								)
+							: null,
 					totalPrice: 0
 				})),
 				items: []
@@ -69,79 +56,46 @@ function groupProductsBySlas(logisticsInfo) {
 
 		const group = groups.get(slaKey)
 
-		// Adiciona o preço de cada SLA ao total
+		// Acumula o preço de cada SLA
 		group.slas.forEach((sla, index) => {
-			sla.totalPrice += item.slas[index].price
+			sla.totalPrice += logisticItem.slas[index].price
 		})
 
+		// Adiciona informações do item e do produto do carrinho
+		const cartItem = cartItems[logisticItem.itemIndex]
+
 		group.items.push({
-			itemIndex: item.itemIndex,
-			itemId: item.itemId,
-			selectedSla: item.selectedSla,
-			selectedDeliveryChannel: item.selectedDeliveryChannel
+			itemIndex: logisticItem.itemIndex,
+			itemId: logisticItem.itemId,
+			selectedSla: logisticItem.selectedSla,
+			selectedDeliveryChannel: logisticItem.selectedDeliveryChannel,
+			name: cartItem?.name,
+			quantity: cartItem?.quantity,
+			imageUrl: cartItem?.imageUrl
 		})
 	})
 
 	return Array.from(groups.values())
 }
 
-const enrichedData = groups => {
+/**
+ * Enriquece os dados dos grupos com formatações e informações adicionais
+ */
+function enrichShippingGroups(groups, cart) {
 	return groups.map(group => {
-		return {
-			...group,
-			currentSla: group?.items?.every(i => i.selectedSla === group?.items?.[0].selectedSla)
-				? group?.items?.[0].selectedSla
-				: '',
-			slas: group.slas.map(sla => {
-				return {
-					...sla,
-					isPickupInPoint: sla.deliveryChannel === 'pickup-in-point',
-					formatedShippingEstimate: formatShippingEstimate(sla),
-					formattedTotalPrice: group.totalPrice === 0 ? 'Grátis' : formatAmountInCents(sla.totalPrice)
-				}
-			})
-		}
-
-		const address = group.isPickupInPoint
-			? JSON.parse(JSON.stringify(group.pickupStoreInfo?.address))
-			: cart?.shippingData?.selectedAddresses?.find(address => address.addressId === group.addressId)
-		const pickUpStorePoint = cart?.shippingData?.pickupPoints?.find(point => point.id === group.pickupPointId)
+		// Verifica se todos os itens têm o mesmo SLA selecionado
+		const firstSelectedSla = group.items[0]?.selectedSla
+		const allSameSla = group.items.every(item => item.selectedSla === firstSelectedSla)
 
 		return {
 			...group,
-			name: group.isPickupInPoint ? group.pickupStoreInfo?.friendlyName : group.name,
-			price: group.price === 0 ? 'Grátis' : formatAmountInCents(group.price),
-			fulfillsAllItems: group?.slas?.length === cart.items.length,
-			isCurrent:
-				group?.slas?.length === cart.items.length &&
-				cart.shippingData?.logisticsInfo?.every(logistic => logistic.id === group.id),
-			address: address ? JSON.parse(JSON.stringify(address)) : null,
-			businessHours: pickUpStorePoint?.businessHours,
-			products: group.slas.map(sla => {
-				return {
-					itemIndex: sla.itemIndex,
-					name: cart?.items[sla.itemIndex]?.name,
-					quantity: cart?.items[sla.itemIndex]?.quantity,
-					imageUrl: cart?.items[sla.itemIndex]?.imageUrl
-				}
-			})
+			currentSla: allSameSla ? firstSelectedSla : '',
+			slas: group.slas.map(sla => ({
+				...sla,
+				isPickupInPoint: sla.deliveryChannel === 'pickup-in-point',
+				formatedShippingEstimate: formatShippingEstimate(sla),
+				formattedTotalPrice: sla.totalPrice === 0 ? 'Grátis' : formatAmountInCents(sla.totalPrice)
+			}))
 		}
 	})
-}
-
-const shippingEstimateDate = shippingEstimate => {
-	const isHours = shippingEstimate.indexOf('h') > -1
-	const isMinutes = shippingEstimate.indexOf('m') > -1
-	const useBd = shippingEstimate.indexOf('bd') > -1
-	const value = parseInt(shippingEstimate)
-
-	if (isMinutes) {
-		return addMinutesToDate(value)
-	}
-
-	if (isHours) {
-		return addHoursToDate(value)
-	}
-
-	return addDaysToDate(value, useBd)
 }

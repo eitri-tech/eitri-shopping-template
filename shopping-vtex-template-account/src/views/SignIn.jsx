@@ -134,15 +134,13 @@ export default function SignIn(props) {
 	const handleLogin = async () => {
 		setLoading(true)
 		try {
-			await doLogin(username, password)
-			const customerData = await getCustomerData()
-			if (redirectTo) {
-				navigate(redirectTo, { customerData }, true)
-			} else if (closeAppAfterLogin) {
-				Eitri.close()
-			} else {
-				Eitri.navigation.back()
+			const loggedIn = await doLogin(username, password)
+			if (loggedIn === 'Success') {
+				await onLoggedIn()
+				return
 			}
+			setAlertMessage(t('signIn.verifyAgain'))
+			setShowLoginErrorAlert(true)
 		} catch (e) {
 			setAlertMessage(t('signIn.errorInvalidUser'))
 			setShowLoginErrorAlert(true)
@@ -154,23 +152,40 @@ export default function SignIn(props) {
 	}
 
 	const loginWithEmailAndAccessKey = async () => {
-		const loggedIn = await loginWithEmailAndKey(username, verificationCode)
-		const customerData = await getCustomerData()
-		if (loggedIn === 'WrongCredentials') {
+		setLoading(true)
+		try {
+			const loggedIn = await loginWithEmailAndKey(username, verificationCode)
+			if (loggedIn === 'Success') {
+				await onLoggedIn()
+				return
+			}
 			setAlertMessage(t('signIn.wrongCredentials'))
 			setShowLoginErrorAlert(true)
-		} else if (loggedIn === 'Success') {
-			if (redirectTo) {
-				navigate(redirectTo, { customerData }, true)
-			} else if (closeAppAfterLogin) {
-				Eitri.close()
-			} else {
-				Eitri.navigation.back()
-			}
-		} else {
-			setAlertMessage(t('signIn.verifyAgain'))
+		} catch (e) {
+			setAlertMessage(t('signIn.wrongCredentials'))
 			setShowLoginErrorAlert(true)
+		} finally {
+			saveUserEmailOnStorage(username)
 		}
+
+		setLoading(false)
+
+		// const customerData = await getCustomerData()
+		// if (loggedIn === 'WrongCredentials') {
+		// 	setAlertMessage(t('signIn.wrongCredentials'))
+		// 	setShowLoginErrorAlert(true)
+		// } else if (loggedIn === 'Success') {
+		// 	if (redirectTo) {
+		// 		navigate(redirectTo, { customerData }, true)
+		// 	} else if (closeAppAfterLogin) {
+		// 		Eitri.close()
+		// 	} else {
+		// 		Eitri.navigation.back()
+		// 	}
+		// } else {
+		// 	setAlertMessage(t('signIn.verifyAgain'))
+		// 	setShowLoginErrorAlert(true)
+		// }
 	}
 
 	const handleSocialLogin = async () => {
@@ -191,7 +206,7 @@ export default function SignIn(props) {
 			</HeaderContentWrapper>
 
 			<Loading
-				isLoading={loadingLoginProviders}
+				isLoading={loadingLoginProviders || loading}
 				fullScreen={true}
 			/>
 
@@ -316,7 +331,8 @@ export default function SignIn(props) {
 					</View>
 				)}
 
-				{ (Eitri.canIUse('23') && canUseSocialLogin) &&
+				{Eitri.canIUse('23') &&
+					canUseSocialLogin &&
 					loginProviders?.oAuthProviders &&
 					loginProviders?.oAuthProviders?.length > 0 && (
 						<>

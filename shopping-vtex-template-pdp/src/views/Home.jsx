@@ -141,7 +141,7 @@ export default function Home() {
 								onSkuChange={onSkuChange}
 							/>
 
-							<Freight currentSku={currentSku} />
+							{configLoaded && <Freight currentSku={currentSku} />}
 
 							{/*<RichContent product={product} />*/}
 

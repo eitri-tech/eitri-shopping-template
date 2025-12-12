@@ -31,6 +31,7 @@ export default function Freight(props) {
 		setLoading(true)
 		try {
 			let freightOpt = await fetchFreight(zipCode, currentSku)
+			console.log('freightOpt', freightOpt)
 			setFreightOptions(freightOpt)
 			await savePostalCodeOnStorage(zipCode)
 		} catch (error) {

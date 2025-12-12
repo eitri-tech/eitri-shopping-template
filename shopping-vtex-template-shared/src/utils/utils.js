@@ -45,24 +45,13 @@ export const addMinutesToDate = minutesToAdd => {
 
 export const formatShippingEstimate = sla => {
 	const shippingEstimate = sla.shippingEstimate
+	let date = getShippingEstimate(sla)
 
 	const isHours = shippingEstimate.indexOf('h') > -1
 	const isMinutes = shippingEstimate.indexOf('m') > -1
 	const useBd = shippingEstimate.indexOf('bd') > -1
 
 	const value = parseInt(shippingEstimate)
-
-	let date = null
-
-	if (isMinutes) {
-		date = addMinutesToDate(value)
-	} else if (isHours) {
-		date = addHoursToDate(value)
-	} else if (useBd) {
-		date = addDaysToDate(value, true)
-	} else {
-		date = addDaysToDate(value, false)
-	}
 
 	if (sla.deliveryChannel === 'pickup-in-point') {
 		if (isHours) {
@@ -131,6 +120,30 @@ export const formatShippingEstimate = sla => {
 		} else {
 			return `Receba até ${day} de ${month}`
 		}
+	}
+
+	return date
+}
+
+export const getShippingEstimate = sla => {
+	const shippingEstimate = sla.shippingEstimate
+
+	const isHours = shippingEstimate.indexOf('h') > -1
+	const isMinutes = shippingEstimate.indexOf('m') > -1
+	const useBd = shippingEstimate.indexOf('bd') > -1
+
+	const value = parseInt(shippingEstimate)
+
+	let date = null
+
+	if (isMinutes) {
+		date = addMinutesToDate(value)
+	} else if (isHours) {
+		date = addHoursToDate(value)
+	} else if (useBd) {
+		date = addDaysToDate(value, true)
+	} else {
+		date = addDaysToDate(value, false)
 	}
 
 	return date

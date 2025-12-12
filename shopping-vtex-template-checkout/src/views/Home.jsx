@@ -69,7 +69,7 @@ export default function Home(props) {
 		}
 
 		const destination = cartHasCustomerData(cart) ? 'FreightResolver' : 'PersonalData'
-		console.log('destination', destination)
+
 		return navigate(destination, {}, true)
 	}
 

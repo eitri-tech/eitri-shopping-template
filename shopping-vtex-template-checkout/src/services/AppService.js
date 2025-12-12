@@ -10,7 +10,7 @@ export const startConfigure = async () => {
 		// 	domain: 'https://www.eitripartnerbr.com.br',
 		// 	vtexCmsUrl: 'https://eitripartnerbr.myvtex.com/'
 		// },
-		verbose: true,
+		verbose: false,
 		gaVerbose: false
 	})
 }
