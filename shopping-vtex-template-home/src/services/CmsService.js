@@ -34,8 +34,8 @@ export const getCmsContent = async (contentType, pageName) => {
 }
 
 export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
-	const result = await Vtex.cms.getPagesByContentTypes(faststore, contentType)
-	const page = result.data.find(item => item.name?.toLowerCase() === pageName?.toLowerCase())
+	const result = await await Vtex.cms.getPagesByContentTypes(faststore, contentType, { 'filters[name]': pageName })
+	const page = result?.data?.[0]
 	return filterRemoteConfigContent(page)
 }
 
