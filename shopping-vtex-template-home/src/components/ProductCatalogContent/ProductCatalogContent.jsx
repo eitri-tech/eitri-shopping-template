@@ -24,7 +24,6 @@ export default function ProductCatalogContent(props) {
 	const [productLoading, setProductLoading] = useState(false)
 	const [products, setProducts] = useState([])
 	const [totalProducts, setTotalProducts] = useState(0)
-	const [initialFilters, setInitialFilters] = useState(null)
 	const [appliedFacets, setAppliedFacets] = useState([]) // Filtros efetivamente usados na busca
 	const [currentPage, setCurrentPage] = useState(1)
 	const [pagesHasEnded, setPageHasEnded] = useState(false)
@@ -35,18 +34,24 @@ export default function ProductCatalogContent(props) {
 	useEffect(() => {
 		if (params) {
 			// Criar uma cópia limpa dos parâmetros para evitar mutação
-			const cleanParams = {
-				...params,
-				sort: params.sort || getDefaultSortParam(true),
-				facets: Array.isArray(params.facets) ? params.facets : []
-			}
+			const initialParams = getInitialParams()
 
-			setInitialFilters(cleanParams)
-			setAppliedFacets(cleanParams)
+			setAppliedFacets(initialParams)
 			setProducts([])
 			setPageHasEnded(false)
 
-			getProducts(cleanParams, currentPage)
+			getProducts(initialParams, currentPage)
+		}
+	}, [params])
+
+	// Normaliza os parâmetros iniciais
+	const getInitialParams = useCallback(() => {
+		if (!params) return null
+
+		return {
+			...params,
+			sort: params.sort || getDefaultSortParam(true),
+			facets: Array.isArray(params.facets) ? params.facets : []
 		}
 	}, [params])
 
@@ -71,10 +76,10 @@ export default function ProductCatalogContent(props) {
 				return
 			}
 
-			if (result?.products?.length > 0) {
-				setProducts(prev => [...prev, ...result?.products])
-			}
+			const loadedProducts = page === 1 ? result.products.length : products.length + result.products.length
 
+			setPageHasEnded(loadedProducts > result.recordsFiltered)
+			setProducts(prev => (page === 1 ? result.products : [...prev, ...result.products]))
 			setTotalProducts(result?.recordsFiltered)
 			setCurrentPage(page)
 			setProductLoading(false)
@@ -112,6 +117,7 @@ export default function ProductCatalogContent(props) {
 	}
 
 	const onFilterClear = () => {
+		const initialFilters = getInitialParams()
 		handleFilterChange(initialFilters)
 	}
 
