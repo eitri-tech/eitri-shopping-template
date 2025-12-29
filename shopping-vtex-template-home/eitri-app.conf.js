@@ -1,3 +1,5 @@
+const { versionMessage } = require("shopping-vtex-template-account/eitri-app.conf");
+
 module.exports = {
 	'name': 'shopping-vtex-template-home',
 	'title': 'shopping-vtex-template-home',
@@ -5,7 +7,8 @@ module.exports = {
 	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '3.10.0',
 	'eitri-commons': '2.1.2',
-	'version': '0.1.11',
+	'version': '0.1.12',
+	'versionMessage': 'Ajuste para captar CMS de LandingPage',
 	'public-key': 'a161f79d-dee9-4e67-932f-6f8b5c7828ce',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
 	'id': '0ce609ca-17c0-4183-9138-0a011d4bb6ee',
