@@ -68,7 +68,9 @@ export default function BannerList(props) {
 											height: 'initial'
 										}}
 										className='mt-1'>
-										<Text className='font-bold line-clamp-2'>{slider?.action?.title}</Text>
+										<Text className='font-bold line-clamp-2 block text-center'>
+											{slider?.action?.title}
+										</Text>
 									</View>
 								)}
 							</View>
