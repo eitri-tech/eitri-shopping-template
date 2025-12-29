@@ -1,4 +1,4 @@
-import { CustomButton, CustomInput, Loading, cartShippingResolver } from 'shopping-vtex-template-shared'
+import { CustomButton, CustomInput, Loading, shippingResolver } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text, Radio } from 'eitri-luminus'
@@ -107,7 +107,7 @@ export default function Freight(props) {
 
 	if (!cart) return null
 
-	const shipping = cartShippingResolver(cart)
+	const shipping = shippingResolver(cart)
 	const deliveryOptions = shipping?.options?.filter(option => !option.isPickupInPoint) || []
 	const pickupOptions = shipping?.options?.filter(option => option.isPickupInPoint) || []
 

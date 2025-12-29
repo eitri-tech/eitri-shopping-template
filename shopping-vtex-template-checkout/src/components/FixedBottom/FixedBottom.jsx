@@ -14,6 +14,8 @@ export default function FixedBottom(props) {
 				style={{ height: offSetHeight || 'auto' }}
 				className='w-full'
 			/>
+
+			<BottomInset />
 		</View>
 	)
 }

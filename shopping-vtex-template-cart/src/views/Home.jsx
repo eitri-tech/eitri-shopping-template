@@ -72,7 +72,7 @@ export default function Home(props) {
 					<View className='py-4 flex flex-col gap-4'>
 						<CartItemsContent />
 
-						<Freight />
+						{/*<Freight />*/}
 
 						<Coupon />
 

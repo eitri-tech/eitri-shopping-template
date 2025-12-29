@@ -20,12 +20,12 @@ export const getProductsService = async (params, page) => {
 
 	// Validar se params está presente e é um objeto válido
 	if (!params || typeof params !== 'object') {
-		throw new Error('Invalid parameters provided to getProductsService')
+		return null
 	}
 
 	// Validar se facets é um array válido quando presente
-	if (params.facets !== undefined && !Array.isArray(params.facets)) {
-		throw new Error('Invalid selectedFacets provided to getProducts')
+	if (params.facets && !Array.isArray(params.facets)) {
+		return null
 	}
 
 	let from = params?.from || 1
@@ -43,14 +43,14 @@ export const getProductsService = async (params, page) => {
 		fullText: params?.query || params?.q || '',
 		selectedFacets: selectedFacets,
 		orderBy: resolveSortParam(params?.sort, true),
-		from: params?.from || from,
-		to: params?.to || to,
+		from: from,
+		to: to,
 		hideUnavailableItems: true
 	}
 
 	// Remover propriedades undefined/null que podem causar problemas no GraphQL
 	Object.keys(options).forEach(key => {
-		if (options[key] === undefined) {
+		if (options[key] === undefined || options[key] === null) {
 			delete options[key]
 		}
 	})
@@ -94,12 +94,12 @@ export const getProductsFacetsService = async params => {
 	})
 
 	const result = await Vtex.searchGraphql.facets(options)
-	
+
 	// Validar e garantir estrutura do resultado
 	if (!result || typeof result !== 'object') {
 		return { facets: [] }
 	}
-	
+
 	// Garantir que facets seja sempre um array
 	if (!Array.isArray(result.facets)) {
 		return { facets: [] }

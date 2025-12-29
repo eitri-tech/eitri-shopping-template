@@ -4,6 +4,8 @@ import Eitri from 'eitri-bifrost'
 
 export const getCmsContent = async (contentType, pageName) => {
 	try {
+		if (!pageName) return null
+
 		const { faststore } = Vtex.configs
 		const cachedPage = await loadPageFromCache(faststore, contentType, pageName)
 
@@ -34,9 +36,51 @@ export const getCmsContent = async (contentType, pageName) => {
 }
 
 export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
-	const result = await await Vtex.cms.getPagesByContentTypes(faststore, contentType, { 'filters[name]': pageName })
-	const page = result?.data?.[0]
-	return filterRemoteConfigContent(page)
+	try {
+		const result = await Vtex.cms.getPagesByContentTypes(faststore, contentType, { 'filters[name]': pageName })
+
+		let page = result?.data?.[0]
+
+		const now = new Date()
+
+		page.sections = page?.sections?.filter(section => {
+			const name = section?.name
+			const { startDate, endDate, images } = section?.data || {}
+
+			// Remove section se estiver fora do intervalo
+			if (!isWithinValidDateRange(startDate, endDate, now)) return false
+
+			// Se for MultipleImageBanner, filtra banners com mesma lógica
+			if (name === 'MultipleImageBanner' && Array.isArray(images)) {
+				section.data.images = images.filter(img => {
+					const action = img?.action || {}
+					return isWithinValidDateRange(action.startDate, action.endDate, now)
+				})
+			}
+
+			return true
+		})
+
+		return filterRemoteConfigContent(page)
+	} catch (error) {
+		console.error('Error loading VTEX CMS page:', pageName, error)
+		return null
+	}
+}
+
+const isWithinValidDateRange = (startDateStr, endDateStr, now) => {
+	const hasStart = !!startDateStr
+	const hasEnd = !!endDateStr
+
+	const start = hasStart ? new Date(startDateStr) : null
+	const end = hasEnd ? new Date(endDateStr) : null
+
+	if ((start && isNaN(start)) || (end && isNaN(end))) return false
+
+	if (start && now < start) return false
+	if (end && now > end) return false
+
+	return true
 }
 
 export const loadPageFromCache = async (faststore, contentType, pageName) => {

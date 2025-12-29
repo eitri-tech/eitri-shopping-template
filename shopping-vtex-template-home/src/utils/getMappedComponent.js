@@ -6,6 +6,7 @@ import LastSeenProducts from '../components/CmsComponents/LastSeenProducts/LastS
 import CategoryListSwipe from '../components/CmsComponents/CategoryListSwipe/CategoryListSwipe'
 import ProductInfiniteScroll from '../components/CmsComponents/ProductInfiniteScroll/ProductInfiniteScroll'
 import BlogPostShelf from '../components/CmsComponents/Blog/BlogPostShelf'
+import HighlightedProductShelf from '../components/CmsComponents/HighlightedProductShelf/HighlightedProductShelf'
 
 const componentMap = {
 	MultipleImageBanner: Banner,
@@ -15,7 +16,8 @@ const componentMap = {
 	LastSeenProducts: LastSeenProducts,
 	CategoryListSwipe: CategoryListSwipe,
 	ProductInfiniteScroll: ProductInfiniteScroll,
-	WordPressCardList: BlogPostShelf
+	WordPressCardList: BlogPostShelf,
+	HighlightedProductShelf: HighlightedProductShelf
 }
 
 const shouldReloadOnResume = componentName => {

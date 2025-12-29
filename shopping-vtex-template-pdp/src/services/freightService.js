@@ -1,4 +1,4 @@
-import { cartShippingResolver } from './cartShippingResolver'
+import { shippingResolver } from 'shopping-vtex-template-shared'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export default async function fetchFreight(zipCode, currentSku) {
@@ -13,12 +13,14 @@ export default async function fetchFreight(zipCode, currentSku) {
 		let cartSimulationPayload
 		let result
 
+		const sellerDefault = currentSku?.sellers?.find(seller => seller.sellerDefault) || currentSku?.sellers[0]
+
 		cartSimulationPayload = {
 			items: [
 				{
 					id: currentSku?.itemId,
 					quantity: '1',
-					seller: currentSku?.sellers[0]?.sellerId
+					seller: sellerDefault?.sellerId
 				}
 			],
 			country,
@@ -34,7 +36,8 @@ export default async function fetchFreight(zipCode, currentSku) {
 			return []
 		}
 
-		return cartShippingResolver({
+		return shippingResolver({
+			items: result?.items || [],
 			shippingData: {
 				address: true,
 				logisticsInfo: result?.logisticsInfo ? result.logisticsInfo : result?.data?.shipping?.logisticsInfo,

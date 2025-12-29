@@ -153,34 +153,12 @@ export default function PriceRange({
 			{/* Input fields */}
 			<View className='flex justify-between w-full'>
 				<View>
-					<Text className='block text-sm font-medium text-gray-700 mb-2'>Valor Mínimo</Text>
-					<CustomInput
-						type='number'
-						min={rangeMin}
-						max={maxValue - step}
-						value={minValue}
-						onChange={e => {
-							const value = parseInt(e.target.value)
-							if (!isNaN(value)) {
-								setMinValue(Math.max(rangeMin, Math.min(value, maxValue - step)))
-							}
-						}}
-					/>
+					<Text className='block text-sm font-medium text-gray-700 mb-1'>Valor Mínimo</Text>
+					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(minValue)}</Text>
 				</View>
 				<View>
-					<Text className='block text-sm font-medium text-gray-700 mb-2'>Valor Máximo</Text>
-					<CustomInput
-						type='number'
-						min={minValue + step}
-						max={rangeMax}
-						value={maxValue}
-						onChange={e => {
-							const value = parseInt(e.target.value)
-							if (!isNaN(value)) {
-								setMaxValue(Math.max(minValue + step, Math.min(value, rangeMax)))
-							}
-						}}
-					/>
+					<Text className='block text-sm font-medium text-gray-700 mb-1'>Valor Máximo</Text>
+					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(maxValue)}</Text>
 				</View>
 			</View>
 		</View>

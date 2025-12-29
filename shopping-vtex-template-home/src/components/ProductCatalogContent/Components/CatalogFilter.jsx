@@ -37,7 +37,7 @@ export default function CatalogFilter(props) {
 		try {
 			setFacetsLoading(true)
 			const result = await getProductsFacetsService(selectedFacets)
-			
+
 			// Validar se result tem a estrutura esperada
 			if (!result || !result.facets || !Array.isArray(result.facets)) {
 				setFacetsLoading(false)
@@ -45,7 +45,7 @@ export default function CatalogFilter(props) {
 			}
 
 			const priceFacet = result.facets.find(f => f.type === 'PRICERANGE')
-			const filteredFacets = result.facets.filter(f => f.type !== 'PRICERANGE')
+			const filteredFacets = result.facets.filter(f => f.type !== 'PRICERANGE' && !f.hidden)
 
 			resolvePriceRangeReceivedFacet(priceFacet)
 

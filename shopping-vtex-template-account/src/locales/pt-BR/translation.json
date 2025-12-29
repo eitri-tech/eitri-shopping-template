@@ -12,7 +12,7 @@
 		"lbOrders": "Pedidos"
 	},
 	"passwordReset": {
-      "emailRecoveryTitle": "Digite seu e-mail para recuperar a senha",
+		"emailRecoveryTitle": "Digite seu e-mail para recuperar a senha",
 		"messageRecovery": "* Vamos te mandar uma mensagem com um código para recuperar senha",
 		"sendButton": "Enviar código",
 		"messageError": "Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.",
@@ -22,7 +22,7 @@
 		"setEmail": "Digite seu e-mail"
 	},
 	"passwordResetCode": {
-		"messageEmail": "Digite sual senha de 6 dígitos enviado para o email",
+		"messageEmail": "Digite o código de 6 dígitos enviado para o email",
 		"sendButton": "Continuar",
 		"headerText": "Senha",
 		"forgotPass": "Esqueceu a senha?"
