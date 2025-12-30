@@ -17,12 +17,12 @@ import {
 	CustomInput
 } from 'shopping-vtex-template-shared'
 
-function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t }) {
+function PostalCodeInput({ value, onChange, isLoading, t, error, touched, onBlur }) {
 	return (
-		<View className='flex justify-between gap-2 w-full items-end'>
-			<View className='w-2/3'>
+		<View className='flex flex-col gap-1 w-full'>
+			<View className='flex justify-between gap-2 w-full items-end'>
 				<CustomInput
-					label={t('addNewShippingAddress.txtCalculate')}
+					label={t('addNewShippingAddress.txtZipCode', 'Insira seu CEP')}
 					inputMode='numeric'
 					placeholder='12345-678'
 					value={value}
@@ -31,27 +31,16 @@ function PostalCodeInput({ value, onChange, onSubmit, isLoading, addressId, t })
 					variant='mask'
 					mask='99999-999'
 					disabled={isLoading}
+					className={error && touched ? 'border-red-500' : ''}
+					onBlur={onBlur}
 				/>
 			</View>
-			<View className='w-1/3'>
-				<CustomButton
-					label={
-						isLoading
-							? t('addNewShippingAddress.loading') || 'Aguarde...'
-							: t('addNewShippingAddress.ok') || 'OK'
-					}
-					onPress={onSubmit}
-					display='flex'
-					justifyContent='center'
-					disabled={isLoading || !value}
-					isLoading={isLoading}
-				/>
-			</View>
+			{error && touched && <Text className='text-xs text-red-500 ml-1'>{error}</Text>}
 		</View>
 	)
 }
 
-function AddressFields({ address, handleAddressChange, t, numberInputRef, touched, errors, onBlur }) {
+function AddressFields({ address, handleAddressChange, t, touched, errors, onBlur }) {
 	return (
 		<>
 			<View>
@@ -72,7 +61,6 @@ function AddressFields({ address, handleAddressChange, t, numberInputRef, touche
 						placeholder={''}
 						value={address?.number || ''}
 						onChange={e => handleAddressChange('number', e)}
-						inputRef={numberInputRef}
 						className={errors.number && touched.number ? 'border-red-500' : ''}
 						onBlur={() => onBlur('number')}
 					/>
@@ -143,8 +131,13 @@ function AddressFields({ address, handleAddressChange, t, numberInputRef, touche
 }
 
 function validateAddress(address, t) {
+	const postalCodeDigits = address.postalCode?.replace(/\D/g, '') || ''
 	return {
-		postalCode: !address.postalCode ? t('addNewShippingAddress.errorPostalCode') : '',
+		postalCode: !address.postalCode
+			? t('addNewShippingAddress.errorPostalCode')
+			: postalCodeDigits.length !== 8
+				? t('addNewShippingAddress.errorPostalCodeInvalid', 'CEP deve ter 8 dígitos')
+				: '',
 		street: !address.street ? t('addNewShippingAddress.errorStreet') : '',
 		neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood') : '',
 		city: !address.city ? t('addNewShippingAddress.errorCity') : '',
@@ -157,36 +150,36 @@ function validateAddress(address, t) {
 export default function AddressForm(props) {
 	const PAGE_NAME = 'Checkout - Cadastro de Endereço'
 
-	const addressId = props.location?.state?.addressId
-
 	const { cart, cartIsLoading, setLogisticInfo, startCart } = useLocalShoppingCart()
 	const { t } = useTranslation()
 
+	const [addressId, setAddressId] = useState(props.location?.state?.addressId)
 	const [isLoading, setIsLoading] = useState(false)
 	const [addressError, setAddressError] = useState('')
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [address, setAddress] = useState({
 		postalCode: '',
 		street: '',
 		neighborhood: '',
 		city: '',
 		state: '',
-		country: '',
+		country: 'BRA',
 		geoCoordinates: [],
 		number: '',
 		complement: '',
 		reference: '',
-		receiverName:
-			cart?.clientProfileData && !cart?.clientProfileData?.firstName?.includes('***')
-				? `${cart?.clientProfileData.firstName} ${cart?.clientProfileData.lastName}`
-				: '',
 		addressQuery: '',
 		addressType: 'residential',
+		receiverName: cart?.clientProfileData?.firstName
+			? `${cart?.clientProfileData?.firstName} ${cart?.clientProfileData?.lastName}`
+			: '',
 		isDisposable: false
 	})
-
-	const numberInputRef = useRef(null)
 	const [touched, setTouched] = useState({})
-	const errors = validateAddress(address, t)
+
+	useEffect(() => {
+		trackScreenView(PAGE_NAME)
+	}, [])
 
 	useEffect(() => {
 		if (addressId) {
@@ -195,8 +188,14 @@ export default function AddressForm(props) {
 	}, [addressId])
 
 	useEffect(() => {
-		trackScreenView(PAGE_NAME)
-	}, [])
+		const postalCodeDigits = address?.postalCode?.replace(/\D/g, '') || ''
+
+		if (postalCodeDigits.length === 8) {
+			submitZipCode(address?.postalCode)
+		}
+	}, [address?.postalCode])
+
+	const errors = useMemo(() => validateAddress(address, t), [address, t])
 
 	const init = async addressId => {
 		try {
@@ -212,6 +211,10 @@ export default function AddressForm(props) {
 				})
 			} else {
 				const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
+				if (!_address && cart?.shippingData?.selectedAddresses?.[0]?.addressId) {
+					setAddressId(cart.shippingData.selectedAddresses[0].addressId)
+					return
+				}
 				setAddress({
 					...address,
 					..._address
@@ -222,26 +225,24 @@ export default function AddressForm(props) {
 		}
 	}
 
-	const handleAddressChange = (key, e) => {
+	const handleAddressChange = useCallback((key, e) => {
 		const { value } = e.target
-		setAddress({
-			...address,
+		setAddress(prev => ({
+			...prev,
 			[key]: key === 'receiverName' ? value.replace(/[^a-zA-Z\s]/g, '') : value
-		})
-	}
+		}))
+	}, [])
 
 	const onChangePostalCodeInput = async e => {
 		const { value } = e.target
 		setAddress({ ...address, postalCode: value })
 	}
 
-	const submitZipCode = async () => {
+	const submitZipCode = async postalCode => {
 		try {
-			if (!address.postalCode) return
+			if (!postalCode) return
 			setIsLoading(true)
-			const { street, neighborhood, city, state, country, geoCoordinates } = await resolvePostalCode(
-				address.postalCode
-			)
+			const { street, neighborhood, city, state, country, geoCoordinates } = await resolvePostalCode(postalCode)
 			setAddress({
 				...address,
 				street,
@@ -254,9 +255,7 @@ export default function AddressForm(props) {
 			setIsLoading(false)
 			// Foco no campo número após buscar o CEP
 			setTimeout(() => {
-				if (numberInputRef.current) {
-					numberInputRef.current.focus()
-				}
+				document.getElementById('numberField')?.focus()
 			}, 100)
 		} catch (e) {
 			setIsLoading(false)
@@ -264,6 +263,8 @@ export default function AddressForm(props) {
 	}
 
 	const submit = async () => {
+		if (isSubmitting) return
+		setIsSubmitting(true)
 		setAddressError('')
 		try {
 			if (addressId) {
@@ -295,7 +296,9 @@ export default function AddressForm(props) {
 				return
 			}
 			setAddressError(t('addNewShippingAddress.errorDefault'))
-			console.error('Error on submit', e)
+			setTimeout(() => setAddressError(''), 8000)
+		} finally {
+			setIsSubmitting(false)
 		}
 	}
 
@@ -303,9 +306,9 @@ export default function AddressForm(props) {
 		setTouched(prev => ({ ...prev, [field]: true }))
 	}
 
-	const isValidAddress = () => {
-		return !Object.values(validateAddress(address, t)).some(Boolean)
-	}
+	const isValidAddress = useMemo(() => {
+		return !Object.values(errors).some(Boolean)
+	}, [errors])
 
 	return (
 		<Page title={PAGE_NAME}>
@@ -326,6 +329,9 @@ export default function AddressForm(props) {
 					onSubmit={submitZipCode}
 					isLoading={isLoading}
 					t={t}
+					error={errors.postalCode}
+					touched={touched.postalCode}
+					onBlur={() => onBlur('postalCode')}
 				/>
 				{isLoading && (
 					<View>
@@ -336,12 +342,19 @@ export default function AddressForm(props) {
 					address={address}
 					handleAddressChange={handleAddressChange}
 					t={t}
-					numberInputRef={numberInputRef}
 					touched={touched}
 					errors={errors}
 					onBlur={onBlur}
 				/>
 			</View>
+
+			{addressError && (
+				<View className={'p-4'}>
+					<View className='bg-red-100 border border-red-400 px-4 py-3 rounded'>
+						<Text className='text-red-700 font-medium'>{addressError}</Text>
+					</View>
+				</View>
+			)}
 
 			<FixedBottom
 				className='flex flex-col align-center gap-4'
@@ -355,7 +368,7 @@ export default function AddressForm(props) {
 							: t('addNewShippingAddress.labelButton')
 					}
 					fontSize='medium'
-					disabled={!isValidAddress() || isLoading}
+					disabled={!isValidAddress || isLoading}
 					onPress={() => {
 						// Marca todos os campos como tocados ao tentar submeter
 						setTouched({

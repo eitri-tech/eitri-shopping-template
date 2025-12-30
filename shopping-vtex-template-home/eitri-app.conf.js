@@ -1,5 +1,3 @@
-const { versionMessage } = require("shopping-vtex-template-account/eitri-app.conf");
-
 module.exports = {
 	'name': 'shopping-vtex-template-home',
 	'title': 'shopping-vtex-template-home',
