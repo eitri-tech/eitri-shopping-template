@@ -23,6 +23,7 @@ export default function CartProvider({ children }) {
 			setCart(newCart)
 		}
 		setCartInLoading(false)
+		return newCart
 	}
 
 	const startCart = async () => {

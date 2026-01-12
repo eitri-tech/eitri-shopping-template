@@ -87,11 +87,6 @@ export const normalizePath = path => {
 	return normalizedData
 }
 
-export const openBrand = (brand, title) => {
-	const facets = [{ key: 'brand', value: brand }]
-	Eitri.navigation.navigate({ path: 'ProductCatalog', state: { params: { facets }, title: title || '' } })
-}
-
 export const resolveNavigation = (path, title) => {
 	const normalizedPath = normalizePath(path)
 	Eitri.navigation.navigate({ path: 'ProductCatalog', state: { params: normalizedPath, title: title || '' } })

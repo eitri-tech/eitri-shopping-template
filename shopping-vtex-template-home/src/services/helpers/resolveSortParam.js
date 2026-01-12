@@ -1,6 +1,6 @@
 export const resolveSortParam = (sort, useGraphQlMode) => {
 	if (useGraphQlMode) {
-		if (!sort?.startsWith('OrderBy')) return sort
+		if (sort?.startsWith('OrderBy')) return sort
 		switch (sort) {
 			case 'orders:desc':
 				return 'OrderByTopSaleDESC'

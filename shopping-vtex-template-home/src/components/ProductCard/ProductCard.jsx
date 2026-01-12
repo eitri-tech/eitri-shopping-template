@@ -3,7 +3,7 @@ import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart, openProduct } from '../../services/NavigationService'
 import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../services/CustomerService'
 import { formatPrice } from '../../utils/utils'
-import { App } from 'eitri-shopping-vtex-shared'
+import { App, EventBus } from 'eitri-shopping-vtex-shared'
 import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 
@@ -99,7 +99,7 @@ const useWishlist = productId => {
 		[loading, isOnWishlist, removeFromList, addToList]
 	)
 
-	return { isOnWishlist, loading, toggle }
+	return { isOnWishlist, loading, wishListId, setIsOnWishlist, toggle, setWishListId }
 }
 
 // ========== Funções Auxiliares ==========
@@ -180,9 +180,7 @@ export default function ProductCard({ product, className }) {
 	// Verifica se o produto tem dados válidos
 	const isValidProduct = Boolean(item && sellerDefault)
 
-	// Gerencia item no carrinho
 	const itemInCart = useCartItem(cart, item?.itemId)
-	const itemQuantity = itemInCart?.quantity || 1
 
 	// Gerencia wishlist
 	const wishlist = useWishlist(product?.productId)
@@ -201,6 +199,32 @@ export default function ProductCard({ product, className }) {
 			installments: formatInstallments(sellerDefault)
 		}
 	}, [product, item, sellerDefault, isValidProduct])
+
+	useEffect(() => {
+		EventBus.subscribe({
+			channel: 'addToWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.productId === product.productId) {
+					wishlist.setIsOnWishlist(true)
+					wishlist.setWishListId(data?.response?.data?.addToList)
+				}
+			}
+		})
+		EventBus.subscribe({
+			channel: 'removeFromWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.id === wishlist.wishListId && data?.response?.data?.removeFromList) {
+					wishlist.setIsOnWishlist(false)
+					wishlist.setWishListId(-1)
+				}
+			}
+		})
+	}, [])
+
+	// Gerencia item no carrinho
+	const itemQuantity = itemInCart?.quantity || 1
 
 	// ========== Ações do Carrinho ==========
 
