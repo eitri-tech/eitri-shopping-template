@@ -36,7 +36,7 @@ export default function AddressSelector(props) {
 				await setShippingAddress(address)
 			}
 
-			navigate('FreightSelect')
+			navigate('FreightSelector')
 		} catch (error) {
 			console.error('Error selecting address:', error)
 		} finally {

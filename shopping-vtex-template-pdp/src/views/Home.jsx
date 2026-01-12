@@ -43,7 +43,7 @@ export default function Home() {
 		let product = await startParams.product
 		if (product) {
 			setProduct(product)
-			setCurrentSku(product.items[0])
+			setCurrentSku(findAvailableSKU(product))
 			setIsLoading(false)
 		}
 
@@ -55,7 +55,7 @@ export default function Home() {
 
 		if (product) {
 			setProduct(product)
-			setCurrentSku(product.items[0])
+			setCurrentSku(findAvailableSKU(product))
 			setIsLoading(false)
 		}
 
@@ -64,6 +64,13 @@ export default function Home() {
 		sendScreenView('PDP', 'home')
 		sendViewItem(product)
 		markLastViewedProduct(product)
+	}
+
+	const findAvailableSKU = product => {
+		const availableSku = product.items.find(item =>
+			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
+		)
+		return availableSku || product.items[0]
 	}
 
 	const loadProduct = async startParams => {

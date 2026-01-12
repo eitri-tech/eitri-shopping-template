@@ -1,4 +1,4 @@
-import { openBrand, openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
+import { openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
 import Eitri from 'eitri-bifrost'
 
 const handleSearchAction = value => {
@@ -9,13 +9,16 @@ const handleSearchAction = value => {
 		}
 	})
 }
-const handleCollectionAction = (value, title, banner) => {
+const handleCollectionAction = action => {
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: {
-			params: { facets: [{ key: 'productClusterIds', value: value }] },
-			title,
-			banner
+			params: {
+				facets: [{ key: 'productClusterIds', value: action?.value }],
+				sort: action?.sort || ''
+			},
+			title: action?.title || '',
+			banner: action?.banner || ''
 		}
 	})
 }
@@ -27,20 +30,23 @@ const handlePageAction = value => {
 		}
 	})
 }
-const handleCategoryAction = (value, title, banner) => {
-	const _categories = value.split('/')
-	const categories = _categories.filter(c => !!c)
+const handleCategoryAction = action => {
+	const _categories = action?.value?.split('/')
+	const categories = _categories?.filter(c => !!c)
 
 	const params = {
-		facets: categories.map((c, index) => {
+		facets: categories?.map((c, index) => {
 			return {
 				key: `category-${index + 1}`,
 				value: c
 			}
-		})
+		}),
+		sort: action?.sort || ''
 	}
-
-	Eitri.navigation.navigate({ path: 'ProductCatalog', state: { params, title, banner } })
+	Eitri.navigation.navigate({
+		path: 'ProductCatalog',
+		state: { params, title: action?.title, banner: action?.banner }
+	})
 }
 const handleProductAction = value => {
 	if (/^\d+$/.test(value)) {
@@ -48,6 +54,19 @@ const handleProductAction = value => {
 	} else {
 		openProductBySlug(value)
 	}
+}
+const openBrand = action => {
+	const facets = [{ key: 'brand', value: action?.value }]
+	Eitri.navigation.navigate({
+		path: 'ProductCatalog',
+		state: { params: { facets, sort: action?.sort }, title: action?.title || '' }
+	})
+}
+const openLink = link => {
+	Eitri.openBrowser({
+		url: link,
+		inApp: true
+	})
 }
 
 export const processActions = sliderData => {
@@ -57,13 +76,13 @@ export const processActions = sliderData => {
 			handleSearchAction(action.value)
 			break
 		case 'collection':
-			handleCollectionAction(action.value, action.title || sliderData.title)
+			handleCollectionAction(action)
 			break
 		case 'page':
 			handlePageAction(action.value)
 			break
 		case 'category':
-			handleCategoryAction(action.value, action.title || sliderData.title, action.banner)
+			handleCategoryAction(action)
 			break
 		case 'product':
 			handleProductAction(action.value)
@@ -72,7 +91,10 @@ export const processActions = sliderData => {
 			resolveNavigation(action.value)
 			break
 		case 'brand':
-			openBrand(action.value, action.title)
+			openBrand(action)
+			break
+		case 'link':
+			openLink(action.value)
 			break
 		default:
 			console.log(`Unknown action type: ${action.type}`)

@@ -101,7 +101,8 @@ export default function CatalogFilter(props) {
 		)
 		let newFacets
 		if (existingIndex !== -1 && existingIndex !== undefined) {
-			newFacets = tempFilters.facets.filter(f => f.key !== filterValue.key)
+			console.log('aqui==>')
+			newFacets = tempFilters.facets.filter(f => !(f.key === filterValue.key && f.value === filterValue.value))
 		} else {
 			newFacets = [...(tempFilters?.facets || []), { key: filterValue.key, value: filterValue.value }]
 		}

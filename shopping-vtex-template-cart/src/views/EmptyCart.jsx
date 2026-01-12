@@ -9,11 +9,22 @@ import {
 	CustomButton,
 	BottomInset
 } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../providers/LocalCart'
 
 export default function EmptyCart(props) {
 	const openWithBottomBar = props?.location?.state?.openWithBottomBar
 
 	const { t } = useTranslation()
+	const { startCart } = useLocalShoppingCart()
+
+	useEffect(() => {
+		Eitri.navigation.setOnResumeListener(async () => {
+			const cart = await startCart()
+			if (cart && cart.items?.length > 0) {
+				Eitri.navigation.navigate({ path: 'Home', replace: true })
+			}
+		})
+	}, [])
 
 	const closeEitriApp = () => {
 		Eitri.navigation.close()

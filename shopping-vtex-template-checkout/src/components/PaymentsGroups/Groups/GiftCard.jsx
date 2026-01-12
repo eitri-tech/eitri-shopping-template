@@ -47,7 +47,11 @@ export default function GiftCard(props) {
 			}
 
 			const newCart = await setPaymentOption(payload)
-			const applied = newCart?.paymentData?.giftCards?.some(gift => gift.redemptionCode === redemptionCode)
+			const applied = newCart?.paymentData?.giftCards?.some(
+				gift =>
+					gift.redemptionCode?.replace(/-/g, '')?.toLowerCase() ===
+					redemptionCode?.replace(/-/g, '')?.toLowerCase()
+			)
 			if (applied) {
 				loadCardValue(newCart)
 				setRedemptionCode('')

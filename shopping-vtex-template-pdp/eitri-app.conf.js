@@ -18,7 +18,7 @@ module.exports = {
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
-			version: '1.2.3'
+			version: '1.7.3'
 		},
 		'i18n': {
 			version: '14.1.2'
