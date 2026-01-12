@@ -38,7 +38,7 @@ export default function ProductCardFullImage(props) {
 
 					<View
 						onClick={_onPressOnWishlist}
-						className='absolute top-[7px] p-2 right-[6px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
+						className='absolute top-[7px] p-2 right-[7px] flex items-center justify-center rounded-full backdrop-blur-sm bg-header-background z-[99] '>
 						<WishlistIcon
 							filled={isOnWishlist}
 							size={'20'}
