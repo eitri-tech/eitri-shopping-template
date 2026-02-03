@@ -508,7 +508,7 @@
 			"properties": {
 				"postUrl": {
 					"title": "Url de Posts do seu blog wordpress",
-					"description": "https://seusite.com/wp-json/wp/v2/posts?_embed",
+					"description": "https://seusite.com",
 					"type": "string"
 				},
 				"numberOfItems": {

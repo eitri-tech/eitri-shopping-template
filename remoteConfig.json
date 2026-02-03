@@ -1,60 +1,59 @@
 {
-    "ecommerceProvider": "VTEX",
-    "providerInfo": {
-        "account": "mundoverde",
-        "domain": "https://www.mundoverde.com.br",
-        "faststore": "mundoverde",
-        "host": "https://www.mundoverde.com.br",
-        "vtexCmsUrl": "https://eitripartnerbr.myvtex.com/"
-    },
-    "appConfigs": {
-        "useScrollEffect": true,
-        "showSearchBar": false,
-        "statusBarTextColor": "white",
-        "headerLogo": "https://framerusercontent.com/images/srQA8vHpVggDBFZ60DgGnWDxuT0.svg",
-        "clarityId": "",
-        "productCard": {
-            "style": "fullImage",
-            "showListPrice": true,
-            "buyGoesToPDP": false
-        },
-        "checkout": {
-            "recaptchaKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-        }
-    },
-    "eitriConfig": {
-        "mainApp": "eitri-shopping-home",
-        "renderFakeBottomBar": true,
-        "bottomNavItems": [
-            {
-                "slug": "eitri-shopping-home",
-                "initParams": {
-                    "tabIndex": 0
-                }
-            },
-            {
-                "slug": "eitri-shopping-home",
-                "initParams": {
-                    "tabIndex": 1,
-                    "route": "Categories"
-                }
-            },
-            {
-                "slug": "eitri-shopping-cart",
-                "initParams": {
-                    "tabIndex": 2
-                }
-            },
-            {
-                "slug": "eitri-shopping-account",
-                "initParams": {
-                    "tabIndex": 3
-                }
-            }
-        ]
-    },
-    "storePreferences": {},
-    "deeplinkResolver": {
-        "slug": "eitri-shopping-addons-deeplink-resolver"
-    }
+	"ecommerceProvider": "VTEX",
+	"providerInfo": {
+		"account": "mundoverde",
+		"faststore": "mundoverde",
+		"host": "https://www.mundoverde.com.br",
+		"vtexCmsUrl": "https://eitripartnerbr.myvtex.com/"
+	},
+	"appConfigs": {
+		"useScrollEffect": true,
+		"showSearchBar": false,
+		"statusBarTextColor": "white",
+		"headerLogo": "https://framerusercontent.com/images/srQA8vHpVggDBFZ60DgGnWDxuT0.svg",
+		"clarityId": "",
+		"productCard": {
+			"style": "fullImage",
+			"showListPrice": true,
+			"buyGoesToPDP": false
+		},
+		"checkout": {
+			"recaptchaKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+		}
+	},
+	"eitriConfig": {
+		"mainApp": "eitri-shopping-home",
+		"renderFakeBottomBar": true,
+		"bottomNavItems": [
+			{
+				"slug": "eitri-shopping-home",
+				"initParams": {
+					"tabIndex": 0
+				}
+			},
+			{
+				"slug": "eitri-shopping-home",
+				"initParams": {
+					"tabIndex": 1,
+					"route": "Categories"
+				}
+			},
+			{
+				"slug": "eitri-shopping-cart",
+				"initParams": {
+					"tabIndex": 2
+				}
+			},
+			{
+				"slug": "eitri-shopping-account",
+				"initParams": {
+					"tabIndex": 3
+				}
+			}
+		]
+	},
+	"storePreferences": {},
+	"deeplinkResolver": {
+		"slug": "eitri-shopping-addons-deeplink-resolver"
+	}
 }

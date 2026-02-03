@@ -37,7 +37,7 @@ export default function Home(props) {
 			if (loggedCustomer) {
 				const cartEmail = cart?.clientProfileData?.email
 				const customerEmail = loggedCustomer?.email
-				if (cartEmail !== customerEmail || !cartHasCustomerData(cart)) {
+				if (cartEmail !== customerEmail) {
 					try {
 						_cart = await addLoggedCustomerToCart(loggedCustomer, cart, { addPersonalData })
 					} catch (e) {
