@@ -29,7 +29,7 @@ export const getProductsService = async (params, page) => {
 	}
 
 	let from = params?.from || 1
-	let to = page?.to || PAGE_SIZE
+	let to = params?.to || PAGE_SIZE
 
 	if (page) {
 		from = (page - 1) * PAGE_SIZE + 1
