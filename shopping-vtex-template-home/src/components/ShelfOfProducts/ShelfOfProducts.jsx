@@ -5,7 +5,7 @@ import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
 
 export default function ShelfOfProducts(props) {
-	const { products, title, isLoading = true, mode, searchParams, ...rest } = props
+	const { products, title, isLoading, mode, searchParams, ...rest } = props
 
 	const { t } = useTranslation()
 
