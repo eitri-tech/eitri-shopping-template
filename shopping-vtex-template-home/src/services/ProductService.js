@@ -63,8 +63,6 @@ export const getProductsService = async (params, page) => {
 		}
 	})
 
-	console.log('GraphQL Product Search Options:', options)
-
 	return await Vtex.searchGraphql.productSearch(options)
 }
 
