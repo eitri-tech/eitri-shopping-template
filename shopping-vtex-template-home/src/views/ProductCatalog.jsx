@@ -32,13 +32,13 @@ export default function ProductCatalog(props) {
 	}
 
 	return (
-		<Page title={title || t('productCatalog.title')}>
+		<Page title={title || t('productCatalog.title', 'Catálogo')}>
 			<>
 				<HeaderContentWrapper className={`justify-between`}>
 					<View className={`flex items-center gap-4`}>
 						{!openInBottomBar && <HeaderReturn />}
 
-						<HeaderText text={title || t('productCatalog.title')} />
+							<HeaderText text={title || t('productCatalog.title', 'Catálogo')} />
 					</View>
 
 					<HeaderSearchIcon onClick={goToSearch} />

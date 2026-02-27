@@ -87,7 +87,7 @@ export default function SignIn(props) {
 			setLoginProviders(providers)
 			setLoadingLoginProviders(false)
 		} catch (e) {
-			console.error('Erro ao carregar provedores de login', e)
+			console.error(t('signIn.loadLoginProvidersError', 'Erro ao carregar provedores de login'), e)
 			setLoadingLoginProviders(false)
 		}
 	}
@@ -338,7 +338,9 @@ export default function SignIn(props) {
 						<>
 							<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
 								<View className='h-px flex-1 bg-gray-300' />
-								<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
+								<Text className='flex-shrink-0 text-accent-100 font-medium'>
+									{t('signIn.or', 'Ou')}
+								</Text>
 								<View className='h-px flex-1 bg-gray-300' />
 							</View>
 

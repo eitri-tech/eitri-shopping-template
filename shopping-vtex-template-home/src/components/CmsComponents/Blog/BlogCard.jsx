@@ -1,9 +1,15 @@
+import { useTranslation } from 'eitri-i18n'
+
 export default function BlogCard(props) {
 	const { postImg, post, handleClick, width, textWidth } = props
+	const { t } = useTranslation()
 
 	const category = post?._embedded['wp:term'][0][0].name.toUpperCase()
 	const author = post?._embedded?.author[0].name
 	const publishedDate = new Date(post?.date).toLocaleDateString('pt-BR')
+	const publishedPrefix = t('blogCard.publishedPrefix', 'Publicado')
+	const byLabel = t('blogCard.by', 'por')
+	const inLabel = t('blogCard.in', 'em')
 
 	const excerpt = post.excerpt.rendered.replace('<p>', '').replace('</p>', '')
 	return (
@@ -36,7 +42,9 @@ export default function BlogCard(props) {
 						</Text>
 					</View>
 
-					<Text className='!text-[10px] mt-auto'>{`Publicado ${author ? `por ${author}` : ''} em ${publishedDate}`}</Text>
+					<Text className='!text-[10px] mt-auto'>
+						{`${publishedPrefix} ${author ? `${byLabel} ${author} ` : ''}${inLabel} ${publishedDate}`}
+					</Text>
 				</View>
 			</View>
 		</View>

@@ -48,7 +48,7 @@ export default function OrderDetails(props) {
 			const orderData = await getOrderById(id)
 			setOrder(orderData)
 		} catch (error) {
-			console.error('Erro ao pegar detalhes do pedido:', error)
+			console.error(t('orderDetails.errors.getOrder', 'Erro ao pegar detalhes do pedido:'), error)
 			Eitri.navigation.back()
 		} finally {
 			setIsLoading(false)
@@ -62,7 +62,7 @@ export default function OrderDetails(props) {
 			await Vtex.customer.cancelOrder(order?.orderId, { reason: cancelReason })
 			Eitri.navigation.back()
 		} catch (e) {
-			console.error('Erro ao cancelar pedido', e)
+			console.error(t('orderDetails.errors.cancelOrder', 'Erro ao cancelar pedido'), e)
 			setIsLoading(false) // Garante que o loading para em caso de erro
 		}
 	}
@@ -274,7 +274,9 @@ export default function OrderDetails(props) {
 											{item.name}
 										</Text>
 										<Text className='text-xs text-gray-600'>
-											{`${item.quantity} un. • ${formatPriceInCents(item.price)}`}
+											{`${item.quantity} ${t('orderDetails.unit', 'un.')} • ${formatPriceInCents(
+												item.price
+											)}`}
 										</Text>
 									</View>
 								</View>

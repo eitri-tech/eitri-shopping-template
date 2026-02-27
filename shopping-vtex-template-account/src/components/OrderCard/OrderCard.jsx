@@ -6,9 +6,11 @@ import { formatDateDaysMonthYear, formatPriceInCents } from '../../utils/utils'
 import { getOrderById } from '../../services/CustomerService'
 import ImageCard from '../Image/ImageCard'
 import { navigate, PAGES } from '../../services/NavigationService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function OrderCard(props) {
 	const { order, showOrderDetails } = props
+	const { t } = useTranslation()
 
 	const [loadingDetails, setLoadingDetails] = useState(false)
 	const [orderDetail, setOrderDetails] = useState(null)
@@ -25,7 +27,7 @@ export default function OrderCard(props) {
 			const result = await getOrderById(order?.orderId)
 			setOrderDetails(result)
 		} catch (e) {
-			console.error('Falha ao carregar detalhes do pedido:', e)
+			console.error(t('orderCard.loadDetailsError', 'Falha ao carregar detalhes do pedido:'), e)
 		} finally {
 			setLoadingDetails(false)
 		}
@@ -43,7 +45,9 @@ export default function OrderCard(props) {
 		<View className='flex flex-col bg-white rounded-lg shadow-sm border border-gray-200 w-full'>
 			<View className='p-4 grid grid-cols-2 gap-x-4 gap-y-4'>
 				<View className='flex flex flex-col'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>Pedido</Text>
+					<Text className='text-xs font-semibold uppercase text-gray-500'>
+						{t('orderCard.order', 'Pedido')}
+					</Text>
 					<Text className='text-sm font-medium text-gray-900 truncate'>{order?.orderId}</Text>
 				</View>
 
@@ -55,13 +59,21 @@ export default function OrderCard(props) {
 				</View>
 
 				<View className='flex flex flex-col'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>Data</Text>
+					<Text className='text-xs font-semibold uppercase text-gray-500'>
+						{t('orderCard.date', 'Data')}
+					</Text>
 					<Text className='text-sm text-gray-700'>{formatDateDaysMonthYear(order?.creationDate)}</Text>
 				</View>
 
 				<View className='flex flex flex-col text-right'>
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						Total ({`${order?.totalItems} ${order?.totalItems > 1 ? 'itens' : 'item'}`})
+						{t('orderCard.total', 'Total')} (
+						{`${order?.totalItems} ${
+							order?.totalItems > 1
+								? t('orderCard.items', 'itens')
+								: t('orderCard.item', 'item')
+						}`}
+						)
 					</Text>
 					<Text className='text-sm font-bold text-gray-900'>{formatPriceInCents(order?.totalValue)}</Text>
 				</View>
@@ -71,7 +83,9 @@ export default function OrderCard(props) {
 				<View className='p-4 border-t border-gray-200'>
 					{loadingDetails ? (
 						<View className='flex justify-center items-center py-2'>
-							<Text className='text-sm text-gray-500'>Carregando produtos...</Text>
+							<Text className='text-sm text-gray-500'>
+								{t('orderCard.loadingProducts', 'Carregando produtos...')}
+							</Text>
 						</View>
 					) : (
 						orderDetail && (
@@ -89,7 +103,9 @@ export default function OrderCard(props) {
 												{item.name}
 											</Text>
 											<Text className='text-xs text-gray-600'>
-												{`${item.quantity} un • ${formatPriceInCents(item.price)}`}
+												{`${item.quantity} ${t('orderCard.unit', 'un')} • ${formatPriceInCents(
+													item.price
+												)}`}
 											</Text>
 										</View>
 									</View>
@@ -103,7 +119,7 @@ export default function OrderCard(props) {
 			<View className='p-4 border-t border-gray-200'>
 				<CustomButton
 					width='100%'
-					label={'Ver detalhes do pedido'}
+					label={t('orderCard.viewOrderDetails', 'Ver detalhes do pedido')}
 					onPress={openOrderDetails}
 				/>
 			</View>

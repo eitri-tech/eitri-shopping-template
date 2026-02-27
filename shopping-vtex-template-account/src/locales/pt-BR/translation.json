@@ -56,7 +56,9 @@
 		"formCodeVerification": "Código de verificação",
 		"textSendCode": "Enviar código",
 		"textResendCode": "Reenviar código",
-		"labelLoginWithPass": "Login com email e senha"
+		"labelLoginWithPass": "Login com email e senha",
+		"loadLoginProvidersError": "Erro ao carregar provedores de login",
+		"or": "Ou"
 	},
 	"orderStatusBadge": {
 		"cancel": "Cancelando pedido",
@@ -82,7 +84,9 @@
 		"lbPoints": "Pontos"
 	},
 	"socialLogin": {
-		"lbButton": "Continuar com o Google"
+		"lbButton": "Continuar com o Google",
+		"socialLoginError": "Error on social login:",
+		"continueWithFacebook": "Continuar com Facebook"
 	},
 	"terms": {
 		"title": "Termos"
@@ -99,7 +103,8 @@
 		"lbVerifyCode": "Código de verificação",
 		"lbResendCode": "Reenviar código",
 		"lbLogin": "Login",
-		"lbBack": "Voltar"
+		"lbBack": "Voltar",
+		"emailPlaceholder": "Email"
 	},
 	"editProfile": {
 		"title": "Editar perfil",
@@ -111,7 +116,22 @@
 		"lbGenderMale": "Masculino",
 		"lbGenderFemale": "Feminino",
 		"lbCPF": "CPF",
-		"lbSave": "Salvar"
+		"lbSave": "Salvar",
+		"errors": {
+			"firstNameRequired": "Nome é obrigatório",
+			"lastNameRequired": "Sobrenome é obrigatório",
+			"birthDateRequired": "Data de nascimento é obrigatória",
+			"birthDateInvalid": "Data de nascimento inválida ou menor de 18 anos",
+			"phoneRequired": "Telefone é obrigatório",
+			"genderRequired": "Gênero é obrigatório",
+			"documentRequired": "CPF é obrigatório"
+		},
+		"placeholders": {
+			"birthDate": "DD/MM/AAAA",
+			"phone": "(99) 99999-9999",
+			"cpf": "000.000.000-00"
+		},
+		"saveSuccess": "Salvo com sucesso!"
 	},
 	"orderDetails": {
 		"title": "Meus Pedidos",
@@ -137,7 +157,45 @@
 		"valueCancelReasonOther": "Outro",
 		"lbBack": "Voltar",
 		"lbCancel": "Cancelar pedido",
-		"lbContinueCancel": "Continuar cancelamento"
+		"lbContinueCancel": "Continuar cancelamento",
+		"errors": {
+			"getOrder": "Erro ao pegar detalhes do pedido:",
+			"cancelOrder": "Erro ao cancelar pedido"
+		},
+		"unit": "un."
+	},
+	"orderCard": {
+		"loadDetailsError": "Falha ao carregar detalhes do pedido:",
+		"order": "Pedido",
+		"date": "Data",
+		"total": "Total",
+		"items": "itens",
+		"item": "item",
+		"loadingProducts": "Carregando produtos...",
+		"unit": "un",
+		"viewOrderDetails": "Ver detalhes do pedido"
+	},
+	"productCard": {
+		"upTo": "em até",
+		"off": "OFF",
+		"buy": "Comprar",
+		"addToCartError": "Error adding cart item"
+	},
+	"wishlistItem": {
+		"fetchProductError": "Erro ao buscar produto"
+	},
+	"protectedView": {
+		"loading": "Carregando..."
+	},
+	"wishlist": {
+		"myFavorites": "Meus favoritos",
+		"noItems": "Você não possui nenhum item salvo",
+		"noItemsSubtitle": "Quando você salvar um produto, ele será listado aqui."
+	},
+	"orderList": {
+		"myOrders": "Meus Pedidos",
+		"fetchOrdersError": "erro ao buscar orders",
+		"noOrders": "Você não possui nenhum pedido",
+		"noOrdersSubtitle": "Quando você fizer uma compra, ela será listada aqui."
 	}
 }
-// t('orderDetails.lbCancel')

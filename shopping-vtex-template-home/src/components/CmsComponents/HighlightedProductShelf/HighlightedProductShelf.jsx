@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { getProductsService } from '../../../services/ProductService'
 import ProductCard from '../../ProductCard/ProductCard'
 import { LuChevronRight } from 'react-icons/lu'
+import { useTranslation } from 'eitri-i18n'
 import Eitri from 'eitri-bifrost'
 
 // Hook customizado para countdown
@@ -33,14 +34,14 @@ const useCountdown = (endDate, enabled) => {
 }
 
 // Componente Timer
-const CountdownTimer = ({ time, textColor }) => {
+const CountdownTimer = ({ time, textColor, t }) => {
 	const pad = n => String(n).padStart(2, '0')
 
 	const timeUnits = [
-		{ value: time.d, label: 'dias' },
-		{ value: time.h, label: 'horas' },
-		{ value: time.m, label: 'minutos' },
-		{ value: time.s, label: 'segundos' }
+		{ value: time.d, label: t('highlightedProductShelf.days', 'dias') },
+		{ value: time.h, label: t('highlightedProductShelf.hours', 'horas') },
+		{ value: time.m, label: t('highlightedProductShelf.minutes', 'minutos') },
+		{ value: time.s, label: t('highlightedProductShelf.seconds', 'segundos') }
 	]
 
 	return (
@@ -72,6 +73,8 @@ export default function HighlightedProductShelf({ data }) {
 	const [products, setProducts] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
 	const time = useCountdown(data?.endDate, data?.showTimer)
+
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		fetchProducts()
@@ -127,23 +130,24 @@ export default function HighlightedProductShelf({ data }) {
 				<View
 					className='flex items-center gap-1'
 					onClick={onSeeMore}>
-					<Text className='text-sm'>Veja mais</Text>
+					<Text className='text-sm'>{t('highlightedProductShelf.seeMore', 'Veja mais')}</Text>
 					<LuChevronRight />
 				</View>
 			</View>
 
-			{data.showTimer && (
-				<CountdownTimer
-					time={time}
-					textColor={data.textColor}
-				/>
-			)}
+				{data.showTimer && (
+					<CountdownTimer
+						time={time}
+						textColor={data.textColor}
+						t={t}
+					/>
+				)}
 
 			<View className='flex overflow-x-auto'>
 				<View className='flex gap-4 px-4'>
-					{isLoading ? (
-						<Text>Carregando...</Text>
-					) : (
+						{isLoading ? (
+							<Text>{t('highlightedProductShelf.loading', 'Carregando...')}</Text>
+						) : (
 						products.map(product => (
 							<ProductCard
 								key={product.productId}

@@ -1,9 +1,11 @@
 import { HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
 import CategoryTitle from './CategoryTitle'
+import { useTranslation } from 'eitri-i18n'
 
 export default function CategoryPageItem(props) {
 	const { item, goToItem } = props
+	const { t } = useTranslation()
 
 	const [showSubItems, setShowSubItems] = useState(false)
 
@@ -49,7 +51,7 @@ export default function CategoryPageItem(props) {
 							<CategoryTitle
 								icon={item.icon}
 								hasSubItems={false}
-								title={`Ver tudo em ${item.title}`}
+								title={`${t('categoryPageItem.seeAllIn', 'Ver tudo em')} ${item.title}`}
 								onClick={() => goToItem(item)}
 							/>
 						)}

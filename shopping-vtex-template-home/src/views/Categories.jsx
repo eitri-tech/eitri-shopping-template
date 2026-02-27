@@ -27,11 +27,11 @@ export default function Categories() {
 
 	return (
 		<Page
-			title='Categorias'
+			title={t('categories.title', 'Categorias')}
 			bottomInset
 			topInset>
 			<HeaderContentWrapper className='justify-between'>
-				<HeaderText text={t('categories.title')} />
+				<HeaderText text={t('categories.title', 'Categorias')} />
 				<HeaderSearchIcon onClick={goToSearch} />
 			</HeaderContentWrapper>
 

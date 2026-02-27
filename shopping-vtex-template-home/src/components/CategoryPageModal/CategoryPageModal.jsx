@@ -34,7 +34,7 @@ export default function CategoryPageModal(props) {
 				width='100vw'
 				className='bg-base-100 overflow-scroll'>
 				<View className='p-2 mx-1 flex flex flex-row justify-between items-center'>
-					<Text>{`${t('categoryPageModal.title')}`}</Text>
+					<Text>{`${t('categoryPageModal.title', 'Filtros')}`}</Text>
 					<View
 						width='36px'
 						height='36px'
@@ -172,12 +172,12 @@ export default function CategoryPageModal(props) {
 							<View
 								onClick={clearFilters}
 								className='flex p-2 items-center justify-center border-primary-content border grow-1 bg-base-100'>
-								<Text className='text-primary-content'>{t('categoryPageModal.clear')}</Text>
+								<Text className='text-primary-content'>{t('categoryPageModal.clear', 'Limpar')}</Text>
 							</View>
 							<View
 								onClick={executeSearch}
 								className='flex p-2 items-center justify-center grow-1 bg-primary-content font-bold'>
-								<Text className='text-neutral font-bold'>{t('categoryPageModal.button')}</Text>
+								<Text className='text-neutral font-bold'>{t('categoryPageModal.button', 'Filtrar')}</Text>
 							</View>
 						</View>
 						<View bottomInset />

@@ -23,12 +23,14 @@ export default function ShelfOfProducts(props) {
 		<View>
 			{title && (
 				<View className={`flex justify-between items-center px-4`}>
-					<Text className='font-bold text-xl'>{isLoading ? t('shelfOfProducts.loading') : title}</Text>
+					<Text className='font-bold text-xl'>
+						{isLoading ? t('shelfOfProducts.loading', 'Carregando...') : title}
+					</Text>
 					{searchParams && (
 						<View
 							onClick={seeMore}
 							className='flex items-center min-w-fit'>
-							<Text className='font-bold'>{t('shelfOfProducts.seeMore')}</Text>
+							<Text className='font-bold'>{t('shelfOfProducts.seeMore', 'Ver mais')}</Text>
 						</View>
 					)}
 				</View>

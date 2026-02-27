@@ -6,8 +6,10 @@ import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
 import { BottomInset } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function Home() {
+	const { t } = useTranslation()
 	const { startCart } = useLocalShoppingCart()
 	const [cmsContent, setCmsContent] = useState(null)
 
@@ -69,7 +71,7 @@ export default function Home() {
 
 	return (
 		<Page
-			title='Home'
+			title={t('home.title', 'Home')}
 			topInset>
 			<MainHeader />
 			<View>

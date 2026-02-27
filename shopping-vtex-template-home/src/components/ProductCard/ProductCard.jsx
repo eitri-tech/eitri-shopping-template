@@ -118,7 +118,7 @@ const getProductVideo = product => {
 /**
  * Formata as parcelas do produto
  */
-const formatInstallments = seller => {
+const formatInstallments = (seller, t) => {
 	if (!seller?.commertialOffer?.Installments?.length) return ''
 
 	const installments = seller.commertialOffer.Installments
@@ -131,13 +131,15 @@ const formatInstallments = seller => {
 		return ''
 	}
 
-	return `em até ${maxInstallments.NumberOfInstallments}x ${formatPrice(maxInstallments.Value)}`
+	return `${t('productCard.installmentsPrefix', 'em até')} ${
+		maxInstallments.NumberOfInstallments
+	}x ${formatPrice(maxInstallments.Value)}`
 }
 
 /**
  * Calcula o badge de desconto
  */
-const calculateBadge = seller => {
+const calculateBadge = (seller, t) => {
 	if (!seller?.commertialOffer) return ''
 
 	const { Price, ListPrice } = seller.commertialOffer
@@ -145,7 +147,7 @@ const calculateBadge = seller => {
 	if (Price === ListPrice || !ListPrice) return ''
 
 	const discount = ((ListPrice - Price) / ListPrice) * 100
-	return `${discount.toFixed(0)}% OFF`
+	return `${discount.toFixed(0)}% ${t('productCard.discountSuffix', 'OFF')}`
 }
 
 /**
@@ -193,12 +195,12 @@ export default function ProductCard({ product, className }) {
 			name: product.productName,
 			image: item.images?.[0]?.imageUrl || '',
 			video: getProductVideo(product),
-			badge: calculateBadge(sellerDefault),
+			badge: calculateBadge(sellerDefault, t),
 			listPrice: getFormattedListPrice(sellerDefault),
 			price: formatPrice(sellerDefault.commertialOffer.Price),
-			installments: formatInstallments(sellerDefault)
+			installments: formatInstallments(sellerDefault, t)
 		}
-	}, [product, item, sellerDefault, isValidProduct])
+	}, [product, item, sellerDefault, isValidProduct, t])
 
 	useEffect(() => {
 		EventBus.subscribe({
@@ -325,7 +327,7 @@ export default function ProductCard({ product, className }) {
 		loadingWishlistOp: wishlist.loading,
 		loadingCartOp,
 		itemQuantity,
-		actionLabel: itemInCart ? 'Ver carrinho' : 'Comprar',
+		actionLabel: itemInCart ? t('productCard.viewCart', 'Ver carrinho') : t('productCard.buy', 'Comprar'),
 		onPressOnCard: handleCardPress,
 		onPressCartButton: handleCartButtonPress,
 		onPressOnWishlist: handleWishlistPress,

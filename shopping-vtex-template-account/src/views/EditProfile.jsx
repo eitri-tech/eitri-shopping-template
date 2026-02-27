@@ -60,37 +60,40 @@ export default function EditProfile(props) {
 
 		// Validar nome
 		if (!user.firstName || user.firstName.trim() === '') {
-			newErrors.firstName = 'Nome é obrigatório'
+			newErrors.firstName = t('editProfile.errors.firstNameRequired', 'Nome é obrigatório')
 		}
 
 		// Validar sobrenome
 		if (!user.lastName || user.lastName.trim() === '') {
-			newErrors.lastName = 'Sobrenome é obrigatório'
+			newErrors.lastName = t('editProfile.errors.lastNameRequired', 'Sobrenome é obrigatório')
 		}
 
 		// Validar data de nascimento
 		if (!user.birthDate || user.birthDate.trim() === '') {
-			newErrors.birthDate = 'Data de nascimento é obrigatória'
+			newErrors.birthDate = t('editProfile.errors.birthDateRequired', 'Data de nascimento é obrigatória')
 		} else {
 			const { isValid } = convertToISO(user.birthDate)
 			if (!isValid) {
-				newErrors.birthDate = 'Data de nascimento inválida ou menor de 18 anos'
+				newErrors.birthDate = t(
+					'editProfile.errors.birthDateInvalid',
+					'Data de nascimento inválida ou menor de 18 anos'
+				)
 			}
 		}
 
 		// Validar telefone
 		if (!user.homePhone || user.homePhone.trim() === '') {
-			newErrors.homePhone = 'Telefone é obrigatório'
+			newErrors.homePhone = t('editProfile.errors.phoneRequired', 'Telefone é obrigatório')
 		}
 
 		// Validar gênero
 		if (!user.gender) {
-			newErrors.gender = 'Gênero é obrigatório'
+			newErrors.gender = t('editProfile.errors.genderRequired', 'Gênero é obrigatório')
 		}
 
 		// Validar CPF
 		if (!user.document || user.document.trim() === '') {
-			newErrors.document = 'CPF é obrigatório'
+			newErrors.document = t('editProfile.errors.documentRequired', 'CPF é obrigatório')
 		}
 
 		setErrors(newErrors)
@@ -217,7 +220,7 @@ export default function EditProfile(props) {
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='DD/MM/AAAA'
+						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}
 						variant='mask'
 						mask='99/99/9999'
 						inputMode='numeric'
@@ -232,7 +235,7 @@ export default function EditProfile(props) {
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='(99) 99999-9999'
+						placeholder={t('editProfile.placeholders.phone', '(99) 99999-9999')}
 						value={user?.homePhone?.replace('+55', '') || ''}
 						inputMode='numeric'
 						variant='mask'
@@ -274,7 +277,7 @@ export default function EditProfile(props) {
 					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='000.000.000-00'
+						placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}
 						value={user.document || ''}
 						inputMode='numeric'
 						variant='mask'
@@ -301,7 +304,9 @@ export default function EditProfile(props) {
 								className='text-white'>
 								<path d='M20 6L9 17l-5-5'></path>
 							</svg>
-							<Text className='text-white font-medium'>Salvo com sucesso!</Text>
+							<Text className='text-white font-medium'>
+								{t('editProfile.saveSuccess', 'Salvo com sucesso!')}
+							</Text>
 						</View>
 					</View>
 				)}

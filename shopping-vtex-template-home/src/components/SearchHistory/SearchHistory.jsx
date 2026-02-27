@@ -1,9 +1,11 @@
 import { getSearchHistory } from '../../services/CatalogService'
 import iconClock from '../../assets/icons/clock.svg'
 import iconLinkGrey from '../../assets/icons/link_grey.svg'
+import { useTranslation } from 'eitri-i18n'
 
 export default function SearchHistory(props) {
 	const { onSubmit, ...rest } = props
+	const { t } = useTranslation()
 
 	const [history, setHistory] = useState([])
 
@@ -23,7 +25,7 @@ export default function SearchHistory(props) {
 			<Text
 				fontWeight='bold'
 				fontSize='small'>
-				Buscas recentes
+				{t('searchHistory.title', 'Buscas recentes')}
 			</Text>
 			<View
 				marginTop='large'

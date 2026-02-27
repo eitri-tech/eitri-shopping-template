@@ -1,7 +1,9 @@
 import { getTopSearches } from '../../services/CatalogService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function TopSearches(props) {
 	const { onSubmit, ...rest } = props
+	const { t } = useTranslation()
 
 	const [searches, setSearches] = useState([])
 
@@ -22,7 +24,7 @@ export default function TopSearches(props) {
 			<Text
 				fontWeight='bold'
 				fontSize='small'>
-				Mais buscados
+				{t('topSearches.title', 'Mais buscados')}
 			</Text>
 			<View
 				display='flex'

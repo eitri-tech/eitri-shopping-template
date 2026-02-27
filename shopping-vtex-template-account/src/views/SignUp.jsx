@@ -130,7 +130,7 @@ export default function SignUp(props) {
 						icon={userIcon}
 						value={email}
 						type='email'
-						placeholder='Email'
+						placeholder={t('signUp.emailPlaceholder', 'Email')}
 						onChange={e => setEmail(e.target.value)}
 						showClearInput={false}
 						required={true}
