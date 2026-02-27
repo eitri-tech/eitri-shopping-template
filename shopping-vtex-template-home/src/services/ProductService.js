@@ -1,4 +1,4 @@
-import { Vtex } from 'eitri-shopping-vtex-shared'
+import { App, Vtex } from 'eitri-shopping-vtex-shared'
 import { CMS_PRODUCT_SORT } from '../utils/Constants'
 import { resolveSortParam } from './helpers/resolveSortParam'
 
@@ -16,6 +16,14 @@ export const autocompleteSuggestions = async value => {
  * */
 
 export const getProductsService = async (params, page) => {
+	const remoteConfig = App?.configs?.appConfigs
+	
+	const useRestSearch = remoteConfig?.useRestSearch
+
+	if (useRestSearch) {
+		return getProductsServiceRest(params, page)
+	}
+
 	const PAGE_SIZE = 12
 
 	// Validar se params está presente e é um objeto válido
