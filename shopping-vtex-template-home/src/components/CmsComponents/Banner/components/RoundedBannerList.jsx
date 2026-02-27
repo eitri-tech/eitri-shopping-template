@@ -29,7 +29,7 @@ export default function RoundedBannerList(props) {
 				</View>
 			)}
 			<View
-				className='flex flex-row overflow-x-scroll mt-2'
+				className='flex flex-row overflow-x-scroll'
 				title={data.mainTitle}>
 				<View className={`flex flex-row gap-4 px-4`}>
 					{imagesList &&
