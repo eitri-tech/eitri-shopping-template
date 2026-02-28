@@ -6,9 +6,11 @@ import { formatAmountInCents } from '../../../utils/utils'
 import { navigate } from '../../../services/navigationService'
 import { trackAddPaymentInfo } from '../../../services/Tracking'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function GiftCard(props) {
 	const { cart, setPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [redemptionCode, setRedemptionCode] = useState('')
@@ -58,7 +60,7 @@ export default function GiftCard(props) {
 				setIsLoading(false)
 				//trackAddPaymentInfo(newCart, 'Vale Presente')
 			} else {
-				setError('Código Invalido')
+				setError(t('paymentMethods.giftCard.invalidCode', 'Código inválido'))
 				setIsLoading(false)
 				setTimeout(() => {
 					setError('')
@@ -90,13 +92,15 @@ export default function GiftCard(props) {
 
 	return (
 		<GroupsWrapper
-			title='Vale presente'
+			title={t('paymentMethods.giftCard.title', 'Vale presente')}
 			icon={<Gift />}
 			onPress={() => {}}>
 			<View>
 				{!selected && (
 					<View onClick={() => setSelected(!selected)}>
-						<Text className='text-primary font-bold'>Adicionar vale presente</Text>
+						<Text className='text-primary font-bold'>
+							{t('paymentMethods.giftCard.addGiftCard', 'Adicionar vale presente')}
+						</Text>
 					</View>
 				)}
 				{selected && (
@@ -104,14 +108,14 @@ export default function GiftCard(props) {
 						<View className='flex justify-between mt-2 gap-2 items-end w-full'>
 							<View className='w-2/3'>
 								<CustomInput
-									placeholder='Insira o código do vale presente'
+									placeholder={t('paymentMethods.giftCard.placeholder', 'Insira o código do vale presente')}
 									value={redemptionCode}
 									onChange={e => setRedemptionCode(e.target.value)}
 								/>
 							</View>
 							<View className='w-1/3'>
 								<CustomButton
-									label='Adicionar'
+									label={t('paymentMethods.giftCard.add', 'Adicionar')}
 									className='grow'
 									onPress={addGiftCard}
 								/>
@@ -146,7 +150,9 @@ export default function GiftCard(props) {
 											</View>
 											<View className='flex flex-row items-center justify-between'>
 												<View onClick={() => removeGiftCart(gift.id)}>
-													<Text className='text-xs font-bold text-blue-500'>{'Remover'}</Text>
+													<Text className='text-xs font-bold text-blue-500'>
+														{t('paymentMethods.giftCard.remove', 'Remover')}
+													</Text>
 												</View>
 											</View>
 										</View>
@@ -155,14 +161,21 @@ export default function GiftCard(props) {
 
 						{giftCardValue > 0 && giftCardValue < cart.value && (
 							<View>
-								<Text className='text-sm font-bold'>{`Pagamento restante de ${formatAmountInCents(cart.value - giftCardValue)}. Por favor, combine com outra forma de pagamento`}</Text>
+								<Text className='text-sm font-bold'>
+									{`${t('paymentMethods.giftCard.remainingPayment', 'Pagamento restante de')} ${formatAmountInCents(
+										cart.value - giftCardValue
+									)}. ${t(
+										'paymentMethods.giftCard.combinePayment',
+										'Por favor, combine com outra forma de pagamento'
+									)}`}
+								</Text>
 							</View>
 						)}
 
 						{giftCardValue > 0 && giftCardValue >= cart.value && (
 							<View>
 								<CustomButton
-									label='Continuar'
+									label={t('paymentMethods.giftCard.continue', 'Continuar')}
 									className='w-full mt-1'
 									onClick={() => navigate('CheckoutReview')}
 								/>

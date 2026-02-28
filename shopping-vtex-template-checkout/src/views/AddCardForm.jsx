@@ -13,9 +13,11 @@ import CreditCardBillingAddress from '../components/PaymentsGroups/Groups/Compon
 import { navigate } from '../services/navigationService'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import CreditCardDisplay from '../components/CreditCardDisplay/CreditCardDisplay'
+import { useTranslation } from 'eitri-i18n'
 
 export default function AddCardForm(props) {
 	const { cart, cardInfo, setCardInfo, selectPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [paymentSystemName, setPaymentSystemName] = useState('')
 	const [systemGroup, setSystemGroups] = useState([])
@@ -117,10 +119,10 @@ export default function AddCardForm(props) {
 	}
 
 	return (
-		<Page title='Checkout - Dados de pagamento'>
+		<Page title={t('checkoutPages.paymentData', 'Checkout - Dados de pagamento')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Novo cartão'} />
+				<HeaderText text={t('addCardForm.header', 'Novo cartão')} />
 			</HeaderContentWrapper>
 
 			<LoadingComponent
@@ -139,14 +141,18 @@ export default function AddCardForm(props) {
 				<View className='flex flex-col gap-2'>
 					<View className='relative'>
 						<CustomInput
-							placeholder={'Insira o número do seu cartão'}
-							label={'Número do cartão'}
+							placeholder={t('addCardForm.cardNumberPlaceholder', 'Insira o número do seu cartão')}
+							label={t('addCardForm.cardNumberLabel', 'Número do cartão')}
 							value={formCardInfo?.cardNumber || ''}
 							inputMode='numeric'
 							mask='9999 9999 9999 9999'
 							variant='mask'
 							onChange={e => handleCardDataChange('cardNumber', e)}
-							error={!validCard && formCardInfo?.cardNumber && 'Verifique o número digitado'}
+							error={
+								!validCard &&
+								formCardInfo?.cardNumber &&
+								t('addCardForm.cardNumberError', 'Verifique o número digitado')
+							}
 						/>
 						{paymentSystemName && (
 							<View className='absolute top-[38px] right-3'>
@@ -161,26 +167,28 @@ export default function AddCardForm(props) {
 
 					<CustomInput
 						showClearInput={false}
-						placeholder={'Nome impresso no cartão'}
-						label={'Nome impresso no cartão'}
+						placeholder={t('addCardForm.holderPlaceholder', 'Nome impresso no cartão')}
+						label={t('addCardForm.holderLabel', 'Nome impresso no cartão')}
 						value={formCardInfo?.holderName || ''}
 						onChange={text => handleCardDataChange('holderName', text)}
 					/>
 					<View className='flex gap-2 w-full flex-row'>
 						<CustomInput
-							label='Validade'
-							placeholder={'MM/AA'}
+							label={t('addCardForm.validityLabel', 'Validade')}
+							placeholder={t('addCardForm.validityPlaceholder', 'MM/AA')}
 							value={formCardInfo?.dueDate || ''}
 							onChange={text => handleCardDataChange('dueDate', text)}
 							inputMode='numeric'
 							variant='mask'
 							mask='99/99'
-							error={!validDueDate && formCardInfo?.dueDate && 'Data inválida'}
+							error={
+								!validDueDate && formCardInfo?.dueDate && t('addCardForm.validityError', 'Data inválida')
+							}
 						/>
 						<CustomInput
 							color='accent-100'
-							label='CVV'
-							placeholder={'CVV'}
+							label={t('addCardForm.cvvLabel', 'CVV')}
+							placeholder={t('addCardForm.cvvPlaceholder', 'CVV')}
 							value={formCardInfo?.validationCode || ''}
 							onChange={text => handleCardDataChange('validationCode', text)}
 							inputMode='numeric'
@@ -194,7 +202,9 @@ export default function AddCardForm(props) {
 			</View>
 
 			<View className='px-4 pb-4'>
-				<Text className='text-accent-100 font-bold font-sm'>Bandeiras aceitas:</Text>
+				<Text className='text-accent-100 font-bold font-sm'>
+					{t('addCardForm.acceptedFlags', 'Bandeiras aceitas:')}
+				</Text>
 				<View className='flex gap-1 justify-between mt-2'>
 					{systemGroup?.paymentSystems?.map(system => {
 						return (
@@ -218,7 +228,7 @@ export default function AddCardForm(props) {
 				offSetHeight={77}>
 				<CustomButton
 					disabled={!validToProceed()}
-					label={'Continuar'}
+					label={t('addCardForm.continue', 'Continuar')}
 					onClick={setPaymentSystem}
 				/>
 			</FixedBottom>

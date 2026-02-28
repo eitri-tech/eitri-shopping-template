@@ -1,1 +1,8 @@
-{}
+{
+	"genericError": {
+		"title": "Could not continue",
+		"description": "Check your device's internet connection or app updates",
+		"retry": "TRY AGAIN",
+		"cancel": "CANCEL"
+	}
+}

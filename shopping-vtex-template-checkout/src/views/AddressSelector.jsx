@@ -101,7 +101,7 @@ export default function AddressSelector(props) {
 							mainTitle={`${address.street}, ${address.number || ''} ${address.complement || ''}`}
 							mainClickHandler={() => handleAddressSelect(address)}
 							secondaryActionHandler={() => handleEditAddress(address)}
-							secondaryActionTitle={'Editar'}>
+							secondaryActionTitle={t('addressSelector.edit', 'Editar')}>
 							<Text className='text text-base-content/70'>
 								{`${address.neighborhood} - ${address.city} - ${address.state}`}
 							</Text>

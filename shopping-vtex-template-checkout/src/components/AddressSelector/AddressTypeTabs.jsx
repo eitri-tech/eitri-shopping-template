@@ -1,7 +1,10 @@
 import { Text, View } from 'eitri-luminus'
 import { CustomButton } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function AddressTypeTabs({ selectedTab, onTabChange }) {
+	const { t } = useTranslation()
+
 	return (
 		<View className='flex flex-row bg-base-200 rounded-lg p-1 mb-4'>
 			<CustomButton
@@ -35,7 +38,7 @@ export default function AddressTypeTabs({ selectedTab, onTabChange }) {
 								strokeLinejoin='round'
 							/>
 						</svg>
-						<Text>Entrega</Text>
+						<Text>{t('addressSelector.tabs.delivery', 'Entrega')}</Text>
 					</View>
 				}
 				className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${
@@ -67,7 +70,7 @@ export default function AddressTypeTabs({ selectedTab, onTabChange }) {
 								strokeWidth='2'
 							/>
 						</svg>
-						<Text>Retirada</Text>
+						<Text>{t('addressSelector.tabs.pickup', 'Retirada')}</Text>
 					</View>
 				}
 				className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-all duration-200 ${

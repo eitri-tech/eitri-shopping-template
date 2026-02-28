@@ -191,9 +191,9 @@ export default function ProductCard(props) {
 
 	const getActionLabel = () => {
 		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-			return 'Comprar'
+			return t('productCard.actionBuy', 'Comprar')
 		}
-		return isItemOnCart() ? 'Ver carrinho' : 'Comprar'
+		return isItemOnCart() ? t('productCard.actionViewCart', 'Ver carrinho') : t('productCard.actionBuy', 'Comprar')
 	}
 
 	const onPressCartButton = () => {

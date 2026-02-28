@@ -62,7 +62,7 @@ export default function ProductCard(props) {
 
 		if (!maxInstallments || maxInstallments?.NumberOfInstallments === 1) return ''
 
-		return `${t('productCard.upTo', 'em até')} ${maxInstallments?.NumberOfInstallments}x ${formatPrice(
+		return `${t('productCard.upTo')} ${maxInstallments?.NumberOfInstallments}x ${formatPrice(
 			maxInstallments?.Value
 		)}`
 	}
@@ -81,7 +81,7 @@ export default function ProductCard(props) {
 
 		if (price !== listPrice) {
 			const discount = ((listPrice - price) / listPrice) * 100
-			return `${discount.toFixed(0)}% ${t('productCard.off', 'OFF')}`
+			return `${discount.toFixed(0)}% ${t('productCard.off')}`
 		} else {
 			return ''
 		}
@@ -99,7 +99,7 @@ export default function ProductCard(props) {
 			}
 			setLoadingCartOp(false)
 		} catch (e) {
-			console.error(t('productCard.addToCartError', 'Error adding cart item'), e)
+			console.error(t('productCard.addToCartError'), e)
 			setLoadingCartOp(false)
 		}
 	}
@@ -200,7 +200,7 @@ export default function ProductCard(props) {
 		loadingWishlistOp: loadingWishlistOp,
 		loadingCartOp: loadingCartOp,
 		itemQuantity: itemQuantity,
-		actionLabel: t('productCard.buy', 'Comprar'),
+		actionLabel: t('productCard.buy'),
 		onPressOnCard: onPressOnCard,
 		onPressCartButton: onPressCartButton,
 		onPressOnWishlist: onPressOnWishlist,

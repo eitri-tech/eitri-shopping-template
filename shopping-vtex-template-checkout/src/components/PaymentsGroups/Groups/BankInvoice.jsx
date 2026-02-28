@@ -1,10 +1,12 @@
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import Boleto from '../../Icons/MethodIcons/Boleto'
 import GroupsWrapper from './GroupsWrapper'
+import { useTranslation } from 'eitri-i18n'
 
 export default function BankInvoice(props) {
 	const { selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()
 	const { paymentSystems, groupName } = props
+	const { t } = useTranslation()
 
 	const onSelectThisGroup = () => {
 		setSelectedPaymentData({
@@ -29,7 +31,7 @@ export default function BankInvoice(props) {
 
 	return (
 		<GroupsWrapper
-			title='Boleto Bancário'
+			title={t('paymentMethods.bankInvoice.title', 'Boleto Bancário')}
 			icon={<Boleto />}
 			isChecked={groupName === selectedPaymentData?.groupName}
 			onPress={onSelectThisGroup}

@@ -14,10 +14,10 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 
 		const todayHours = businessHours.find(h => h.DayOfWeek === today)
 		if (todayHours) {
-			return `Hoje: ${todayHours?.OpeningTime?.slice(0, 5)} - ${todayHours.ClosingTime.slice(0, 5)}`
+			return `${t('addressSelector.today', 'Hoje')}: ${todayHours?.OpeningTime?.slice(0, 5)} - ${todayHours.ClosingTime.slice(0, 5)}`
 		}
 
-		return 'Horário disponível'
+		return t('addressSelector.businessHoursAvailable', 'Horário disponível')
 	}
 
 	const editAddress = () => {
@@ -63,7 +63,9 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 					<View
 						onClick={editAddress}
 						className='mt-2'>
-						<Text className='uppercase text-xs text-primary-700'>Editar</Text>
+						<Text className='uppercase text-xs text-primary-700'>
+							{t('addressSelector.edit', 'Editar')}
+						</Text>
 					</View>
 				</View>
 

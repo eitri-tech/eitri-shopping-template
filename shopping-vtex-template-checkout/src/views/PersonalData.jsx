@@ -195,13 +195,13 @@ export default function PersonalData() {
 			(!isLegalPerson && inputOption.requeriedForPersonal && !inputValue)
 
 		if (isRequiredError) {
-			return updateOption({ error: 'Este campo é obrigatório' })
+			return updateOption({ error: t('personalData.requiredField', 'Este campo é obrigatório') })
 		}
 
 		if (inputOption.label === 'document') {
 			const validSocialNumber = verifySocialNumber(inputValue.replace(/\D/g, ''))
 			if (!validSocialNumber) {
-				return updateOption({ error: 'Documento inválido' })
+				return updateOption({ error: t('personalData.invalidDocument', 'Documento inválido') })
 			}
 		}
 
@@ -278,7 +278,7 @@ export default function PersonalData() {
 	})()
 
 	return (
-		<Page title='Checkout - Dados Pessoais'>
+		<Page title={t('checkoutPages.personalData', 'Checkout - Dados Pessoais')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('personalData.title', 'Seus dados pessoais')} />
@@ -288,8 +288,12 @@ export default function PersonalData() {
 
 			<View className='m-4 p-4 flex flex-col justify-between flex-grow bg-white rounded shadow-sm border border-gray-300'>
 				<View className='mb-2'>
-					<Text className='block text-lg font-bold text-center'>Informe seu e-mail para continuar</Text>
-					<Text className='block text-center'>Vamos verificar se você já fez alguma compra com a gente</Text>
+					<Text className='block text-lg font-bold text-center'>
+						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
+					</Text>
+					<Text className='block text-center'>
+						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
+					</Text>
 				</View>
 
 				<View className='flex flex-col gap-2'>
@@ -309,7 +313,7 @@ export default function PersonalData() {
 						<View className='w-1/4'>
 							<CustomButton
 								disabled={!isValidEmail}
-								label='OK'
+								label={t('personalData.ok', 'OK')}
 								onPress={findUserByEmail}
 							/>
 						</View>

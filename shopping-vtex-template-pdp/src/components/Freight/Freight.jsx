@@ -59,7 +59,7 @@ export default function Freight(props) {
 					</View>
 					<View className='w-1/3'>
 						<CustomButton
-							label='calcular'
+							label={t('freight.labelCalculate', 'Calcular')}
 							variant='outlined'
 							onClick={() => handleFreight(zipCode)}
 						/>

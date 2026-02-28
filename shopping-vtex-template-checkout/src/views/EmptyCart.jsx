@@ -13,7 +13,7 @@ export default function EmptyCart() {
 	}, [])
 
 	return (
-		<Page title='Checkout - Carrinho Vazio'>
+		<Page title={t('checkoutPages.emptyCart', 'Checkout - Carrinho Vazio')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<View onClick={goToCartman}>

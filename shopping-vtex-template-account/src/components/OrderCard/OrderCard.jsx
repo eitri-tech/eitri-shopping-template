@@ -27,7 +27,7 @@ export default function OrderCard(props) {
 			const result = await getOrderById(order?.orderId)
 			setOrderDetails(result)
 		} catch (e) {
-			console.error(t('orderCard.loadDetailsError', 'Falha ao carregar detalhes do pedido:'), e)
+			console.error(t('orderCard.loadDetailsError'), e)
 		} finally {
 			setLoadingDetails(false)
 		}
@@ -46,7 +46,7 @@ export default function OrderCard(props) {
 			<View className='p-4 grid grid-cols-2 gap-x-4 gap-y-4'>
 				<View className='flex flex flex-col'>
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						{t('orderCard.order', 'Pedido')}
+						{t('orderCard.order')}
 					</Text>
 					<Text className='text-sm font-medium text-gray-900 truncate'>{order?.orderId}</Text>
 				</View>
@@ -60,18 +60,18 @@ export default function OrderCard(props) {
 
 				<View className='flex flex flex-col'>
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						{t('orderCard.date', 'Data')}
+						{t('orderCard.date')}
 					</Text>
 					<Text className='text-sm text-gray-700'>{formatDateDaysMonthYear(order?.creationDate)}</Text>
 				</View>
 
 				<View className='flex flex flex-col text-right'>
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						{t('orderCard.total', 'Total')} (
+						{t('orderCard.total')} (
 						{`${order?.totalItems} ${
 							order?.totalItems > 1
-								? t('orderCard.items', 'itens')
-								: t('orderCard.item', 'item')
+								? t('orderCard.items')
+								: t('orderCard.item')
 						}`}
 						)
 					</Text>
@@ -84,7 +84,7 @@ export default function OrderCard(props) {
 					{loadingDetails ? (
 						<View className='flex justify-center items-center py-2'>
 							<Text className='text-sm text-gray-500'>
-								{t('orderCard.loadingProducts', 'Carregando produtos...')}
+								{t('orderCard.loadingProducts')}
 							</Text>
 						</View>
 					) : (
@@ -103,7 +103,7 @@ export default function OrderCard(props) {
 												{item.name}
 											</Text>
 											<Text className='text-xs text-gray-600'>
-												{`${item.quantity} ${t('orderCard.unit', 'un')} • ${formatPriceInCents(
+												{`${item.quantity} ${t('orderCard.unit')} • ${formatPriceInCents(
 													item.price
 												)}`}
 											</Text>
@@ -119,7 +119,7 @@ export default function OrderCard(props) {
 			<View className='p-4 border-t border-gray-200'>
 				<CustomButton
 					width='100%'
-					label={t('orderCard.viewOrderDetails', 'Ver detalhes do pedido')}
+					label={t('orderCard.viewOrderDetails')}
 					onPress={openOrderDetails}
 				/>
 			</View>

@@ -14,7 +14,7 @@ export default function SocialLogin(props) {
 			await executor()
 			handleSocialLogin()
 		} catch (e) {
-			console.log(t('socialLogin.socialLoginError', 'Error on social login:'), e)
+			console.log(t('socialLogin.socialLoginError'), e)
 		}
 	}
 
@@ -43,7 +43,7 @@ export default function SocialLogin(props) {
 						height='24px'
 					/>
 					<Text className='text-white font-bold uppercase text-sm'>
-						{t('socialLogin.continueWithFacebook', 'Continuar com Facebook')}
+						{t('socialLogin.continueWithFacebook')}
 					</Text>
 				</View>
 			)}

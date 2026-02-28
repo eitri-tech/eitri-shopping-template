@@ -185,7 +185,7 @@ export default function EditProfile(props) {
 			statusBarTextColor='white'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('editProfile.title')} />
+				<HeaderText text={t('editProfile.title', 'Editar perfil')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -195,11 +195,11 @@ export default function EditProfile(props) {
 
 			<View className='p-4 flex flex-col gap-4'>
 				<View>
-					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName')} *</Text>
+					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName', 'Nome')} *</Text>
 					<View className='mt-1 flex gap-1.5'>
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbName')}
+							placeholder={t('editProfile.lbName', 'Nome')}
 							value={user?.firstName || ''}
 							onChange={value => handleInputChange('firstName', value)}
 							error={errors.firstName}
@@ -207,7 +207,7 @@ export default function EditProfile(props) {
 						{errors.firstName && <Text className='text-red-500 text-xs mt-1'>{errors.firstName}</Text>}
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbLastName')}
+							placeholder={t('editProfile.lbLastName', 'Sobrenome')}
 							value={user?.lastName || ''}
 							onChange={value => handleInputChange('lastName', value)}
 							error={errors.lastName}
@@ -217,7 +217,7 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate', 'Data de nascimento')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}
@@ -232,7 +232,7 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone', 'Telefone')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder={t('editProfile.placeholders.phone', '(99) 99999-9999')}
@@ -247,7 +247,7 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender', 'Sexo')} *</Text>
 					<View className='flex gap-4'>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -257,7 +257,7 @@ export default function EditProfile(props) {
 								checked={user?.gender === 'male'}
 								onChange={value => handleInputChange('gender', value)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale', 'Masculino')}</Text>
 						</View>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -267,14 +267,14 @@ export default function EditProfile(props) {
 								checked={user?.gender === 'female'}
 								onChange={value => handleInputChange('gender', value)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale', 'Feminino')}</Text>
 						</View>
 					</View>
 					{errors.gender && <Text className='text-red-500 text-xs mt-1'>{errors.gender}</Text>}
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF', 'CPF')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}
@@ -317,7 +317,7 @@ export default function EditProfile(props) {
 				<View className='p-4'>
 					<CustomButton
 						width='100%'
-						label={t('editProfile.lbSave')}
+						label={t('editProfile.lbSave', 'Salvar')}
 						onPress={handleSave}
 						disabled={!isFormValid() || isLoading}
 					/>

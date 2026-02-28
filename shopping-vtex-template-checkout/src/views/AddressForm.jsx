@@ -335,7 +335,7 @@ export default function AddressForm(props) {
 				/>
 				{isLoading && (
 					<View>
-						<Text>{t('addNewShippingAddress.loading') || 'Aguarde...'}</Text>
+						<Text>{t('addNewShippingAddress.loading', 'Aguarde...')}</Text>
 					</View>
 				)}
 				<AddressFields
@@ -364,7 +364,7 @@ export default function AddressForm(props) {
 					marginTop='large'
 					label={
 						isLoading
-							? t('addNewShippingAddress.loading') || 'Aguarde...'
+							? t('addNewShippingAddress.loading', 'Aguarde...')
 							: t('addNewShippingAddress.labelButton')
 					}
 					fontSize='medium'

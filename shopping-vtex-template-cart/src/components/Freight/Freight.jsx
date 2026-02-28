@@ -139,17 +139,21 @@ export default function Freight(props) {
 					</View>
 				) : (
 					<View className='mt-2 flex flex-row items-center gap-4'>
-						<Text className='text-base font-medium'>{`Receber em ${shipping?.postalCode}`}</Text>
+						<Text className='text-base font-medium'>
+							{`${t('freight.receiveAt', 'Receber em')} ${shipping?.postalCode}`}
+						</Text>
 
 						<View onClick={onPressEditZipCode}>
-							<Text className='text-sm text-primary font-bold'>alterar</Text>
+							<Text className='text-sm text-primary font-bold'>{t('freight.change', 'Alterar')}</Text>
 						</View>
 					</View>
 				)}
 
 				{shipping?.address && !shipping?.shippingAvailable && (
 					<View className='mt-2 p-2 bg-red-50 border border-red-200 rounded'>
-						<Text className='text-sm text-red-600 font-medium'>Entrega indisponível</Text>
+						<Text className='text-sm text-red-600 font-medium'>
+							{t('freight.unavailableDelivery', 'Entrega indisponível')}
+						</Text>
 					</View>
 				)}
 
@@ -201,7 +205,7 @@ export default function Freight(props) {
 						{pickupOptions.length > 0 && (
 							<View className='mt-4'>
 								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
-									{t('freight.tabPickup') || 'Retirada'}
+									{t('freight.tabPickup', 'Retirada')}
 								</Text>
 								<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
 									{pickupOptions.map((item, index) => (

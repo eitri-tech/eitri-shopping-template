@@ -42,7 +42,7 @@ export default function Wishlist(props) {
 	}
 
 	return (
-		<Page title='Wishlist'>
+		<Page title={t('wishlist.pageTitle', 'Wishlist')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('wishlist.myFavorites', 'Meus favoritos')} />

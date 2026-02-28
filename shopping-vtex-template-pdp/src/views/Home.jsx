@@ -11,6 +11,7 @@ import RichContent from '../components/RichContent/RichContent'
 import DescriptionComponent from '../components/Description/DescriptionComponent'
 import Reviews from '../components/Reviews/Reviews'
 import RelatedProducts from '../components/RelatedProducts/RelatedProducts'
+import { useTranslation } from 'eitri-i18n'
 import { startConfigure } from '../services/AppService'
 import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
@@ -19,6 +20,7 @@ import { getProductById, getProductBySlug } from '../services/productService'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [product, setProduct] = useState(null)
 	const [isLoading, setIsLoading] = useState(null)
@@ -120,7 +122,7 @@ export default function Home() {
 	}
 
 	return (
-		<Page title='Página de produto'>
+		<Page title={t('home.pageTitle', 'Página de produto')}>
 			<Header
 				product={product}
 				configLoaded={configLoaded}

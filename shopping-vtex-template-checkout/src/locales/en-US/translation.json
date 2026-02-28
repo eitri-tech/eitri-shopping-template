@@ -1,51 +1,78 @@
 {
 	"home": {
-		"title": "Checkout"
+		"title": "Complete Order"
 	},
 	"orderCompleted": {
 		"title": "Order Confirmed",
 		"txtCongratulation": "Congratulations!",
 		"txtOrderSuccessful": "Order placed successfully.",
-		"txtOrderNumber": "Order No:",
-		"txtOrderFollow": "You will receive an email with all the details. You can also track your order in the 'My Orders' section.",
-		"labelSeeOrders": "See Orders",
-		"labelBack": "Back to Home"
+		"txtOrderNumber": "Order no.:",
+		"txtOrderFollow": "You will receive an email with all the details. You can also track your order in 'My orders'.",
+		"labelSeeOrders": "View orders",
+		"labelBack": "Back to home screen",
+		"header": "Order completed",
+		"done": "Done, purchase completed!",
+		"emailConfirmation": "We've sent a confirmation with your order details to your email",
+		"orderCodeIs": "Your order code is",
+		"seeMyOrders": "View my orders",
+		"backHome": "Back to home"
 	},
 	"paymentData": {
 		"title": "Payment",
-		"txtTotalPayment": "Total Payment",
-		"labelButton": "Continue"
+		"txtTotalPayment": "Total to pay",
+		"labelButton": "Continue",
+		"chooseHowToPay": "Choose how to pay"
 	},
 	"personalData": {
-		"frmName": "First Name",
+		"frmName": "First name",
 		"placeholderName": "Enter your first name",
-		"frmLastName": "Last Name",
+		"frmLastName": "Last name",
 		"placeholderLastName": "Enter your last name",
-		"frmTaxpayerId": "Taxpayer ID",
-		"placeholderTaxpayerId": "Enter your Taxpayer ID",
+		"frmTaxpayerId": "CPF",
+		"placeholderTaxpayerId": "Enter your CPF",
 		"frmPhone": "Phone",
-		"placeholderPhone": "Enter your phone number",
-		"frmCorporateName": "Corporate Name",
-		"placeholderCorporateName": "Enter your corporate name",
-		"frmFantasyName": "Trade Name",
+		"placeholderPhone": "Enter your phone",
+		"frmCorporateName": "Legal name",
+		"placeholderCorporateName": "Enter your legal name",
+		"frmFantasyName": "Trade name",
 		"placeholderFantasyName": "Enter your trade name",
-		"frmCorporateDocument": "Corporate Document",
-		"placeholderCorporateDocument": "Enter your corporate document",
-		"frmCorporatePhone": "Corporate Phone",
-		"placeholderCorporatePhone": "Enter your corporate phone number",
-		"frmStateInscription": "State Registration",
+		"frmCorporateDocument": "CNPJ",
+		"placeholderCorporateDocument": "Enter your CNPJ",
+		"frmCorporatePhone": "Phone",
+		"placeholderCorporatePhone": "Enter your phone",
+		"frmStateInscription": "State registration",
 		"placeholderStateInscription": "Enter your state registration",
-		"title": "Personal Data",
+		"title": "Personal data",
 		"frmEmail": "Email",
 		"placeholderEmail": "Enter your email",
 		"labelPerson": "I am an individual",
 		"labelCorporate": "I am a company",
-		"errorInvalidDoc": "The entered Taxpayer ID is invalid",
-		"labelButton": "Continue"
+		"errorInvalidDoc": "The entered CPF is invalid",
+		"labelButton": "Continue",
+		"requiredField": "This field is required",
+		"invalidDocument": "Invalid document",
+		"enterEmailTitle": "Enter your email to continue",
+		"enterEmailSubtitle": "We'll check if you've already made a purchase with us",
+		"ok": "OK"
 	},
 	"pixOrder": {
-		"txtTimeRemaining": "Time Remaining",
-		"labelCopyCode": "Copy Code"
+		"txtTimeRemaining": "Time remaining",
+		"labelCopyCode": "Copy code",
+		"pageTitle": "Pix QR Code",
+		"header": "PIX Payment",
+		"approvalInfo": "With PIX, your purchase is approved instantly",
+		"purchaseValue": "Purchase value",
+		"codeTitle": "PIX code",
+		"copyCode": "Copy code",
+		"share": "Share",
+		"hideQrCode": "Hide QR Code",
+		"showQrCode": "Show QR Code",
+		"howToPayTitle": "How to pay with PIX",
+		"step1": "Access your internet banking",
+		"step2": "Choose PIX payment",
+		"step3": "Paste the code above",
+		"timeRemaining": "Time remaining",
+		"autoProcessInfo": "Payment will be processed automatically after confirmation"
 	},
 	"finishCart": {
 		"errorOrder": "There was an error processing your order. Please review the products and payment details before trying again",
@@ -60,57 +87,69 @@
 		"labelButton": "Complete Purchase"
 	},
 	"emptyCart": {
-		"title": "Checkout",
+		"title": "Complete Order",
 		"txtEmptyCart": "Your cart is empty",
 		"txtAddItem": "Add products to your cart",
 		"labelBack": "Back"
 	},
 	"addNewShippingAddress": {
 		"title": "Delivery",
-		"errorAddress": "Invalid address, please check the details",
+		"errorAddress": "Invalid address, please check the data",
 		"errorDefault": "An unexpected error occurred, please try again",
 		"txtCalculate": "Calculate shipping and delivery time",
-		"txtPickupAddress": "Pickup Address",
+		"txtPickupAddress": "Pickup address",
 		"txtEdit": "Edit",
-		"txtZipCode": "Insert your zip code",
+		"txtZipCode": "Enter your ZIP code",
 		"frmNumber": "Number",
 		"frmComplement": "Complement",
 		"frmReference": "Reference",
 		"frmReceiveName": "Who will receive the order?",
 		"frmStreet": "Street / Avenue",
-		"frmNeighborhood": "Neighborhood",
+		"frmNeighborhood": "Street / Avenue",
 		"frmCity": "City",
 		"frmState": "State",
 		"labelButton": "Continue",
 		"ok": "OK",
 		"loading": "Please wait...",
-		"errorPostalCode": "Enter the zip code",
-		"errorStreet": "Enter the street/avenue",
-		"errorNeighborhood": "Enter the neighborhood",
-		"errorCity": "Enter the city",
-		"errorState": "Enter the state",
-		"errorReceiverName": "Enter the receiver's name",
-		"errorNumber": "Enter the number"
+		"errorPostalCode": "Enter ZIP code",
+		"errorStreet": "Enter street/avenue",
+		"errorNeighborhood": "Enter neighborhood",
+		"errorCity": "Enter city",
+		"errorState": "Enter state",
+		"errorReceiverName": "Enter receiver name",
+		"errorNumber": "Enter number"
 	},
 	"simpleCard": {
-		"txtEdit": "EDIT"
+		"txtEdit": "CHANGE"
 	},
 	"deliveryData": {
 		"txtWithdrawal": "PICKUP",
 		"txtDelivery": "DELIVERY",
 		"txtNoNumber": "no number",
-		"txtAlert": "Your address information is incomplete. Please click here to update it."
+		"txtAlert": "Your address information is incomplete. Please click here to update it.",
+		"storeAddress": "Store Address",
+		"deliveryAddress": "Delivery Address"
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAYMENT",
-		"txtFillCard": "Fill in the card details"
+		"txtFillCard": "Fill in card details",
+		"cardType": "CREDIT CARD",
+		"cardNumber": "Card number",
+		"holder": "Cardholder",
+		"cvv": "CVV",
+		"validThru": "Valid thru",
+		"installments": "Installments",
+		"instantApproval": "Instant approval",
+		"giftCardPayment": "Gift card payment:",
+		"code": "Code",
+		"value": "Value"
 	},
 	"userData": {
 		"txtPersonData": "PERSONAL DATA",
 		"txtMessageLeave": "Not you? Sign out"
 	},
 	"shippingMethods": {
-		"txtSelectDelivery": "How do you want to receive your product?"
+		"txtSelectDelivery": "How would you like to receive your product?"
 	},
 	"giftCardInput": {
 		"txtHideGiftCard": "Hide Gift Card",
@@ -121,16 +160,16 @@
 	},
 	"creditCard": {
 		"title": "Credit Card",
-		"labelCardNumber": "Card Number",
-		"labelName": "Cardholder Name",
-		"labelValidity": "Validity",
+		"labelCardNumber": "Card number",
+		"labelName": "Cardholder name",
+		"labelValidity": "Expiration date",
 		"labelCvv": "CVV",
 		"labelBrand": "Brand",
-		"labelInstallment": "Installment",
-		"labelBillingAddress": "Billing Address:",
-		"infoBillingAddress": "Your billing address is the same as the delivery address",
-		"labelZipCode": "Zip Code",
-		"labelAddress": "Street/Avenue",
+		"labelInstallment": "Installments",
+		"labelBillingAddress": "Billing address:",
+		"infoBillingAddress": "Your billing address is the same as delivery",
+		"labelZipCode": "ZIP code",
+		"labelAddress": "Street / Avenue",
 		"labelNumber": "Number",
 		"labelComplement": "Complement",
 		"labelNeighborhood": "Neighborhood",
@@ -140,13 +179,158 @@
 	"addressSelector": {
 		"title": "Delivery Addresses",
 		"subtitle": "Select a delivery address",
-		"noAddresses": "No addresses registered",
+		"noAddresses": "No registered addresses",
 		"addFirstAddress": "Add First Address",
 		"addNewAddress": "Add New Address",
 		"default": "Default",
 		"noReceiver": "Name not provided",
 		"loading": "Loading addresses...",
 		"selectedAddress": "Selected Address",
-		"otherAddresses": "Other Addresses"
+		"otherAddresses": "Other Addresses",
+		"edit": "Edit",
+		"today": "Today",
+		"businessHoursAvailable": "Available hours",
+		"tabs": {
+			"delivery": "Delivery",
+			"pickup": "Pickup"
+		}
+	},
+	"checkoutPages": {
+		"checkout": "Checkout",
+		"home": "Checkout - Home",
+		"freightDelivery": "Checkout - Shipping and Delivery",
+		"paymentData": "Checkout - Payment data",
+		"personalData": "Checkout - Personal data",
+		"emptyCart": "Checkout - Empty Cart"
+	},
+	"creditCardDisplay": {
+		"type": "CREDIT CARD",
+		"number": "Card number",
+		"holder": "Cardholder",
+		"validThru": "Valid thru",
+		"cvv": "CVV"
+	},
+	"otpLogin": {
+		"securityMessage": "For security reasons, enter the code sent to your email",
+		"codePlaceholder": "Code sent to email",
+		"invalidCode": "Invalid code",
+		"continue": "Continue"
+	},
+	"paymentMethods": {
+		"bankInvoice": {
+			"title": "Bank Slip"
+		},
+		"googlePay": {
+			"title": "Google Pay"
+		},
+		"instantPayment": {
+			"title": "Pix",
+			"subtitle": "Instant payment",
+			"info": "The Pix code will be shown in the next step, after reviewing your order.",
+			"discount": "3% OFF"
+		},
+		"giftCard": {
+			"title": "Gift card",
+			"invalidCode": "Invalid code",
+			"addGiftCard": "Add gift card",
+			"placeholder": "Enter the gift card code",
+			"add": "Add",
+			"remove": "Remove",
+			"remainingPayment": "Remaining payment of",
+			"combinePayment": "Please combine with another payment method",
+			"continue": "Continue"
+		},
+		"creditCard": {
+			"title": "Credit Card",
+			"remove": "Remove",
+			"securityCode": "Security code",
+			"continue": "Continue",
+			"newCard": "+ new card",
+			"confirmRemove": "Do you want to remove the card ending in",
+			"endingIn": "ending in",
+			"yes": "Yes",
+			"no": "No"
+		}
+	},
+	"creditCardBillingAddress": {
+		"title": "Billing address",
+		"sameAs": "Billing address is",
+		"shippingAddress": "delivery address",
+		"zipCode": "ZIP code",
+		"street": "Street",
+		"number": "Number",
+		"complement": "Complement",
+		"neighborhood": "Neighborhood",
+		"city": "City",
+		"state": "State"
+	},
+	"addCardForm": {
+		"header": "New card",
+		"cardNumberPlaceholder": "Enter your card number",
+		"cardNumberLabel": "Card number",
+		"cardNumberError": "Check the entered number",
+		"holderPlaceholder": "Name printed on the card",
+		"holderLabel": "Name printed on the card",
+		"validityLabel": "Validity",
+		"validityPlaceholder": "MM/YY",
+		"validityError": "Invalid date",
+		"cvvLabel": "CVV",
+		"cvvPlaceholder": "CVV",
+		"acceptedFlags": "Accepted brands:",
+		"continue": "Continue"
+	},
+	"checkoutReview": {
+		"loading": "We're preparing your purchase",
+		"title": "Review and confirm",
+		"removeUnavailable": "Delete",
+		"errorClosingOrder": "There was an error closing the order"
+	},
+	"freightGroupSelectorOptions": {
+		"title": "Choose how you want to receive these products",
+		"pickupAtStore": "Pick up at store"
+	},
+	"freightSelector": {
+		"title": "How would you like to receive your product?",
+		"changeAddress": "Change delivery address",
+		"receiveAt": "Receive at"
+	},
+	"multipleFreightSelector": {
+		"title": "How would you like to receive your product?",
+		"pickupAtStore": "Pick up at store",
+		"chooseHowToReceive": "Choose how to receive",
+		"yourProduct": "your product",
+		"yourProducts": "your products",
+		"seeMoreOptions": "See more options",
+		"changeAddress": "Change delivery address",
+		"package": "Package"
+	},
+	"shippingMethod": {
+		"title": "How do you prefer to receive your product?",
+		"sendToAddress": "Send to my address",
+		"changeDeliveryAddress": "Change delivery address",
+		"pickupOtherStore": "Pick up at another store"
+	},
+	"installments": {
+		"header": "Installments",
+		"googlePay": "Google Pay",
+		"creditCard": "Credit Card",
+		"endingIn": "ending in",
+		"withInterest": "with interest",
+		"withoutInterest": "without interest"
+	},
+	"pickupSelector": {
+		"header": "Pickup",
+		"title": "At which store do you want to pick up your product?",
+		"seeLess": "See less",
+		"seeMore": "See more"
+	},
+	"externalProviderOrderFinished": {
+		"title": "Request sent!",
+		"description": "Track your order in \"My orders\". If there was any payment issue, just click \"Try again\"!",
+		"seeMyOrders": "View my orders",
+		"tryAgain": "Try again"
+	},
+	"common": {
+		"zipCode": "ZIP code"
 	}
 }

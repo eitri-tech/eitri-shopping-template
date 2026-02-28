@@ -3,9 +3,11 @@ import { useLocalShoppingCart } from '../../../../providers/LocalCart'
 import { useEffect, useState } from 'react'
 import { resolvePostalCode } from '../../../../services/freigthService'
 import { CustomInput } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function CreditCardBillingAddress() {
 	const { cart, cardInfo, setCardInfo } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [useShippingAddress, setUseShippingAddress] = useState(true)
 
@@ -74,12 +76,14 @@ export default function CreditCardBillingAddress() {
 		if (cardInfo) {
 			return `${cardInfo.address?.street}, ${cardInfo.address?.number} - ${cardInfo.address?.neighborhood}, ${cardInfo.address?.city}`
 		}
-		return 'endereço de entrega'
+		return t('creditCardBillingAddress.shippingAddress', 'endereço de entrega')
 	}
 
 	return (
 		<View className='flex flex-col gap-2 mt-2'>
-			<Text className='text-sm font-bold'>Endereço de cobrança</Text>
+			<Text className='text-sm font-bold'>
+				{t('creditCardBillingAddress.title', 'Endereço de cobrança')}
+			</Text>
 
 			<View className='flex flex-row items-center gap-2'>
 				<Checkbox
@@ -92,14 +96,14 @@ export default function CreditCardBillingAddress() {
 				<Text
 					htmlFor='useShippingAddress'
 					className='text-sm cursor-pointer'>
-					O endereço da fatura é {getShippingAddressLabel()}
+					{`${t('creditCardBillingAddress.sameAs', 'O endereço da fatura é')} ${getShippingAddressLabel()}`}
 				</Text>
 			</View>
 
 			{!useShippingAddress && (
 				<>
 					<CustomInput
-						label='CEP'
+						label={t('creditCardBillingAddress.zipCode', 'CEP')}
 						value={cardInfo?.address?.postalCode}
 						inputMode='numeric'
 						variant='mask'
@@ -108,38 +112,38 @@ export default function CreditCardBillingAddress() {
 					/>
 
 					<CustomInput
-						label='Rua'
+						label={t('creditCardBillingAddress.street', 'Rua')}
 						value={cardInfo?.address?.street}
 						onChange={value => handleAddressChange('street', value)}
 					/>
 
 					<View className='flex flex-row gap-4'>
 						<CustomInput
-							label='Número'
+							label={t('creditCardBillingAddress.number', 'Número')}
 							value={cardInfo?.address?.number}
 							onChange={value => handleAddressChange('number', value)}
 						/>
 						<CustomInput
-							label='Complemento'
+							label={t('creditCardBillingAddress.complement', 'Complemento')}
 							value={cardInfo?.address?.complement}
 							onChange={value => handleAddressChange('complement', value)}
 						/>
 					</View>
 
 					<CustomInput
-						label='Bairro'
+						label={t('creditCardBillingAddress.neighborhood', 'Bairro')}
 						value={cardInfo?.address?.neighborhood}
 						onChange={value => handleAddressChange('neighborhood', value)}
 					/>
 
 					<View className='flex flex-row gap-4'>
 						<CustomInput
-							label='Cidade'
+							label={t('creditCardBillingAddress.city', 'Cidade')}
 							value={cardInfo?.address?.city}
 							onChange={value => handleAddressChange('city', value)}
 						/>
 						<CustomInput
-							label='Estado'
+							label={t('creditCardBillingAddress.state', 'Estado')}
 							value={cardInfo?.address?.state}
 							onChange={value => handleAddressChange('state', value)}
 						/>

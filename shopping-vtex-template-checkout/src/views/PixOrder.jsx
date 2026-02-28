@@ -14,8 +14,10 @@ import {
 	BottomInset
 } from 'shopping-vtex-template-shared'
 import { navigate } from '@/services/navigationService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function PixOrder(props) {
+	const { t } = useTranslation()
 	const [timeOut, setTimeOut] = useState(10 * 60)
 	const [pixPayload, setPixPayload] = useState(null)
 	const [showQRCode, setShowQRCode] = useState(false)
@@ -119,10 +121,10 @@ export default function PixOrder(props) {
 	if (!pixPayload) return null
 
 	return (
-		<Page title='Pix QR Code'>
+		<Page title={t('pixOrder.pageTitle', 'Pix QR Code')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Pagamento PIX'} />
+				<HeaderText text={t('pixOrder.header', 'Pagamento PIX')} />
 			</HeaderContentWrapper>
 
 			<View className='p-4 flex flex-col gap-4'>
@@ -146,19 +148,24 @@ export default function PixOrder(props) {
 							<polyline points='12 6 12 12 16 14'></polyline>
 						</svg>
 					</View>
-					<Text className='text-base-content/70 font-medium'>Com o PIX, sua compra é aprovada na hora</Text>
+					<Text className='text-base-content/70 font-medium'>
+						{t('pixOrder.approvalInfo', 'Com o PIX, sua compra é aprovada na hora')}
+					</Text>
 				</View>
 
 				{/* Valor do pagamento */}
 				<View className='bg-white rounded p-4'>
 					<Text className='text-base-content/70'>
-						Valor da compra: <Text className='font-bold'>{formatAmountInCents(cart.value)}</Text>
+						{t('pixOrder.purchaseValue', 'Valor da compra')}:{' '}
+						<Text className='font-bold'>{formatAmountInCents(cart.value)}</Text>
 					</Text>
 				</View>
 
 				{/* Código PIX */}
 				<View className='bg-white rounded p-4'>
-					<Text className='text-base font-semibold mb-3 text-base-content'>Código PIX</Text>
+					<Text className='text-base font-semibold mb-3 text-base-content'>
+						{t('pixOrder.codeTitle', 'Código PIX')}
+					</Text>
 					<CustomInput
 						value={pixPayload.code}
 						disabled
@@ -170,12 +177,12 @@ export default function PixOrder(props) {
 					{/* Botões de ação */}
 					<View className='flex flex-row gap-2'>
 						<CustomButton
-							label='Copiar código'
+							label={t('pixOrder.copyCode', 'Copiar código')}
 							className='flex-1'
 							onPress={copyCode}
 						/>
 						<CustomButton
-							label='Compartilhar'
+							label={t('pixOrder.share', 'Compartilhar')}
 							className='flex-1'
 							onPress={shareCode}
 						/>
@@ -183,7 +190,11 @@ export default function PixOrder(props) {
 
 					{/* Botão para mostrar/ocultar QR Code */}
 					<CustomButton
-						label={showQRCode ? 'Ocultar QR Code' : 'Mostrar QR Code'}
+						label={
+							showQRCode
+								? t('pixOrder.hideQrCode', 'Ocultar QR Code')
+								: t('pixOrder.showQrCode', 'Mostrar QR Code')
+						}
 						className='w-full'
 						onPress={toggleQRCode}
 					/>
@@ -203,16 +214,22 @@ export default function PixOrder(props) {
 
 				{/* Instruções */}
 				<View className='bg-white rounded p-4'>
-					<Text className='text-lg font-bold mb-3 text-base-content'>Como pagar com PIX</Text>
+					<Text className='text-lg font-bold mb-3 text-base-content'>
+						{t('pixOrder.howToPayTitle', 'Como pagar com PIX')}
+					</Text>
 					<View className='flex flex-col gap-2 mt-2'>
 						<View className='flex flex-row items-center'>
-							<Text className='text-base-content/70'>• Acesse seu Internet Banking</Text>
+							<Text className='text-base-content/70'>
+								{`• ${t('pixOrder.step1', 'Acesse seu Internet Banking')}`}
+							</Text>
 						</View>
 						<View className='flex flex-row items-center'>
-							<Text className='text-base-content/70'>• Escolha o pagamento via PIX</Text>
+							<Text className='text-base-content/70'>
+								{`• ${t('pixOrder.step2', 'Escolha o pagamento via PIX')}`}
+							</Text>
 						</View>
 						<View className='flex flex-row items-center'>
-							<Text className='text-base-content/70'>• Cole o código acima</Text>
+							<Text className='text-base-content/70'>{`• ${t('pixOrder.step3', 'Cole o código acima')}`}</Text>
 						</View>
 					</View>
 				</View>
@@ -220,14 +237,18 @@ export default function PixOrder(props) {
 				{/* Timer */}
 				<View className='flex items-center justify-center'>
 					<Text className='text-base-content/70 text-sm text-center'>
-						Tempo restante: <Text className='font-semibold'>{formatTime(timeOut)}</Text>
+						{t('pixOrder.timeRemaining', 'Tempo restante')}:{' '}
+						<Text className='font-semibold'>{formatTime(timeOut)}</Text>
 					</Text>
 				</View>
 
 				{/* Informações adicionais */}
 				<View className='px-4'>
 					<Text className='block text-sm text-base-content/70 text-center'>
-						O pagamento será processado automaticamente após a confirmação
+						{t(
+							'pixOrder.autoProcessInfo',
+							'O pagamento será processado automaticamente após a confirmação'
+						)}
 					</Text>
 				</View>
 			</View>

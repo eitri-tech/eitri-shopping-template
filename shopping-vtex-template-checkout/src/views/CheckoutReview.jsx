@@ -123,7 +123,9 @@ export default function CheckoutReview() {
 			setError({
 				state: true,
 				message:
-					ERROR_MAP[errorCode] || error.response?.data?.error?.message || 'Houve um erro ao fechar pedido'
+					ERROR_MAP[errorCode] ||
+					error.response?.data?.error?.message ||
+					t('checkoutReview.errorClosingOrder', 'Houve um erro ao fechar pedido')
 			})
 
 			setIsLoading(false)
@@ -162,20 +164,20 @@ export default function CheckoutReview() {
 	}
 
 	return (
-		<Page title='Checkout - Home'>
+		<Page title={t('checkoutPages.home', 'Checkout - Home')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
 
 			<LoadingComponent
-				text={'Estamos preparando a sua compra'}
+				text={t('checkoutReview.loading', 'Estamos preparando a sua compra')}
 				fullScreen
 				isLoading={cartIsLoading || isLoading}
 			/>
 
 			<View className='p-4'>
 				<View className='mb-2'>
-					<Text className='text-xl font-bold'>Revise e confirme</Text>
+					<Text className='text-xl font-bold'>{t('checkoutReview.title', 'Revise e confirme')}</Text>
 				</View>
 
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
@@ -196,7 +198,9 @@ export default function CheckoutReview() {
 										<Text className='text-sm font-medium'>{uItem.name}</Text>
 									</View>
 									<View onClick={() => removeUnavailableItem(uItem)}>
-										<Text className='text-sm text-red-600 font-medium'>Excluir</Text>
+										<Text className='text-sm text-red-600 font-medium'>
+											{t('checkoutReview.removeUnavailable', 'Excluir')}
+										</Text>
 									</View>
 								</View>
 							))}
@@ -226,7 +230,7 @@ export default function CheckoutReview() {
 				<View className='fixed bottom-[90px] left-0 w-full'>
 					<View className='p-4 bg-red-50 border border-red-200 rounded'>
 						<Text className='text-sm text-red-600 font-medium'>
-							{error.message || 'Houve um erro ao fechar o pedido'}
+							{error.message || t('checkoutReview.errorClosingOrder', 'Houve um erro ao fechar o pedido')}
 						</Text>
 					</View>
 					<BottomInset />
