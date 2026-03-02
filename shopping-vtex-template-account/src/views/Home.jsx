@@ -12,6 +12,7 @@ import InfoCard from '../components/InfoCard/InfoCard'
 import userIcon from '../assets/images/user.svg'
 import bookmarkIcon from '../assets/images/bookmark-01.svg'
 import boxIcon from '../assets/images/box-01.svg'
+import locationIcon from '../assets/images/location.svg'
 
 export default function Home(props) {
 	const PAGE = 'Minha Conta'
@@ -130,6 +131,11 @@ export default function Home(props) {
 								? navigate(PAGES.ORDER_LIST)
 								: navigate(PAGES.SIGNIN, { redirectTo: PAGES.ORDER_LIST })
 						}}
+					/>
+					<ProfileCardButton
+						label='Find a Store'
+						icon={locationIcon}
+						onClick={() => navigate(PAGES.STORE_LOCATOR)}
 					/>
 				</View>
 			</View>
