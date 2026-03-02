@@ -41,7 +41,7 @@ export default function CartSummary() {
 
 			{/* Final total */}
 			<View className='flex flex-row w-full justify-between items-center pt-3 border-t border-neutral-300'>
-				<Text className='text-neutral-700 font-bold'>{t('finishCart.txtTotal')}</Text>
+				<Text className='text-neutral-700 font-bold'>{t('finishCart.txtTotal', 'Total')}</Text>
 				<Text className='font-bold text-primary-700'>{formatAmountInCents(finalTotal)}</Text>
 			</View>
 		</View>

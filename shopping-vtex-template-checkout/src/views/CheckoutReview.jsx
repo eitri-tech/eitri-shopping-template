@@ -184,7 +184,7 @@ export default function CheckoutReview() {
 				<>
 					{unavailableItems.length > 0 && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems')}</Text>
+							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}</Text>
 
 							{unavailableItems.map(uItem => (
 								<View
@@ -243,7 +243,7 @@ export default function CheckoutReview() {
 					<View className='p-4'>
 						<CustomButton
 							disabled={!isReadyToPay()}
-							label={t('finishCart.labelButton')}
+							label={t('finishCart.labelButton', 'Finalizar Compra')}
 							onPress={runPaymentScript}
 						/>
 					</View>

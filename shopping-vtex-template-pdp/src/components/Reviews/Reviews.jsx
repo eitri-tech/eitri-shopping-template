@@ -41,7 +41,7 @@ export default function Reviews(props) {
 										<Loading />
 									) : (
 										<Text className='font-bold text-primary-content'>
-											{t('review.seeMoreReviews')}
+											{t('review.seeMoreReviews', 'Ver mais avaliações')}
 										</Text>
 									)}
 								</View>

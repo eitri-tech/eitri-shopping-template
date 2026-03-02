@@ -17,7 +17,7 @@ export default function EmptyCart() {
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<View onClick={goToCartman}>
-					<HeaderText text={t('emptyCart.title')} />
+					<HeaderText text={t('emptyCart.title', 'Finalizar Pedido')} />
 				</View>
 			</HeaderContentWrapper>
 
@@ -32,14 +32,14 @@ export default function EmptyCart() {
 
 				<View className='flex flex-col justify-start self-center'>
 					<Text className='font-bold text-primary-base text-xl text-center'>
-						{t('emptyCart.txtEmptyCart')}
+						{t('emptyCart.txtEmptyCart', 'Seu carrinho está vazio')}
 					</Text>
-					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem')}</Text>
+					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem', 'Adicione produtos no seu carrinho')}</Text>
 				</View>
 
 				<CustomButton
 					className={'w-full'}
-					label={t('emptyCart.labelBack')}
+					label={t('emptyCart.labelBack', 'Voltar')}
 					onPress={closeEitriApp}
 				/>
 			</View>

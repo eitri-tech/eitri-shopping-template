@@ -11,7 +11,7 @@ export default function Supplier(props) {
 		<View>
 			<View onClick={() => toggleCollapsedState()}>
 				<View className='flex items-center justify-between w-full'>
-					<Text className='text-lg font-bold'>{t('supplier.txtSupplier')}</Text>
+					<Text className='text-lg font-bold'>{t('supplier.txtSupplier', 'Fornecedor')}</Text>
 					<View>{/* <Icon iconKey={collapsed ? 'chevron-down' : 'chevron-up'} width={26} /> */}</View>
 				</View>
 			</View>

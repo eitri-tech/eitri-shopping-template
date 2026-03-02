@@ -28,7 +28,7 @@ export default function MainDescription(props) {
 
 				if (betterInstallment.NumberOfInstallments === 1) return ''
 
-				return `${t('mainDescription.txtUntil')} ${betterInstallment.NumberOfInstallments}x ${t('mainDescription.txtOf')} ${formatAmount(betterInstallment.Value, locale, currency)}`
+				return `${t('mainDescription.txtUntil', 'ou em até')} ${betterInstallment.NumberOfInstallments}x ${t('mainDescription.txtOf', 'de')} ${formatAmount(betterInstallment.Value, locale, currency)}`
 			}
 			return ''
 		} catch (error) {

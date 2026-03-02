@@ -79,7 +79,7 @@ export default function AddressSelector(props) {
 		<Page title={PAGE}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('addNewShippingAddress.title')} />
+				<HeaderText text={t('addNewShippingAddress.title', 'Entrega')} />
 			</HeaderContentWrapper>
 
 			<Loading

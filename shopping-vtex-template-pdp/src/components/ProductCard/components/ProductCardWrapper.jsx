@@ -129,7 +129,7 @@ export default function ProductCardWrapper(props) {
 				isOnWishlist={isOnWishlist}
 				loadingWishlistOp={loadingWishlistOp}
 				loadingCartOp={loadingCartOp}
-				actionLabel={isItemOnCart() ? t('productCardVertical.cart') : t('productCardVertical.buy')}
+				actionLabel={isItemOnCart() ? t('productCardVertical.cart', 'ver Carrinho') : t('productCardVertical.buy', 'comprar')}
 				width={width}
 				onPressOnCard={onPressOnCard}
 				onPressCartButton={onPressCartButton}
@@ -147,7 +147,7 @@ export default function ProductCardWrapper(props) {
 			price={formatPrice(sellerDefault?.commertialOffer.Price)}
 			installments={formatInstallments(sellerDefault)}
 			isInCart={isItemOnCart()}
-			actionLabel={isItemOnCart() ? t('productCardVertical.cart') : t('productCardVertical.buy')}
+			actionLabel={isItemOnCart() ? t('productCardVertical.cart', 'ver Carrinho') : t('productCardVertical.buy', 'comprar')}
 			isOnWishlist={isOnWishlist}
 			loadingWishlistOp={loadingWishlistOp}
 			loadingCartOp={loadingCartOp}

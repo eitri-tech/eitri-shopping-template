@@ -27,8 +27,8 @@ export default function DeliveryData(props) {
 					isFilled={true}
 					title={
 						currentDelivery?.isPickupInPoint
-							? t('deliveryData.txtWithdrawal')
-							: t('deliveryData.txtDelivery')
+							? t('deliveryData.txtWithdrawal', 'RETIRADA')
+							: t('deliveryData.txtDelivery', 'ENTREGA')
 					}
 					icon={currentDelivery?.isPickupInPoint ? iconStore : iconTruck}
 					onPress={onPressMainAction}>
@@ -172,7 +172,7 @@ export default function DeliveryData(props) {
 										<Text className='text-xs text-neutral-600'>
 											{`${currentDelivery?.address?.street}, ${
 												currentDelivery?.address?.number === null
-													? t('deliveryData.txtNoNumber')
+													? t('deliveryData.txtNoNumber', 'sem número')
 													: currentDelivery?.address?.number
 											}${currentDelivery?.address?.complement ? ` - ${currentDelivery?.address?.complement}` : ''}`}
 										</Text>

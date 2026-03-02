@@ -49,8 +49,8 @@ export default function PersonalData() {
 			id: 'firstName',
 			label: 'firstName',
 			type: 'string',
-			title: t('personalData.frmName'),
-			placeholder: t('personalData.placeholderName'),
+			title: t('personalData.frmName', 'Nome'),
+			placeholder: t('personalData.placeholderName', 'Digite seu nome'),
 			inputMode: 'string',
 			requeriedForPersonal: true,
 			requeriedForCorporate: true,
@@ -60,8 +60,8 @@ export default function PersonalData() {
 		{
 			label: 'lastName',
 			type: 'string',
-			title: t('personalData.frmLastName'),
-			placeholder: t('personalData.placeholderLastName'),
+			title: t('personalData.frmLastName', 'Sobrenome'),
+			placeholder: t('personalData.placeholderLastName', 'Digite seu sobrenome'),
 			inputMode: 'string',
 			requeriedForPersonal: true,
 			requeriedForCorporate: true,
@@ -83,8 +83,8 @@ export default function PersonalData() {
 		{
 			label: 'phone',
 			type: 'string',
-			title: t('personalData.frmPhone'),
-			placeholder: t('personalData.placeholderPhone'),
+			title: t('personalData.frmPhone', 'Telefone'),
+			placeholder: t('personalData.placeholderPhone', 'Digite seu telefone'),
 			inputMode: 'tel',
 			mask: '(99) 99999-9999',
 			requeriedForPersonal: true,
@@ -95,8 +95,8 @@ export default function PersonalData() {
 		{
 			label: 'corporateName',
 			type: 'string',
-			title: t('personalData.frmCorporateName'),
-			placeholder: t('personalData.placeholderCorporateName'),
+			title: t('personalData.frmCorporateName', 'Razão Social'),
+			placeholder: t('personalData.placeholderCorporateName', 'Digite sua razão social'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -107,8 +107,8 @@ export default function PersonalData() {
 		{
 			label: 'tradeName',
 			type: 'string',
-			title: t('personalData.frmFantasyName'),
-			placeholder: t('personalData.placeholderFantasyName'),
+			title: t('personalData.frmFantasyName', 'Nome Fantasia'),
+			placeholder: t('personalData.placeholderFantasyName', 'Digite seu nome fantasia'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -119,8 +119,8 @@ export default function PersonalData() {
 		{
 			label: 'corporateDocument',
 			type: 'string',
-			title: t('personalData.frmCorporateDocument'),
-			placeholder: t('personalData.placeholderCorporateDocument'),
+			title: t('personalData.frmCorporateDocument', 'CNPJ'),
+			placeholder: t('personalData.placeholderCorporateDocument', 'Digite seu CNPJ'),
 			inputMode: 'numeric',
 			corporateField: true,
 			mask: '99.999.999/9999-99',
@@ -132,8 +132,8 @@ export default function PersonalData() {
 		{
 			label: 'corporatePhone',
 			type: 'string',
-			title: t('personalData.frmCorporatePhone'),
-			placeholder: t('personalData.placeholderCorporatePhone'),
+			title: t('personalData.frmCorporatePhone', 'Telefone'),
+			placeholder: t('personalData.placeholderCorporatePhone', 'Digite seu telefone'),
 			inputMode: 'tel',
 			mask: '(99) 99999-9999',
 			corporateField: true,
@@ -145,8 +145,8 @@ export default function PersonalData() {
 		{
 			label: 'stateInscription',
 			type: 'string',
-			title: t('personalData.frmStateInscription'),
-			placeholder: t('personalData.placeholderStateInscription'),
+			title: t('personalData.frmStateInscription', 'Inscrição Estadual'),
+			placeholder: t('personalData.placeholderStateInscription', 'Digite sua inscrição estadual'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -267,7 +267,7 @@ export default function PersonalData() {
 			personalData?.email !== '' &&
 			personalData?.firstName !== '' &&
 			personalData?.lastName !== '' &&
-			// verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
+			verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
 			personalData?.phone !== ''
 		)
 	}
@@ -292,10 +292,7 @@ export default function PersonalData() {
 						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
 					</Text>
 					<Text className='block text-center'>
-						{t(
-							'personalData.enterEmailSubtitle',
-							'Vamos verificar se você já fez alguma compra com a gente'
-						)}
+						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
 					</Text>
 				</View>
 
@@ -304,12 +301,12 @@ export default function PersonalData() {
 						<View className='w-3/4'>
 							<CustomInput
 								autoFocus={true}
-								label={t('personalData.frmEmail')}
+								label={t('personalData.frmEmail', 'Email')}
 								value={personalData['email'] || ''}
 								onChange={e => {
 									handleFormDataChange('email', e.target?.value?.toLowerCase())
 								}}
-								placeholder={t('personalData.placeholderEmail')}
+								placeholder={t('personalData.placeholderEmail', 'Digite seu email')}
 								inputMode={'email'}
 							/>
 						</View>
@@ -349,7 +346,7 @@ export default function PersonalData() {
 								className='mt-3'
 								onClick={handleLegalPerson}>
 								<Text className='text-primary font-bold'>
-									{isLegalPerson ? t('personalData.labelPerson') : t('personalData.labelCorporate')}
+									{isLegalPerson ? t('personalData.labelPerson', 'Sou pessoa física') : t('personalData.labelCorporate', 'Sou pessoa jurídica')}
 								</Text>
 							</View>
 						</>
@@ -363,7 +360,7 @@ export default function PersonalData() {
 					offSetHeight={77}>
 					<CustomButton
 						disabled={!handleDataFilled()}
-						label={t('personalData.labelButton')}
+						label={t('personalData.labelButton', 'Continuar')}
 						onPress={setUserData}
 					/>
 				</FixedBottom>

@@ -26,7 +26,7 @@ export default function ActionButton(props) {
 				<View className='p-4'>
 					<CustomButton
 						disabled={!isValidToProceed()}
-						label={t('cartSummary.labelFinish')}
+						label={t('cartSummary.labelFinish', 'Finalizar Compra')}
 						onPress={goToCheckout}
 					/>
 				</View>

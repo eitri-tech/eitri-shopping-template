@@ -94,7 +94,7 @@ export default function FreightSelector(props) {
 			<FixedBottom className='flex flex-col align-center gap-4'>
 				<CustomButton
 					disabled={!deliveryOptions?.some(item => item.isCurrent)}
-					label={t('addNewShippingAddress.labelButton')}
+					label={t('addNewShippingAddress.labelButton', 'Continuar')}
 					onClick={submit}
 				/>
 				<View onClick={() => navigate('AddressSelector', {}, true)}>

@@ -117,7 +117,8 @@
 		"errorCity": "Enter city",
 		"errorState": "Enter state",
 		"errorReceiverName": "Enter receiver name",
-		"errorNumber": "Enter number"
+		"errorNumber": "Enter number",
+		"errorPostalCodeInvalid": "ZIP code must have 8 digits"
 	},
 	"simpleCard": {
 		"txtEdit": "CHANGE"
@@ -190,6 +191,9 @@
 		"edit": "Edit",
 		"today": "Today",
 		"businessHoursAvailable": "Available hours",
+		"pickupTitle": "Pickup Points",
+		"pickupSubtitle": "Select a pickup point",
+		"noPickupPoints": "No pickup points available",
 		"tabs": {
 			"delivery": "Delivery",
 			"pickup": "Pickup"

@@ -84,7 +84,7 @@ export default function Home(props) {
 	return (
 		<Page title={PAGE}>
 			<HeaderContentWrapper className='justify-between'>
-				<HeaderText text={t('home.labelMyAccount')} />
+				<HeaderText text={t('home.labelMyAccount', 'Minha conta')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -95,11 +95,11 @@ export default function Home(props) {
 			{!isLoading && (isLogged ? <InfoCard customerData={customerData} /> : <LoginCard />)}
 
 			<View className='px-4 mt-2 mb-2'>
-				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData')}</Text>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData', 'Dados pessoais')}</Text>
 
 				<View className='flex flex-col gap-3 mt-2'>
 					<ProfileCardButton
-						label={t('home.labelMyAccount')}
+						label={t('home.labelMyAccount', 'Minha conta')}
 						icon={userIcon}
 						onClick={() => {
 							isLogged
@@ -108,7 +108,7 @@ export default function Home(props) {
 						}}
 					/>
 					<ProfileCardButton
-						label={t('home.labelMyFavorites')}
+						label={t('home.labelMyFavorites', 'Meus favoritos')}
 						icon={bookmarkIcon}
 						onClick={() => {
 							isLogged
@@ -120,10 +120,10 @@ export default function Home(props) {
 			</View>
 
 			<View className='px-4 mt-6 mb-2'>
-				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbOrders')}</Text>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbOrders', 'Pedidos')}</Text>
 				<View className='flex flex-col gap-3 mt-2'>
 					<ProfileCardButton
-						label={t('home.labelMyOrders')}
+						label={t('home.labelMyOrders', 'Meus pedidos')}
 						icon={boxIcon}
 						onClick={() => {
 							isLogged
@@ -138,7 +138,7 @@ export default function Home(props) {
 				<View className='px-4 py-6 mt-4'>
 					<CustomButton
 						variant='outlined'
-						label={t('home.labelLeave')}
+						label={t('home.labelLeave', 'Sair')}
 						onPress={_doLogout}
 					/>
 				</View>

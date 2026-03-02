@@ -55,7 +55,7 @@ export default function SimpleCard(props) {
 							onClick={onPress}
 							className='mt-2'>
 							<Text className='uppercase text-xs text-primary-700'>
-								{mainActionLabel || t('simpleCard.txtEdit')}
+								{mainActionLabel || t('simpleCard.txtEdit', 'ALTERAR')}
 							</Text>
 						</View>
 					</View>
