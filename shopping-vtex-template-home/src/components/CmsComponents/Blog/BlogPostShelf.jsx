@@ -38,19 +38,15 @@ export default function BlogPostShelf(props) {
 	}
 
 	return (
-		<SwiperContent
-			paddingHorizontal='large'
-			title={data.title}
-			gap='16px'>
+		<SwiperContent title={data.title}>
 			{isLoading ? (
 				<View className='w-screen flex flex-row justify-center'>
 					<Loading />
 				</View>
 			) : (
 				<>
-					{posts.map((post, index) => {
-						let postImg = ''
-						postImg = post._embedded['wp:featuredmedia'][0]?.source_url
+					{posts.map(post => {
+						const postImg = post._embedded?.['wp:featuredmedia']?.[0]?.source_url
 
 						return (
 							<BlogCard
@@ -65,8 +61,8 @@ export default function BlogPostShelf(props) {
 					<View
 						className='flex flex-col justify-center items-center w-[120px] h-full p-4'
 						onClick={navigateToSeeMore}>
-						<Text className='text-primary-500 font-bold mb-[4px]'>{t('blogPostShelf.seeMore')}</Text>
-						<Text className='text-primary-500 font-bold'>+</Text>
+						<Text className='text-primary font-bold mb-[4px]'>{t('blogPostShelf.seeMore')}</Text>
+						<Text className='text-primary font-bold'>+</Text>
 					</View>
 				</>
 			)}

@@ -10,7 +10,7 @@ export default function SwiperContent(props) {
 				</View>
 			)}
 			<View className='flex flex-row overflow-x-scroll'>
-				<View className={`flex flex-row gap-4 px-4`}>{children}</View>
+				<View className='flex flex-row gap-4 px-4 py-1'>{children}</View>
 			</View>
 		</View>
 	)
