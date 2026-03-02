@@ -46,15 +46,15 @@ bottom-tab-view-simulation:
       initialization-params:
         type: "string"
         value: "tabIndex=2"
-    - slug: "shopping-vtex-template-home"
-      title: "Ofertas"
-      initialization-params:
-        type: "string"
-        value: "tabIndex=3&route=LandingPage"
+    # - slug: "shopping-vtex-template-home"
+    #   title: "Ofertas"
+    #   initialization-params:
+    #     type: "string"
+    #     value: "tabIndex=3&route=LandingPage"
     - slug: "shopping-vtex-template-account"
       title: "Perfil"
       initialization-params:
         type: "string"
-        value: "tabIndex=4"
+        value: "tabIndex=3"
 
 application-id: 26d271df-0b10-46f6-9542-6facf96be5a2
