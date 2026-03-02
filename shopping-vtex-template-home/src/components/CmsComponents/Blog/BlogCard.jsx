@@ -6,21 +6,21 @@ export default function BlogCard(props) {
 	const publishedDate = new Date(post?.date).toLocaleDateString('pt-BR')
 
 	const excerpt = post.excerpt.rendered.replace('<p>', '').replace('</p>', '')
+	const isFullWidth = width === '100%'
+
 	return (
 		<View
 			key={post.id}
-			className={`min-h-[290px] w-[283px]`}
+			className={`min-h-[290px] ${isFullWidth ? 'w-full' : 'w-[283px]'}`}
 			onClick={handleClick}>
 			<View className='flex flex-col w-full rounded-2xl shadow-md'>
 				<View className='relative'>
-					<View className=''>
-						<Image
-							src={postImg}
-							className={`w-full h-[168px] rounded object-cover object-top`}
-							alt={post.title.rendered}
-						/>
-					</View>
-					<View className='px-2 bg-blue-500 rounded-full absolute bottom-2 left-4 w-fit'>
+					<Image
+						src={postImg}
+						className='w-full h-[168px] rounded object-cover object-top'
+						alt={post.title.rendered}
+					/>
+					<View className='px-2 bg-primary rounded-full absolute bottom-2 left-4 w-fit'>
 						<Text className='text-white !text-[14px]'>{category}</Text>
 					</View>
 				</View>
@@ -30,8 +30,7 @@ export default function BlogCard(props) {
 					</View>
 
 					<View>
-						<Text
-							className={`line-clamp-3 max-w-[${textWidth || '231px'}] text-support-01 text-sm mb-[4px] font-normal`}>
+						<Text className={`line-clamp-3 ${isFullWidth ? 'w-full' : `max-w-[${textWidth || '231px'}]`} text-support-01 text-sm mb-[4px] font-normal`}>
 							{excerpt}
 						</Text>
 					</View>
