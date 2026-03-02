@@ -90,11 +90,11 @@ export default function EditProfile(props) {
 		if (!user.gender) {
 			newErrors.gender = t('editProfile.errors.genderRequired', 'Gênero é obrigatório')
 		}
-
-		// Validar CPF
-		if (!user.document || user.document.trim() === '') {
-			newErrors.document = t('editProfile.errors.documentRequired', 'CPF é obrigatório')
-		}
+		//
+		// // Validar CPF
+		// if (!user.document || user.document.trim() === '') {
+		// 	newErrors.document = t('editProfile.errors.documentRequired', 'CPF é obrigatório')
+		// }
 
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
@@ -173,9 +173,7 @@ export default function EditProfile(props) {
 			user.birthDate.trim() !== '' &&
 			user.homePhone &&
 			user.homePhone.trim() !== '' &&
-			user.gender &&
-			user.document &&
-			user.document.trim() !== ''
+			user.gender
 		)
 	}
 
@@ -217,7 +215,9 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate', 'Data de nascimento')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>
+						{t('editProfile.lbBirthdate', 'Data de nascimento')} *
+					</Text>
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}
@@ -273,20 +273,20 @@ export default function EditProfile(props) {
 					{errors.gender && <Text className='text-red-500 text-xs mt-1'>{errors.gender}</Text>}
 				</View>
 
-				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF', 'CPF')} *</Text>
-					<CustomInput
-						backgroundColor='background-color'
-						placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}
-						value={user.document || ''}
-						inputMode='numeric'
-						variant='mask'
-						onChange={value => handleInputChange('document', value)}
-						mask='999.999.999-99'
-						error={errors.document}
-					/>
-					{errors.document && <Text className='text-red-500 text-xs mt-1'>{errors.document}</Text>}
-				</View>
+				{/*<View>*/}
+				{/*	<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF', 'CPF')} *</Text>*/}
+				{/*	<CustomInput*/}
+				{/*		backgroundColor='background-color'*/}
+				{/*		placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}*/}
+				{/*		value={user.document || ''}*/}
+				{/*		inputMode='numeric'*/}
+				{/*		variant='mask'*/}
+				{/*		onChange={value => handleInputChange('document', value)}*/}
+				{/*		mask='999.999.999-99'*/}
+				{/*		error={errors.document}*/}
+				{/*	/>*/}
+				{/*	{errors.document && <Text className='text-red-500 text-xs mt-1'>{errors.document}</Text>}*/}
+				{/*</View>*/}
 
 				{showNotification && (
 					<View className='bg-green-500 text-white px-4 py-3 rounded shadow-lg flex flex-row items-center justify-between'>
