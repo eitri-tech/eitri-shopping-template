@@ -57,7 +57,7 @@ export default function CartItem(props) {
 	}
 
 	const handleRemoveCartItemIntention = () => {
-		setModalRemoveItemText(`Deseja remover ${item.name} do carrinho?`)
+		setModalRemoveItemText(`Do you want to remove ${item.name} from the cart?`)
 		setShowModalRemoveItem(true)
 	}
 
