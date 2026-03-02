@@ -14,7 +14,7 @@ export default function Categories() {
 	}, [])
 
 	const loadCms = async () => {
-		const { sections } = await getCmsContent('categories', 'categorias')
+		const { sections } = await getCmsContent('categories', 'category')
 		setCmsContent(sections)
 		setIsLoading(false)
 	}

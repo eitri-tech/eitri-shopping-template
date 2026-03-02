@@ -64,11 +64,11 @@ export default function ProductCardFullImage(props) {
 
 						<Text className='font-bold text-primary-700 text'>{price}</Text>
 
-						{installments ? (
-							<Text className='font-bold text-neutral-500 text-xs'>{installments}</Text>
-						) : (
-							<View className='h-[16px]' />
-						)}
+						{/*{installments ? (*/}
+						{/*	<Text className='font-bold text-neutral-500 text-xs'>{installments}</Text>*/}
+						{/*) : (*/}
+						{/*	<View className='h-[16px]' />*/}
+						{/*)}*/}
 					</View>
 				</View>
 

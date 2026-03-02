@@ -68,18 +68,18 @@ export default function PersonalData() {
 			pristine: true,
 			error: ''
 		},
-		{
-			label: 'document',
-			type: 'string',
-			title: t('personalData.frmTaxpayerId'),
-			placeholder: t('personalData.placeholderTaxpayerId'),
-			inputMode: 'numeric',
-			mask: '999.999.999-99',
-			requeriedForPersonal: true,
-			requeriedForCorporate: false,
-			pristine: true,
-			error: ''
-		},
+		// {
+		// 	label: 'document',
+		// 	type: 'string',
+		// 	title: t('personalData.frmTaxpayerId'),
+		// 	placeholder: t('personalData.placeholderTaxpayerId'),
+		// 	inputMode: 'numeric',
+		// 	mask: '999.999.999-99',
+		// 	requeriedForPersonal: true,
+		// 	requeriedForCorporate: false,
+		// 	pristine: true,
+		// 	error: ''
+		// },
 		{
 			label: 'phone',
 			type: 'string',
@@ -267,7 +267,7 @@ export default function PersonalData() {
 			personalData?.email !== '' &&
 			personalData?.firstName !== '' &&
 			personalData?.lastName !== '' &&
-			verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
+			// verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
 			personalData?.phone !== ''
 		)
 	}
@@ -292,7 +292,10 @@ export default function PersonalData() {
 						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
 					</Text>
 					<Text className='block text-center'>
-						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
+						{t(
+							'personalData.enterEmailSubtitle',
+							'Vamos verificar se você já fez alguma compra com a gente'
+						)}
 					</Text>
 				</View>
 

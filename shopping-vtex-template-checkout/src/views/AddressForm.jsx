@@ -24,12 +24,9 @@ function PostalCodeInput({ value, onChange, isLoading, t, error, touched, onBlur
 				<CustomInput
 					label={t('addNewShippingAddress.txtZipCode', 'Insira seu CEP')}
 					inputMode='numeric'
-					placeholder='12345-678'
 					value={value}
 					onChange={onChange}
 					autoFocus={true}
-					variant='mask'
-					mask='99999-999'
 					disabled={isLoading}
 					className={error && touched ? 'border-red-500' : ''}
 					onBlur={onBlur}
@@ -77,17 +74,17 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 				</View>
 			</View>
 			<View>
-				<CustomInput
-					label={t('addNewShippingAddress.frmNeighborhood')}
-					placeholder={''}
-					value={address.neighborhood || ''}
-					onChange={e => handleAddressChange('neighborhood', e)}
-					className={errors.neighborhood && touched.neighborhood ? 'border-red-500' : ''}
-					onBlur={() => onBlur('neighborhood')}
-				/>
-				{errors.neighborhood && touched.neighborhood && (
-					<Text className='text-xs text-red-500'>{errors.neighborhood}</Text>
-				)}
+				{/*<CustomInput*/}
+				{/*	label={t('addNewShippingAddress.frmNeighborhood')}*/}
+				{/*	placeholder={''}*/}
+				{/*	value={address.neighborhood || ''}*/}
+				{/*	onChange={e => handleAddressChange('neighborhood', e)}*/}
+				{/*	className={errors.neighborhood && touched.neighborhood ? 'border-red-500' : ''}*/}
+				{/*	onBlur={() => onBlur('neighborhood')}*/}
+				{/*/>*/}
+				{/*{errors.neighborhood && touched.neighborhood && (*/}
+				{/*	<Text className='text-xs text-red-500'>{errors.neighborhood}</Text>*/}
+				{/*)}*/}
 			</View>
 			<View className='flex gap-4'>
 				<View className='w-1/2'>
@@ -131,15 +128,9 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 }
 
 function validateAddress(address, t) {
-	const postalCodeDigits = address.postalCode?.replace(/\D/g, '') || ''
 	return {
-		postalCode: !address.postalCode
-			? t('addNewShippingAddress.errorPostalCode')
-			: postalCodeDigits.length !== 8
-				? t('addNewShippingAddress.errorPostalCodeInvalid', 'CEP deve ter 8 dígitos')
-				: '',
 		street: !address.street ? t('addNewShippingAddress.errorStreet') : '',
-		neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood') : '',
+		// neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood') : '',
 		city: !address.city ? t('addNewShippingAddress.errorCity') : '',
 		state: !address.state ? t('addNewShippingAddress.errorState') : '',
 		receiverName: !address.receiverName ? t('addNewShippingAddress.errorReceiverName') : '',
@@ -163,7 +154,7 @@ export default function AddressForm(props) {
 		neighborhood: '',
 		city: '',
 		state: '',
-		country: 'BRA',
+		country: 'USA',
 		geoCoordinates: [],
 		number: '',
 		complement: '',
@@ -187,13 +178,13 @@ export default function AddressForm(props) {
 		}
 	}, [addressId])
 
-	useEffect(() => {
-		const postalCodeDigits = address?.postalCode?.replace(/\D/g, '') || ''
-
-		if (postalCodeDigits.length === 8) {
-			submitZipCode(address?.postalCode)
-		}
-	}, [address?.postalCode])
+	// useEffect(() => {
+	// 	const postalCodeDigits = address?.postalCode?.replace(/\D/g, '') || ''
+	//
+	// 	if (postalCodeDigits.length === 8) {
+	// 		submitZipCode(address?.postalCode)
+	// 	}
+	// }, [address?.postalCode])
 
 	const errors = useMemo(() => validateAddress(address, t), [address, t])
 
@@ -323,6 +314,35 @@ export default function AddressForm(props) {
 			/>
 
 			<View className='flex flex-col gap-2 p-4 m-4 bg-white rounded shadow-sm border border-gray-300'>
+				<View>
+					<View className='mb-1'>
+						<Text className='text-xs font-bold'>Country</Text>
+					</View>
+					<Select
+						value={address?.country}
+						className={'w-full rounded border-gray-300 border-solid border-2 focus:outline-none'}
+						placeholder='Country'>
+						<Select.Item value='AUS'>Australia</Select.Item>
+						<Select.Item value='CAN'>Canada</Select.Item>
+						<Select.Item value='CHN'>China</Select.Item>
+						<Select.Item value='DOM'>Dominican Republic</Select.Item>
+						<Select.Item value='HKG'>Hong Kong</Select.Item>
+						<Select.Item value='JPN'>Japan</Select.Item>
+						<Select.Item value='KOR'>Korea, Republic of</Select.Item>
+						<Select.Item value='MEX'>Mexico</Select.Item>
+						<Select.Item value='NZL'>New Zealand</Select.Item>
+						<Select.Item value='PRI'>Puerto Rico</Select.Item>
+						<Select.Item value='LCA'>Saint Lucia</Select.Item>
+						<Select.Item value='TWN'>Taiwan</Select.Item>
+						<Select.Item value='ARE'>United Arab Emirates</Select.Item>
+						<Select.Item
+							value='USA'
+							selected=''>
+							United States
+						</Select.Item>
+					</Select>
+				</View>
+
 				<PostalCodeInput
 					value={address?.postalCode}
 					onChange={onChangePostalCodeInput}

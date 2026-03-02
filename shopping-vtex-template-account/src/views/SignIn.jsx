@@ -226,7 +226,6 @@ export default function SignIn(props) {
 								onChange={e => setUsername(e?.target?.value)}
 							/>
 						</View>
-
 						<View className='mt-4'>
 							<CustomInput
 								placeholder={t('signIn.formPass', 'Senha')}
@@ -236,7 +235,6 @@ export default function SignIn(props) {
 								onChange={e => setPassword(e.target.value)}
 							/>
 						</View>
-
 						<View className='mt-4'>
 							<CustomButton
 								width='100%'
@@ -244,19 +242,22 @@ export default function SignIn(props) {
 								onPress={handleLogin}
 							/>
 						</View>
-
-						<View className='mt-4'>
-							<CustomButton
-								width='100%'
-								variant='outlined'
-								label={t('signIn.labelAccessWithCode', 'Login com código de acesso')}
-								onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)}
-							/>
-						</View>
+						{loginProviders?.accessKeyAuthentication && (
+							<View className='mt-4'>
+								<CustomButton
+									width='100%'
+									variant='outlined'
+									label={t('signIn.labelAccessWithCode', 'Login com código de acesso')}
+									onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)}
+								/>
+							</View>
+						)}
 
 						<View className='mt-8 flex justify-center'>
 							<View onClick={goToPasswordReset}>
-								<Text className='w-full text-primary'>{t('signIn.forgotPass', 'Esqueceu a senha?')}</Text>
+								<Text className='w-full text-primary'>
+									{t('signIn.forgotPass', 'Esqueceu a senha?')}
+								</Text>
 							</View>
 						</View>
 						<View className='mt-4 flex justify-center'>
@@ -264,7 +265,9 @@ export default function SignIn(props) {
 								onClick={() => {
 									navigate(PAGES.SIGNUP)
 								}}>
-								<Text className='w-full text-primary'>{t('signIn.noRegister', 'Não tenho cadastro')}</Text>
+								<Text className='w-full text-primary'>
+									{t('signIn.noRegister', 'Não tenho cadastro')}
+								</Text>
 							</View>
 						</View>
 					</>

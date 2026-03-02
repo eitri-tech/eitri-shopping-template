@@ -62,7 +62,7 @@ export const cartHasCustomerData = cart => {
 		cart.clientProfileData.email &&
 		cart.clientProfileData.firstName &&
 		cart.clientProfileData.lastName &&
-		cart.clientProfileData.document &&
+		// cart.clientProfileData.document &&
 		cart.clientProfileData.phone
 	)
 }

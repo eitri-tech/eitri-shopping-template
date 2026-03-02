@@ -16,7 +16,7 @@ export default function CartItem(props) {
 	const [modalRemoveItemText, setModalRemoveItemText] = useState('')
 	const [loadingItemQuantity, setLoadingItemQuantity] = useState(false)
 
-	const resizedImageUrl = item.imageUrl.replace(/\/(\d+)-\d+-\d+\//, '/$1-200-200/')
+	const resizedImageUrl = item.imageUrl.replace(/\/(\d+)-\d+-\d+\//, '/$1-200-200/').replace('http:', 'https:')
 
 	useEffect(() => {
 		checkWishlist()
