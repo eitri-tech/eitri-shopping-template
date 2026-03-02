@@ -45,7 +45,7 @@ export default function UserData(props) {
 	return (
 		<>
 			<SimpleCard
-				title={t('userData.txtPersonData')}
+				title={t('userData.txtPersonData', 'DADOS PESSOAIS')}
 				isFilled={cart?.clientProfileData?.email}
 				onPress={onPressMainAction}
 				icon={personalIcon}>
@@ -55,7 +55,7 @@ export default function UserData(props) {
 						{cart?.clientProfileData?.email && !cart.canEditData && (
 							<View onClick={clearClientData}>
 								<Text className='text-xs text-primary-300 underline'>
-									{t('userData.txtMessageLeave')}
+									{t('userData.txtMessageLeave', 'Não é você? Sair')}
 								</Text>
 							</View>
 						)}

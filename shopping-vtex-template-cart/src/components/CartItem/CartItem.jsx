@@ -191,7 +191,7 @@ export default function CartItem(props) {
 					<View className='flex flex-col justify-center items-center'>
 						<View className={'h-[10px]'} />
 						<Text className='text-center text-tertiary-500'>
-							{message.text || t('cartItem.txtMessageUnavailable')}
+							{message.text || t('cartItem.txtMessageUnavailable', 'Este produto não está disponível!')}
 						</Text>
 						<View className={'h-[10px]'} />
 					</View>

@@ -15,7 +15,7 @@ export default function Description(props) {
 
 	return (
 		<CollapseWrapper
-			title={t('description.txtDescription')}
+			title={t('description.txtDescription', 'Descrição')}
 			defaltCollpased={false}>
 			<View className={`${!showMore ? 'max-h-[150px]' : ''} overflow-y-hidden relative`}>
 				<HTMLRender html={description} />
@@ -27,7 +27,7 @@ export default function Description(props) {
 			{isLongDescription && (
 				<View onClick={toggleShowMore}>
 					<Text className='underline font-bold mt-1'>
-						{showMore ? t('description.labelSeeLess') : t('description.labelSeeMore')}
+						{showMore ? t('description.labelSeeLess', 'Ver menos') : t('description.labelSeeMore', 'Ver mais')}
 					</Text>
 				</View>
 			)}

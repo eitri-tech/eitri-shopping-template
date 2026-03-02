@@ -18,13 +18,13 @@ export default function ModalConfirm(props) {
 				<Text className='text-center text-lg font-bold mb-6 text-base-content'>{text}</Text>
 				<View className='flex flex-col gap-3 w-full'>
 					<CustomButton
-						label={t('modal.confirm.delete')}
+						label={t('modal.confirm.delete', 'Excluir')}
 						className='btn-error btn-block'
 						onClick={removeItem}
 					/>
 					<CustomButton
 						variant='outlined'
-						label={t('modal.confirm.cancel')}
+						label={t('modal.confirm.cancel', 'Cancelar')}
 						onClick={closeModal}
 					/>
 				</View>

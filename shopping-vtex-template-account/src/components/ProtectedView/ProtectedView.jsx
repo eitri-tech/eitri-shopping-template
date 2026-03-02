@@ -34,7 +34,7 @@ export default function ProtectedView(props) {
 				justifyContent='center'
 				alignItems='center'
 				minHeight='100vh'>
-				<Text block>{labelLoading || t('protectedView.loading')}</Text>
+				<Text block>{labelLoading || t('protectedView.loading', 'Carregando...')}</Text>
 			</View>
 		)
 	}

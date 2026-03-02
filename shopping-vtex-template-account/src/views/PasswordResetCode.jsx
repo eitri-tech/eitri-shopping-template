@@ -39,14 +39,14 @@ export default function PasswordResetCode(props) {
 		<Page topInset>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('passwordResetCode.headerText')} />
+				<HeaderText text={t('passwordResetCode.headerText', 'Senha')} />
 			</HeaderContentWrapper>
 
 			<View className='p-4 flex flex-col w-full'>
 				<View className='flex flex-col gap-2'>
-					<Text className='w-full font-bold text-xl'>{t('passwordResetCode.forgotPass')}</Text>
+					<Text className='w-full font-bold text-xl'>{t('passwordResetCode.forgotPass', 'Esqueceu a senha?')}</Text>
 					<Text className='text text-gray-600'>
-						{t('passwordResetCode.messageEmail')}
+						{t('passwordResetCode.messageEmail', 'Digite o código de 6 dígitos enviado para o email')}
 						<Text className='font-bold text-gray-700 ml-1'>{email}</Text>
 					</Text>
 				</View>
@@ -63,7 +63,7 @@ export default function PasswordResetCode(props) {
 				<View className='mt-8'>
 					<CustomButton
 						disabled={recoveryCode.length !== RECOVERY_CODE_LENGTH}
-						label={t('passwordResetCode.sendButton')}
+						label={t('passwordResetCode.sendButton', 'Continuar')}
 						onPress={goToPasswordNewPass}
 					/>
 				</View>

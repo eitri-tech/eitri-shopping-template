@@ -114,7 +114,7 @@ export default function SelectedPaymentData(props) {
 		<SimpleCard
 			isFilled={paymentSystem || cart?.paymentData?.giftCards?.length > 0}
 			onPress={onPress}
-			title={t('selectedPaymentData.txtPayment')}
+			title={t('selectedPaymentData.txtPayment', 'PAGAMENTO')}
 			icon={iconCard}>
 			<View className={'flex flex-col gap-4'}>
 				{cart?.paymentData?.payments?.length > 0 && (

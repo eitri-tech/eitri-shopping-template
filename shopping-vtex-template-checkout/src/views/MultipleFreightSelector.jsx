@@ -145,7 +145,7 @@ export default function MultipleFreightSelector(props) {
 				offSetHeight={120}>
 				<CustomButton
 					disabled={!shippingOptions?.every(opt => opt.currentSla)}
-					label={t('addNewShippingAddress.labelButton')}
+					label={t('addNewShippingAddress.labelButton', 'Continuar')}
 					onClick={submit}
 				/>
 				<View onClick={() => navigate('AddressSelector', {}, true)}>

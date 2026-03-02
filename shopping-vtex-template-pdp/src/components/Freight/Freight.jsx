@@ -43,13 +43,13 @@ export default function Freight(props) {
 	return (
 		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
 			<View className='flex items-center justify-between w-full'>
-				<Text className='text-lg font-semibold'>{t('freight.txtCalculate')}</Text>
+				<Text className='text-lg font-semibold'>{t('freight.txtCalculate', 'Calcular frete')}</Text>
 			</View>
 			<View>
 				<View className='flex justify-between items-center w-full gap-2 mt-2'>
 					<View className='w-2/3'>
 						<CustomInput
-							placeholder={t('freight.labelZipCode')}
+							placeholder={t('freight.labelZipCode', 'CEP')}
 							value={zipCode}
 							variant='mask'
 							mask='99999-999'

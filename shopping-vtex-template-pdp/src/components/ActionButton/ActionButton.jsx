@@ -21,8 +21,8 @@ export default function ActionButton(props) {
 	}
 
 	const getButtonLabel = () => {
-		if (!isAvailable) return t('product.errorNoProduct')
-		return isItemOnCart() ? t('product.labelGoToCart') : t('product.labelAddToCart')
+		if (!isAvailable) return t('product.errorNoProduct', 'Produto Indisponível')
+		return isItemOnCart() ? t('product.labelGoToCart', 'Ir para carrinho') : t('product.labelAddToCart', 'Adicionar ao carrinho')
 	}
 
 	const handleButtonClick = () => {

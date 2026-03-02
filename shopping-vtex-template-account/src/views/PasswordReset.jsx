@@ -54,19 +54,19 @@ export default function PasswordReset(props) {
 
 			<HeaderContentWrapper className=''>
 				<HeaderReturn />
-				<HeaderText text={t('passwordReset.headerText')} />
+				<HeaderText text={t('passwordReset.headerText', 'Senha')} />
 			</HeaderContentWrapper>
 
 			<View className='p-4 flex flex-col h-full'>
 				<View>
 					<View className='flex flex flex-col gap-2 mb-4'>
-						<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle')}</Text>
-						<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery')}</Text>
+						<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle', 'Digite seu e-mail para recuperar a senha')}</Text>
+						<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery', '* Vamos te mandar uma mensagem com um código para recuperar senha')}</Text>
 					</View>
 
 					<CustomInput
 						inputMode='email'
-						placeholder={t('passwordReset.setEmail')}
+						placeholder={t('passwordReset.setEmail', 'Digite seu e-mail')}
 						value={username}
 						onChange={e => setUsername(e.target.value)}
 					/>
@@ -74,7 +74,7 @@ export default function PasswordReset(props) {
 
 				<View className='mt-4'>
 					<CustomButton
-						label={t('passwordReset.sendButton')}
+						label={t('passwordReset.sendButton', 'Enviar código')}
 						onPress={goToPasswordResetCode}
 						disabled={!username || loading}
 					/>
@@ -86,7 +86,7 @@ export default function PasswordReset(props) {
 				show={showErrorAlert}
 				onDismiss={() => setShowErrorAlert(false)}
 				duration={7}
-				message={t('passwordReset.messageError')}
+				message={t('passwordReset.messageError', 'Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.')}
 			/>
 		</Page>
 	)

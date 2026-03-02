@@ -37,26 +37,26 @@ export default function CartSummary(props) {
 					<View className='w-full max-w-sm px-4'>
 						{itemsValue > 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal')}</Text>
+								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal', 'Subtotal')}</Text>
 								<Text className='text-sm'>{formatAmountInCents(itemsValue)}</Text>
 							</View>
 						)}
 						{discounts > 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDiscount')}</Text>
+								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDiscount', 'Desconto')}</Text>
 								<Text className='text-sm'>{formatAmountInCents(discounts)}</Text>
 							</View>
 						)}
 						{/*{shipping && (*/}
 						{/*	<View className='flex justify-between py-2'>*/}
-						{/*		<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDelivery')}</Text>*/}
+						{/*		<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDelivery', 'Entrega')}</Text>*/}
 						{/*		<Text className='text-sm'>{formatAmountInCents(shipping.value)}</Text>*/}
 						{/*	</View>*/}
 						{/*)}*/}
 						{total > 0 && (
 							<View className='flex justify-between py-2 border-t border-base-300 mt-2 pt-2'>
 								<Text className='text-base-content font-bold text-base'>
-									{t('cartSummary.txtTotal')}
+									{t('cartSummary.txtTotal', 'Total')}
 								</Text>
 								<Text className='text-base font-bold text-primary'>{formatAmountInCents(total)}</Text>
 							</View>

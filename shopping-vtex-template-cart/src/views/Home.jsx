@@ -59,7 +59,7 @@ export default function Home(props) {
 		<Page title={t('home.title', 'Carrinho')}>
 			<HeaderContentWrapper>
 				{!openWithBottomBar && <HeaderReturn />}
-				<HeaderText text={t('home.title')} />
+				<HeaderText text={t('home.title', 'Carrinho')} />
 			</HeaderContentWrapper>
 
 			<Loading
