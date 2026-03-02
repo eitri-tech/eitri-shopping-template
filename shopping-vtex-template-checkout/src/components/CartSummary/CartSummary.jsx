@@ -18,7 +18,7 @@ export default function CartSummary() {
 						key={item.id}
 						className='w-12 h-12 p-1 rounded-full overflow-hidden border'>
 						<Image
-							src={item.imageUrl}
+							src={item?.imageUrl?.replace('http:', 'https:')}
 							width='100%'
 							height='100%'
 							className='object-cover'

@@ -3,7 +3,7 @@ export const formatAmountInCents = amount => {
 		return ''
 	}
 	if (amount === 0) {
-		return 'Grátis'
+		return 'Free'
 	}
 	return (amount / 100).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 }
@@ -61,7 +61,7 @@ export const formatShippingEstimate = sla => {
 				date.getDate() === new Date().getDate()
 
 			if (isSameDay) {
-				return `Retire hoje a partir de ${value} horas`
+				return `Pick up today in ${value} hours`
 			}
 
 			const isTomorrow =
@@ -70,7 +70,7 @@ export const formatShippingEstimate = sla => {
 				date.getDate() === new Date().getDate() + 1
 
 			if (isTomorrow) {
-				return `Retire amanhã`
+				return `Pick up tomorrow`
 			}
 			//
 			// console.log(
@@ -85,40 +85,40 @@ export const formatShippingEstimate = sla => {
 			// )
 
 			// if (value === 1) {
-			// 	return `Retire na loja após ${value} hora`
+			// 	return `Pick up in store after ${value} hour`
 			// }
-			return `Retire na loja após ${value} horas`
+			return `Pick up in store after ${value} hours`
 		}
 
 		if (isMinutes) {
-			return `Retire na loja após ${value} minutos`
+			return `Pick up in store after ${value} minutes`
 		}
 
 		if (useBd) {
-			const weekday = date.toLocaleDateString('pt-BR', { weekday: 'long' })
+			const weekday = date.toLocaleDateString('en-US', { weekday: 'long' })
 			const day = date.getDate()
-			const month = date.toLocaleDateString('pt-BR', { month: 'long' })
+			const month = date.toLocaleDateString('en-US', { month: 'long' })
 
-			// Se for até 7 dias úteis (aproximadamente 1 semana)
+			// If it is up to 7 business days (approximately 1 week)
 			if (value <= 7) {
-				return `Retire até ${weekday}, ${day} de ${month}`
+				return `Pick up by ${weekday}, ${month} ${day}`
 			} else {
-				return `Retire após ${day} de ${month}`
+				return `Pick up after ${month} ${day}`
 			}
 		}
 	}
 
-	// Para entregas normais (não pickup)
+	// For regular deliveries (not pickup)
 	if (useBd || (!isHours && !isMinutes)) {
-		const weekday = date.toLocaleDateString('pt-BR', { weekday: 'long' })
+		const weekday = date.toLocaleDateString('en-US', { weekday: 'long' })
 		const day = date.getDate()
-		const month = date.toLocaleDateString('pt-BR', { month: 'long' })
+		const month = date.toLocaleDateString('en-US', { month: 'long' })
 
-		// Se for até 7 dias úteis (aproximadamente 1 semana)
+		// If it is up to 7 business days (approximately 1 week)
 		if (value <= 7) {
-			return `Receba até ${weekday}, ${day} de ${month}`
+			return `Receive by ${weekday}, ${month} ${day}`
 		} else {
-			return `Receba até ${day} de ${month}`
+			return `Receive by ${month} ${day}`
 		}
 	}
 

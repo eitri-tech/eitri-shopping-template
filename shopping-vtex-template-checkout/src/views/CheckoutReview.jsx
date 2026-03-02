@@ -184,7 +184,9 @@ export default function CheckoutReview() {
 				<>
 					{unavailableItems.length > 0 && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}</Text>
+							<Text className='text-sm text-red-600 font-medium'>
+								{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}
+							</Text>
 
 							{unavailableItems.map(uItem => (
 								<View
@@ -192,7 +194,7 @@ export default function CheckoutReview() {
 									key={uItem.uniqueId}>
 									<View className='flex items-center gap-2'>
 										<Image
-											src={uItem.imageUrl}
+											src={uItem?.imageUrl?.replace('http:', 'https:')}
 											className='w-[60px] rounded'
 										/>
 										<Text className='text-sm font-medium'>{uItem.name}</Text>
@@ -250,7 +252,7 @@ export default function CheckoutReview() {
 					<BottomInset />
 				</View>
 
-				<View className='h-[50px] w-full' />
+				<View className='h-[80px] w-full' />
 			</View>
 
 			<BottomInset />

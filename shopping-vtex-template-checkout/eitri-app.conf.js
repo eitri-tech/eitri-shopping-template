@@ -4,7 +4,7 @@ module.exports = {
 	'slug': 'shopping-vtex-template-checkout',
 	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '4.2.0',
-	'version': '0.2.4',
+	'version': '0.2.5',
 	'versionMessage': 'Versao worldgolf',
 	'public-key': '3563e2d0-5e21-474e-9588-016069973f90',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
@@ -14,7 +14,7 @@ module.exports = {
 	'eitri-app-dependencies': {
 		'shopping-vtex-template-shared': {
 			isEitriAppShared: true,
-			version: '0.1.11'
+			version: '0.1.12'
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,

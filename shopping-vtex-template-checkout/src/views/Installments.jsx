@@ -21,6 +21,12 @@ export default function Installments(props) {
 		i => i.paymentSystem === paymentSystem?.stringId
 	)
 
+	// useEffect(() => {
+	// 	if (installmentOption?.installments?.length === 1) {
+	// 		handleInstallmentSelect(installmentOption?.installments?.[0])
+	// 	}
+	// }, [])
+
 	// console.log('paymentSystem', cart?.orderFormId, installmentOption)
 
 	const installments = installmentOption?.installments || []

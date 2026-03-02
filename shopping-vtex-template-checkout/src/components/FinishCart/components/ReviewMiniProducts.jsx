@@ -1,5 +1,4 @@
 export default function ReviewMiniProducts(props) {
-
 	const { products } = props
 
 	return (
@@ -7,10 +6,10 @@ export default function ReviewMiniProducts(props) {
 			{products?.map(item => (
 				<View
 					key={item.imageUrl}
-					className='flex flex-row justify-between w-full gap-2'>
-					<View className='flex justify-center min-w-[40px] min-h-[40px] bg-neutral-200'>
+					className='flex flex-row w-full gap-3'>
+					<View className='flex justify-center min-w-[40px] max-w-[40px] bg-neutral-200'>
 						<Image
-							src={item.imageUrl}
+							src={item?.imageUrl?.replace('http:', 'https:')}
 							className='object-cover'
 						/>
 					</View>

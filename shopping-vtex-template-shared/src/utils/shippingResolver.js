@@ -1,7 +1,7 @@
 import { formatAmountInCents, formatShippingEstimate, getShippingEstimate } from './utils'
 
 // Constantes
-const FREE_SHIPPING_LABEL = 'Grátis'
+const FREE_SHIPPING_LABEL = 'Free'
 const PICKUP_CHANNEL = 'pickup-in-point'
 
 export default function shippingResolver(cart) {

@@ -86,7 +86,7 @@ export default function PersonalData() {
 			title: t('personalData.frmPhone', 'Telefone'),
 			placeholder: t('personalData.placeholderPhone', 'Digite seu telefone'),
 			inputMode: 'tel',
-			mask: '(99) 99999-9999',
+			// mask: '(99) 99999-9999',
 			requeriedForPersonal: true,
 			requeriedForCorporate: true,
 			pristine: true,
@@ -198,12 +198,12 @@ export default function PersonalData() {
 			return updateOption({ error: t('personalData.requiredField', 'Este campo é obrigatório') })
 		}
 
-		if (inputOption.label === 'document') {
-			const validSocialNumber = verifySocialNumber(inputValue.replace(/\D/g, ''))
-			if (!validSocialNumber) {
-				return updateOption({ error: t('personalData.invalidDocument', 'Documento inválido') })
-			}
-		}
+		// if (inputOption.label === 'document') {
+		// 	const validSocialNumber = verifySocialNumber(inputValue.replace(/\D/g, ''))
+		// 	if (!validSocialNumber) {
+		// 		return updateOption({ error: t('personalData.invalidDocument', 'Documento inválido') })
+		// 	}
+		// }
 
 		updateOption({})
 	}
@@ -267,7 +267,7 @@ export default function PersonalData() {
 			personalData?.email !== '' &&
 			personalData?.firstName !== '' &&
 			personalData?.lastName !== '' &&
-			verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
+			// verifySocialNumber(personalData?.document?.replace(/\D/g, '')) &&
 			personalData?.phone !== ''
 		)
 	}
@@ -292,7 +292,10 @@ export default function PersonalData() {
 						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
 					</Text>
 					<Text className='block text-center'>
-						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
+						{t(
+							'personalData.enterEmailSubtitle',
+							'Vamos verificar se você já fez alguma compra com a gente'
+						)}
 					</Text>
 				</View>
 
@@ -346,7 +349,9 @@ export default function PersonalData() {
 								className='mt-3'
 								onClick={handleLegalPerson}>
 								<Text className='text-primary font-bold'>
-									{isLegalPerson ? t('personalData.labelPerson', 'Sou pessoa física') : t('personalData.labelCorporate', 'Sou pessoa jurídica')}
+									{isLegalPerson
+										? t('personalData.labelPerson', 'Sou pessoa física')
+										: t('personalData.labelCorporate', 'Sou pessoa jurídica')}
 								</Text>
 							</View>
 						</>

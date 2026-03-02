@@ -25,11 +25,11 @@ export default function cartShippingResolver(cart) {
 		if (cheapers.length > 0 || fasters.length > 0 || pickUpInPoints.length > 0) {
 			if (isCheaperAndFasterTheSame) {
 				options.push({
-					label: 'Entrega econômica',
+					label: 'Economy delivery',
 					shippingEstimate:
 						getMaximumDeliveryDate(cheapers) === '01/02/1970'
-							? 'Indiponível para entrega'
-							: `Receba até ${getMaximumDeliveryDate(cheapers)}`,
+							? 'Unavailable for delivery'
+							: `Receive by ${getMaximumDeliveryDate(cheapers)}`,
 					price: getFormattedTotalPrice(cheapers),
 					slas: cheapers,
 					isCurrent: cheapers.every(cheaper => cheaper.selected)
@@ -37,11 +37,11 @@ export default function cartShippingResolver(cart) {
 			} else {
 				if (fasters && fasters?.length > 0) {
 					options.push({
-						label: 'Entrega mais rápida',
+						label: 'Fastest delivery',
 						shippingEstimate:
 							getMaximumDeliveryDate(fasters) === '01/02/1970'
-								? 'Indiponível para entrega'
-								: `Receba até ${getMaximumDeliveryDate(fasters)}`,
+								? 'Unavailable for delivery'
+								: `Receive by ${getMaximumDeliveryDate(fasters)}`,
 						price: getFormattedTotalPrice(fasters),
 						slas: fasters,
 						isCurrent: fasters.every(faster => faster.selected)
@@ -49,11 +49,11 @@ export default function cartShippingResolver(cart) {
 				}
 				if (cheapers && cheapers?.length > 0) {
 					options.push({
-						label: 'Entrega econômica',
+						label: 'Economy delivery',
 						shippingEstimate:
 							getMaximumDeliveryDate(cheapers) === '01/02/1970'
-								? 'Indiponível para entrega'
-								: `Receba até ${getMaximumDeliveryDate(cheapers)}`,
+								? 'Unavailable for delivery'
+								: `Receive by ${getMaximumDeliveryDate(cheapers)}`,
 						price: getFormattedTotalPrice(cheapers),
 						slas: cheapers,
 						isCurrent: cheapers.every(cheaper => cheaper.selected)
@@ -67,7 +67,7 @@ export default function cartShippingResolver(cart) {
 				const pickUpInPointAddress = pickUpInPoint?.pickupStoreInfo?.address
 				options.push({
 					label: pickUpInPoint?.pickupStoreInfo?.friendlyName,
-					shippingEstimate: `Retire na loja até ${pickUpInPoint.formattedShippingEstimate}`,
+					shippingEstimate: `Pick up in store by ${pickUpInPoint.formattedShippingEstimate}`,
 					price: getFormattedTotalPrice(pickUpInPoint?.slas),
 					slas: pickUpInPoint?.slas,
 					isPickupInPoint: true,
@@ -149,7 +149,7 @@ function getFormattedTotalPrice(slas) {
 		return acc + current.price
 	}, 0)
 
-	return total === 0 ? 'Grátis' : formatAmountInCents(total)
+	return total === 0 ? 'Free' : formatAmountInCents(total)
 }
 
 function getMaximumDeliveryDate(slas) {
