@@ -9,7 +9,9 @@
 	"cartItem": {
 		"txtAdd": "Adicionar",
 		"txtMessageUnavailable": "Este produto não está disponível!",
-		"txtRemoveCart": "Deseja excluir o produto do carrinho?"
+		"txtRemoveCart": "Deseja excluir o produto do carrinho?",
+		"cannotBeDelivered": "Este item não pode ser entregue",
+		"notAvailable": "Este item não está disponível"
 	},
 	"cartSummary": {
 		"txtSubtotal": "Subtotal",

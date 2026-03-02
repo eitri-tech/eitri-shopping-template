@@ -117,7 +117,8 @@
 		"errorCity": "Informe a cidade",
 		"errorState": "Informe o estado",
 		"errorReceiverName": "Informe quem irá receber",
-		"errorNumber": "Informe o número"
+		"errorNumber": "Informe o número",
+		"errorPostalCodeInvalid": "CEP deve ter 8 dígitos"
 	},
 	"simpleCard": {
 		"txtEdit": "ALTERAR"
@@ -190,6 +191,9 @@
 		"edit": "Editar",
 		"today": "Hoje",
 		"businessHoursAvailable": "Horário disponível",
+		"pickupTitle": "Pontos de Retirada",
+		"pickupSubtitle": "Selecione um ponto de retirada",
+		"noPickupPoints": "Nenhum ponto de retirada disponível",
 		"tabs": {
 			"delivery": "Entrega",
 			"pickup": "Retirada"

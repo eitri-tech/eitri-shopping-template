@@ -23,6 +23,10 @@
 		"actionBuy": "Comprar",
 		"actionViewCart": "Ver carrinho"
 	},
+	"shelfOfProducts": {
+		"loading": "Carregando...",
+		"seeMore": "Ver mais"
+	},
 	"mainDescription": {
 		"txtUntil": "ou em até",
 		"txtOf": "de"
