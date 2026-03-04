@@ -60,7 +60,7 @@ export default function SignUp(props) {
 
 	const sendAccessKey = async () => {
 		if (!termsChecked) {
-			setAlertMessage(t('signUp.alertMessageAcceptTerms'))
+			setAlertMessage(t('signUp.alertMessageAcceptTerms', 'Necessário aceitar os termos'))
 			setShowLoginErrorAlert(true)
 			return
 		}
@@ -73,7 +73,7 @@ export default function SignUp(props) {
 			setEmailCodeSent(true)
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 		} catch (e) {
-			setAlertMessage(t('signUp.alertMessageSendEmailError'))
+			setAlertMessage(t('signUp.alertMessageSendEmailError', 'Erro ao enviar email'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)
 			setTimeOutToResentEmail(0)
@@ -88,20 +88,20 @@ export default function SignUp(props) {
 			const loggedIn = await loginWithEmailAndKey(email, verificationCode)
 
 			if (loggedIn === 'WrongCredentials') {
-				setAlertMessage(t('signUp.alertMessageInvalidToken'))
+				setAlertMessage(t('signUp.alertMessageInvalidToken', 'Token incorreto'))
 				setShowLoginErrorAlert(true)
 			} else if (loggedIn === 'Success') {
 				navigate(PAGES.HOME)
 			} else {
-				setAlertMessage(t('signUp.alertMessageVerify'))
+				setAlertMessage(t('signUp.alertMessageVerify', 'Verifique as informaçoes e tente novamente'))
 				setShowLoginErrorAlert(true)
 			}
 		} catch (e) {
 			const status = e?.response?.status || 400
 			if (status >= 500) {
-				setAlertMessage(t('signUp.alertMessageServiceError'))
+				setAlertMessage(t('signUp.alertMessageServiceError', 'Ocorreu uma falha no serviço, tente novamente'))
 			} else {
-				setAlertMessage(t('signUp.alertMessageVerify'))
+				setAlertMessage(t('signUp.alertMessageVerify', 'Verifique as informaçoes e tente novamente'))
 			}
 			setShowLoginErrorAlert(true)
 		} finally {
@@ -118,11 +118,11 @@ export default function SignUp(props) {
 
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('signUp.lbRegister')} />
+				<HeaderText text={t('signUp.lbRegister', 'Registrar')} />
 			</HeaderContentWrapper>
 
 			<View className='p-4'>
-				<Text className='text-xl font-bold'>{t('signUp.lbEmailAccess')}</Text>
+				<Text className='text-xl font-bold'>{t('signUp.lbEmailAccess', 'Acessar com o seu email')}</Text>
 
 				{/* Container do formulário com espaçamento vertical consistente */}
 				<View className='mt-8 flex flex-col gap-y-4'>
@@ -130,14 +130,14 @@ export default function SignUp(props) {
 						icon={userIcon}
 						value={email}
 						type='email'
-						placeholder='Email'
+						placeholder={t('signUp.emailPlaceholder', 'Email')}
 						onChange={e => setEmail(e.target.value)}
 						showClearInput={false}
 						required={true}
 					/>
 
 					<CCheckbox
-						label={`${t('signUp.textTerms')}${storeConfig?.displayCompanyName ? ' ' + storeConfig?.displayCompanyName : ''}.`}
+						label={`${t('signUp.textTerms', 'Ao clicar em Registrar você concorda com os termos de serviço')}${storeConfig?.displayCompanyName ? ' ' + storeConfig?.displayCompanyName : ''}.`}
 						checked={termsChecked}
 						onChange={setTermsChecked}
 					/>
@@ -145,8 +145,8 @@ export default function SignUp(props) {
 					{emailCodeSent && (
 						<>
 							<CustomInput
-								label={t('signUp.lbVerifyCode')}
-								placeholder={t('signUp.lbVerifyCode')}
+								label={t('signUp.lbVerifyCode', 'Código de verificação')}
+								placeholder={t('signUp.lbVerifyCode', 'Código de verificação')}
 								inputMode='numeric'
 								value={verificationCode}
 								onChange={e => setVerificationCode(e.target.value)}
@@ -154,7 +154,7 @@ export default function SignUp(props) {
 							/>
 
 							<CustomButton
-								label={t('signUp.lbLogin')}
+								label={t('signUp.lbLogin', 'Login')}
 								onPress={loginWithEmailAndAccessKey}
 								disabled={!email || !verificationCode}
 								type='email'
@@ -166,8 +166,8 @@ export default function SignUp(props) {
 						width='100%'
 						label={
 							!emailCodeSent
-								? t('signIn.textSendCode')
-								: `${t('signIn.textResendCode')}${resendCode ? ` (${timeOutToResentEmail})` : ''}`
+								? t('signIn.textSendCode', 'Enviar código')
+								: `${t('signIn.textResendCode', 'Reenviar código')}${resendCode ? ` (${timeOutToResentEmail})` : ''}`
 						}
 						disabled={resendCode || !email || loadingSendingCode}
 						onPress={sendAccessKey}
@@ -175,7 +175,7 @@ export default function SignUp(props) {
 
 					<CustomButton
 						variant='outlined'
-						label={t('signUp.lbBack')}
+						label={t('signUp.lbBack', 'Voltar')}
 						onPress={() => Eitri.navigation.back()}
 					/>
 				</View>

@@ -5,6 +5,7 @@ import { useTranslation } from 'eitri-i18n'
 
 export default function SearchResults(props) {
 	const { searchResults, isLoading } = props
+	const { t } = useTranslation()
 
 	if (searchResults.length === 0 && !isLoading) {
 		return (
@@ -31,10 +32,10 @@ export default function SearchResults(props) {
 					</svg>
 				</View>
 				<Text className='text-lg font-semibold text-base-content/80 text-center'>
-					Nenhum produto encontrado
+					{t('searchResults.emptyTitle', 'Nenhum produto encontrado')}
 				</Text>
 				<Text className='text-base text-base-content/60 text-center max-w-xs'>
-					Tente ajustar sua busca ou explorar outras categorias.
+					{t('searchResults.emptyDescription', 'Tente ajustar sua busca ou explorar outras categorias.')}
 				</Text>
 			</View>
 		)

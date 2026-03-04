@@ -6,12 +6,14 @@ import { Page, Text, View } from 'eitri-luminus'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import CardIcon from '../components/Icons/CardIcons/CardIcon'
 import { navigate } from '../services/navigationService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function Installments(props) {
 	const paymentSystem = props.location?.state?.paymentSystem
 	const description = props.location?.state?.description
 
 	const { cart, cardInfo, selectPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -61,7 +63,7 @@ export default function Installments(props) {
 			<View className='p-4 pt-8 h-min-screen flex flex-col'>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={'Parcelamento'} />
+					<HeaderText text={t('installments.header', 'Parcelamento')} />
 				</HeaderContentWrapper>
 
 				<LoadingComponent
@@ -77,10 +79,15 @@ export default function Installments(props) {
 						/>
 					</View>
 					{paymentSystem?.groupName === 'WH Google PayPaymentGroup' ? (
-						<Text className='text font-bold text-neutral-900'>{description || 'Google Pay'}</Text>
+						<Text className='text font-bold text-neutral-900'>
+							{description || t('installments.googlePay', 'Google Pay')}
+						</Text>
 					) : (
 						<Text className='text font-bold text-neutral-900'>
-							{`${paymentSystem?.name || 'Cartão de Crédito'} com final ${cardInfo?.cardNumber?.slice(-4)}`}
+							{`${paymentSystem?.name || t('installments.creditCard', 'Cartão de Crédito')} ${t(
+								'installments.endingIn',
+								'com final'
+							)} ${cardInfo?.cardNumber?.slice(-4)}`}
 						</Text>
 					)}
 				</View>
@@ -98,7 +105,9 @@ export default function Installments(props) {
 									</Text>
 									{installment.count > 1 && (
 										<Text className='text-sm text-neutral-500'>
-											{installment.hasInterestRate ? 'com juros' : 'sem juros'}
+											{installment.hasInterestRate
+												? t('installments.withInterest', 'com juros')
+												: t('installments.withoutInterest', 'sem juros')}
 										</Text>
 									)}
 								</View>

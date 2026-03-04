@@ -1,6 +1,7 @@
 {
 	"home": {
-		"title": "Produto"
+		"title": "Produto",
+		"pageTitle": "Página de produto"
 	},
 	"description": {
 		"txtDescription": "Descrição",
@@ -16,7 +17,15 @@
 	"freight": {
 		"labelZipCode": "CEP",
 		"labelCalculate": "Calcular",
-		"txtCalculate": "Calcular frete",
+		"txtCalculate": "Calcular frete"
+	},
+	"productCard": {
+		"actionBuy": "Comprar",
+		"actionViewCart": "Ver carrinho"
+	},
+	"shelfOfProducts": {
+		"loading": "Carregando...",
+		"seeMore": "Ver mais"
 	},
 	"mainDescription": {
 		"txtUntil": "ou em até",

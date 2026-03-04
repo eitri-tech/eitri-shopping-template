@@ -42,7 +42,7 @@ export default function Freight(props) {
 				return
 			}
 			if (!(zipCode.length == 8 || zipCode.length == 9)) {
-				setError(t('freight.errorCep'))
+				setError(t('freight.errorCep', 'Digite um CEP válido'))
 				return
 			}
 			fetchFreight(zipCode)
@@ -67,7 +67,7 @@ export default function Freight(props) {
 			await setNewAddress(cart, zipCode)
 		} catch (error) {
 			console.error('Error fetching freight', error)
-			setError(t('freight.errorCalcFreight'))
+			setError(t('freight.errorCalcFreight', 'Não foi possível calcular o frete'))
 		} finally {
 			setIsLoading(false)
 		}
@@ -114,13 +114,13 @@ export default function Freight(props) {
 	return (
 		<View className='px-4'>
 			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
-				<Text className='text-base font-bold'>{t('freight.txtDelivery')}</Text>
+				<Text className='text-base font-bold'>{t('freight.txtDelivery', 'Entrega')}</Text>
 
 				{cart?.canEditData || isEditingZipCode ? (
 					<View className='flex justify-between mt-2 gap-2 items-center w-full'>
 						<View className='w-2/3'>
 							<CustomInput
-								placeholder={t('freight.labelZipCode')}
+								placeholder={t('freight.labelZipCode', 'CEP')}
 								value={zipCode}
 								variant='mask'
 								mask='99999-999'
@@ -132,24 +132,28 @@ export default function Freight(props) {
 							<CustomButton
 								variant='outlined'
 								isLoading={isLoading}
-								label={t('freight.txtCalculate')}
+								label={t('freight.txtCalculate', 'Calcular')}
 								onPress={onPressZipCodeChange}
 							/>
 						</View>
 					</View>
 				) : (
 					<View className='mt-2 flex flex-row items-center gap-4'>
-						<Text className='text-base font-medium'>{`Receber em ${shipping?.postalCode}`}</Text>
+						<Text className='text-base font-medium'>
+							{`${t('freight.receiveAt', 'Receber em')} ${shipping?.postalCode}`}
+						</Text>
 
 						<View onClick={onPressEditZipCode}>
-							<Text className='text-sm text-primary font-bold'>alterar</Text>
+							<Text className='text-sm text-primary font-bold'>{t('freight.change', 'Alterar')}</Text>
 						</View>
 					</View>
 				)}
 
 				{shipping?.address && !shipping?.shippingAvailable && (
 					<View className='mt-2 p-2 bg-red-50 border border-red-200 rounded'>
-						<Text className='text-sm text-red-600 font-medium'>Entrega indisponível</Text>
+						<Text className='text-sm text-red-600 font-medium'>
+							{t('freight.unavailableDelivery', 'Entrega indisponível')}
+						</Text>
 					</View>
 				)}
 
@@ -160,7 +164,7 @@ export default function Freight(props) {
 						{deliveryOptions.length > 0 && (
 							<View className='mt-4'>
 								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
-									{t('freight.tabDelivery')}
+									{t('freight.tabDelivery', 'Opções de Entrega')}
 								</Text>
 
 								<View className='flex flex-col p-4 mt-2 border border-neutral-300 rounded items-center justify-between gap-2'>
@@ -201,7 +205,7 @@ export default function Freight(props) {
 						{pickupOptions.length > 0 && (
 							<View className='mt-4'>
 								<Text className='text-sm font-semibold text-neutral-700 mb-2'>
-									{t('freight.tabPickup') || 'Retirada'}
+									{t('freight.tabPickup', 'Retirada')}
 								</Text>
 								<View className='flex flex-col p-4 border border-neutral-300 rounded items-center justify-between gap-2'>
 									{pickupOptions.map((item, index) => (

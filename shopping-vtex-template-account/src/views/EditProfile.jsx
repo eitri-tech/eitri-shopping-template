@@ -60,37 +60,40 @@ export default function EditProfile(props) {
 
 		// Validar nome
 		if (!user.firstName || user.firstName.trim() === '') {
-			newErrors.firstName = 'Nome é obrigatório'
+			newErrors.firstName = t('editProfile.errors.firstNameRequired', 'Nome é obrigatório')
 		}
 
 		// Validar sobrenome
 		if (!user.lastName || user.lastName.trim() === '') {
-			newErrors.lastName = 'Sobrenome é obrigatório'
+			newErrors.lastName = t('editProfile.errors.lastNameRequired', 'Sobrenome é obrigatório')
 		}
 
 		// Validar data de nascimento
 		if (!user.birthDate || user.birthDate.trim() === '') {
-			newErrors.birthDate = 'Data de nascimento é obrigatória'
+			newErrors.birthDate = t('editProfile.errors.birthDateRequired', 'Data de nascimento é obrigatória')
 		} else {
 			const { isValid } = convertToISO(user.birthDate)
 			if (!isValid) {
-				newErrors.birthDate = 'Data de nascimento inválida ou menor de 18 anos'
+				newErrors.birthDate = t(
+					'editProfile.errors.birthDateInvalid',
+					'Data de nascimento inválida ou menor de 18 anos'
+				)
 			}
 		}
 
 		// Validar telefone
 		if (!user.homePhone || user.homePhone.trim() === '') {
-			newErrors.homePhone = 'Telefone é obrigatório'
+			newErrors.homePhone = t('editProfile.errors.phoneRequired', 'Telefone é obrigatório')
 		}
 
 		// Validar gênero
 		if (!user.gender) {
-			newErrors.gender = 'Gênero é obrigatório'
+			newErrors.gender = t('editProfile.errors.genderRequired', 'Gênero é obrigatório')
 		}
 
 		// Validar CPF
 		if (!user.document || user.document.trim() === '') {
-			newErrors.document = 'CPF é obrigatório'
+			newErrors.document = t('editProfile.errors.documentRequired', 'CPF é obrigatório')
 		}
 
 		setErrors(newErrors)
@@ -182,7 +185,7 @@ export default function EditProfile(props) {
 			statusBarTextColor='white'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('editProfile.title')} />
+				<HeaderText text={t('editProfile.title', 'Editar perfil')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -192,11 +195,11 @@ export default function EditProfile(props) {
 
 			<View className='p-4 flex flex-col gap-4'>
 				<View>
-					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName')} *</Text>
+					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName', 'Nome')} *</Text>
 					<View className='mt-1 flex gap-1.5'>
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbName')}
+							placeholder={t('editProfile.lbName', 'Nome')}
 							value={user?.firstName || ''}
 							onChange={value => handleInputChange('firstName', value)}
 							error={errors.firstName}
@@ -204,7 +207,7 @@ export default function EditProfile(props) {
 						{errors.firstName && <Text className='text-red-500 text-xs mt-1'>{errors.firstName}</Text>}
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbLastName')}
+							placeholder={t('editProfile.lbLastName', 'Sobrenome')}
 							value={user?.lastName || ''}
 							onChange={value => handleInputChange('lastName', value)}
 							error={errors.lastName}
@@ -214,10 +217,10 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate', 'Data de nascimento')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='DD/MM/AAAA'
+						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}
 						variant='mask'
 						mask='99/99/9999'
 						inputMode='numeric'
@@ -229,10 +232,10 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone', 'Telefone')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='(99) 99999-9999'
+						placeholder={t('editProfile.placeholders.phone', '(99) 99999-9999')}
 						value={user?.homePhone?.replace('+55', '') || ''}
 						inputMode='numeric'
 						variant='mask'
@@ -244,7 +247,7 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender', 'Sexo')} *</Text>
 					<View className='flex gap-4'>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -254,7 +257,7 @@ export default function EditProfile(props) {
 								checked={user?.gender === 'male'}
 								onChange={value => handleInputChange('gender', value)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale', 'Masculino')}</Text>
 						</View>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -264,17 +267,17 @@ export default function EditProfile(props) {
 								checked={user?.gender === 'female'}
 								onChange={value => handleInputChange('gender', value)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale', 'Feminino')}</Text>
 						</View>
 					</View>
 					{errors.gender && <Text className='text-red-500 text-xs mt-1'>{errors.gender}</Text>}
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF', 'CPF')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder='000.000.000-00'
+						placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}
 						value={user.document || ''}
 						inputMode='numeric'
 						variant='mask'
@@ -301,7 +304,9 @@ export default function EditProfile(props) {
 								className='text-white'>
 								<path d='M20 6L9 17l-5-5'></path>
 							</svg>
-							<Text className='text-white font-medium'>Salvo com sucesso!</Text>
+							<Text className='text-white font-medium'>
+								{t('editProfile.saveSuccess', 'Salvo com sucesso!')}
+							</Text>
 						</View>
 					</View>
 				)}
@@ -312,7 +317,7 @@ export default function EditProfile(props) {
 				<View className='p-4'>
 					<CustomButton
 						width='100%'
-						label={t('editProfile.lbSave')}
+						label={t('editProfile.lbSave', 'Salvar')}
 						onPress={handleSave}
 						disabled={!isFormValid() || isLoading}
 					/>

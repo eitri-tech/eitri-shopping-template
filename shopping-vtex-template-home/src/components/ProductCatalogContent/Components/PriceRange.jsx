@@ -2,6 +2,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 import { View, Text, TextInput } from 'eitri-luminus'
 import { CustomInput } from 'shopping-vtex-template-shared'
 import { formatPrice } from '../../../utils/utils'
+import { useTranslation } from 'eitri-i18n'
 
 export default function PriceRange({
 	initialMin = 20,
@@ -14,6 +15,7 @@ export default function PriceRange({
 	const [minValue, setMinValue] = useState(initialMin)
 	const [maxValue, setMaxValue] = useState(initialMax)
 	const [isDragging, setIsDragging] = useState(null)
+	const { t } = useTranslation()
 
 	const sliderRef = useRef(null)
 	const minThumbRef = useRef(null)
@@ -151,16 +153,20 @@ export default function PriceRange({
 			</View>
 
 			{/* Input fields */}
-			<View className='flex justify-between w-full'>
-				<View>
-					<Text className='block text-sm font-medium text-gray-700 mb-1'>Valor Mínimo</Text>
-					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(minValue)}</Text>
+				<View className='flex justify-between w-full'>
+					<View>
+						<Text className='block text-sm font-medium text-gray-700 mb-1'>
+							{t('priceRange.minLabel', 'Valor Mínimo')}
+						</Text>
+						<Text className='block text-sm font-medium text-gray-700'>{formatPrice(minValue)}</Text>
+					</View>
+					<View>
+						<Text className='block text-sm font-medium text-gray-700 mb-1'>
+							{t('priceRange.maxLabel', 'Valor Máximo')}
+						</Text>
+						<Text className='block text-sm font-medium text-gray-700'>{formatPrice(maxValue)}</Text>
+					</View>
 				</View>
-				<View>
-					<Text className='block text-sm font-medium text-gray-700 mb-1'>Valor Máximo</Text>
-					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(maxValue)}</Text>
-				</View>
-			</View>
 		</View>
 	)
 }

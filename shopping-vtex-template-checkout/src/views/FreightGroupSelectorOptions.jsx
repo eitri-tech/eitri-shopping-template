@@ -48,7 +48,7 @@ export default function FreightGroupSelectorOptions(props) {
 	}
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title={t('checkoutPages.freightDelivery', 'Checkout - Frete e Entrega')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
@@ -59,7 +59,9 @@ export default function FreightGroupSelectorOptions(props) {
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>Escolha como quer receber esses produtos</Text>
+				<Text className='text-xl font-bold'>
+					{t('freightGroupSelectorOptions.title', 'Escolha como quer receber esses produtos')}
+				</Text>
 
 				<View className='flex flex-row gap-4'>
 					{group?.items?.map(product => (
@@ -74,7 +76,7 @@ export default function FreightGroupSelectorOptions(props) {
 				<View className='flex flex-col'>
 					{group?.slas?.map(sla => {
 						const label = sla.isPickupInPoint
-							? `Retire na loja ${sla.pickupStoreInfo.friendlyName}`
+							? `${t('freightGroupSelectorOptions.pickupAtStore', 'Retire na loja')} ${sla.pickupStoreInfo.friendlyName}`
 							: `${sla.formatedShippingEstimate}`
 
 						return (

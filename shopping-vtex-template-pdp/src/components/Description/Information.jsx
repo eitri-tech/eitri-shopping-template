@@ -32,7 +32,7 @@ export default function Information(props) {
 
 	return (
 		<CollapseWrapper
-			title={t('information.txtInformation')}
+			title={t('information.txtInformation', 'Informações')}
 			defaultCollapsed={true}>
 			<View>
 				{specifications?.map((specification, index) => (

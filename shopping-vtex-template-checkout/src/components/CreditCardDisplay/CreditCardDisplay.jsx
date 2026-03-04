@@ -1,6 +1,8 @@
 import CardIcon from '../Icons/CardIcons/CardIcon'
+import { useTranslation } from 'eitri-i18n'
 
 export default function CreditCardDisplay({ cardInfo, cardName }) {
+	const { t } = useTranslation()
 	// Determinar a cor do cartão baseado na bandeira detectada
 	const getCardGradient = brand => {
 		const loBrand = brand?.toLowerCase()
@@ -36,7 +38,9 @@ export default function CreditCardDisplay({ cardInfo, cardName }) {
 			<View className='relative z-10 flex flex-col justify-between h-[100%]'>
 				{/* Header do cartão */}
 				<View className='flex flex-row items-center justify-between'>
-					<Text className='text-white/80 text-xs font-medium'>CARTÃO DE CRÉDITO</Text>
+					<Text className='text-white/80 text-xs font-medium'>
+						{t('creditCardDisplay.type', 'CARTÃO DE CRÉDITO')}
+					</Text>
 					<CardIcon
 						width={'20px'}
 						iconKey={cardName}
@@ -46,7 +50,9 @@ export default function CreditCardDisplay({ cardInfo, cardName }) {
 				<View className='flex flex-col justify-between grow-1 gap-4 h-[100%] mt-2'>
 					{/* Número do cartão */}
 					<View className='flex flex-col'>
-						<Text className='text-white/60 text-xs'>Número do cartão</Text>
+						<Text className='text-white/60 text-xs'>
+							{t('creditCardDisplay.number', 'Número do cartão')}
+						</Text>
 						<View className='h-[18px]'>
 							{cardInfo?.cardNumber && (
 								<Text className='text-white text-base font-mono tracking-wider'>
@@ -59,7 +65,7 @@ export default function CreditCardDisplay({ cardInfo, cardName }) {
 					{/* Informações do titular e validade */}
 					<View className='flex flex-row items-end justify-between'>
 						<View className='flex flex-col'>
-							<Text className='text-white/60 text-xs'>Titular</Text>
+							<Text className='text-white/60 text-xs'>{t('creditCardDisplay.holder', 'Titular')}</Text>
 							<View className='h-[14px] max-w-[100%]'>
 								{cardInfo?.holderName && (
 									<Text className='text-white text-sm font-medium truncate'>
@@ -73,7 +79,9 @@ export default function CreditCardDisplay({ cardInfo, cardName }) {
 					{/* Informações do titular e validade */}
 					<View className='flex flex-row items-end justify-between'>
 						<View className='flex flex-col'>
-							<Text className='text-white/60 text-xs'>Válido até</Text>
+							<Text className='text-white/60 text-xs'>
+								{t('creditCardDisplay.validThru', 'Válido até')}
+							</Text>
 							<View className='h-[16px]'>
 								{cardInfo?.dueDate && (
 									<Text className='text-white text-sm font-medium'>{cardInfo?.dueDate}</Text>
@@ -82,7 +90,7 @@ export default function CreditCardDisplay({ cardInfo, cardName }) {
 						</View>
 
 						<View className='flex flex-col items-end'>
-							<Text className='text-white/60 text-xs'>CVV</Text>
+							<Text className='text-white/60 text-xs'>{t('creditCardDisplay.cvv', 'CVV')}</Text>
 							<View className='h-[16px]'>
 								{cardInfo?.validationCode && (
 									<Text className='text-white text-sm font-medium'>{cardInfo?.validationCode}</Text>

@@ -28,19 +28,19 @@ export default function PasswordResetNewPass(props) {
 
 	const requirements = [
 		{
-			text: t('passwordResetNewPass.passwordRequirementsCharacters'),
+			text: t('passwordResetNewPass.passwordRequirementsCharacters', 'Mínimo de 8 caracteres'),
 			valid: newPassword.length >= 8
 		},
 		{
-			text: t('passwordResetNewPass.passwordRequirementsNumber'),
+			text: t('passwordResetNewPass.passwordRequirementsNumber', 'Pelo menos um número'),
 			valid: /[0-9]/.test(newPassword)
 		},
 		{
-			text: t('passwordResetNewPass.passwordRequirementsUppercase'),
+			text: t('passwordResetNewPass.passwordRequirementsUppercase', 'Pelo menos uma letra maiúscula'),
 			valid: /[A-Z]/.test(newPassword)
 		},
 		{
-			text: t('passwordResetNewPass.passwordRequirementsLowercase'),
+			text: t('passwordResetNewPass.passwordRequirementsLowercase', 'Pelo menos uma letra minúscula'),
 			valid: /[a-z]/.test(newPassword)
 		}
 	]
@@ -74,7 +74,7 @@ export default function PasswordResetNewPass(props) {
 		<Page title={PAGE}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('passwordResetNewPass.headerText')} />
+				<HeaderText text={t('passwordResetNewPass.headerText', 'Senha')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -84,20 +84,20 @@ export default function PasswordResetNewPass(props) {
 
 			<View className='p-4'>
 				<View className='flex flex-col gap-2'>
-					<Text className='w-full font-bold text-xl'>{t('passwordResetNewPass.forgotPass')}</Text>
+					<Text className='w-full font-bold text-xl'>{t('passwordResetNewPass.forgotPass', 'Esqueceu a senha?')}</Text>
 				</View>
 
 				<View className='mt-4 flex flex-col gap-2'>
 					<CustomInput
 						autoFocus
 						type='password'
-						label={t('passwordResetNewPass.newPass')}
+						label={t('passwordResetNewPass.newPass', 'Nova senha')}
 						value={newPassword}
 						onChange={e => setNewPassword(e.target.value)}
 					/>
 					<CustomInput
 						type='password'
-						label={t('passwordResetNewPass.confirmPass')}
+						label={t('passwordResetNewPass.confirmPass', 'Confirme a senha')}
 						value={confirmPassword}
 						onChange={e => setConfirmPassword(e.target.value)}
 					/>
@@ -147,7 +147,7 @@ export default function PasswordResetNewPass(props) {
 				<View className='mt-6'>
 					<CustomButton
 						disabled={!allRequirementsMet || !passwordsMatch || loading}
-						label={t('passwordResetNewPass.sendButton')}
+						label={t('passwordResetNewPass.sendButton', 'Continuar')}
 						onPress={confirmNewPassword}
 					/>
 				</View>
@@ -158,7 +158,7 @@ export default function PasswordResetNewPass(props) {
 				show={showErrorAlert}
 				onDismiss={() => setShowErrorAlert(false)}
 				duration={7}
-				message={t('passwordResetNewPass.messageError')}
+				message={t('passwordResetNewPass.messageError', 'Houve um erro ao redefinir a senha. Tente novamente mais tarde.')}
 			/>
 		</Page>
 	)

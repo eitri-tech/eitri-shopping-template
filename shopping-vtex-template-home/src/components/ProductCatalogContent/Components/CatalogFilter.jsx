@@ -155,7 +155,7 @@ export default function CatalogFilter(props) {
 						<path d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z' />
 					</svg>
 				}
-				label={t('categoryPageModal.title')}
+				label={t('categoryPageModal.title', 'Filtros')}
 			/>
 
 			{showModal && (
@@ -166,7 +166,7 @@ export default function CatalogFilter(props) {
 						onClick={e => e.stopPropagation()}
 						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
 						<View className='flex flex-row items-center justify-between border-b border-gray-300'>
-							<Text className='text-xl font-semibold'>{t('categoryPageModal.title')}</Text>
+							<Text className='text-xl font-semibold'>{t('categoryPageModal.title', 'Filtros')}</Text>
 						</View>
 
 						<View className='flex flex-col gap-4 mt-4'>
@@ -206,13 +206,13 @@ export default function CatalogFilter(props) {
 									<CustomButton
 										outlined
 										onClick={onFilterClear}
-										label={t('categoryPageModal.clear')}
+										label={t('categoryPageModal.clear', 'Limpar')}
 									/>
 								</View>
 								<View className='w-1/2'>
 									<CustomButton
 										onClick={onApplyFilters}
-										label={t('categoryPageModal.button')}
+										label={t('categoryPageModal.button', 'Filtrar')}
 									/>
 								</View>
 							</View>

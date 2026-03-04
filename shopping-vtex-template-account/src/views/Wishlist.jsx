@@ -4,10 +4,12 @@ import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } 
 import NoItem from '../components/NoItem/NoItem'
 import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { useTranslation } from 'eitri-i18n'
 
 export default function Wishlist(props) {
 	const [wishlistItems, setWishlistItems] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		start()
@@ -40,10 +42,10 @@ export default function Wishlist(props) {
 	}
 
 	return (
-		<Page title='Wishlist'>
+		<Page title={t('wishlist.pageTitle', 'Wishlist')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Meus favoritos'} />
+				<HeaderText text={t('wishlist.myFavorites', 'Meus favoritos')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -62,8 +64,11 @@ export default function Wishlist(props) {
 			</View>
 			{wishlistItems.length === 0 && !isLoading && (
 				<NoItem
-					title='Você não possui nenhum item salvo'
-					subtitle='Quando você salvar um produto, ele será listado aqui.'
+					title={t('wishlist.noItems', 'Você não possui nenhum item salvo')}
+					subtitle={t(
+						'wishlist.noItemsSubtitle',
+						'Quando você salvar um produto, ele será listado aqui.'
+					)}
 				/>
 			)}
 			<BottomInset />

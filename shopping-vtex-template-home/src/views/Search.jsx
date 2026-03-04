@@ -4,8 +4,10 @@ import SearchInput from '../components/SearchInput/SearchInput'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { View } from 'eitri-luminus'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
+import { useTranslation } from 'eitri-i18n'
 
 export default function Search(props) {
+	const { t } = useTranslation()
 	const incomingSearchTerm = props?.history?.location?.state?.searchTerm || props?.location?.state?.searchTerm
 
 	const { startCart } = useLocalShoppingCart()
@@ -60,7 +62,7 @@ export default function Search(props) {
 	}
 
 	return (
-		<Page title='Tela de busca'>
+		<Page title={t('search.title', 'Tela de busca')}>
 			<HeaderContentWrapper
 				scrollEffect={false}
 				className='gap-3 w-full justify-between relative'>
@@ -112,9 +114,11 @@ export default function Search(props) {
 							fill='white'
 						/>
 					</svg>
-					<Text className='text-primary text-2xl font-bold text-center mb-2'>O que você está buscando?</Text>
+					<Text className='text-primary text-2xl font-bold text-center mb-2'>
+						{t('search.pristineTitle', 'O que você está buscando?')}
+					</Text>
 					<Text className='text-base-content text-base text-center opacity-80'>
-						Nos diga o que procura e achamos pra você
+						{t('search.pristineDescription', 'Nos diga o que procura e achamos pra você')}
 					</Text>
 				</View>
 			)}

@@ -6,11 +6,13 @@ import { useLocalShoppingCart } from '../providers/LocalCart'
 import { trackBeginCheckout } from '../services/Tracking'
 import { navigate } from '../services/navigationService'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useTranslation } from 'eitri-i18n'
 
 let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData } = useLocalShoppingCart()
 	const { getCustomer, getUserByEmail } = useCustomer()
+	const { t } = useTranslation()
 
 	useEffect(() => {
 		init()
@@ -88,7 +90,7 @@ export default function Home(props) {
 	}
 
 	return (
-		<Page title={'Checkout'}>
+		<Page title={t('checkoutPages.checkout', 'Checkout')}>
 			<LoadingComponent
 				fullScreen={true}
 				isLoading={true}

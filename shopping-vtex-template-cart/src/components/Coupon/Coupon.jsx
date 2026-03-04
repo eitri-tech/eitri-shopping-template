@@ -21,7 +21,7 @@ export default function Coupon(props) {
 			setAppliedCoupon(cart.marketingData.coupon)
 
 			if (coupon === cart?.marketingData?.coupon) {
-				setCouponTextAlert(t('coupon.txtAppliedCoupon'))
+				setCouponTextAlert(t('coupon.txtAppliedCoupon', 'Cupom aplicado!'))
 			}
 		} else {
 			const errorMessage = cart?.messages || []
@@ -29,9 +29,9 @@ export default function Coupon(props) {
 
 			if (couponError) {
 				if (couponError.code === 'couponNotFound') {
-					setCouponTextAlert(t('coupon.txtInvalidCoupon'))
+					setCouponTextAlert(t('coupon.txtInvalidCoupon', 'Cupom inválido'))
 				} else if (couponError.code === 'couponExpired') {
-					setCouponTextAlert(t('coupon.txtExpiredCoupon'))
+					setCouponTextAlert(t('coupon.txtExpiredCoupon', 'Cupom Expirado'))
 				}
 				setInvalidCoupon(true)
 			} else {
@@ -62,7 +62,7 @@ export default function Coupon(props) {
 	return (
 		<View className='px-4'>
 			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
-				<Text className='text-base font-bold'>{t('coupon.txtCoupon')}</Text>
+				<Text className='text-base font-bold'>{t('coupon.txtCoupon', 'Cupom de desconto')}</Text>
 				<View className='mt-2 flex gap-8 justify-between items-center'>
 					{appliedCoupon ? (
 						<>
@@ -102,7 +102,7 @@ export default function Coupon(props) {
 							<View className='flex justify-between mt-2 gap-2 items-center w-full'>
 								<View className='w-2/3'>
 									<CustomInput
-										placeholder={t('coupon.labelInsertCode')}
+										placeholder={t('coupon.labelInsertCode', 'Insira o código')}
 										value={coupon}
 										onChange={e => inputOnChange(e.target.value)}
 									/>
@@ -112,7 +112,7 @@ export default function Coupon(props) {
 										variant='outlined'
 										onPress={onPressAddCoupon}
 										isLoading={isLoading}
-										label={t('coupon.txtAdd')}
+										label={t('coupon.txtAdd', 'Adicionar')}
 									/>
 								</View>
 							</View>

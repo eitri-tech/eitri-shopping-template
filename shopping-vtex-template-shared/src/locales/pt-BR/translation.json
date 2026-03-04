@@ -1,1 +1,8 @@
-{}
+{
+	"genericError": {
+		"title": "Não foi possível continuar",
+		"description": "Verifique a conexão com a internet do seu dispositivo ou atualizações do aplicativo",
+		"retry": "TENTAR NOVAMENTE",
+		"cancel": "CANCELAR"
+	}
+}

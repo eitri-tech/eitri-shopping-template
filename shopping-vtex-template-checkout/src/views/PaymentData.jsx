@@ -4,9 +4,11 @@ import PaymentMethods from '../components/Methods/PaymentMethods'
 import { trackScreenView } from '../services/Tracking'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function PaymentData(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -34,7 +36,7 @@ export default function PaymentData(props) {
 	}
 
 	return (
-		<Page title='Checkout - Dados de pagamento'>
+		<Page title={t('checkoutPages.paymentData', 'Checkout - Dados de pagamento')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
@@ -45,7 +47,7 @@ export default function PaymentData(props) {
 			/>
 
 			<View className='flex-1 p-4 flex flex-col gap-4'>
-				<Text className='text-xl font-bold'>Escolha como pagar</Text>
+				<Text className='text-xl font-bold'>{t('paymentData.chooseHowToPay', 'Escolha como pagar')}</Text>
 				<PaymentMethods onSelectPaymentMethod={handlePaymentOptionsChange} />
 			</View>
 

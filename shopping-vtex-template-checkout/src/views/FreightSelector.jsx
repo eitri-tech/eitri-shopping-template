@@ -45,7 +45,7 @@ export default function FreightSelector(props) {
 	const deliveryOptions = shippingOptions?.options?.filter(opt => !opt.isPickupInPoint)
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title={t('checkoutPages.freightDelivery', 'Checkout - Frete e Entrega')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
@@ -56,10 +56,12 @@ export default function FreightSelector(props) {
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>Como deseja receber seu produto?</Text>
+				<Text className='text-xl font-bold'>
+					{t('freightSelector.title', 'Como deseja receber seu produto?')}
+				</Text>
 
 				<Text>
-					{`Receber em ${shippingOptions.address.street}, ${shippingOptions.address.number || ''} ${shippingOptions.address.complement || ''}`}
+					{`${t('freightSelector.receiveAt', 'Receber em')} ${shippingOptions.address.street}, ${shippingOptions.address.number || ''} ${shippingOptions.address.complement || ''}`}
 				</Text>
 
 				<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col gap-3'>
@@ -92,11 +94,13 @@ export default function FreightSelector(props) {
 			<FixedBottom className='flex flex-col align-center gap-4'>
 				<CustomButton
 					disabled={!deliveryOptions?.some(item => item.isCurrent)}
-					label={t('addNewShippingAddress.labelButton')}
+					label={t('addNewShippingAddress.labelButton', 'Continuar')}
 					onClick={submit}
 				/>
 				<View onClick={() => navigate('AddressSelector', {}, true)}>
-					<Text className='text-primary text-center font-bold block'>{'Alterar endereço de entrega'}</Text>
+					<Text className='text-primary text-center font-bold block'>
+						{t('freightSelector.changeAddress', 'Alterar endereço de entrega')}
+					</Text>
 				</View>
 			</FixedBottom>
 		</Page>

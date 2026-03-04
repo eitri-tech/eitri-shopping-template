@@ -28,7 +28,7 @@ export default function SaveButton(props) {
 						height={'2px'}
 						className='w-[4px] h-[2px]'></View>
 					<Text className={`text-center text-${isInWishlist ? 'primary-700' : 'neutral-700'}`}>
-						{isInWishlist ? t('saveButton.saved') : t('saveButton.save')}
+						{isInWishlist ? t('saveButton.saved', 'Salvo') : t('saveButton.save', 'Salvar')}
 					</Text>
 				</View>
 			</View>

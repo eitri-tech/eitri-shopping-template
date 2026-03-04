@@ -3,9 +3,11 @@ import { useLocalShoppingCart } from '../providers/LocalCart'
 import { navigate } from '../services/navigationService'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import CardSelector from '../components/CardSelector/CardSelector'
+import { useTranslation } from 'eitri-i18n'
 
 export default function ShippingMethod(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -59,16 +61,20 @@ export default function ShippingMethod(props) {
 			/>
 
 			<View className='p-4'>
-				<Text className='text-xl font-bold mb-4'>Como você prefere receber seu produto?</Text>
+				<Text className='text-xl font-bold mb-4'>
+					{t('shippingMethod.title', 'Como você prefere receber seu produto?')}
+				</Text>
 				{deliveryOptions?.length > 0 && (
 					<CardSelector
-						mainTitle={'Enviar para o meu endereço'}
+						mainTitle={t('shippingMethod.sendToAddress', 'Enviar para o meu endereço')}
 						mainClickHandler={goToFreightSelector}
 						secondaryActionHandler={goToAddressSelector}
-						secondaryActionTitle={'Trocar endereço de entrega'}>
+						secondaryActionTitle={t('shippingMethod.changeDeliveryAddress', 'Trocar endereço de entrega')}>
 						<Text className='text text-base-content/70'>{`${shippingOptions.address.street}, ${shippingOptions.address.number || ''} ${shippingOptions.address.complement || ''}`}</Text>
 						<Text className='text text-base-content/70'>{`${shippingOptions.address.neighborhood} - ${shippingOptions.address.city} - ${shippingOptions.address.state}`}</Text>
-						<Text className='text text-base-content/70'>{`CEP: ${shippingOptions.address.postalCode}`}</Text>
+						<Text className='text text-base-content/70'>
+							{`${t('common.zipCode', 'CEP')}: ${shippingOptions.address.postalCode}`}
+						</Text>
 					</CardSelector>
 				)}
 
@@ -77,10 +83,12 @@ export default function ShippingMethod(props) {
 						mainTitle={currentOrFirstPickUpOption.label}
 						mainClickHandler={() => onSelectFreightOption(currentOrFirstPickUpOption)}
 						secondaryActionHandler={() => navigate('PickupSelector')}
-						secondaryActionTitle={'Retirar em outra loja'}>
+						secondaryActionTitle={t('shippingMethod.pickupOtherStore', 'Retirar em outra loja')}>
 						<Text className='text text-base-content/70'>{`${currentOrFirstPickUpOption.address.street}, ${currentOrFirstPickUpOption.address.number} ${currentOrFirstPickUpOption.address.complement}`}</Text>
 						<Text className='text text-base-content/70'>{`${currentOrFirstPickUpOption.address.neighborhood} - ${currentOrFirstPickUpOption.address.city} - ${currentOrFirstPickUpOption.address.state}`}</Text>
-						<Text className='text text-base-content/70'>{`CEP: ${currentOrFirstPickUpOption.address.postalCode}`}</Text>
+						<Text className='text text-base-content/70'>
+							{`${t('common.zipCode', 'CEP')}: ${currentOrFirstPickUpOption.address.postalCode}`}
+						</Text>
 					</CardSelector>
 				)}
 			</View>

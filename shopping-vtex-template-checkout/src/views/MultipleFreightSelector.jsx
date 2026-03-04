@@ -9,13 +9,13 @@ import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import { HeaderContentWrapper, HeaderReturn, CustomButton } from 'shopping-vtex-template-shared'
 import { FaChevronRight } from 'react-icons/fa'
 
-function AddressSelectorCard({ sla }) {
+function AddressSelectorCard({ sla, t }) {
 	const formatAddress = address => {
 		return `${address?.street}, ${address?.number || ''} ${address?.complement || ''} - ${address?.neighborhood}`
 	}
 
 	const label = sla.isPickupInPoint
-		? `Retire na loja ${sla.pickupStoreInfo.friendlyName}`
+		? `${t('multipleFreightSelector.pickupAtStore', 'Retire na loja')} ${sla.pickupStoreInfo.friendlyName}`
 		: `${sla.formatedShippingEstimate}`
 
 	return (
@@ -65,7 +65,7 @@ export default function MultipleFreightSelector(props) {
 	// console.log('shippingOptions===>', shippingOptions)
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title={t('checkoutPages.freightDelivery', 'Checkout - Frete e Entrega')}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
@@ -76,13 +76,15 @@ export default function MultipleFreightSelector(props) {
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>Como deseja receber seu produto?</Text>
+				<Text className='text-xl font-bold'>
+					{t('multipleFreightSelector.title', 'Como deseja receber seu produto?')}
+				</Text>
 
 				<View className={'flex flex-col gap-4'}>
 					{shippingOptions?.map((group, index) => (
 						<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
 							<View className='flex flex-row items-center justify-between mb-3 border-b'>
-								<Text className='font-bold'>{`Pacote ${index + 1}`}</Text>
+								<Text className='font-bold'>{`${t('multipleFreightSelector.package', 'Pacote')} ${index + 1}`}</Text>
 								<View className='flex flex-row gap-4 mb-3'>
 									{group?.items?.slice(0, 4)?.map(product => (
 										<View
@@ -101,6 +103,7 @@ export default function MultipleFreightSelector(props) {
 
 							{getCurrentSla(group.slas, group.currentSla) ? (
 								<AddressSelectorCard
+									t={t}
 									sla={getCurrentSla(group.slas, group.currentSla)}
 									currentSla={group.currentSla}
 								/>
@@ -110,7 +113,11 @@ export default function MultipleFreightSelector(props) {
 									className='flex flex-col'>
 									<View className='flex flex-row items-center justify-between mb-1 gap-2'>
 										<Text className='font-bold text-lg block'>
-											{`Escolha como receber ${group?.items?.length === 1 ? 'seu produto' : 'seus produtos'}`}
+											{`${t('multipleFreightSelector.chooseHowToReceive', 'Escolha como receber')} ${
+												group?.items?.length === 1
+													? t('multipleFreightSelector.yourProduct', 'seu produto')
+													: t('multipleFreightSelector.yourProducts', 'seus produtos')
+											}`}
 										</Text>
 										<FaChevronRight className='text-primary w-[24px]' />
 									</View>
@@ -122,7 +129,9 @@ export default function MultipleFreightSelector(props) {
 									<View className='border-b my-4'></View>
 
 									<View onClick={() => navigate('FreightGroupSelectorOptions', { group })}>
-										<Text className='text-primary font-bold'>Ver mais opções</Text>
+										<Text className='text-primary font-bold'>
+											{t('multipleFreightSelector.seeMoreOptions', 'Ver mais opções')}
+										</Text>
 									</View>
 								</>
 							)}
@@ -136,11 +145,13 @@ export default function MultipleFreightSelector(props) {
 				offSetHeight={120}>
 				<CustomButton
 					disabled={!shippingOptions?.every(opt => opt.currentSla)}
-					label={t('addNewShippingAddress.labelButton')}
+					label={t('addNewShippingAddress.labelButton', 'Continuar')}
 					onClick={submit}
 				/>
 				<View onClick={() => navigate('AddressSelector', {}, true)}>
-					<Text className='text-primary text-center font-bold block'>{'Alterar endereço de entrega'}</Text>
+					<Text className='text-primary text-center font-bold block'>
+						{t('multipleFreightSelector.changeAddress', 'Alterar endereço de entrega')}
+					</Text>
 				</View>
 			</FixedBottom>
 		</Page>

@@ -45,7 +45,9 @@ function CreditCardVisual({ cardInfo, cardName }) {
 			<View className='relative z-10 flex flex-col gap-3'>
 				{/* Header do cartão */}
 				<View className='flex flex-row items-center justify-between'>
-					<Text className='text-white/80 text-xs font-medium'>CARTÃO DE CRÉDITO</Text>
+					<Text className='text-white/80 text-xs font-medium'>
+						{t('selectedPaymentData.cardType', 'CARTÃO DE CRÉDITO')}
+					</Text>
 					<CardIcon
 						width={'40px'}
 						iconKey={cardName}
@@ -54,7 +56,9 @@ function CreditCardVisual({ cardInfo, cardName }) {
 
 				{/* Número do cartão */}
 				<View className='flex flex-col gap-1'>
-					<Text className='text-white/60 text-xs'>Número do cartão</Text>
+					<Text className='text-white/60 text-xs'>
+						{t('selectedPaymentData.cardNumber', 'Número do cartão')}
+					</Text>
 					<Text className='text-white text-base font-mono tracking-wider'>
 						{hideCreditCardNumber(cardInfo?.cardNumber)}
 					</Text>
@@ -64,18 +68,20 @@ function CreditCardVisual({ cardInfo, cardName }) {
 				<View className='flex flex-row items-end justify-between'>
 					{cardInfo?.holderName && (
 						<View className='flex flex-col gap-1'>
-							<Text className='text-white/60 text-xs'>Titular</Text>
+							<Text className='text-white/60 text-xs'>{t('selectedPaymentData.holder', 'Titular')}</Text>
 							<Text className='text-white text-sm font-medium'>{cardInfo?.holderName}</Text>
 						</View>
 					)}
 
 					<View className='flex flex-col gap-1 items-end'>
-						<Text className='text-white/60 text-xs'>CVV</Text>
+						<Text className='text-white/60 text-xs'>{t('selectedPaymentData.cvv', 'CVV')}</Text>
 						<Text className='text-white text-sm font-medium'>{cardInfo?.validationCode}</Text>
 					</View>
 					{cardInfo?.dueDate && (
 						<View className='flex flex-col gap-1 items-end'>
-							<Text className='text-white/60 text-xs'>Válido até</Text>
+							<Text className='text-white/60 text-xs'>
+								{t('selectedPaymentData.validThru', 'Válido até')}
+							</Text>
 							<Text className='text-white text-sm font-medium'>{cardInfo?.dueDate}</Text>
 						</View>
 					)}
@@ -108,7 +114,7 @@ export default function SelectedPaymentData(props) {
 		<SimpleCard
 			isFilled={paymentSystem || cart?.paymentData?.giftCards?.length > 0}
 			onPress={onPress}
-			title={t('selectedPaymentData.txtPayment')}
+			title={t('selectedPaymentData.txtPayment', 'PAGAMENTO')}
 			icon={iconCard}>
 			<View className={'flex flex-col gap-4'}>
 				{cart?.paymentData?.payments?.length > 0 && (
@@ -130,7 +136,9 @@ export default function SelectedPaymentData(props) {
 										{/* Informações adicionais do cartão */}
 										<View className='bg-white border border-gray-200 rounded-lg p-3'>
 											<View className='flex flex-col items-center gap-1'>
-												<Text className='text-xs text-gray-600'>Parcelamento</Text>
+												<Text className='text-xs text-gray-600'>
+													{t('selectedPaymentData.installments', 'Parcelamento')}
+												</Text>
 												<Text className='text-sm font-bold text-primary'>
 													{installmentText}
 												</Text>
@@ -149,7 +157,7 @@ export default function SelectedPaymentData(props) {
 											src={pixImage}
 											className='w-[130px] object-contain'
 										/>
-										<Text className='text-sm'>Aprovação imediata</Text>
+										<Text className='text-sm'>{t('selectedPaymentData.instantApproval', 'Aprovação imediata')}</Text>
 									</View>
 								)
 							}
@@ -181,7 +189,7 @@ export default function SelectedPaymentData(props) {
 					<View className='flex flex-col gap-3'>
 						<View className='flex items-center gap-2'>
 							<Text className='text-sm font-medium text-base-content/80'>
-								Pagamento com vale presente:
+								{t('selectedPaymentData.giftCardPayment', 'Pagamento com vale presente:')}
 							</Text>
 						</View>
 
@@ -193,13 +201,17 @@ export default function SelectedPaymentData(props) {
 										key={index}
 										className='flex items-center justify-between p-3 bg-neutral-50 rounded'>
 										<View className='flex flex-col'>
-											<Text className='text-xs text-base-content/60'>Código</Text>
+											<Text className='text-xs text-base-content/60'>
+												{t('selectedPaymentData.code', 'Código')}
+											</Text>
 											<Text className='text-sm font-mono font-medium text-base-content'>
 												{gift.redemptionCode}
 											</Text>
 										</View>
 										<View className='flex flex-col items-end'>
-											<Text className='text-xs text-base-content/60'>Valor</Text>
+											<Text className='text-xs text-base-content/60'>
+												{t('selectedPaymentData.value', 'Valor')}
+											</Text>
 											<Text className='text-sm font-bold'>{formatAmountInCents(gift.value)}</Text>
 										</View>
 									</View>

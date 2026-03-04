@@ -1,40 +1,79 @@
 {
 	"home": {
+		"title": "Home",
 		"offers": "Offers"
 	},
 	"categories": {
 		"title": "Categories"
 	},
-	"productCatalog": {
-		"title": "Catalog"
+	"blogPostShelf": {
+		"seeMore": "See more"
+	},
+	"blogCard": {
+		"publishedPrefix": "Published",
+		"by": "by",
+		"in": "in"
 	},
 	"categoryPageModal": {
 		"title": "Filters",
 		"clear": "Clear",
 		"button": "Filter"
 	},
+	"categoryPageItem": {
+		"seeAllIn": "See all in"
+	},
 	"pristineView": {
 		"content": "Enter a search term"
 	},
 	"searchResults": {
-		"resultNotFound": "No results were found for your search"
+		"resultNotFound": "No results were found for your search",
+		"emptyTitle": "No products found",
+		"emptyDescription": "Try adjusting your search or exploring other categories."
+	},
+	"searchHistory": {
+		"title": "Recent searches"
 	},
 	"headerSearch": {
 		"labelSearch": "Search..."
+	},
+	"productCatalog": {
+		"title": "Catalog",
+		"showing": "Showing",
+		"productSingular": "product",
+		"productPlural": "products"
 	},
 	"productCardVertical": {
 		"cart": "In cart",
 		"buy": "Buy"
 	},
+	"productCard": {
+		"installmentsPrefix": "up to",
+		"discountSuffix": "OFF",
+		"viewCart": "View cart",
+		"buy": "Buy"
+	},
 	"scheduleCard": {
-		"button": "Check it out"
+		"button": "Check"
 	},
 	"searchInput": {
-		"content": "Find your product..."
+		"content": "Find your product...",
+		"placeholder": "Search..."
+	},
+	"search": {
+		"title": "Search screen",
+		"pristineTitle": "What are you looking for?",
+		"pristineDescription": "Tell us what you're looking for and we'll find it for you"
+	},
+	"topSearches": {
+		"title": "Most searched"
 	},
 	"shelfOfProducts": {
 		"loading": "Loading...",
 		"seeMore": "See more"
+	},
+	"priceRange": {
+		"minLabel": "Minimum Value",
+		"maxLabel": "Maximum Value"
 	},
 	"lists": {
 		"title": "Sort by",
@@ -45,10 +84,19 @@
 		"labelHighestPrice": "Highest price",
 		"labelLowestPrice": "Lowest price",
 		"labelAToZ": "A to Z",
-		"labelZToA": "Z to A"
+		"labelZToA": "Z to A",
+		"cancel": "Cancel"
 	},
 	"facetsModal": {
 		"from": "From",
 		"to": "to"
+	},
+	"highlightedProductShelf": {
+		"seeMore": "See more",
+		"days": "days",
+		"hours": "hours",
+		"minutes": "minutes",
+		"seconds": "seconds",
+		"loading": "Loading..."
 	}
 }

@@ -13,7 +13,7 @@ export default function Review(props) {
 					<Text className='text-neutral-content font-bold'>{review?.created_at}</Text>
 				</View>
 				<View className='py-1'>
-					<Text>{review?.opinion || t('review.txtOpnion')}</Text>
+					<Text>{review?.opinion || t('review.txtOpnion', 'Cliente não escreveu uma avaliação, apenas deu a nota do produto.')}</Text>
 				</View>
 			</View>
 			<Divisor />

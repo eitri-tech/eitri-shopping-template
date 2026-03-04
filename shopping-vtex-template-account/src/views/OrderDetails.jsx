@@ -48,7 +48,7 @@ export default function OrderDetails(props) {
 			const orderData = await getOrderById(id)
 			setOrder(orderData)
 		} catch (error) {
-			console.error('Erro ao pegar detalhes do pedido:', error)
+			console.error(t('orderDetails.errors.getOrder', 'Erro ao pegar detalhes do pedido:'), error)
 			Eitri.navigation.back()
 		} finally {
 			setIsLoading(false)
@@ -62,7 +62,7 @@ export default function OrderDetails(props) {
 			await Vtex.customer.cancelOrder(order?.orderId, { reason: cancelReason })
 			Eitri.navigation.back()
 		} catch (e) {
-			console.error('Erro ao cancelar pedido', e)
+			console.error(t('orderDetails.errors.cancelOrder', 'Erro ao cancelar pedido'), e)
 			setIsLoading(false) // Garante que o loading para em caso de erro
 		}
 	}
@@ -80,7 +80,7 @@ export default function OrderDetails(props) {
 							className='cursor-pointer'
 							onClick={() => Eitri.openBrowser({ url: payment.url })}>
 							<Text className='text-sm font-bold text-blue-600 hover:underline'>
-								{t('orderDetails.lbSeeBilling')}
+								{t('orderDetails.lbSeeBilling', 'Ver boleto')}
 							</Text>
 						</View>
 					)}
@@ -105,7 +105,7 @@ export default function OrderDetails(props) {
 			<Page>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={t('orderDetails.title')} />
+					<HeaderText text={t('orderDetails.title', 'Meus Pedidos')} />
 				</HeaderContentWrapper>
 				<Loading fullScreen />
 			</Page>
@@ -123,7 +123,7 @@ export default function OrderDetails(props) {
 			<Page title={'Detalhes do pedido'}>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={t('orderDetails.title')} />
+					<HeaderText text={t('orderDetails.title', 'Meus Pedidos')} />
 				</HeaderContentWrapper>
 
 				<View className='p-4'>
@@ -133,7 +133,7 @@ export default function OrderDetails(props) {
 							<View className='flex flex-row items-start justify-between'>
 								<View className='flex flex-col gap-1'>
 									<Text className='text-xs font-semibold uppercase text-gray-500'>
-										{t('orderDetails.lbOrder')}
+										{t('orderDetails.lbOrder', 'Pedido')}
 									</Text>
 									<Text className='text-sm font-medium text-gray-900'>{order?.orderId}</Text>
 								</View>
@@ -143,13 +143,13 @@ export default function OrderDetails(props) {
 								/>
 							</View>
 
-							<DetailSection title={t('orderDetails.lbOrderDate')}>
+							<DetailSection title={t('orderDetails.lbOrderDate', 'Data do pedido')}>
 								<Text className='text-sm text-gray-700'>
 									{formatDateDaysMonthYear(order?.creationDate)}
 								</Text>
 							</DetailSection>
 
-							<DetailSection title={t('orderDetails.lbAddress')}>
+							<DetailSection title={t('orderDetails.lbAddress', 'Endereço')}>
 								<View className='flex flex-col'>
 									<Text className='text-sm text-gray-700'>
 										{`${order?.shippingData?.address.street}, ${order?.shippingData?.address?.number}${
@@ -164,27 +164,29 @@ export default function OrderDetails(props) {
 								</View>
 							</DetailSection>
 
-							<DetailSection title={t('orderDetails.lbPayment')}>
+							<DetailSection title={t('orderDetails.lbPayment', 'Forma de pagamento')}>
 								{order?.paymentData?.transactions[0]?.payments?.map((payment, index) => (
 									<View key={index}>{getFormattedPaymentSystem(payment)}</View>
 								))}
 							</DetailSection>
 
-							<DetailSection title={t('orderDetails.lbDelivery')}>
+							<DetailSection title={t('orderDetails.lbDelivery', 'Entrega')}>
 								{order?.shippingData?.logisticsInfo[0]?.shippingEstimateDate ? (
-									<Text className='text-sm text-gray-700'>{`${t('orderDetails.lbShippingUntil')} ${formatDate(
+									<Text className='text-sm text-gray-700'>{`${t('orderDetails.lbShippingUntil', 'Entrega até')} ${formatDate(
 										order?.shippingData?.logisticsInfo[0]?.shippingEstimateDate
 									)}`}</Text>
 								) : (
 									<Text className='text-sm text-gray-700'>{`${t(
-										'orderDetails.lbShippingDeadline'
+										'orderDetails.lbShippingDeadline',
+										'Prazo de'
 									)} ${handleShippingEstimate(order?.shippingData?.logisticsInfo[0]?.shippingEstimate)} ${t(
-										'orderDetails.lbShippingDeadlineInfo'
+										'orderDetails.lbShippingDeadlineInfo',
+										'dias úteis após aprovação do pagamento'
 									)}`}</Text>
 								)}
 							</DetailSection>
 
-							<DetailSection title={t('orderDetails.lbSumary')}>
+							<DetailSection title={t('orderDetails.lbSumary', 'Resumo')}>
 								<View className='flex flex-col text-sm text-gray-700'>
 									{order?.totals?.map(
 										total =>
@@ -198,7 +200,7 @@ export default function OrderDetails(props) {
 											)
 									)}
 									<View className='mt-2 flex justify-between border-t border-gray-200 pt-2'>
-										<Text className='font-bold text-gray-900'>{`${t('orderDetails.lbTotal')}:`}</Text>
+										<Text className='font-bold text-gray-900'>{`${t('orderDetails.lbTotal', 'Total')}:`}</Text>
 										<Text className='font-bold text-gray-900'>
 											{formatPriceInCents(
 												order?.totals
@@ -216,11 +218,11 @@ export default function OrderDetails(props) {
 									{cancelConfirmation ? (
 										<View className='w-full'>
 											<Text className='mb-2 block text-sm font-bold text-gray-800'>
-												{t('orderDetails.lbCancelReason')}
+												{t('orderDetails.lbCancelReason', 'Selecione o motivo para o cancelamento')}
 											</Text>
 											<Dropdown
 												value={cancelReason}
-												placeholder={t('orderDetails.lbSelectCancelReason')}
+												placeholder={t('orderDetails.lbSelectCancelReason', 'Selecione o motivo')}
 												onChange={value => setCancelReason(value)}>
 												{/* Adicione os Dropdown.Item aqui */}
 											</Dropdown>
@@ -229,7 +231,7 @@ export default function OrderDetails(props) {
 													className='cursor-pointer'
 													onClick={() => setCancelConfirmation(false)}>
 													<Text className='text-sm font-bold text-gray-700 hover:underline'>
-														{t('orderDetails.lbBack')}
+														{t('orderDetails.lbBack', 'Voltar')}
 													</Text>
 												</View>
 												<View
@@ -241,7 +243,7 @@ export default function OrderDetails(props) {
 																? 'text-red-600 hover:underline'
 																: 'text-gray-400'
 														}`}>
-														{t('orderDetails.lbContinueCancel')}
+														{t('orderDetails.lbContinueCancel', 'Continuar cancelamento')}
 													</Text>
 												</View>
 											</View>
@@ -251,7 +253,7 @@ export default function OrderDetails(props) {
 											className='cursor-pointer'
 											onClick={() => setCancelConfirmation(true)}>
 											<Text className='font-bold text-red-600 hover:underline'>
-												{t('orderDetails.lbCancel')}
+												{t('orderDetails.lbCancel', 'Cancelar pedido')}
 											</Text>
 										</View>
 									)}
@@ -274,7 +276,9 @@ export default function OrderDetails(props) {
 											{item.name}
 										</Text>
 										<Text className='text-xs text-gray-600'>
-											{`${item.quantity} un. • ${formatPriceInCents(item.price)}`}
+											{`${item.quantity} ${t('orderDetails.unit', 'un.')} • ${formatPriceInCents(
+												item.price
+											)}`}
 										</Text>
 									</View>
 								</View>

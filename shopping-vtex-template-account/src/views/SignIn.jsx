@@ -87,7 +87,7 @@ export default function SignIn(props) {
 			setLoginProviders(providers)
 			setLoadingLoginProviders(false)
 		} catch (e) {
-			console.error('Erro ao carregar provedores de login', e)
+			console.error(t('signIn.loadLoginProvidersError', 'Erro ao carregar provedores de login'), e)
 			setLoadingLoginProviders(false)
 		}
 	}
@@ -111,7 +111,7 @@ export default function SignIn(props) {
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 			setLoadingSendingCode(false)
 		} catch (e) {
-			setAlertMessage(t('signIn.errorSendAccess'))
+			setAlertMessage(t('signIn.errorSendAccess', 'erro ao enviar email'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)
 			setTimeOutToResentEmail(0)
@@ -139,10 +139,10 @@ export default function SignIn(props) {
 				await onLoggedIn()
 				return
 			}
-			setAlertMessage(t('signIn.verifyAgain'))
+			setAlertMessage(t('signIn.verifyAgain', 'Verifique as informaçoes e tente novamente'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
-			setAlertMessage(t('signIn.errorInvalidUser'))
+			setAlertMessage(t('signIn.errorInvalidUser', 'Usuário ou senha inválidos'))
 			setShowLoginErrorAlert(true)
 		} finally {
 			saveUserEmailOnStorage(username)
@@ -159,10 +159,10 @@ export default function SignIn(props) {
 				await onLoggedIn()
 				return
 			}
-			setAlertMessage(t('signIn.wrongCredentials'))
+			setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
-			setAlertMessage(t('signIn.wrongCredentials'))
+			setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
 			setShowLoginErrorAlert(true)
 		} finally {
 			saveUserEmailOnStorage(username)
@@ -172,7 +172,7 @@ export default function SignIn(props) {
 
 		// const customerData = await getCustomerData()
 		// if (loggedIn === 'WrongCredentials') {
-		// 	setAlertMessage(t('signIn.wrongCredentials'))
+		// 	setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
 		// 	setShowLoginErrorAlert(true)
 		// } else if (loggedIn === 'Success') {
 		// 	if (redirectTo) {
@@ -183,7 +183,7 @@ export default function SignIn(props) {
 		// 		Eitri.navigation.back()
 		// 	}
 		// } else {
-		// 	setAlertMessage(t('signIn.verifyAgain'))
+		// 	setAlertMessage(t('signIn.verifyAgain', 'Verifique as informaçoes e tente novamente'))
 		// 	setShowLoginErrorAlert(true)
 		// }
 	}
@@ -202,7 +202,7 @@ export default function SignIn(props) {
 		<Page topInset>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('signIn.headerText')} />
+				<HeaderText text={t('signIn.headerText', 'Entrar')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -212,7 +212,7 @@ export default function SignIn(props) {
 
 			<View className='p-4'>
 				<View className='flex flex-col gap-2'>
-					<Text className='w-full font-bold text-xl'>{t('signIn.welcome')}</Text>
+					<Text className='w-full font-bold text-xl'>{t('signIn.welcome', 'Bem vindo de volta!')}</Text>
 				</View>
 
 				{loginMode === LOGIN_WITH_EMAIL_AND_PASSWORD && (
@@ -221,7 +221,7 @@ export default function SignIn(props) {
 							<CustomInput
 								icon={userIcon}
 								value={username}
-								placeholder={t('signIn.formName')}
+								placeholder={t('signIn.formName', 'E-mail')}
 								inputMode='email'
 								onChange={e => setUsername(e?.target?.value)}
 							/>
@@ -229,7 +229,7 @@ export default function SignIn(props) {
 
 						<View className='mt-4'>
 							<CustomInput
-								placeholder={t('signIn.formPass')}
+								placeholder={t('signIn.formPass', 'Senha')}
 								icon={lockIcon}
 								value={password}
 								type='password'
@@ -240,7 +240,7 @@ export default function SignIn(props) {
 						<View className='mt-4'>
 							<CustomButton
 								width='100%'
-								label={t('signIn.labelButton')}
+								label={t('signIn.labelButton', 'Login')}
 								onPress={handleLogin}
 							/>
 						</View>
@@ -249,14 +249,14 @@ export default function SignIn(props) {
 							<CustomButton
 								width='100%'
 								variant='outlined'
-								label={t('signIn.labelAccessWithCode')}
+								label={t('signIn.labelAccessWithCode', 'Login com código de acesso')}
 								onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)}
 							/>
 						</View>
 
 						<View className='mt-8 flex justify-center'>
 							<View onClick={goToPasswordReset}>
-								<Text className='w-full text-primary'>{t('signIn.forgotPass')}</Text>
+								<Text className='w-full text-primary'>{t('signIn.forgotPass', 'Esqueceu a senha?')}</Text>
 							</View>
 						</View>
 						<View className='mt-4 flex justify-center'>
@@ -264,7 +264,7 @@ export default function SignIn(props) {
 								onClick={() => {
 									navigate(PAGES.SIGNUP)
 								}}>
-								<Text className='w-full text-primary'>{t('signIn.noRegister')}</Text>
+								<Text className='w-full text-primary'>{t('signIn.noRegister', 'Não tenho cadastro')}</Text>
 							</View>
 						</View>
 					</>
@@ -276,7 +276,7 @@ export default function SignIn(props) {
 							icon={userIcon}
 							value={username}
 							inputMode='email'
-							placeholder={t('signIn.formEmail')}
+							placeholder={t('signIn.formEmail', 'Email')}
 							onChange={e => {
 								setUsername(e.target.value)
 							}}
@@ -286,8 +286,8 @@ export default function SignIn(props) {
 							<>
 								<View className='mt-4'>
 									<CustomInput
-										label={t('signIn.formCodeVerification')}
-										placeholder={t('signIn.formCodeVerification')}
+										label={t('signIn.formCodeVerification', 'Código de verificação')}
+										placeholder={t('signIn.formCodeVerification', 'Código de verificação')}
 										inputMode='numeric'
 										value={verificationCode}
 										onChange={e => setVerificationCode(e.target.value)}
@@ -297,7 +297,7 @@ export default function SignIn(props) {
 
 								<View className='mt-4'>
 									<CustomButton
-										label={t('signIn.labelButton')}
+										label={t('signIn.labelButton', 'Login')}
 										onPress={loginWithEmailAndAccessKey}
 										disabled={!username || !verificationCode}
 									/>
@@ -309,8 +309,8 @@ export default function SignIn(props) {
 							<CustomButton
 								label={
 									!emailCodeSent
-										? t('signIn.textSendCode')
-										: `${t('signIn.textResendCode')}${
+										? t('signIn.textSendCode', 'Enviar código')
+										: `${t('signIn.textResendCode', 'Reenviar código')}${
 												resendCode ? ` (${timeOutToResentEmail})` : ''
 											}`
 								}
@@ -323,7 +323,7 @@ export default function SignIn(props) {
 							<View className='mt-4'>
 								<CustomButton
 									variant='outlined'
-									label={t('signIn.labelLoginWithPass')}
+									label={t('signIn.labelLoginWithPass', 'Login com email e senha')}
 									onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_PASSWORD)}
 								/>
 							</View>
@@ -338,7 +338,9 @@ export default function SignIn(props) {
 						<>
 							<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
 								<View className='h-px flex-1 bg-gray-300' />
-								<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
+								<Text className='flex-shrink-0 text-accent-100 font-medium'>
+									{t('signIn.or', 'Ou')}
+								</Text>
 								<View className='h-px flex-1 bg-gray-300' />
 							</View>
 

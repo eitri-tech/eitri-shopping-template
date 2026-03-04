@@ -3,8 +3,10 @@ import { HeaderContentWrapper, CustomButton } from 'shopping-vtex-template-share
 import { openAccount } from '../services/navigationService'
 import { trackScreenView } from '../services/Tracking'
 import { useEffect } from 'react'
+import { useTranslation } from 'eitri-i18n'
 
 export default function ExternalProviderOrderFinished(props) {
+	const { t } = useTranslation()
 	const PAGE = 'External Provider Order Finished'
 
 	useEffect(() => {
@@ -24,24 +26,26 @@ export default function ExternalProviderOrderFinished(props) {
 				<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
 					<View className='mb-6 flex flex-col items-center'>
 						<Text className='text-2xl w-full font-bold text-center text-gray-800 mb-2'>
-							Solicitação enviada!
+							{t('externalProviderOrderFinished.title', 'Solicitação enviada!')}
 						</Text>
 						<Text className='text-base text-center text-gray-600 leading-relaxed'>
-							Acompanhe seu pedido em "Meus pedidos". Se houve algum problema no pagamento, é só clicar em
-							"Tentar novamente"!
+							{t(
+								'externalProviderOrderFinished.description',
+								'Acompanhe seu pedido em "Meus pedidos". Se houve algum problema no pagamento, é só clicar em "Tentar novamente"!'
+							)}
 						</Text>
 					</View>
 
 					{/* Action Buttons */}
 					<View className='flex flex-col gap-4'>
 						<CustomButton
-							label={'Ver meus pedidos'}
+							label={t('externalProviderOrderFinished.seeMyOrders', 'Ver meus pedidos')}
 							onPress={openAccount}
 							block
 						/>
 						<CustomButton
 							outlined
-							label={'Tentar novamente'}
+							label={t('externalProviderOrderFinished.tryAgain', 'Tentar novamente')}
 							onPress={Eitri.navigation.back}
 						/>
 					</View>

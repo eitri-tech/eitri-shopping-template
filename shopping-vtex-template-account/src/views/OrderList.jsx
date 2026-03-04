@@ -6,10 +6,12 @@ import { listOrders } from '../services/CustomerService'
 import ProtectedView from '../components/ProtectedView/ProtectedView'
 import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { useTranslation } from 'eitri-i18n'
 
 export default function OrderList(props) {
 	const [orders, setOrders] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
+	const { t } = useTranslation()
 
 	const [page, setPage] = useState(1)
 
@@ -41,7 +43,7 @@ export default function OrderList(props) {
 				setPage(page + 1)
 			}
 		} catch (error) {
-			console.log('erro ao buscar orders', error)
+			console.log(t('orderList.fetchOrdersError', 'erro ao buscar orders'), error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -52,7 +54,7 @@ export default function OrderList(props) {
 			<Page>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={'Meus Pedidos'} />
+					<HeaderText text={t('orderList.myOrders', 'Meus Pedidos')} />
 				</HeaderContentWrapper>
 
 				<Loading
@@ -78,8 +80,11 @@ export default function OrderList(props) {
 									</InfiniteScroll>
 								) : (
 									<NoItem
-										title='Você não possui nenhum pedido'
-										subtitle='Quando você fizer uma compra, ela será listada aqui.'
+										title={t('orderList.noOrders', 'Você não possui nenhum pedido')}
+										subtitle={t(
+											'orderList.noOrdersSubtitle',
+											'Quando você fizer uma compra, ela será listada aqui.'
+										)}
 									/>
 								)}
 							</>

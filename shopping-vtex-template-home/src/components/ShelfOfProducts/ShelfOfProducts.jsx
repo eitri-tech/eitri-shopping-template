@@ -35,7 +35,7 @@ export default function ShelfOfProducts(props) {
 							{isLoading ? (
 								<Skeleton className='!w-[64px] !h-7 !rounded-md' />
 							) : (
-								<Text className='font-bold'>{t('shelfOfProducts.seeMore')}</Text>
+								<Text className='font-bold'>{t('shelfOfProducts.seeMore', 'Ver mais')}</Text>
 							)}
 						</View>
 					)}

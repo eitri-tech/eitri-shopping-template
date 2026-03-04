@@ -35,7 +35,7 @@ export default function EmptyCart(props) {
 			<View className={'min-h-[100vh] flex flex-col'}>
 				<HeaderContentWrapper>
 					{!openWithBottomBar && <HeaderReturn />}
-					<HeaderText text={t('home.title')} />
+					<HeaderText text={t('home.title', 'Carrinho')} />
 				</HeaderContentWrapper>
 
 				<View className='flex flex-1 flex-col justify-center items-center'>
@@ -45,15 +45,15 @@ export default function EmptyCart(props) {
 							className='w-16 mb-2'
 						/>
 						<Text className='font-bold text-primary-base text-2xl text-center mb-2'>
-							{t('emptyCart.txtEmptyCart')}
+							{t('emptyCart.txtEmptyCart', 'Seu carrinho está vazio')}
 						</Text>
 						<Text className='text-neutral-700 text-base text-center mb-6'>
-							{t('emptyCart.txtMessageList')}
+							{t('emptyCart.txtMessageList', 'Adicione produtos no seu carrinho e eles serão listados aqui.')}
 						</Text>
 						{!openWithBottomBar && (
 							<View className='w-full mt-2'>
 								<CustomButton
-									label={t('emptyCart.labelButton')}
+									label={t('emptyCart.labelButton', 'Comprar Agora')}
 									onPress={closeEitriApp}
 									className='btn-primary w-full'
 								/>

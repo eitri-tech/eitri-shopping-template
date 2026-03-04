@@ -61,8 +61,10 @@ export default function BlogPostShelf(props) {
 					<View
 						className='flex flex-col justify-center items-center w-[120px] h-full p-4'
 						onClick={navigateToSeeMore}>
-						<Text className='text-primary font-bold mb-[4px]'>{t('blogPostShelf.seeMore')}</Text>
-						<Text className='text-primary font-bold'>+</Text>
+						<Text className='text-primary-500 font-bold mb-[4px]'>
+							{t('blogPostShelf.seeMore', 'Ver mais')}
+						</Text>
+						<Text className='text-primary-500 font-bold'>+</Text>
 					</View>
 				</>
 			)}

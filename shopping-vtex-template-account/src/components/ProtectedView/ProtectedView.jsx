@@ -1,8 +1,10 @@
 import Eitri from 'eitri-bifrost'
 import { isLoggedIn } from '../../services/CustomerService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function ProtectedView(props) {
 	const { afterLoginRedirectTo, redirectState, labelLoading } = props
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(true)
 
@@ -32,7 +34,7 @@ export default function ProtectedView(props) {
 				justifyContent='center'
 				alignItems='center'
 				minHeight='100vh'>
-				<Text block>{labelLoading || 'Carregando...'}</Text>
+				<Text block>{labelLoading || t('protectedView.loading', 'Carregando...')}</Text>
 			</View>
 		)
 	}

@@ -45,7 +45,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 		<>
 			<View>
 				<CustomInput
-					label={t('addNewShippingAddress.frmStreet')}
+					label={t('addNewShippingAddress.frmStreet', 'Rua / Avenida')}
 					placeholder={''}
 					value={address?.street || ''}
 					onChange={e => handleAddressChange('street', e)}
@@ -57,7 +57,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 			<View className='flex gap-4'>
 				<View className='w-1/2'>
 					<CustomInput
-						label={t('addNewShippingAddress.frmNumber')}
+						label={t('addNewShippingAddress.frmNumber', 'Número')}
 						placeholder={''}
 						value={address?.number || ''}
 						onChange={e => handleAddressChange('number', e)}
@@ -68,7 +68,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 				</View>
 				<View className='w-1/2'>
 					<CustomInput
-						label={t('addNewShippingAddress.frmComplement')}
+						label={t('addNewShippingAddress.frmComplement', 'Complemento')}
 						placeholder={''}
 						value={address?.complement || ''}
 						onChange={e => handleAddressChange('complement', e)}
@@ -78,7 +78,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 			</View>
 			<View>
 				<CustomInput
-					label={t('addNewShippingAddress.frmNeighborhood')}
+					label={t('addNewShippingAddress.frmNeighborhood', 'Rua / Avenida')}
 					placeholder={''}
 					value={address.neighborhood || ''}
 					onChange={e => handleAddressChange('neighborhood', e)}
@@ -92,7 +92,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 			<View className='flex gap-4'>
 				<View className='w-1/2'>
 					<CustomInput
-						label={t('addNewShippingAddress.frmCity')}
+						label={t('addNewShippingAddress.frmCity', 'Cidade')}
 						placeholder={''}
 						value={address.city || ''}
 						onChange={e => handleAddressChange('city', e)}
@@ -103,7 +103,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 				</View>
 				<View className='w-1/2'>
 					<CustomInput
-						label={t('addNewShippingAddress.frmState')}
+						label={t('addNewShippingAddress.frmState', 'Estado')}
 						placeholder={''}
 						value={address?.state || ''}
 						onChange={e => handleAddressChange('state', e)}
@@ -115,8 +115,8 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 			</View>
 			<View>
 				<CustomInput
-					placeholder={t('addNewShippingAddress.frmReceiveName')}
-					label={t('addNewShippingAddress.frmReceiveName')}
+					placeholder={t('addNewShippingAddress.frmReceiveName', 'Quem irá receber o pedido?')}
+					label={t('addNewShippingAddress.frmReceiveName', 'Quem irá receber o pedido?')}
 					value={address?.receiverName || ''}
 					onChange={text => handleAddressChange('receiverName', text)}
 					className={errors.receiverName && touched.receiverName ? 'border-red-500' : ''}
@@ -134,16 +134,16 @@ function validateAddress(address, t) {
 	const postalCodeDigits = address.postalCode?.replace(/\D/g, '') || ''
 	return {
 		postalCode: !address.postalCode
-			? t('addNewShippingAddress.errorPostalCode')
+			? t('addNewShippingAddress.errorPostalCode', 'Informe o CEP')
 			: postalCodeDigits.length !== 8
 				? t('addNewShippingAddress.errorPostalCodeInvalid', 'CEP deve ter 8 dígitos')
 				: '',
-		street: !address.street ? t('addNewShippingAddress.errorStreet') : '',
-		neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood') : '',
-		city: !address.city ? t('addNewShippingAddress.errorCity') : '',
-		state: !address.state ? t('addNewShippingAddress.errorState') : '',
-		receiverName: !address.receiverName ? t('addNewShippingAddress.errorReceiverName') : '',
-		number: !address.number ? t('addNewShippingAddress.errorNumber') : ''
+		street: !address.street ? t('addNewShippingAddress.errorStreet', 'Informe a rua/avenida') : '',
+		neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood', 'Informe o bairro') : '',
+		city: !address.city ? t('addNewShippingAddress.errorCity', 'Informe a cidade') : '',
+		state: !address.state ? t('addNewShippingAddress.errorState', 'Informe o estado') : '',
+		receiverName: !address.receiverName ? t('addNewShippingAddress.errorReceiverName', 'Informe quem irá receber') : '',
+		number: !address.number ? t('addNewShippingAddress.errorNumber', 'Informe o número') : ''
 	}
 }
 
@@ -291,11 +291,11 @@ export default function AddressForm(props) {
 			navigate('FreightResolver', {}, true)
 		} catch (e) {
 			if (e.response?.status === 400) {
-				setAddressError(t('addNewShippingAddress.errorAddress'))
+				setAddressError(t('addNewShippingAddress.errorAddress', 'Endereço inválido, por favor verifique os dados'))
 				console.error('Error on submit', e)
 				return
 			}
-			setAddressError(t('addNewShippingAddress.errorDefault'))
+			setAddressError(t('addNewShippingAddress.errorDefault', 'Ocorreu um erro inesperado, tente novamente'))
 			setTimeout(() => setAddressError(''), 8000)
 		} finally {
 			setIsSubmitting(false)
@@ -314,7 +314,7 @@ export default function AddressForm(props) {
 		<Page title={PAGE_NAME}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('addNewShippingAddress.title')} />
+				<HeaderText text={t('addNewShippingAddress.title', 'Entrega')} />
 			</HeaderContentWrapper>
 
 			<LoadingComponent
@@ -335,7 +335,7 @@ export default function AddressForm(props) {
 				/>
 				{isLoading && (
 					<View>
-						<Text>{t('addNewShippingAddress.loading') || 'Aguarde...'}</Text>
+						<Text>{t('addNewShippingAddress.loading', 'Aguarde...')}</Text>
 					</View>
 				)}
 				<AddressFields
@@ -364,8 +364,8 @@ export default function AddressForm(props) {
 					marginTop='large'
 					label={
 						isLoading
-							? t('addNewShippingAddress.loading') || 'Aguarde...'
-							: t('addNewShippingAddress.labelButton')
+							? t('addNewShippingAddress.loading', 'Aguarde...')
+							: t('addNewShippingAddress.labelButton', 'Continuar')
 					}
 					fontSize='medium'
 					disabled={!isValidAddress || isLoading}

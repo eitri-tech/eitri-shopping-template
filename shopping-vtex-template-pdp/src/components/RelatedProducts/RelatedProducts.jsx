@@ -34,7 +34,7 @@ export default function RelatedProducts(props) {
 	return (
 		<View className='mt-4'>
 			<View className='px-4'>
-				<Text className='text-lg font-semibold'>{t('productBasicTemplate.txtWhoSaw')}</Text>
+				<Text className='text-lg font-semibold'>{t('productBasicTemplate.txtWhoSaw', 'Quem viu esta, viu também:')}</Text>
 			</View>
 
 			{isLoading ? (
@@ -68,7 +68,7 @@ export default function RelatedProducts(props) {
 		// />
 
 		// <ShelfOfProducts
-		// 	title={t('productBasicTemplate.txtWhoSaw')}
+		// 	title={t('productBasicTemplate.txtWhoSaw', 'Quem viu também comprou')}
 		// 	mode='carousel'
 		// 	products={relatedProducts}
 		// />
