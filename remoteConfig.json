@@ -19,7 +19,24 @@
 		},
 		"checkout": {
 			"recaptchaKey": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-		}
+		},
+		"pdp": {
+			"hiddenProperties": [
+				"Descrição",
+				"Genericos",
+				"sellerId",
+				"Termolabil",
+				"Tipo Medicamento",
+				"Uso e Consumo",
+				"SEO description",
+				"SEO keyword",
+				"Menor Preço PBM"
+			],
+			"hiddenPropertiesValues": [
+				"0",
+				"N/A"
+			]
+    	}
 	},
 	"eitriConfig": {
 		"mainApp": "eitri-shopping-home",
@@ -54,6 +71,28 @@
 	},
 	"storePreferences": {},
 	"deeplinkResolver": {
-		"slug": "eitri-shopping-addons-deeplink-resolver"
+		"slug": "deeplink-resolver"
+	},
+	"deeplink": {
+		"deeplinkMap": [
+			{
+				"path": [
+				"/account#/orders"
+				],
+				"slug": "account",
+				"params": {
+				"route": "OrderList"
+				}
+			},
+			{
+				"path": [
+				"/account#/wishlist"
+				],
+				"slug": "account",
+				"params": {
+				"route": "Wishlist"
+				}
+			}
+		]
 	}
 }
