@@ -8,15 +8,26 @@ export default function HeaderContentWrapper(props) {
 	const [safeAreaTop, setSafeAreaTop] = useState(0)
 	const [translate, setTranslate] = useState('')
 
+	const [headerHeight, setHeaderHeight] = useState(height || DIMENSIONS.HEADER_HEIGHT)
 	const safeAreaTopRef = useRef()
 	const scrollHandler = useRef()
 
 	safeAreaTopRef.current = safeAreaTop
 
-	let _height = height || DIMENSIONS.HEADER_HEIGHT
+	const _height = Math.max(0, headerHeight - 2)
 
 	useEffect(() => {
 		initScrollEffect()
+	}, [])
+
+	useEffect(() => {
+		const headerElement = document.getElementById('header')
+		if (!headerElement) return
+		const observer = new ResizeObserver(([entry]) => {
+			setHeaderHeight(entry.contentRect.height)
+		})
+		observer.observe(headerElement)
+		return () => observer.disconnect()
 	}, [])
 
 	const initScrollEffect = async () => {
@@ -53,11 +64,15 @@ export default function HeaderContentWrapper(props) {
 			if (!ticking) {
 				window.requestAnimationFrame(() => {
 					let currentScrollTop = window.document.documentElement.scrollTop
-					if (currentScrollTop > lastScrollTop) {
-						setTranslate(`translate-y-[${scrollEffectMaxTranslate || '-100%'}]`)
-					} else if (currentScrollTop < lastScrollTop) {
-						setTranslate('')
+					const distance = currentScrollTop - lastScrollTop
+					if (Math.abs(distance) > .8) {
+						if (distance > 0 && currentScrollTop > safeAreaTopRef.current) {
+							setTranslate(scrollEffectMaxTranslate ?? '-100%')
+						} else if (currentScrollTop < lastScrollTop) {
+							setTranslate('0')
+						}
 					}
+
 
 					lastScrollTop = Math.max(currentScrollTop, 0)
 
@@ -73,7 +88,10 @@ export default function HeaderContentWrapper(props) {
 		<>
 			<View
 				id='header-container'
-				className={`fixed top-0 left-0 right-0 z-[9900] ${translate} transition-all duration-500 ease-in-out shadow-md w-full backdrop-blur-sm bg-header-background ${containerClassName || ''}`}>
+				style={{
+					transform: `translateY(${translate})`
+				}}
+				className={`fixed top-0 left-0 right-0 z-[9900] transition-all duration-500 ease-in-out shadow-md w-full backdrop-blur-sm bg-header-background ${containerClassName || ''}`}>
 				<View topInset={'auto'} />
 				<View id='header'>
 					<View
@@ -86,7 +104,7 @@ export default function HeaderContentWrapper(props) {
 			</View>
 			<View
 				topInset={'auto'}
-				className={`fixed top-0 left-0 right-0 z-[2000] w-full bg-header-background`}
+				className={`fixed top-0 left-0 right-0 z-[2000] w-full`}
 			/>
 			<HeaderOffset
 				height={_height}

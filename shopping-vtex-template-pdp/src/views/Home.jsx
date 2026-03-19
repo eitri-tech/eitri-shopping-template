@@ -108,14 +108,9 @@ export default function Home() {
 
 	const onSkuChange = newDesiredVariations => {
 		const productSku = product.items.find(item => {
-			return item.variations.every(variation =>
-				newDesiredVariations.some(
-					newDesiredVariation =>
-						variation?.name === newDesiredVariation.variation &&
-						variation?.values?.[0] === newDesiredVariation.value
-				)
-			)
+			return item.itemId === newDesiredVariations?.itemId
 		})
+
 		if (productSku) {
 			setCurrentSku(productSku)
 		}
