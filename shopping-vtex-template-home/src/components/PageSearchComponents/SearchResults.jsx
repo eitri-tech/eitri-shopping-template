@@ -1,7 +1,7 @@
-import { Loading } from 'shopping-vtex-template-shared'
-import { View, Text, Image } from 'eitri-luminus'
-import ProductCard from '../ProductCard/ProductCard'
 import { useTranslation } from 'eitri-i18n'
+import { View, Text } from 'eitri-luminus'
+import { Loading } from 'shopping-vtex-template-shared'
+import ProductCard from '../ProductCard/ProductCard'
 
 export default function SearchResults(props) {
 	const { searchResults, isLoading } = props

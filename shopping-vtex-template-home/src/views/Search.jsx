@@ -1,10 +1,10 @@
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
+import { View } from 'eitri-luminus'
 import { HeaderContentWrapper, HeaderReturn, HeaderWishList } from 'shopping-vtex-template-shared'
+import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 import SearchInput from '../components/SearchInput/SearchInput'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { View } from 'eitri-luminus'
-import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
-import { useTranslation } from 'eitri-i18n'
 
 export default function Search(props) {
 	const { t } = useTranslation()
@@ -26,6 +26,7 @@ export default function Search(props) {
 				facets: [],
 				query: incomingSearchTerm
 			}
+
 			setParams(searchParams)
 		}
 
@@ -47,12 +48,14 @@ export default function Search(props) {
 		if (term) {
 			setPristine(false)
 			Eitri.keyboard.dismiss()
+
 			try {
 				const params = {
 					sort: 'release:desc',
 					facets: [],
 					query: term
 				}
+
 				//saveSearchHistory(term)
 				setParams(params)
 			} catch (error) {

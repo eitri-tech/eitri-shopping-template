@@ -1,11 +1,11 @@
-import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
-
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
 
 export default function ProductCatalog(props) {
 	const { location } = props
+
 	const { t } = useTranslation()
 
 	const title = location.state.title
@@ -15,6 +15,7 @@ export default function ProductCatalog(props) {
 
 	useEffect(() => {
 		const params = location.state.params
+
 		setAppliedFacets(params)
 
 		if (!openInBottomBar) {
@@ -27,9 +28,7 @@ export default function ProductCatalog(props) {
 		}
 	}, [])
 
-	const goToSearch = () => {
-		Eitri.navigation.navigate({ path: 'Search' })
-	}
+	const goToSearch = () => Eitri.navigation.navigate({ path: 'Search' })
 
 	return (
 		<Page title={title || t('productCatalog.title', 'Catálogo')}>
@@ -38,7 +37,7 @@ export default function ProductCatalog(props) {
 					<View className={`flex items-center gap-4`}>
 						{!openInBottomBar && <HeaderReturn />}
 
-							<HeaderText text={title || t('productCatalog.title', 'Catálogo')} />
+						<HeaderText text={title || t('productCatalog.title', 'Catálogo')} />
 					</View>
 
 					<HeaderSearchIcon onClick={goToSearch} />

@@ -1,6 +1,8 @@
 import { Text, View } from 'eitri-luminus'
+
 export default function ListWithImages(props) {
 	const { currentShelf, chooseCategory } = props
+
 	return (
 		<View className='px-8 flex flex-col'>
 			{currentShelf?.content?.map(category => (

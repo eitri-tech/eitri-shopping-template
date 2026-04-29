@@ -1,5 +1,5 @@
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export default function Cartman() {
 	const [cart, setCart] = useState()
@@ -11,6 +11,7 @@ export default function Cartman() {
 	const getCart = async () => {
 		try {
 			const cart = await Vtex.cart.getCartIfExists()
+
 			console.log('cart========>', cart.orderFormId)
 			setCart(cart)
 		} catch (error) {
@@ -20,6 +21,7 @@ export default function Cartman() {
 
 	const generateNewCart = async () => {
 		const cart = await Vtex.cart.generateNewCart()
+
 		setCart(cart)
 	}
 
@@ -28,16 +30,19 @@ export default function Cartman() {
 		const product = products[Math.floor(Math.random() * products.length)]
 		const sku = product.items[0]
 		const result = await Vtex.cart.addItem(sku)
+
 		setCart(result)
 	}
 
 	const goToHome = async () => {
 		Eitri.navigation.navigate({ path: 'Home', replace: true })
+
 		return
 	}
 
 	const clearCart = async () => {
 		await Vtex.cart.clearCart()
+
 		return
 	}
 
@@ -50,8 +55,8 @@ export default function Cartman() {
 				bottomInset
 				topInset>
 				<Text>{`Id do carrinho: ${cart?.orderFormId}`}</Text>
-				{cart?.items?.map(item => (
-					<Text>{`Item no carrinho: ${item?.name}`}</Text>
+				{cart?.items?.map((item, index) => (
+					<Text key={item?.id || index}>{`Item no carrinho: ${item?.name}`}</Text>
 				))}
 				<Button
 					className='btn-primary w-full'

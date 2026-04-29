@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { View, Text } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
-import { LIST_ORDERING } from '../../../utils/lists'
+import { Text, View } from 'eitri-luminus'
 import { CustomButton } from 'shopping-vtex-template-shared'
+import { LIST_ORDERING } from '../../../utils/lists'
 import CustomModal from '../../CustomModal/CustomModal'
 
 export default function CatalogSort(props) {
@@ -19,6 +19,7 @@ export default function CatalogSort(props) {
 
 	const getCurrentSortLabel = () => {
 		const currentOption = LIST_ORDERING.values.find(option => option.value === currentSort)
+
 		return currentOption ? t(currentOption.name, '') : t('lists.labelRelevance', 'Relevância')
 	}
 

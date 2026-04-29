@@ -1,6 +1,8 @@
 import { View } from 'eitri-luminus'
+
 export default function SelectableTouchable(props) {
 	const { addCategory, removeCategory, checked, value, categoryKey, name } = props
+	
 	const handleCheck = value => {
 		if (checked) {
 			removeCategory({
@@ -11,6 +13,7 @@ export default function SelectableTouchable(props) {
 			addCategory(value)
 		}
 	}
+
 	return (
 		<View
 			onClick={() =>
@@ -21,6 +24,7 @@ export default function SelectableTouchable(props) {
 			}
 			className='flex items-center'>
 			<Checkbox defaultChecked={checked} />
+			
 			{`${name}`}
 		</View>
 	)

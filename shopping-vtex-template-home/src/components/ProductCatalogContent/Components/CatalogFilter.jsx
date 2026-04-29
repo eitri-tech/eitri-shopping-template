@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { View, Text, Button, Modal } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
-import { getProductsFacetsService } from '../../../services/ProductService'
+import { View, Text } from 'eitri-luminus'
 import { CustomButton, BottomInset, CustomCheckbox } from 'shopping-vtex-template-shared'
+import { getProductsFacetsService } from '../../../services/ProductService'
 import CustomModal from '../../CustomModal/CustomModal'
 import PriceRange from './PriceRange'
 
@@ -41,6 +41,7 @@ export default function CatalogFilter(props) {
 			// Validar se result tem a estrutura esperada
 			if (!result || !result.facets || !Array.isArray(result.facets)) {
 				setFacetsLoading(false)
+
 				return
 			}
 
@@ -75,6 +76,7 @@ export default function CatalogFilter(props) {
 			if (value.range.from < min) {
 				min = value.range.from
 			}
+
 			if (value.range.to > max) {
 				max = value.range.to
 			}
@@ -89,6 +91,7 @@ export default function CatalogFilter(props) {
 
 		if (priceRangeFacet) {
 			const [min, max] = priceRangeFacet.value.split(':')
+
 			setInitialMinPriceRange(min)
 			setInitialMaxPriceRange(max)
 		}
@@ -100,11 +103,13 @@ export default function CatalogFilter(props) {
 			f => f.key === filterValue.key && f.value === filterValue.value
 		)
 		let newFacets
+
 		if (existingIndex !== -1 && existingIndex !== undefined) {
 			newFacets = tempFilters.facets.filter(f => !(f.key === filterValue.key && f.value === filterValue.value))
 		} else {
 			newFacets = [...(tempFilters?.facets || []), { key: filterValue.key, value: filterValue.value }]
 		}
+
 		setTempFilters({
 			...tempFilters,
 			facets: newFacets

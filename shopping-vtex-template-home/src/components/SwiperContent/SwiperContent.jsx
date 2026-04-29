@@ -2,6 +2,7 @@ import { Text, View } from 'eitri-luminus'
 
 export default function SwiperContent(props) {
 	const { title, children } = props
+
 	return (
 		<View className='flex flex-col gap-2'>
 			{title && (

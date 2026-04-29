@@ -1,13 +1,12 @@
-import { useEffect } from 'react'
-import { View } from 'eitri-luminus'
-import { getProductsService } from '../../services/ProductService'
-import { useState } from 'react'
-import SearchResults from '../../components/PageSearchComponents/SearchResults'
-import CatalogSort from './Components/CatalogSort'
-import { getDefaultSortParam } from '../../services/helpers/resolveSortParam'
-import CatalogFilter from './Components/CatalogFilter'
-import InfiniteScroll from '../InfiniteScroll/InfiniteScroll'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'eitri-i18n'
+import { View } from 'eitri-luminus'
+import SearchResults from '../../components/PageSearchComponents/SearchResults'
+import { getProductsService } from '../../services/ProductService'
+import { getDefaultSortParam } from '../../services/helpers/resolveSortParam'
+import InfiniteScroll from '../InfiniteScroll/InfiniteScroll'
+import CatalogFilter from './Components/CatalogFilter'
+import CatalogSort from './Components/CatalogSort'
 
 export default function ProductCatalogContent(props) {
 	/*
@@ -67,6 +66,7 @@ export default function ProductCatalogContent(props) {
 			if (!selectedFacets || typeof selectedFacets !== 'object') {
 				console.error('Invalid selectedFacets provided to getProducts')
 				setProductLoading(false)
+
 				return
 			}
 
@@ -77,13 +77,14 @@ export default function ProductCatalogContent(props) {
 			if (result?.products?.length === 0) {
 				setProductLoading(false)
 				setPageHasEnded(true)
+
 				return
 			}
 
 			const loadedProducts = page === 1 ? result.products.length : products.length + result.products.length
 
 			setPageHasEnded(loadedProducts > result.recordsFiltered)
-			setProducts(prev => (page === 1 ? result.products : [...prev, ...result.products]))
+			setProducts(prev => (page === 1 ? result.products : [...prev, ...(result.products || [])]))
 			setTotalProducts(result?.recordsFiltered)
 			setCurrentPage(page)
 			setProductLoading(false)
@@ -96,6 +97,7 @@ export default function ProductCatalogContent(props) {
 	const onScrollEnd = async () => {
 		if (!productLoading && !pagesHasEnded) {
 			const newPage = currentPage + 1
+
 			getProducts(appliedFacets, newPage)
 		}
 	}
@@ -105,6 +107,7 @@ export default function ProductCatalogContent(props) {
 			...appliedFacets,
 			sort: newSort
 		}
+
 		setAppliedFacets(newParams)
 		setProducts([])
 		setCurrentPage(1)
@@ -122,6 +125,7 @@ export default function ProductCatalogContent(props) {
 
 	const onFilterClear = () => {
 		const initialFilters = getInitialParams()
+
 		handleFilterChange(initialFilters)
 	}
 
@@ -152,15 +156,15 @@ export default function ProductCatalogContent(props) {
 						/>
 					</View>
 
-						{totalProducts > 0 && (
-							<View className='px-4'>
-								<Text>
-									{`${showingLabel} ${totalProducts} ${
-										totalProducts > 1 ? productPlural : productSingular
-									}`}
-								</Text>
-							</View>
-						)}
+					{totalProducts > 0 && (
+						<View className='px-4'>
+							<Text>
+								{`${showingLabel} ${totalProducts} ${
+									totalProducts > 1 ? productPlural : productSingular
+								}`}
+							</Text>
+						</View>
+					)}
 				</>
 			)}
 

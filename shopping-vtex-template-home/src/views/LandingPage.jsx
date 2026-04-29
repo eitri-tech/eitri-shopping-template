@@ -1,13 +1,13 @@
 import Eitri from 'eitri-bifrost'
 import {
-	Loading,
 	HeaderContentWrapper,
 	HeaderReturn,
+	HeaderSearchIcon,
 	HeaderText,
-	HeaderSearchIcon
+	Loading
 } from 'shopping-vtex-template-shared'
-import { getCmsContent } from '../services/CmsService'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
+import { getCmsContent } from '../services/CmsService'
 
 export default function LandingPage(props) {
 	const [cmsContent, setCmsContent] = useState(null)
@@ -23,6 +23,7 @@ export default function LandingPage(props) {
 		try {
 			const landingPageName = props?.location?.state?.landingPageName
 			const { sections } = await getCmsContent('landingPage', landingPageName)
+
 			setCmsContent(sections)
 			setIsLoading(false)
 		} catch (e) {

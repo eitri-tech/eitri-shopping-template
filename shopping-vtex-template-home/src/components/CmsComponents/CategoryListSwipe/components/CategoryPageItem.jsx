@@ -1,7 +1,7 @@
-import { HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
-import CategoryTitle from './CategoryTitle'
 import { useTranslation } from 'eitri-i18n'
+import { HeaderReturn, HeaderContentWrapper, HeaderText } from 'shopping-vtex-template-shared'
+import CategoryTitle from './CategoryTitle'
 
 export default function CategoryPageItem(props) {
 	const { item, goToItem } = props
@@ -13,6 +13,7 @@ export default function CategoryPageItem(props) {
 		if (showSubItems) {
 			Eitri.navigation.addBackHandler(() => {
 				setShowSubItems(false)
+
 				return false
 			})
 		} else {
@@ -43,6 +44,7 @@ export default function CategoryPageItem(props) {
 					<HeaderReturn onClick={() => setShowSubItems(false)} />
 					<HeaderText text={item.title}>{item.title}</HeaderText>
 				</HeaderContentWrapper>
+
 				<View
 					bottomInset={'auto'}
 					className='bg-base-100 flex-1 overflow-y-auto'>
@@ -55,9 +57,10 @@ export default function CategoryPageItem(props) {
 								onClick={() => goToItem(item)}
 							/>
 						)}
+
 						{item?.subcategories?.map((subItem, index) => (
 							<CategoryTitle
-								key={subItem.title}
+								key={`${subItem.title}-${index}`}
 								icon={subItem.icon}
 								hasSubItems={false}
 								title={subItem.title}

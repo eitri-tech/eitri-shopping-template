@@ -11,6 +11,7 @@ export default function ProductInfiniteScroll(props) {
 			query: data.term ?? '',
 			sort: data.sort ?? ''
 		}
+
 		setParams(data)
 	}, [])
 

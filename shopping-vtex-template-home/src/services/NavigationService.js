@@ -58,6 +58,7 @@ export const normalizePath = path => {
 
 	if (queryParams.has('map')) {
 		let mapKeys = queryParams.get('map').split(',')
+
 		pathData.forEach((value, index) => {
 			if (mapKeys[index] === 'ft') {
 				normalizedData.query = value
@@ -89,5 +90,6 @@ export const normalizePath = path => {
 
 export const resolveNavigation = (path, title) => {
 	const normalizedPath = normalizePath(path)
+
 	Eitri.navigation.navigate({ path: 'ProductCatalog', state: { params: normalizedPath, title: title || '' } })
 }

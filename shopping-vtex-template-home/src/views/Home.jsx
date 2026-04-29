@@ -1,29 +1,30 @@
 import Eitri from 'eitri-bifrost'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { getCmsContent } from '../services/CmsService'
-import { startConfigure } from '../services/AppService'
-import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
+import { useTranslation } from 'eitri-i18n'
+import { BottomInset } from 'shopping-vtex-template-shared'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
-import { BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { startConfigure } from '../services/AppService'
+import { getCmsContent } from '../services/CmsService'
 
 export default function Home() {
 	const { t } = useTranslation()
 	const { startCart } = useLocalShoppingCart()
+
 	const [cmsContent, setCmsContent] = useState(null)
 
 	useEffect(() => {
 		startHome()
 		requestNotificationPermission()
-		Eitri.navigation.setOnResumeListener(() => {
-			startCart()
-		})
+
+		Eitri.navigation.addOnResumeListener(() => startCart())
 	}, [])
 
 	const requestNotificationPermission = async () => {
 		try {
 			let notificationPermissionStatus = await Eitri.notification.checkPermission()
+
 			if (notificationPermissionStatus.status === 'DENIED') {
 				await Eitri.notification.requestPermission()
 			}
@@ -42,13 +43,17 @@ export default function Home() {
 
 	const resolveRedirectAndCartAndCms = async () => {
 		const startParams = await Eitri.getInitializationInfos()
+
 		if (startParams) {
 			const openRoute = processDeepLink(startParams)
+
 			if (openRoute) {
 				Eitri.navigation.navigate(openRoute)
+
 				return
 			}
 		}
+
 		loadCms()
 		startCart()
 	}
@@ -56,6 +61,7 @@ export default function Home() {
 	const processDeepLink = startParams => {
 		if (startParams?.route) {
 			let { route, ...rest } = startParams
+
 			return {
 				path: route,
 				state: rest,
@@ -66,6 +72,7 @@ export default function Home() {
 
 	const loadCms = async () => {
 		const { sections } = await getCmsContent('home', 'home')
+
 		setCmsContent(sections)
 	}
 
@@ -73,10 +80,13 @@ export default function Home() {
 		<Page
 			title={t('home.title', 'Home')}
 			topInset>
-			<MainHeader />
+			{cmsContent && <MainHeader />}
+
 			<View>
 				<HomeSkeleton show={!cmsContent} />
+
 				<CmsContentRender cmsContent={cmsContent} />
+
 				<BottomInset />
 			</View>
 		</Page>
