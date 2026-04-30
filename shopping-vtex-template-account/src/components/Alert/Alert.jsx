@@ -14,6 +14,7 @@ export default function Alert(props) {
 				setIsAnimatingOut(true) // Inicia a animação de saída
 				const dismissTimer = setTimeout(() => {
 					setVisible(false)
+
 					if (typeof onDismiss === 'function') {
 						onDismiss()
 					}

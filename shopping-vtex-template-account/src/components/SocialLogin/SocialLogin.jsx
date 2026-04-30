@@ -1,7 +1,7 @@
 // /Users/calindra/Workspace/Eitri/eitri-shopping-template/shopping-vtex-template-account/src/components/SocialLogin/SocialLogin.jsx
+import { useTranslation } from 'eitri-i18n'
 import iconFacebook from '../../assets/images/social_facebook.svg'
 import iconGoogle from '../../assets/images/social_google.svg'
-import { useTranslation } from 'eitri-i18n'
 import { loginWithFacebook, loginWithGoogle } from '../../services/CustomerService'
 
 export default function SocialLogin(props) {
@@ -29,7 +29,9 @@ export default function SocialLogin(props) {
 						width='24px'
 						height='24px'
 					/>
-					<Text className='text-gray-700 font-bold uppercase text-sm'>{t('socialLogin.lbButton', 'Continuar com o Google')}</Text>
+					<Text className='text-gray-700 font-bold uppercase text-sm'>
+						{t('socialLogin.lbButton', 'Continuar com o Google')}
+					</Text>
 				</View>
 			)}
 

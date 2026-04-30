@@ -9,6 +9,7 @@ export default function PoweredBy(props) {
 
 	const handlePress = () => {
 		counter.current += 1
+
 		if (counter.current === 5) {
 			setShowEffect(true)
 			counter.current = 0
@@ -186,8 +187,8 @@ export default function PoweredBy(props) {
 										fill='#9DE82B'
 									/>
 									<path
-										fill-rule='evenodd'
-										clip-rule='evenodd'
+										fillRule='evenodd'
+										clipRule='evenodd'
 										d='M89.0144 10.3731C88.7653 11.023 88.1245 11.4883 87.3665 11.4883H86.9197C85.6637 11.4883 84.6456 10.5009 84.6456 9.28268V9.24361H91.2811V8.21362C91.2811 5.93342 89.3769 4.08654 87.0259 4.08654H86.8611C84.4479 4.08654 82.4924 5.98315 82.4924 8.32372V9.11575C82.4924 11.4421 84.4369 13.3281 86.8355 13.3281H87.3445C89.2121 13.3281 90.7721 12.0672 91.1786 10.3731H89.0144ZM86.949 5.92632H87.0845C88.2087 5.92632 89.1206 6.80359 89.1315 7.89041H84.6676C84.8031 6.78228 85.7699 5.92632 86.949 5.92632Z'
 										fill='#9DE82B'
 									/>

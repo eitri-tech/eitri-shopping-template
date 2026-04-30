@@ -1,3 +1,4 @@
+import { useTranslation } from 'eitri-i18n'
 import {
 	Loading,
 	HeaderContentWrapper,
@@ -8,9 +9,8 @@ import {
 } from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { sendPasswordResetCode } from '../services/CustomerService'
-import { sendScreenView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
-import { useTranslation } from 'eitri-i18n'
+import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function PasswordReset(props) {
@@ -22,6 +22,7 @@ export default function PasswordReset(props) {
 
 	useEffect(() => {
 		const email = props?.location?.state?.email
+
 		if (email) {
 			setUsername(email)
 		}
@@ -35,6 +36,7 @@ export default function PasswordReset(props) {
 			if (!username) {
 				return
 			}
+
 			setLoading(true)
 			await sendPasswordResetCode(username)
 			navigate(PAGES.PASSWORD_RESET_CODE, { email: username })
@@ -60,8 +62,15 @@ export default function PasswordReset(props) {
 			<View className='p-4 flex flex-col h-full'>
 				<View>
 					<View className='flex flex flex-col gap-2 mb-4'>
-						<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle', 'Digite seu e-mail para recuperar a senha')}</Text>
-						<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery', '* Vamos te mandar uma mensagem com um código para recuperar senha')}</Text>
+						<Text className='w-full font-bold text-xl'>
+							{t('passwordReset.emailRecoveryTitle', 'Digite seu e-mail para recuperar a senha')}
+						</Text>
+						<Text className='text-sm text-gray-600'>
+							{t(
+								'passwordReset.messageRecovery',
+								'* Vamos te mandar uma mensagem com um código para recuperar senha'
+							)}
+						</Text>
 					</View>
 
 					<CustomInput
@@ -86,7 +95,10 @@ export default function PasswordReset(props) {
 				show={showErrorAlert}
 				onDismiss={() => setShowErrorAlert(false)}
 				duration={7}
-				message={t('passwordReset.messageError', 'Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.')}
+				message={t(
+					'passwordReset.messageError',
+					'Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.'
+				)}
 			/>
 		</Page>
 	)

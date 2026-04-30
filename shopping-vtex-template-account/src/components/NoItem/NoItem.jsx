@@ -1,5 +1,3 @@
-import imgBox from '../../assets/images/box-01.svg'
-
 export default function NoItem(props) {
 	const { title, subtitle } = props
 

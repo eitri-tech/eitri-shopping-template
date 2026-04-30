@@ -1,9 +1,9 @@
-import { openProduct } from '../../services/NavigationService'
-import { removeFromWishlist } from '../../services/CustomerService'
-import { formatPrice } from '../../utils/utils'
-import { App } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { App } from 'eitri-shopping-vtex-shared'
+import { ProductCardDefault, ProductCardFullImage } from 'shopping-vtex-template-shared'
+import { removeFromWishlist } from '../../services/CustomerService'
+import { openProduct } from '../../services/NavigationService'
+import { formatPrice } from '../../utils/utils'
 
 export default function ProductCard(props) {
 	/*
@@ -11,7 +11,7 @@ export default function ProductCard(props) {
 	 * */
 
 	const { t } = useTranslation()
-	const { product, className } = props
+	const { product, className, onRemoveFromWishListExternal } = props
 
 	const [loadingCartOp, setLoadingCartOp] = useState(false)
 	const [loadingWishlistOp, setLoadingWishlistOp] = useState(true)
@@ -42,9 +42,11 @@ export default function ProductCard(props) {
 	const getItemVideo = () => {
 		if (item) {
 			let productVideo = ''
+
 			if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
 				const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
 				const property = product?.properties?.find(prop => prop.name === productVideoTag)
+
 				if (property) {
 					productVideo = property.values?.[0]
 				}
@@ -81,6 +83,7 @@ export default function ProductCard(props) {
 
 		if (price !== listPrice) {
 			const discount = ((listPrice - price) / listPrice) * 100
+
 			return `${discount.toFixed(0)}% ${t('productCard.off', 'OFF')}`
 		} else {
 			return ''
@@ -93,10 +96,12 @@ export default function ProductCard(props) {
 			setLoadingCartOp(true)
 			const newCart = await addItem({ ...item, quantity: itemQuantity })
 			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
+
 			if (itemIndex > -1) {
 				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
 				setItemQuantity(cart?.items?.[itemIndex].quantity)
 			}
+
 			setLoadingCartOp(false)
 		} catch (e) {
 			console.error(t('productCard.addToCartError', 'Error adding cart item'), e)
@@ -107,6 +112,7 @@ export default function ProductCard(props) {
 	const removeFromCart = async () => {
 		setLoadingCartOp(true)
 		const index = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
+
 		await removeItem(index)
 		setItemInCart(null)
 		setLoadingCartOp(false)
@@ -120,6 +126,7 @@ export default function ProductCard(props) {
 		if (newQuantity === 0) {
 			return removeFromCart()
 		}
+
 		if (itemInCart) {
 			await updateItemQuantity(itemInCart.index, newQuantity)
 			setItemQuantity(newQuantity)
@@ -130,9 +137,11 @@ export default function ProductCard(props) {
 	const onAddToWishlist = async () => {
 		try {
 			if (!product.productId) return
+
 			setLoadingWishlistOp(true)
 			setIsOnWishlist(true)
 			let response = await addToWishlist(product.productId, item?.name, item?.itemId)
+
 			setWishListId(response?.data?.addToList)
 			setLoadingWishlistOp(false)
 		} catch (error) {
@@ -161,15 +170,20 @@ export default function ProductCard(props) {
 	}
 
 	const onPressOnWishlist = () => {
-		onRemoveFromWishlist()
+		onRemoveFromWishListExternal && typeof onRemoveFromWishListExternal === 'function'
+			? onRemoveFromWishListExternal()
+			: onRemoveFromWishlist()
 	}
 
 	const onPressCartButton = () => {
 		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
 			openProduct(product)
+
 			return
 		}
+
 		if (loadingCartOp) return
+
 		if (isItemOnCart()) {
 			removeFromCart()
 		} else {
@@ -178,9 +192,11 @@ export default function ProductCard(props) {
 	}
 
 	let productVideo = ''
+
 	if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
 		const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
 		const property = product?.properties?.find(prop => prop.name === productVideoTag)
+
 		if (property) {
 			productVideo = property.values?.[0]
 		}

@@ -1,4 +1,5 @@
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
 import {
 	CustomButton,
 	CustomInput,
@@ -7,14 +8,13 @@ import {
 	HeaderReturn,
 	Loading
 } from 'shopping-vtex-template-shared'
-import userIcon from '../assets/icons/user.svg'
+import Alert from '../components/Alert/Alert'
 import CCheckbox from '../components/CCheckbox/CCheckbox'
-import { sendScreenView } from '../services/TrackingService'
-import { getStorePreferences } from '../services/StoreService'
 import { getSavedUser, loginWithEmailAndKey, sendAccessKeyByEmail } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
-import { useTranslation } from 'eitri-i18n'
-import Alert from '../components/Alert/Alert'
+import { getStorePreferences } from '../services/StoreService'
+import { sendScreenView } from '../services/TrackingService'
+import userIcon from '../assets/icons/user.svg'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function SignUp(props) {
@@ -40,6 +40,7 @@ export default function SignUp(props) {
 		})
 		const loadSavedUser = async () => {
 			const user = await getSavedUser()
+
 			if (user && user.email) {
 				setEmail(user.email)
 			}
@@ -62,6 +63,7 @@ export default function SignUp(props) {
 		if (!termsChecked) {
 			setAlertMessage(t('signUp.alertMessageAcceptTerms', 'Necessário aceitar os termos'))
 			setShowLoginErrorAlert(true)
+
 			return
 		}
 
@@ -84,6 +86,7 @@ export default function SignUp(props) {
 
 	const loginWithEmailAndAccessKey = async () => {
 		setLoading(true)
+
 		try {
 			const loggedIn = await loginWithEmailAndKey(email, verificationCode)
 
@@ -98,11 +101,13 @@ export default function SignUp(props) {
 			}
 		} catch (e) {
 			const status = e?.response?.status || 400
+
 			if (status >= 500) {
 				setAlertMessage(t('signUp.alertMessageServiceError', 'Ocorreu uma falha no serviço, tente novamente'))
 			} else {
 				setAlertMessage(t('signUp.alertMessageVerify', 'Verifique as informaçoes e tente novamente'))
 			}
+
 			setShowLoginErrorAlert(true)
 		} finally {
 			setLoading(false)

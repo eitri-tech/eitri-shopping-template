@@ -36,6 +36,7 @@ export const getCustomerData = async () => {
 	try {
 		const result = await Vtex.customer.getCustomerProfile()
 		const profile = result?.data?.profile
+
 		return profile
 	} catch (e) {
 		console.log('getCustomerData error', e)
@@ -61,6 +62,7 @@ export const setCustomerData = async profileData => {
 		}
 		const result = await Vtex.customer.updateCustomerProfile(payload)
 		const updateProfile = result?.data?.updateProfile
+
 		return updateProfile
 	} catch (e) {
 		console.log('setCustomerData error', e)
@@ -69,6 +71,7 @@ export const setCustomerData = async profileData => {
 
 export const getWishlist = async () => {
 	const result = await Vtex.wishlist.listItems()
+
 	return result?.data?.viewLists?.[0]?.data || []
 }
 

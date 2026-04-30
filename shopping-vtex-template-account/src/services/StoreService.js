@@ -1,12 +1,13 @@
 import Eitri from 'eitri-bifrost'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 
-let STORE_PREFERENCES
+let STORE_PREFERENCES = null
 
 export const getStorePreferences = (page, state = {}, replace = false) => {
 	if (STORE_PREFERENCES) {
 		return STORE_PREFERENCES
 	}
+
 	return new Promise((resolve, reject) => {
 		Eitri.environment
 			.getRemoteConfigs()

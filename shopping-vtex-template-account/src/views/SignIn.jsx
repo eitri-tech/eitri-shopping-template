@@ -1,6 +1,5 @@
-import userIcon from '../assets/images/user.svg'
-import lockIcon from '../assets/icons/lock.svg'
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
 import {
 	Loading,
 	HeaderContentWrapper,
@@ -9,20 +8,20 @@ import {
 	CustomInput,
 	HeaderReturn
 } from 'shopping-vtex-template-shared'
+import Alert from '../components/Alert/Alert'
+import SocialLogin from '../components/SocialLogin/SocialLogin'
 import {
 	doLogin,
-	getCustomerData,
 	loadUserEmailFromStorage,
 	loginWithEmailAndKey,
 	saveUserEmailOnStorage,
 	sendAccessKeyByEmail
 } from '../services/CustomerService'
-import Alert from '../components/Alert/Alert'
-import { sendScreenView } from '../services/TrackingService'
 import { navigate, PAGES } from '../services/NavigationService'
-import { useTranslation } from 'eitri-i18n'
 import { getLoginProviders } from '../services/StoreService'
-import SocialLogin from '../components/SocialLogin/SocialLogin'
+import { sendScreenView } from '../services/TrackingService'
+import lockIcon from '../assets/icons/lock.svg'
+import userIcon from '../assets/images/user.svg'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function SignIn(props) {
@@ -77,13 +76,17 @@ export default function SignIn(props) {
 		try {
 			setLoadingLoginProviders(true)
 			const providers = await getLoginProviders()
+
 			if (!providers?.passwordAuthentication && providers?.accessKeyAuthentication) {
 				setLoginMode(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)
 			}
+
 			const { applicationData } = await Eitri.getConfigs()
+
 			if (applicationData?.platform === 'android') {
 				setCanUseSocialLogin(true)
 			}
+
 			setLoginProviders(providers)
 			setLoadingLoginProviders(false)
 		} catch (e) {
@@ -105,6 +108,7 @@ export default function SignIn(props) {
 			if (timeOutToResentEmail > 0) {
 				return
 			}
+
 			setLoadingSendingCode(true)
 			await sendAccessKeyByEmail(username)
 			setEmailCodeSent(true)
@@ -133,12 +137,16 @@ export default function SignIn(props) {
 
 	const handleLogin = async () => {
 		setLoading(true)
+
 		try {
 			const loggedIn = await doLogin(username, password)
+
 			if (loggedIn === 'Success') {
 				await onLoggedIn()
+
 				return
 			}
+
 			setAlertMessage(t('signIn.verifyAgain', 'Verifique as informaçoes e tente novamente'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
@@ -153,12 +161,16 @@ export default function SignIn(props) {
 
 	const loginWithEmailAndAccessKey = async () => {
 		setLoading(true)
+
 		try {
 			const loggedIn = await loginWithEmailAndKey(username, verificationCode)
+
 			if (loggedIn === 'Success') {
 				await onLoggedIn()
+
 				return
 			}
+
 			setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
@@ -256,7 +268,9 @@ export default function SignIn(props) {
 
 						<View className='mt-8 flex justify-center'>
 							<View onClick={goToPasswordReset}>
-								<Text className='w-full text-primary'>{t('signIn.forgotPass', 'Esqueceu a senha?')}</Text>
+								<Text className='w-full text-primary'>
+									{t('signIn.forgotPass', 'Esqueceu a senha?')}
+								</Text>
 							</View>
 						</View>
 						<View className='mt-4 flex justify-center'>
@@ -264,7 +278,9 @@ export default function SignIn(props) {
 								onClick={() => {
 									navigate(PAGES.SIGNUP)
 								}}>
-								<Text className='w-full text-primary'>{t('signIn.noRegister', 'Não tenho cadastro')}</Text>
+								<Text className='w-full text-primary'>
+									{t('signIn.noRegister', 'Não tenho cadastro')}
+								</Text>
 							</View>
 						</View>
 					</>
