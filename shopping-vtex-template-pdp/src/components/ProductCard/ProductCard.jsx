@@ -1,10 +1,10 @@
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { openCart, openProduct } from '../../services/NavigationService'
-import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../services/CustomerService'
-import { formatPrice } from '../../utils/utils'
-import { App } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { App } from 'eitri-shopping-vtex-shared'
+import { ProductCardDefault, ProductCardFullImage } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../services/CustomerService'
+import { openCart, openProduct } from '../../services/NavigationService'
+import { formatPrice } from '../../utils/utils'
 
 export default function ProductCard(props) {
 	/*
@@ -30,6 +30,7 @@ export default function ProductCard(props) {
 	useEffect(() => {
 		checkItemOnWishlist()
 		const itemIndex = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
+
 		if (itemIndex > -1) {
 			setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
 			setItemQuantity(cart?.items?.[itemIndex].quantity)
@@ -40,10 +41,12 @@ export default function ProductCard(props) {
 	const checkItemOnWishlist = async () => {
 		try {
 			const { inList, listId } = await productOnWishlist(product.productId)
+
 			if (inList) {
 				setIsOnWishlist(true)
 				setWishListId(listId)
 			}
+
 			setLoadingWishlistOp(false)
 		} catch (e) {
 			setLoadingWishlistOp(false)
@@ -52,6 +55,20 @@ export default function ProductCard(props) {
 
 	const getItemName = () => {
 		return product.productName
+	}
+
+	const getItemBrand = () => {
+		return product?.brand
+	}
+
+	const getItemPix = () => {
+		const pixPrice = sellerDefault?.commertialOffer?.Installments?.find(
+			installment => installment.PaymentSystemName === 'Pix'
+		)?.Value
+
+		if (!pixPrice || pixPrice >= sellerDefault?.commertialOffer?.Price) return null
+
+		return formatPrice(pixPrice)
 	}
 
 	const getItemImage = () => {
@@ -63,9 +80,11 @@ export default function ProductCard(props) {
 	const getItemVideo = () => {
 		if (item) {
 			let productVideo = ''
+
 			if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
 				const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
 				const property = product?.properties?.find(prop => prop.name === productVideoTag)
+
 				if (property) {
 					productVideo = property.values?.[0]
 				}
@@ -100,6 +119,7 @@ export default function ProductCard(props) {
 
 		if (price !== listPrice) {
 			const discount = ((listPrice - price) / listPrice) * 100
+
 			return `${discount.toFixed(0)}% OFF`
 		} else {
 			return ''
@@ -112,10 +132,12 @@ export default function ProductCard(props) {
 			setLoadingCartOp(true)
 			const newCart = await addItem({ ...item, quantity: itemQuantity })
 			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
+
 			if (itemIndex > -1) {
 				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
 				setItemQuantity(cart?.items?.[itemIndex].quantity)
 			}
+
 			setLoadingCartOp(false)
 		} catch (e) {
 			console.error('Error adding cart item', e)
@@ -126,6 +148,7 @@ export default function ProductCard(props) {
 	const removeFromCart = async () => {
 		setLoadingCartOp(true)
 		const index = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
+
 		await removeItem(index)
 		setItemInCart(null)
 		setLoadingCartOp(false)
@@ -139,6 +162,7 @@ export default function ProductCard(props) {
 		if (newQuantity === 0) {
 			return removeFromCart()
 		}
+
 		if (itemInCart) {
 			await updateItemQuantity(itemInCart.index, newQuantity)
 			setItemQuantity(newQuantity)
@@ -149,9 +173,11 @@ export default function ProductCard(props) {
 	const onAddToWishlist = async () => {
 		try {
 			if (!product.productId) return
+
 			setLoadingWishlistOp(true)
 			setIsOnWishlist(true)
 			let response = await addToWishlist(product.productId, item?.name, item?.itemId)
+
 			setWishListId(response?.data?.addToList)
 			setLoadingWishlistOp(false)
 		} catch (error) {
@@ -181,38 +207,47 @@ export default function ProductCard(props) {
 	const onPressOnWishlist = () => {
 		try {
 			if (loadingWishlistOp) return
+
 			if (isOnWishlist) {
 				onRemoveFromWishlist()
 			} else {
 				onAddToWishlist()
 			}
-		} catch (e) {}
+		} catch (e) {
+			console.error('Error on wishlist operation [onPressOnWishlist]:', e)
+		}
 	}
 
 	const getActionLabel = () => {
 		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
 			return t('productCard.actionBuy', 'Comprar')
 		}
+
 		return isItemOnCart() ? t('productCard.actionViewCart', 'Ver carrinho') : t('productCard.actionBuy', 'Comprar')
 	}
 
 	const onPressCartButton = () => {
 		if (loadingCartOp) return
+
 		if (isItemOnCart()) {
 			openCart()
 		} else {
 			if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
 				openProduct(product)
+
 				return
 			}
+
 			addToCart()
 		}
 	}
 
 	let productVideo = ''
+
 	if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
 		const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
 		const property = product?.properties?.find(prop => prop.name === productVideoTag)
+
 		if (property) {
 			productVideo = property.values?.[0]
 		}
@@ -223,6 +258,8 @@ export default function ProductCard(props) {
 		image: getItemImage(),
 		video: productVideo,
 		badge: getBadge(),
+		brand: getItemBrand(),
+		pixPrice: getItemPix(),
 		listPrice: getListPrice(),
 		showListItem: App?.configs?.appConfigs?.productCard?.showListPrice ?? true,
 		price: formatPrice(sellerDefault?.commertialOffer.Price),

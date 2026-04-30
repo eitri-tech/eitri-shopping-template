@@ -14,6 +14,7 @@ export const formatAmount = (amount, locale = 'pt-BR', currency = 'BRL') => {
 	if (typeof amount !== 'number') {
 		return ''
 	}
+
 	return amount.toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
@@ -21,30 +22,36 @@ export const formatAmountInCents = (amount, locale = 'pt-BR', currency = 'BRL') 
 	if (typeof amount !== 'number') {
 		return ''
 	}
+
 	if (amount === 0) {
 		return 'Grátis'
 	}
+
 	return (amount / 100).toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
 const discoverInstallments = item => {
 	try {
 		const mainSeller = item.sellers.find(seller => seller.sellerDefault)
+
 		if (mainSeller) {
 			const betterInstallment = mainSeller.commertialOffer.Installments.reduce((acc, installment) => {
 				if (!acc) {
 					acc = installment
+
 					return acc
 				} else {
 					if (installment.NumberOfInstallments > acc.NumberOfInstallments) {
 						acc = installment
 					}
+
 					return acc
 				}
 			}, null)
 
 			return `Em até ${betterInstallment.NumberOfInstallments}x de ${formatAmount(betterInstallment.Value)}`
 		}
+
 		return ''
 	} catch (error) {
 		return ''
@@ -60,8 +67,10 @@ export const calculateDiscount = (initialValue, currencyValue) => {
 	) {
 		const discountPrice = initialValue - currencyValue
 		const discount = (discountPrice / initialValue) * 100
+
 		return parseInt(discount)
 	}
+
 	return 0
 }
 
@@ -116,13 +125,14 @@ export const formatProductFromVtex = product => {
 			})
 		}
 	} catch (error) {
-		// console.log('error', product)
+		console.error('Error [formatProductFromVtex]:', error)
 		throw error
 	}
 }
 
 export const validateZipCode = text => {
 	const regexCEP = /^\d{8}$/
+
 	return regexCEP.test(text)
 }
 
@@ -139,15 +149,18 @@ export const formatDateDaysMonthYear = date => {
 	const dia = data.getDate()
 	const mes = data.toLocaleString('pt-BR', { month: 'long' })
 	const ano = data.getFullYear()
+
 	return `${dia} de ${mes} de ${ano}`
 }
 
 export const openNativeProduct = product => {
 	console.log('openProduct', window.__WORKSPACE_USER_ID)
+
 	//HACK para desenvolvimento.
 	if (window && window.__WORKSPACE_USER_ID) {
 		Eitri.navigation.navigate({ path: 'Product', state: { product: product } })
 		console.warn(window.__WORKSPACE_USER_ID)
+
 		return
 	}
 
@@ -163,7 +176,9 @@ export const formatDate = date => {
 
 export const formatZipCode = zipCode => {
 	if (!zipCode) return ''
+
 	if (zipCode.includes('-') || zipCode.includes('*')) return zipCode
+
 	return zipCode.slice(0, 5) + '-' + zipCode.slice(5)
 }
 
@@ -176,13 +191,16 @@ export const addDaysToDate = (daysToAdd, onlyBusinessDays = true) => {
 	currentDate.setMilliseconds(0)
 
 	let count = 0
+
 	while (count < daysToAdd) {
 		currentDate.setDate(currentDate.getDate() + 1)
+
 		// Check if it's not a weekend (Saturday: 6, Sunday: 0)
 		if (!onlyBusinessDays || (currentDate.getDay() !== 0 && currentDate.getDay() !== 6)) {
 			count++
 		}
 	}
+
 	return currentDate
 }
 
@@ -211,4 +229,24 @@ export const parseJwt = token => {
 
 export const upperCaseWord = string => {
 	return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+export const waitForElement = selector => {
+	return new Promise(resolve => {
+		if (document.querySelector(selector)) {
+			return resolve(document.querySelector(selector))
+		}
+
+		const observer = new MutationObserver(mutations => {
+			if (document.querySelector(selector)) {
+				observer.disconnect()
+				resolve(document.querySelector(selector))
+			}
+		})
+
+		observer.observe(document.body, {
+			childList: true,
+			subtree: true
+		})
+	})
 }

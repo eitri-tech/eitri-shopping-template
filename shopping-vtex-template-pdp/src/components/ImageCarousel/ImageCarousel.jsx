@@ -1,5 +1,5 @@
-import { View, Carousel, Image } from 'eitri-luminus'
 import { useState } from 'react'
+import { View, Image } from 'eitri-luminus'
 import { CustomCarousel } from 'shopping-vtex-template-shared'
 
 export default function ImageCarousel(props) {

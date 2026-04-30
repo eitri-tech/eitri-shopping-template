@@ -1,5 +1,5 @@
-import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart } from '../../services/NavigationService'
 
@@ -13,6 +13,7 @@ export default function ActionButton(props) {
 	useEffect(() => {
 		const mainSeller = currentSku.sellers.find(seller => seller.sellerDefault)
 		const isAvailable = mainSeller?.commertialOffer?.AvailableQuantity > 0
+
 		setIsAvailable(isAvailable)
 	}, [currentSku])
 
@@ -22,17 +23,23 @@ export default function ActionButton(props) {
 
 	const getButtonLabel = () => {
 		if (!isAvailable) return t('product.errorNoProduct', 'Produto Indisponível')
-		return isItemOnCart() ? t('product.labelGoToCart', 'Ir para carrinho') : t('product.labelAddToCart', 'Adicionar ao carrinho')
+
+		return isItemOnCart()
+			? t('product.labelGoToCart', 'Ir para carrinho')
+			: t('product.labelAddToCart', 'Adicionar ao carrinho')
 	}
 
 	const handleButtonClick = () => {
 		if (!isAvailable) return
+
 		setLoading(true)
+
 		if (isItemOnCart()) {
 			openCart()
 		} else {
 			addItem(currentSku)
 		}
+
 		setLoading(false)
 	}
 

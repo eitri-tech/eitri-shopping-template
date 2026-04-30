@@ -3,6 +3,11 @@
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
 
+.prettierrc.mjs
+eslint.config.mjs
+package.json
+package-lock.json
+
 jsconfig.json
 
 # Node artifact files

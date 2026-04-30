@@ -1,10 +1,12 @@
 import ProductCard from '../../ProductCard/ProductCard'
 import ProductCardLoading from './ProductCardLoading'
+
 export default function ShelfOfProductsCarousel(props) {
 	const { isLoading, products, gap, locale, currency } = props
 	const products_per_page = 2
 
 	const productsPage = []
+
 	if (Array.isArray(products)) {
 		for (let i = 0; i < products.length; i += products_per_page) {
 			productsPage.push(products.slice(i, i + products_per_page))

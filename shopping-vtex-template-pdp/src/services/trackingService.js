@@ -1,5 +1,4 @@
-import Eitri from 'eitri-bifrost'
-import { Tracking, TrackingService } from 'shopping-vtex-template-shared'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export const sendScreenView = async (friendlyScreenName, screenFilename) => {
 	try {

@@ -1,6 +1,7 @@
+import { useTranslation } from 'eitri-i18n'
 import { Divisor, Loading, Spacing } from 'shopping-vtex-template-shared'
 import Review from './Review'
-import { useTranslation } from 'eitri-i18n'
+
 export default function Reviews(props) {
 	const { reviews, disableReviewButton, ratingsCount, fetchAndSetReviews, productId, productLinkText } = props
 	const [collapsed, setCollapsed] = useState(false)
@@ -16,7 +17,9 @@ export default function Reviews(props) {
 		setPage(page + 1)
 		setButtomIsLoading(false)
 	}
+
 	if (!reviews) return null
+
 	return (
 		<View>
 			<View onClick={() => toggleCollapsedState()}>

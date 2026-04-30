@@ -1,22 +1,21 @@
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
 import { View } from 'eitri-luminus'
 import { Loading, BottomInset } from 'shopping-vtex-template-shared'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
+import ActionButton from '../components/ActionButton/ActionButton'
+import DescriptionComponent from '../components/Description/DescriptionComponent'
+import Freight from '../components/Freight/Freight'
+import Header from '../components/Header/Header'
 import ImageCarousel from '../components/ImageCarousel/ImageCarousel'
 import MainDescription from '../components/MainDescription/MainDescription'
-import SkuSelector from '../components/SkuSelector/SkuSelector'
-import Freight from '../components/Freight/Freight'
-import RichContent from '../components/RichContent/RichContent'
-import DescriptionComponent from '../components/Description/DescriptionComponent'
-import Reviews from '../components/Reviews/Reviews'
 import RelatedProducts from '../components/RelatedProducts/RelatedProducts'
-import { useTranslation } from 'eitri-i18n'
+import Reviews from '../components/Reviews/Reviews'
+import SkuSelector from '../components/SkuSelector/SkuSelector'
+import { useLocalShoppingCart } from '../providers/LocalCart'
 import { startConfigure } from '../services/AppService'
-import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
-import ActionButton from '../components/ActionButton/ActionButton'
-import { getProductById, getProductBySlug } from '../services/productService'
+import { getProductById, getProductBySlug, markLastViewedProduct } from '../services/productService'
+import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
@@ -43,6 +42,7 @@ export default function Home() {
 		const startParams = await Eitri.getInitializationInfos()
 
 		let product = await startParams.product
+
 		if (product) {
 			setProduct(product)
 			setCurrentSku(findAvailableSKU(product))
@@ -72,6 +72,7 @@ export default function Home() {
 		const availableSku = product.items.find(item =>
 			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
 		)
+
 		return availableSku || product.items[0]
 	}
 
@@ -80,11 +81,13 @@ export default function Home() {
 			if (startParams.productId) {
 				return await getProductById(startParams.productId)
 			}
+
 			if (startParams.slug) {
 				return await getProductBySlug(startParams.slug)
 			}
 		} catch (e) {
 			console.error('loadProduct: Error', e)
+
 			return null
 		}
 	}
@@ -93,6 +96,7 @@ export default function Home() {
 		if (startParams?.orderFormId) {
 			await saveCartIdOnStorage(startParams?.orderFormId)
 		}
+
 		await startCart()
 	}
 

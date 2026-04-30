@@ -1,6 +1,8 @@
 import { Loading } from 'shopping-vtex-template-shared'
+
 export default function ProductCardLoading(props) {
 	const { width, gap } = props
+
 	return (
 		<View className='flex justify-center'>
 			<View className='p-8 pr-1 w-[50%]'>

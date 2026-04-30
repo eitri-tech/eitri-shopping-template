@@ -1,6 +1,6 @@
 import Description from './Description'
 import Information from './Information'
-import Supplier from './Supplier'
+
 export default function DescriptionComponent(props) {
 	const { product } = props
 

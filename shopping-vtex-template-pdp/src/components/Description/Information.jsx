@@ -1,6 +1,6 @@
 import { useTranslation } from 'eitri-i18n'
-import CollapseWrapper from './components/CollapseWrapper'
 import { App } from 'eitri-shopping-vtex-shared'
+import CollapseWrapper from './components/CollapseWrapper'
 
 export default function Information(props) {
 	const { product } = props
@@ -12,6 +12,7 @@ export default function Information(props) {
 		const hiddenProperties = App?.configs?.appConfigs?.pdp?.hiddenProperties
 
 		const isExcluded = name => hiddenProperties?.includes(name)
+
 		if (product?.properties) {
 			return product?.properties?.filter(element => !isExcluded(element.name))
 		} else {
@@ -19,12 +20,14 @@ export default function Information(props) {
 			let allSpecifications = product?.specificationGroups?.find(
 				group => group.originalName === 'allSpecifications'
 			)
+
 			allSpecifications?.specifications.forEach(element => {
 				if (!isExcluded(element.name)) {
 					result[element.name] = element.values
 				}
 			})
 		}
+
 		return [result]
 	}
 

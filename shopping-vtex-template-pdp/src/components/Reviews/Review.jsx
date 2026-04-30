@@ -1,9 +1,11 @@
+import { useTranslation } from 'eitri-i18n'
 import { Divisor } from 'shopping-vtex-template-shared'
 import Rating from '../Rating/Rating'
-import { useTranslation } from 'eitri-i18n'
+
 export default function Review(props) {
 	const { review } = props
 	const { t } = useTranslation()
+
 	return (
 		<View>
 			<View className='py-2'>
@@ -13,7 +15,10 @@ export default function Review(props) {
 					<Text className='text-neutral-content font-bold'>{review?.created_at}</Text>
 				</View>
 				<View className='py-1'>
-					<Text>{review?.opinion || t('review.txtOpnion', 'Cliente não escreveu uma avaliação, apenas deu a nota do produto.')}</Text>
+					<Text>
+						{review?.opinion ||
+							t('review.txtOpnion', 'Cliente não escreveu uma avaliação, apenas deu a nota do produto.')}
+					</Text>
 				</View>
 			</View>
 			<Divisor />

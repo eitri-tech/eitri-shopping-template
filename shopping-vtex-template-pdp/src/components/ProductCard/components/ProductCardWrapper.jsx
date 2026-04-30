@@ -1,10 +1,11 @@
-import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import { openProduct } from '../../../services/NavigationService'
-import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../../services/CustomerService'
-import { formatPrice } from '../../../utils/utils'
+import { useTranslation } from 'eitri-i18n'
 import { App } from 'eitri-shopping-vtex-shared'
 import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../../services/CustomerService'
+import { openProduct } from '../../../services/NavigationService'
+import { formatPrice } from '../../../utils/utils'
+
 export default function ProductCardWrapper(props) {
 	const { vtexProduct, width } = props
 	const { addItem, removeItem, cart } = useLocalShoppingCart()
@@ -13,6 +14,7 @@ export default function ProductCardWrapper(props) {
 	const [isOnWishlist, setIsOnWishlist] = useState(false)
 	const [wishListId, setWishListId] = useState(null)
 	const { t } = useTranslation()
+
 	useEffect(() => {
 		checkItemOnWishlist()
 	}, [])
@@ -22,10 +24,12 @@ export default function ProductCardWrapper(props) {
 	const checkItemOnWishlist = async () => {
 		try {
 			const { inList, listId } = await productOnWishlist(vtexProduct.productId)
+
 			if (inList) {
 				setIsOnWishlist(true)
 				setWishListId(listId)
 			}
+
 			setLoadingWishlistOp(false)
 		} catch (e) {
 			setLoadingWishlistOp(false)
@@ -37,7 +41,9 @@ export default function ProductCardWrapper(props) {
 		const maxInstallments = installments?.reduce((acc, curr) => {
 			return curr.NumberOfInstallments > acc.NumberOfInstallments ? curr : acc
 		}, installments[0])
+
 		if (!maxInstallments || maxInstallments?.NumberOfInstallments === 1) return ''
+
 		return `em até ${maxInstallments?.NumberOfInstallments}x ${formatPrice(maxInstallments?.Value)}`
 	}
 	const getListPrice = () => {
@@ -50,9 +56,12 @@ export default function ProductCardWrapper(props) {
 	const getBadge = () => {
 		const price = sellerDefault?.commertialOffer?.Price
 		const listPrice = sellerDefault?.commertialOffer?.ListPrice
+
 		if (price < listPrice) {
 			const discount = ((listPrice - price) / listPrice) * 100
+
 			if (discount < 1) return ''
+
 			return `${discount.toFixed(0)}% off`
 		} else {
 			return ''
@@ -67,6 +76,7 @@ export default function ProductCardWrapper(props) {
 	const removeFromCart = async () => {
 		setLoadingCartOp(true)
 		const index = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
+
 		await removeItem(index)
 		setLoadingCartOp(false)
 	}
@@ -77,6 +87,7 @@ export default function ProductCardWrapper(props) {
 	const onAddToWishlist = async () => {
 		try {
 			if (!vtexProduct.productId) return
+
 			setLoadingWishlistOp(true)
 			await addToWishlist(vtexProduct.productId, item?.name, item?.itemId)
 			setIsOnWishlist(true)
@@ -97,6 +108,7 @@ export default function ProductCardWrapper(props) {
 	}
 	const onPressOnWishlist = () => {
 		if (loadingWishlistOp) return
+
 		if (isOnWishlist) {
 			onRemoveFromWishlist()
 		} else {
@@ -106,15 +118,19 @@ export default function ProductCardWrapper(props) {
 	const onPressCartButton = () => {
 		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
 			openProduct(vtexProduct)
+
 			return
 		}
+
 		if (loadingCartOp) return
+
 		if (isItemOnCart()) {
 			removeFromCart()
 		} else {
 			addToCart()
 		}
 	}
+
 	if (App?.configs?.appConfigs?.productCard?.style === 'fullImage') {
 		return (
 			<ProductCardFullImage
@@ -129,7 +145,11 @@ export default function ProductCardWrapper(props) {
 				isOnWishlist={isOnWishlist}
 				loadingWishlistOp={loadingWishlistOp}
 				loadingCartOp={loadingCartOp}
-				actionLabel={isItemOnCart() ? t('productCardVertical.cart', 'ver Carrinho') : t('productCardVertical.buy', 'comprar')}
+				actionLabel={
+					isItemOnCart()
+						? t('productCardVertical.cart', 'ver Carrinho')
+						: t('productCardVertical.buy', 'comprar')
+				}
 				width={width}
 				onPressOnCard={onPressOnCard}
 				onPressCartButton={onPressCartButton}
@@ -137,6 +157,7 @@ export default function ProductCardWrapper(props) {
 			/>
 		)
 	}
+
 	return (
 		<ProductCardDefault
 			name={item?.nameComplete || item?.name}
@@ -147,7 +168,9 @@ export default function ProductCardWrapper(props) {
 			price={formatPrice(sellerDefault?.commertialOffer.Price)}
 			installments={formatInstallments(sellerDefault)}
 			isInCart={isItemOnCart()}
-			actionLabel={isItemOnCart() ? t('productCardVertical.cart', 'ver Carrinho') : t('productCardVertical.buy', 'comprar')}
+			actionLabel={
+				isItemOnCart() ? t('productCardVertical.cart', 'ver Carrinho') : t('productCardVertical.buy', 'comprar')
+			}
 			isOnWishlist={isOnWishlist}
 			loadingWishlistOp={loadingWishlistOp}
 			loadingCartOp={loadingCartOp}
