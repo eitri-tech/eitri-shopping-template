@@ -33,6 +33,7 @@ export default function CustomButton(props) {
 		if (variant === 'outlined' || outlined) {
 			return 'transparent'
 		}
+
 		return isLoading || disabled ? 'bg-gray-300' : 'bg-primary'
 	})()
 
@@ -40,6 +41,7 @@ export default function CustomButton(props) {
 		if (variant === 'outlined' || outlined) {
 			return 'text-primary'
 		}
+
 		return isLoading || disabled ? 'text-gray-500' : 'text-primary-content'
 	})()
 

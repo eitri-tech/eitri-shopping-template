@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { Text, View, Button } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import { Text, View, Button } from 'eitri-luminus'
 
 /**
  * Função de Erro Genérico.
@@ -20,6 +20,7 @@ export default function GenericError(props) {
 	async function getConfigs() {
 		try {
 			const configs = await Eitri.getConfigs()
+
 			setAppSlug(configs?.miniAppData?.slug)
 		} catch (error) {
 			console.error('@Shared.GenericError.getConfigs', error)

@@ -1,4 +1,5 @@
 import { Text, View } from 'eitri-luminus'
+
 export default function HeaderSearch(props) {
 	const { onPress, labelSearch } = props
 

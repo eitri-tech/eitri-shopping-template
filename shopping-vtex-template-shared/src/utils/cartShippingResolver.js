@@ -47,6 +47,7 @@ export default function cartShippingResolver(cart) {
 						isCurrent: fasters.every(faster => faster.selected)
 					})
 				}
+
 				if (cheapers && cheapers?.length > 0) {
 					options.push({
 						label: 'Entrega econômica',
@@ -65,6 +66,7 @@ export default function cartShippingResolver(cart) {
 		if (pickUpInPoints && pickUpInPoints?.length > 0) {
 			for (const pickUpInPoint of pickUpInPoints) {
 				const pickUpInPointAddress = pickUpInPoint?.pickupStoreInfo?.address
+
 				options.push({
 					label: pickUpInPoint?.pickupStoreInfo?.friendlyName,
 					shippingEstimate: `Retire na loja até ${pickUpInPoint.formattedShippingEstimate}`,
@@ -106,10 +108,12 @@ function getCheapersAndFasters(logInfoWithFasterAndCheaperSla) {
 		if (cheaperSla) {
 			cheapers.push({ itemIndex: logicInfo.itemIndex, ...cheaperSla })
 		}
+
 		if (fasterSla) {
 			fasters.push({ itemIndex: logicInfo.itemIndex, ...fasterSla })
 		}
 	}
+
 	return { cheapers, fasters }
 }
 
@@ -124,7 +128,9 @@ function getPickupPoints(logInfoWithFasterAndCheaperSla) {
 	const findSlasFromPickUpInPoints = pickUpPointId => {
 		return logInfoWithFasterAndCheaperSla.reduce((acc, logicInfo) => {
 			const sla = logicInfo?.slas?.find(sla => sla.id === pickUpPointId)
+
 			if (sla) acc.push({ itemIndex: logicInfo.itemIndex, ...sla })
+
 			return acc
 		}, [])
 	}
@@ -184,6 +190,7 @@ function preProcessingSla(logisticsInfo) {
 			selectedDeliveryChannel: logistic.selectedDeliveryChannel,
 			slas: logistic.slas.map(sla => {
 				const estimatedDate = shippingEstimateDate(sla.shippingEstimate)
+
 				return {
 					id: sla.id,
 					price: sla.price,
@@ -219,12 +226,14 @@ function mapFasterAndCheaperShippingOption(preProcessedSlas) {
 			if (sla.isPickupInPoint) {
 				continue
 			}
+
 			if (
 				fasterSla.shippingEstimateDate > sla.shippingEstimateDate ||
 				(fasterSla.shippingEstimateDate === sla.shippingEstimateDate && fasterSla.price > sla.price)
 			) {
 				fasterSla = sla
 			}
+
 			if (
 				cheaperSla.price > sla.price ||
 				(cheaperSla.price === sla.price && cheaperSla.shippingEstimateDate > sla.shippingEstimateDate)
@@ -232,6 +241,7 @@ function mapFasterAndCheaperShippingOption(preProcessedSlas) {
 				cheaperSla = sla
 			}
 		}
+
 		_preProcessedSlas.push({
 			...preProcessedSla,
 			slas: preProcessedSla?.slas.map(sla => {

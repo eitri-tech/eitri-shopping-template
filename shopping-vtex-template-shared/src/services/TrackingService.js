@@ -117,6 +117,7 @@ export default class TrackingService {
 	static screenView = async (friendlyScreenName, screenFilename, logEvent = false) => {
 		try {
 			const _friendlyScreenName = friendlyScreenName.replace(/ /g, '_').toLowerCase()
+
 			this.sendEitriTracking(
 				this.EVENTS.screen_view,
 				{
@@ -244,10 +245,12 @@ export default class TrackingService {
 				} else {
 					acc[`item_category${index + 1}`] = curr
 				}
+
 				return acc
 			}, {})
 
 		let price = _item?.price || 0
+
 		if (Array.isArray(_item?.sellers) && _item?.sellers[0]?.Price) {
 			price = _item.sellers[0].Price
 		} else if (Array.isArray(_item?.sellers) && _item?.sellers[0]?.commertialOffer?.Price) {
@@ -352,10 +355,12 @@ export default class TrackingService {
 			const items = cart?.items.map(item => {
 				item.price = (item.price / 100).toFixed(2)
 				const _item = this.mountProductItem(item, item?.quantity || 1)
+
 				return _item
 			})
 
 			const price = cart?.value ? (cart.value / 100).toFixed(2) : null
+
 			try {
 				this.sendEitriTracking(this.EVENTS.view_cart, {
 					[this.PARAMS.currency]: currency,
@@ -388,6 +393,7 @@ export default class TrackingService {
 		try {
 			if (Eitri.exposedApis.inngage && Eitri.exposedApis.inngage.logEvent) {
 				const env = await Eitri.environment.getName()
+
 				if (env !== 'dev') {
 					await Eitri.exposedApis.inngage.logEvent({ eventName, data })
 				}
@@ -421,6 +427,7 @@ export default class TrackingService {
 		try {
 			if (Eitri.exposedApis.appsFlyer && Eitri.exposedApis.appsFlyer.logEvent) {
 				const env = await Eitri.environment.getName()
+
 				if (env !== 'dev') {
 					await Eitri.exposedApis.appsFlyer.logEvent({ eventName, data })
 				}

@@ -2,9 +2,11 @@ export const formatAmountInCents = amount => {
 	if (typeof amount !== 'number') {
 		return ''
 	}
+
 	if (amount === 0) {
 		return 'Grátis'
 	}
+
 	return (amount / 100).toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
 }
 
@@ -21,25 +23,32 @@ export const addDaysToDate = (daysToAdd, onlyBusinessDays = true) => {
 	currentDate.setMilliseconds(0)
 
 	let count = 0
+
 	while (count < daysToAdd) {
 		currentDate.setDate(currentDate.getDate() + 1)
+
 		// Check if it's not a weekend (Saturday: 6, Sunday: 0)
 		if (!onlyBusinessDays || (currentDate.getDay() !== 0 && currentDate.getDay() !== 6)) {
 			count++
 		}
 	}
+
 	return currentDate
 }
 
 export const addHoursToDate = hoursToAdd => {
 	const currentDate = new Date()
+
 	currentDate.setHours(currentDate.getHours() + hoursToAdd)
+
 	return currentDate
 }
 
 export const addMinutesToDate = minutesToAdd => {
 	const currentDate = new Date()
+
 	currentDate.setMinutes(currentDate.getMinutes() + minutesToAdd)
+
 	return currentDate
 }
 
