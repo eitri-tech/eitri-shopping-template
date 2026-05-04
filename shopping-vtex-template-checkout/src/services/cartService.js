@@ -1,5 +1,5 @@
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export const getCart = async () => {
 	return await Vtex.cart.getCartIfExists()
@@ -27,11 +27,13 @@ export const saveCartIdOnStorage = async orderFormId => {
 
 export const addUserData = async userData => {
 	const newCart = await Vtex.checkout.addUserData(userData)
+
 	return newCart
 }
 
 export const selectPaymentOption = async payload => {
 	const newCart = await Vtex.checkout.selectPaymentOption(payload)
+
 	return newCart
 }
 
@@ -41,6 +43,7 @@ export const clearCart = async () => {
 
 export const removeClientData = async () => {
 	await Vtex.cart.removeClientData()
+
 	return await getCart()
 }
 

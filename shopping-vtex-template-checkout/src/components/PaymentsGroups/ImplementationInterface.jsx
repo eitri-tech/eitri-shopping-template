@@ -1,10 +1,9 @@
 import { App } from 'eitri-shopping-vtex-shared'
-import CreditCard from './Groups/CreditCard'
-import BankInvoice from './Groups/BankInvoice'
-import InstantPayment from './Groups/InstantPayment'
-import GiftCard from './Groups/GiftCard'
-import Eitri from 'eitri-bifrost'
 import GooglePay from '@/components/PaymentsGroups/Groups/GooglePay'
+import BankInvoice from './Groups/BankInvoice'
+import CreditCard from './Groups/CreditCard'
+import GiftCard from './Groups/GiftCard'
+import InstantPayment from './Groups/InstantPayment'
 
 export default function ImplementationInterface(props) {
 	const { groupName, systemGroup, onSelectPaymentMethod } = props

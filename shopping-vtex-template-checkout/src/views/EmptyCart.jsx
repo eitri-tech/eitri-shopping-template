@@ -1,9 +1,9 @@
+import { useTranslation } from 'eitri-i18n'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, CustomButton } from 'shopping-vtex-template-shared'
+import { trackScreenView } from '../services/Tracking'
 import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
-import { useTranslation } from 'eitri-i18n'
 import { goToCartman } from '../utils/utils'
-import { trackScreenView } from '../services/Tracking'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, CustomButton } from 'shopping-vtex-template-shared'
 
 export default function EmptyCart() {
 	const { t } = useTranslation()
@@ -34,7 +34,9 @@ export default function EmptyCart() {
 					<Text className='font-bold text-primary-base text-xl text-center'>
 						{t('emptyCart.txtEmptyCart', 'Seu carrinho está vazio')}
 					</Text>
-					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem', 'Adicione produtos no seu carrinho')}</Text>
+					<Text className='mt-6 text-neutral-700 text-base text-center'>
+						{t('emptyCart.txtAddItem', 'Adicione produtos no seu carrinho')}
+					</Text>
 				</View>
 
 				<CustomButton

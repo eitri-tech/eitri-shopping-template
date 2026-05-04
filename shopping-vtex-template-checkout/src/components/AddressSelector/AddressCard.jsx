@@ -1,5 +1,5 @@
-import { Text, View } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import { Text, View } from 'eitri-luminus'
 import { navigate } from '../../services/navigationService'
 
 export default function AddressCard({ address, isSelected = false, onClick, showBusinessHours = false, title = null }) {
@@ -13,6 +13,7 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 		const today = new Date().getDay()
 
 		const todayHours = businessHours.find(h => h.DayOfWeek === today)
+
 		if (todayHours) {
 			return `${t('addressSelector.today', 'Hoje')}: ${todayHours?.OpeningTime?.slice(0, 5)} - ${todayHours.ClosingTime.slice(0, 5)}`
 		}

@@ -1,7 +1,7 @@
-import { formatAmountInCents } from '../../utils/utils'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { useTranslation } from 'eitri-i18n'
 import { Text, View } from 'eitri-luminus'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { formatAmountInCents } from '../../utils/utils'
 
 export default function CartSummary() {
 	const { t } = useTranslation()

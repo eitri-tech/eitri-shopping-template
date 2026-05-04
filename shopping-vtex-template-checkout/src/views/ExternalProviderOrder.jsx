@@ -47,7 +47,9 @@ export default function ExternalProviderOrder(props) {
 					orderId: props.location?.state?.paymentResult?.orderId
 				})
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log('Erro ao verificar status do pedido [checkOrderStatus]', error)
+		}
 	}
 
 	return <Page></Page>

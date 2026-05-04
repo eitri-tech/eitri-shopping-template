@@ -1,6 +1,6 @@
+import { cartShippingResolver, shippingResolver } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { navigate, openCart } from '../services/navigationService'
-import { cartShippingResolver, shippingResolver } from 'shopping-vtex-template-shared'
 
 export default function FreightResolver(props) {
 	const { cart } = useLocalShoppingCart()
@@ -11,6 +11,7 @@ export default function FreightResolver(props) {
 		} else {
 			if (cart?.shippingData?.address?.addressType === 'residential' && !cart?.shippingData?.address?.number) {
 				navigate('AddressForm', { addressId: cart?.shippingData?.address?.addressId }, true)
+
 				return
 			}
 
@@ -21,11 +22,13 @@ export default function FreightResolver(props) {
 
 			if (shipping?.options?.some(opt => !opt.fulfillsAllItems)) {
 				navigate('MultipleFreightSelector', {}, true)
+
 				return
 			}
 
 			if (!shippingData || shippingData?.options?.length === 0) {
 				openCart()
+
 				return
 			}
 

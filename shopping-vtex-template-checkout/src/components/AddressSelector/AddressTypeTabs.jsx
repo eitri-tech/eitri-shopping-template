@@ -1,6 +1,6 @@
+import { useTranslation } from 'eitri-i18n'
 import { Text, View } from 'eitri-luminus'
 import { CustomButton } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
 
 export default function AddressTypeTabs({ selectedTab, onTabChange }) {
 	const { t } = useTranslation()

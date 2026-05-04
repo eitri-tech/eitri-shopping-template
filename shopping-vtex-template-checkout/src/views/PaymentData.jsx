@@ -1,10 +1,10 @@
-import { Page, View } from 'eitri-luminus'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import PaymentMethods from '../components/Methods/PaymentMethods'
-import { trackScreenView } from '../services/Tracking'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { Page, View } from 'eitri-luminus'
+import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
+import PaymentMethods from '../components/Methods/PaymentMethods'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { trackScreenView } from '../services/Tracking'
 
 export default function PaymentData(props) {
 	const { cart, selectPaymentOption } = useLocalShoppingCart()
@@ -23,6 +23,7 @@ export default function PaymentData(props) {
 				payments: Array.isArray(paymentMethod) ? paymentMethod : [paymentMethod],
 				giftCards: cart.paymentData.giftCards
 			}
+
 			await selectPaymentOption(payload)
 		} catch (error) {
 			console.log('Erro ao selecionar método de pagamento', error)

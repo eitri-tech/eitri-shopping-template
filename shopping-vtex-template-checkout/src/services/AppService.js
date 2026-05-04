@@ -1,4 +1,3 @@
-import Eitri from 'eitri-bifrost'
 import { App } from 'eitri-shopping-vtex-shared'
 
 export const startConfigure = async () => {

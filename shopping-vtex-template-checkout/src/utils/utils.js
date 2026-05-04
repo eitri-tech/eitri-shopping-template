@@ -4,9 +4,11 @@ export const formatAmountInCents = (amount, locale = 'pt-BR', currency = 'BRL') 
 	if (typeof amount !== 'number') {
 		return ''
 	}
+
 	if (amount === 0) {
 		return 'Grátis'
 	}
+
 	return (amount / 100).toLocaleString(locale, { style: 'currency', currency: currency })
 }
 
@@ -41,13 +43,16 @@ export const addDaysToDate = (daysToAdd, onlyBusinessDays = true) => {
 	currentDate.setMilliseconds(0)
 
 	let count = 0
+
 	while (count < daysToAdd) {
 		currentDate.setDate(currentDate.getDate() + 1)
+
 		// Check if it's not a weekend (Saturday: 6, Sunday: 0)
 		if (!onlyBusinessDays || (currentDate.getDay() !== 0 && currentDate.getDay() !== 6)) {
 			count++
 		}
 	}
+
 	return currentDate
 }
 
@@ -58,6 +63,7 @@ export const resolveCategoryItemCart = item => {
 
 	ids.forEach((id, index) => {
 		const key = index === 0 ? 'item_category' : `item_category${index + 1}`
+
 		result[key] = item.productCategories ? categories[id] : categories[index]
 	})
 
@@ -69,6 +75,7 @@ export const extractUniqueCategoryNames = data => {
 
 	data.items.forEach(item => {
 		const category = resolveCategoryItemCart(item)
+
 		categorySet.add(category.item_category)
 	})
 
@@ -76,6 +83,7 @@ export const extractUniqueCategoryNames = data => {
 }
 
 let cartmantCountdown = 10
+
 export const goToCartman = () => {
 	if (cartmantCountdown === 0) {
 		Eitri.navigation.navigate({ path: 'Cartman' })

@@ -1,9 +1,9 @@
-import { Text, View } from 'eitri-luminus'
-import { useLocalShoppingCart } from '../../../../providers/LocalCart'
 import { useEffect, useState } from 'react'
-import { resolvePostalCode } from '../../../../services/freigthService'
-import { CustomInput } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { Text, View } from 'eitri-luminus'
+import { CustomInput } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../../../../providers/LocalCart'
+import { resolvePostalCode } from '../../../../services/freigthService'
 
 export default function CreditCardBillingAddress() {
 	const { cart, cardInfo, setCardInfo } = useLocalShoppingCart()
@@ -13,6 +13,7 @@ export default function CreditCardBillingAddress() {
 
 	useEffect(() => {
 		const userAddress = cart?.shippingData?.address
+
 		if (userAddress && userAddress?.addressType === 'residential') {
 			setCardInfo({ ...cardInfo, address: userAddress })
 		}
@@ -23,6 +24,7 @@ export default function CreditCardBillingAddress() {
 
 		if (!/^\d{5}-?\d{3}$/.test(value)) {
 			handleAddressChange(e)
+
 			return
 		}
 
@@ -51,6 +53,7 @@ export default function CreditCardBillingAddress() {
 
 	const handleAddressChange = (field, e) => {
 		const value = e.target.value
+
 		setCardInfo(prev => ({
 			...prev,
 			address: {
@@ -62,8 +65,10 @@ export default function CreditCardBillingAddress() {
 
 	const onChangeBillingAddressCheckbox = async checked => {
 		setUseShippingAddress(checked)
+
 		if (checked) {
 			const userAddress = cart?.shippingData?.address
+
 			if (userAddress) {
 				setCardInfo({ ...cardInfo, address: null, addressId: userAddress.addressId })
 			}
@@ -76,14 +81,13 @@ export default function CreditCardBillingAddress() {
 		if (cardInfo) {
 			return `${cardInfo.address?.street}, ${cardInfo.address?.number} - ${cardInfo.address?.neighborhood}, ${cardInfo.address?.city}`
 		}
+
 		return t('creditCardBillingAddress.shippingAddress', 'endereço de entrega')
 	}
 
 	return (
 		<View className='flex flex-col gap-2 mt-2'>
-			<Text className='text-sm font-bold'>
-				{t('creditCardBillingAddress.title', 'Endereço de cobrança')}
-			</Text>
+			<Text className='text-sm font-bold'>{t('creditCardBillingAddress.title', 'Endereço de cobrança')}</Text>
 
 			<View className='flex flex-row items-center gap-2'>
 				<Checkbox

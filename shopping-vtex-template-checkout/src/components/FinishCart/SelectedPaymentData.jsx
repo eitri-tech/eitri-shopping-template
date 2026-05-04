@@ -1,12 +1,12 @@
-import { formatAmountInCents, hideCreditCardNumber } from '../../utils/utils'
-import SimpleCard from '../Card/SimpleCard'
-import iconCard from '../../assets/images/credit_card.svg'
 import { useTranslation } from 'eitri-i18n'
 import { Image, Text, View } from 'eitri-luminus'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import CardIcon from '../Icons/CardIcons/CardIcon'
-import pixImage from '../../assets/images/pix.png'
 import googlePayImage from '../../assets/images/GPay_Acceptance_Mark_800.png'
+import iconCard from '../../assets/images/credit_card.svg'
+import pixImage from '../../assets/images/pix.png'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { formatAmountInCents, hideCreditCardNumber } from '../../utils/utils'
+import SimpleCard from '../Card/SimpleCard'
+import CardIcon from '../Icons/CardIcons/CardIcon'
 
 function CreditCardVisual({ cardInfo, cardName }) {
 	const { t } = useTranslation()
@@ -14,6 +14,7 @@ function CreditCardVisual({ cardInfo, cardName }) {
 	// Determinar a cor do cartão baseado na bandeira detectada
 	const getCardGradient = brand => {
 		const loBrand = brand.toLowerCase()
+
 		switch (loBrand) {
 			case 'visa':
 				return 'from-blue-600 via-blue-700 to-blue-800'
@@ -101,6 +102,7 @@ export default function SelectedPaymentData(props) {
 
 	const getPaymentSystemDetails = paymentSystem => {
 		const ps = cart?.paymentData?.paymentSystems?.find(ps => ps.stringId === paymentSystem.paymentSystem)
+
 		return {
 			groupName: ps?.groupName,
 			name: ps.name,
@@ -157,7 +159,9 @@ export default function SelectedPaymentData(props) {
 											src={pixImage}
 											className='w-[130px] object-contain'
 										/>
-										<Text className='text-sm'>{t('selectedPaymentData.instantApproval', 'Aprovação imediata')}</Text>
+										<Text className='text-sm'>
+											{t('selectedPaymentData.instantApproval', 'Aprovação imediata')}
+										</Text>
 									</View>
 								)
 							}

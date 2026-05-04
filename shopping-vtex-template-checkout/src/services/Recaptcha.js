@@ -12,6 +12,7 @@ const Recaptcha = forwardRef((props, ref) => {
 			await waitForElement('#g-recaptcha-button')
 			window?.grecaptcha?.render('g-recaptcha-button')
 			window.eitriShopRecaptchaOnSubmit = () => {}
+
 			if (onRecaptchaReady) onRecaptchaReady()
 		} catch (error) {
 			console.error(error)
@@ -43,6 +44,7 @@ const Recaptcha = forwardRef((props, ref) => {
 			async getRecaptchaToken() {
 				try {
 					const token = await window?.grecaptcha?.execute()
+
 					return token
 				} catch (e) {
 					console.error(e)
@@ -63,4 +65,5 @@ const Recaptcha = forwardRef((props, ref) => {
 	)
 })
 
+Recaptcha.displayName = 'Recaptcha'
 export default Recaptcha

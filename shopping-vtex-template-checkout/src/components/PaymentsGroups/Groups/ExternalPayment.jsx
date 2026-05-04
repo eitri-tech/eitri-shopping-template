@@ -1,7 +1,6 @@
-import GroupsWrapper from './GroupsWrapper'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
 import { navigate } from '../../../services/navigationService'
+import GroupsWrapper from './GroupsWrapper'
 
 export default function ExternalPayment(props) {
 	const { cart } = useLocalShoppingCart()
@@ -12,6 +11,7 @@ export default function ExternalPayment(props) {
 		const paymentSystem = systemGroup?.paymentSystems?.[0]
 
 		if (!paymentSystem) return
+
 		await onSelectPaymentMethod([
 			{
 				paymentSystem: paymentSystem.id,

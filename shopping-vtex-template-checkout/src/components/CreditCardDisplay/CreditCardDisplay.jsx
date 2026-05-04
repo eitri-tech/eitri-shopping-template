@@ -1,11 +1,12 @@
-import CardIcon from '../Icons/CardIcons/CardIcon'
 import { useTranslation } from 'eitri-i18n'
+import CardIcon from '../Icons/CardIcons/CardIcon'
 
 export default function CreditCardDisplay({ cardInfo, cardName }) {
 	const { t } = useTranslation()
 	// Determinar a cor do cartão baseado na bandeira detectada
 	const getCardGradient = brand => {
 		const loBrand = brand?.toLowerCase()
+
 		switch (loBrand) {
 			case 'visa':
 				return 'from-blue-600 via-blue-700 to-blue-800'

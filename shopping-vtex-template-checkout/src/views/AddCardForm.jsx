@@ -1,3 +1,4 @@
+import { useTranslation } from 'eitri-i18n'
 import {
 	HeaderContentWrapper,
 	HeaderReturn,
@@ -6,14 +7,13 @@ import {
 	BottomInset,
 	CustomInput
 } from 'shopping-vtex-template-shared'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { getPaymentSystem } from '../utils/getPaymentSystem'
+import CreditCardDisplay from '../components/CreditCardDisplay/CreditCardDisplay'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
 import CreditCardBillingAddress from '../components/PaymentsGroups/Groups/Components/CreditCardBillingAddress'
-import { navigate } from '../services/navigationService'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import CreditCardDisplay from '../components/CreditCardDisplay/CreditCardDisplay'
-import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { navigate } from '../services/navigationService'
+import { getPaymentSystem } from '../utils/getPaymentSystem'
 
 export default function AddCardForm(props) {
 	const { cart, cardInfo, setCardInfo, selectPaymentOption } = useLocalShoppingCart()
@@ -28,8 +28,9 @@ export default function AddCardForm(props) {
 	const [validDueDate, setValidDueDate] = useState(false)
 
 	useEffect(() => {
-		const paymentSystemGroups = getPaymentSystem(cart)
+		const paymentSystemGroups = getPaymentSystem(cart) || []
 		const cardSystemGroup = paymentSystemGroups.find(ps => ps.groupName === 'creditCardPaymentGroup')
+
 		setSystemGroups(cardSystemGroup)
 	}, [cart])
 
@@ -56,6 +57,7 @@ export default function AddCardForm(props) {
 		const value = formCardInfo?.dueDate
 		// Check format MM/YY
 		const regex = /^(0[1-9]|1[0-2])\/\d{2}$/
+
 		if (!regex.test(value)) return setValidDueDate(false)
 
 		const [month, year] = value.split('/').map(Number)
@@ -69,6 +71,7 @@ export default function AddCardForm(props) {
 
 		// Validate if future or current month/year
 		if (fullYear === currentYear && month >= currentMonth) return setValidDueDate(true)
+
 		if (fullYear > currentYear) return setValidDueDate(true)
 
 		return setValidDueDate(false)
@@ -77,6 +80,7 @@ export default function AddCardForm(props) {
 	const findPaymentSystem = cardNumber => {
 		return systemGroup?.paymentSystems?.find(method => {
 			const regex = RegExp(method.validator.regex)
+
 			return regex.test(cardNumber.replace(/\D+/g, ''))
 		})
 	}
@@ -85,6 +89,7 @@ export default function AddCardForm(props) {
 		try {
 			setIsLoading(true)
 			const paymentSystem = findPaymentSystem(formCardInfo?.cardNumber)
+
 			if (paymentSystem) {
 				const payload = {
 					payments: [
@@ -99,8 +104,10 @@ export default function AddCardForm(props) {
 					],
 					giftCards: cart.paymentData.giftCards
 				}
+
 				await selectPaymentOption(payload)
 			}
+
 			setCardInfo({ ...cardInfo, ...formCardInfo })
 			navigate('Installments', { paymentSystem })
 			setIsLoading(false)
@@ -111,6 +118,7 @@ export default function AddCardForm(props) {
 
 	const handleCardDataChange = (key, e) => {
 		const value = e.target.value
+
 		setFormCardInfo(prev => ({ ...prev, [key]: value }))
 	}
 
@@ -182,7 +190,9 @@ export default function AddCardForm(props) {
 							variant='mask'
 							mask='99/99'
 							error={
-								!validDueDate && formCardInfo?.dueDate && t('addCardForm.validityError', 'Data inválida')
+								!validDueDate &&
+								formCardInfo?.dueDate &&
+								t('addCardForm.validityError', 'Data inválida')
 							}
 						/>
 						<CustomInput

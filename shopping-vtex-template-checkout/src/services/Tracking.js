@@ -1,6 +1,6 @@
+import Eitri from 'eitri-bifrost'
 import { TrackingService } from 'shopping-vtex-template-shared'
 import { extractUniqueCategoryNames } from '../utils/utils'
-import Eitri from 'eitri-bifrost'
 import { autoTriggerGAEvents } from './AppService'
 
 export const trackScreenView = (friendlyScreenName, screenFileName) => {
@@ -53,6 +53,7 @@ export const trackAddPaymentInfo = (cart, paymentType) => {
 	try {
 		if (!paymentType) {
 			const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
+
 			paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
 		}
 
@@ -99,6 +100,7 @@ export const trackShippingInfo = async cart => {
 					quantity: item.quantity
 				}
 			})
+
 			TrackingService.event('add_shipping_info', {
 				currency: 'BRL',
 				shipping_tier: shippingTier?.selectedSla ? shippingTier.selectedSla : '',
@@ -151,8 +153,10 @@ export const sendLogError = async (error, method, data = {}, _cart) => {
 		}
 
 		const environment = await Eitri.environment.getName()
+
 		if (environment === 'dev') {
 			console.log('===sendLogError===', payload)
+
 			return
 		}
 

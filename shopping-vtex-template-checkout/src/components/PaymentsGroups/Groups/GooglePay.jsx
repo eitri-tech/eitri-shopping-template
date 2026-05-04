@@ -1,12 +1,12 @@
-import GroupsWrapper from './GroupsWrapper'
-import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import { navigate } from '../../../services/navigationService'
-import GPay from '@/components/Icons/MethodIcons/GPay'
-import GPayBtn from './../../../assets/images/gp-light-pt.svg'
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
+import GPay from '@/components/Icons/MethodIcons/GPay'
 import loadGPaymentData from '@/services/GPayService'
 import { sendLogError } from '@/services/Tracking'
-import { useTranslation } from 'eitri-i18n'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import { navigate } from '../../../services/navigationService'
+import GPayBtn from './../../../assets/images/gp-light-pt.svg'
+import GroupsWrapper from './GroupsWrapper'
 
 export default function GooglePay(props) {
 	const { systemGroup, onSelectPaymentMethod } = props
@@ -69,6 +69,7 @@ export default function GooglePay(props) {
 		} catch (e) {
 			sendLogError(e, 'onSelectThisGroup', { paymentSystem: 'Google Pay' }, cart)
 		}
+
 		setLoadingGoogleData(false)
 	}
 

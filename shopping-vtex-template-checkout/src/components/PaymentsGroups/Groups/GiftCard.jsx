@@ -1,12 +1,11 @@
-import Gift from '../../Icons/MethodIcons/Gift'
-import GroupsWrapper from './GroupsWrapper'
-import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import LoadingComponent from '../../Shared/Loading/LoadingComponent'
-import { formatAmountInCents } from '../../../utils/utils'
-import { navigate } from '../../../services/navigationService'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import { navigate } from '../../../services/navigationService'
+import { formatAmountInCents } from '../../../utils/utils'
+import Gift from '../../Icons/MethodIcons/Gift'
+import LoadingComponent from '../../Shared/Loading/LoadingComponent'
+import GroupsWrapper from './GroupsWrapper'
 
 export default function GiftCard(props) {
 	const { cart, setPaymentOption } = useLocalShoppingCart()
@@ -30,6 +29,7 @@ export default function GiftCard(props) {
 
 	const loadCardValue = cart => {
 		const giftCardsValue = cart.paymentData?.giftCards?.reduce((acc, giftCard) => acc + giftCard.value, 0) ?? 0
+
 		setGiftCardValue(giftCardsValue)
 	}
 
@@ -54,6 +54,7 @@ export default function GiftCard(props) {
 					gift.redemptionCode?.replace(/-/g, '')?.toLowerCase() ===
 					redemptionCode?.replace(/-/g, '')?.toLowerCase()
 			)
+
 			if (applied) {
 				loadCardValue(newCart)
 				setRedemptionCode('')
@@ -75,11 +76,13 @@ export default function GiftCard(props) {
 	const removeGiftCart = async giftId => {
 		try {
 			const newGiftCardList = cart?.giftCards?.filter(gift => gift.id !== giftId)
+
 			setIsLoading(true)
 			const payload = {
 				payments: cart.paymentData.payments,
 				giftCards: newGiftCardList
 			}
+
 			await setPaymentOption(payload)
 			setRedemptionCode('')
 			setGiftCardValue(0)
@@ -108,7 +111,10 @@ export default function GiftCard(props) {
 						<View className='flex justify-between mt-2 gap-2 items-end w-full'>
 							<View className='w-2/3'>
 								<CustomInput
-									placeholder={t('paymentMethods.giftCard.placeholder', 'Insira o código do vale presente')}
+									placeholder={t(
+										'paymentMethods.giftCard.placeholder',
+										'Insira o código do vale presente'
+									)}
 									value={redemptionCode}
 									onChange={e => setRedemptionCode(e.target.value)}
 								/>

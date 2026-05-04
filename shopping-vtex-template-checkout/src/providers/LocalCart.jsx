@@ -26,8 +26,10 @@ export default function CartProvider({ children }) {
 	const executeCartOperation = async (operation, ...args) => {
 		setCartIsLoading(true)
 		const newCart = await operation(...args)
+
 		setCart(newCart)
 		setCartIsLoading(false)
+
 		return newCart
 	}
 
@@ -70,6 +72,7 @@ export default function CartProvider({ children }) {
 				giftCards: []
 			})
 		}
+
 		return executeCartOperation(selectPaymentOption, payload)
 	}
 

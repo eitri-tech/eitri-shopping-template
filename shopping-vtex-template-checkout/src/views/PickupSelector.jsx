@@ -1,13 +1,18 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackScreenView } from '../services/Tracking'
+import { useTranslation } from 'eitri-i18n'
 import { Page, Text, View } from 'eitri-luminus'
 import { useEffect, useState } from 'react'
-import { navigate } from '../services/navigationService'
-import { cartShippingResolver } from 'shopping-vtex-template-shared'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import {
+	BottomInset,
+	cartShippingResolver,
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText
+} from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { trackScreenView } from '../services/Tracking'
+import { navigate } from '../services/navigationService'
 
 export default function PickupSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
@@ -26,9 +31,7 @@ export default function PickupSelector(props) {
 		}
 	}, [])
 
-	const handleAddNewAddress = () => {
-		navigate('AddressForm', {}, true)
-	}
+	const handleAddNewAddress = () => navigate('AddressForm', {}, true)
 
 	const onSelectFreightOption = async freightOption => {
 		try {
@@ -44,6 +47,7 @@ export default function PickupSelector(props) {
 				logisticsInfo: slas,
 				selectedAddresses: cart.shippingData.selectedAddresses
 			}
+
 			await setFreight(payload)
 			navigate('PaymentData')
 		} catch (error) {
@@ -75,16 +79,20 @@ export default function PickupSelector(props) {
 					</Text>
 				</View>
 
-				{pickUpOptions?.slice(0, seeMore ? Infinity : 3).map(option => (
+				{pickUpOptions?.slice(0, seeMore ? Infinity : 3).map((option, index) => (
 					<CardSelector
+						key={option?.id || `${option.label}-${index}`}
 						mainTitle={option.label}
 						mainClickHandler={() => onSelectFreightOption(option)}
 						secondaryActionTitle={option.shippingEstimate}>
 						<Text className='text text-base-content/70'>{`${option.address.street}, ${option.address.number} ${option.address.complement}`}</Text>
+
 						<Text className='text text-base-content/70'>{`${option.address.neighborhood} - ${option.address.city} - ${option.address.state}`}</Text>
+
 						<Text className='text text-base-content/70'>
 							{`${t('common.zipCode', 'CEP')}: ${option.address.postalCode}`}
 						</Text>
+
 						<Text
 							className={`text text-base-content/70 font-bold ${option.price === 'Grátis' ? 'text-green-600' : ''}`}>
 							{option.price}
@@ -96,9 +104,7 @@ export default function PickupSelector(props) {
 					onClick={() => setSeeMore(!seeMore)}
 					className='flex items-center justify-center mt-4 text-primary font-bold'>
 					<Text>
-						{seeMore
-							? t('pickupSelector.seeLess', 'Ver menos')
-							: t('pickupSelector.seeMore', 'Ver mais')}
+						{seeMore ? t('pickupSelector.seeLess', 'Ver menos') : t('pickupSelector.seeMore', 'Ver mais')}
 					</Text>
 				</View>
 			</View>

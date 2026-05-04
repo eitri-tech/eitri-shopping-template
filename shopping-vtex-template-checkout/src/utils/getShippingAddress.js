@@ -9,6 +9,7 @@ export const getShippingAddress = cart => {
 
 	if (isPickup) {
 		const pickupAddress = selectedSla?.pickupStoreInfo?.address
+
 		return {
 			...pickupAddress,
 			formattedAddress: `${pickupAddress?.street}, ${

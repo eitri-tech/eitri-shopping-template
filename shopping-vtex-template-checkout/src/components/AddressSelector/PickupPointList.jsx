@@ -1,5 +1,5 @@
-import { Loading, Skeleton, Text, View } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import { Loading, Skeleton, Text, View } from 'eitri-luminus'
 
 export default function PickupPointList({ options, onSelectFreightOption, loading }) {
 	const { t } = useTranslation()
