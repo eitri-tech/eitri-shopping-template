@@ -1,6 +1,6 @@
-import { Spacing, Divisor } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import CollapseWrapper from './components/CollapseWrapper'
+
 export default function Description(props) {
 	const { description } = props
 
@@ -27,7 +27,9 @@ export default function Description(props) {
 			{isLongDescription && (
 				<View onClick={toggleShowMore}>
 					<Text className='underline font-bold mt-1'>
-						{showMore ? t('description.labelSeeLess', 'Ver menos') : t('description.labelSeeMore', 'Ver mais')}
+						{showMore
+							? t('description.labelSeeLess', 'Ver menos')
+							: t('description.labelSeeMore', 'Ver mais')}
 					</Text>
 				</View>
 			)}

@@ -1,5 +1,6 @@
 export default function WishlistIcon(props) {
 	const { checked } = props
+
 	return (
 		<svg
 			width='24'

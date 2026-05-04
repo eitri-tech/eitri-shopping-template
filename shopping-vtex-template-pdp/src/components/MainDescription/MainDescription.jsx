@@ -1,7 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { formatAmount, formatPrice } from '../../utils/utils'
 import { useTranslation } from 'eitri-i18n'
-import { App } from 'eitri-shopping-vtex-shared'
+import { formatAmount, formatPrice } from '../../utils/utils'
 
 export default function MainDescription(props) {
 	const { product, currentSku, locale, currency } = props
@@ -12,16 +11,19 @@ export default function MainDescription(props) {
 
 	const discoverInstallments = item => {
 		try {
-			const mainSeller = item.sellers.find(seller => seller.sellerDefault)
+			const mainSeller = item?.sellers?.find(seller => seller.sellerDefault)
+
 			if (mainSeller) {
 				const betterInstallment = mainSeller.commertialOffer.Installments.reduce((acc, installment) => {
 					if (!acc) {
 						acc = installment
+
 						return acc
 					} else {
 						if (installment.NumberOfInstallments > acc.NumberOfInstallments) {
 							acc = installment
 						}
+
 						return acc
 					}
 				}, null)
@@ -30,6 +32,7 @@ export default function MainDescription(props) {
 
 				return `${t('mainDescription.txtUntil', 'ou em até')} ${betterInstallment.NumberOfInstallments}x ${t('mainDescription.txtOf', 'de')} ${formatAmount(betterInstallment.Value, locale, currency)}`
 			}
+
 			return ''
 		} catch (error) {
 			return ''
@@ -39,8 +42,10 @@ export default function MainDescription(props) {
 	const copyCheckoutId = () => {
 		if (count.current > 0) {
 			count.current -= 1
+
 			return
 		}
+
 		Eitri.clipboard.setText({
 			text: product?.productId
 		})

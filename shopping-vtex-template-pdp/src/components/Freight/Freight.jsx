@@ -1,7 +1,7 @@
 import { useTranslation } from 'eitri-i18n'
-import fetchFreight from '../../services/freightService'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
 import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
+import fetchFreight from '../../services/freightService'
 
 export default function Freight(props) {
 	const { currentSku } = props
@@ -23,20 +23,25 @@ export default function Freight(props) {
 
 	const onInputZipCode = e => {
 		const value = e.target.value
+
 		setZipCode(value)
 	}
 
 	const handleFreight = async zipCode => {
 		if (loading) return
+
 		setLoading(true)
+
 		try {
 			let freightOpt = await fetchFreight(zipCode, currentSku)
+
 			console.log('freightOpt', freightOpt)
 			setFreightOptions(freightOpt)
 			await savePostalCodeOnStorage(zipCode)
 		} catch (error) {
 			console.error('Error handleFreight', error)
 		}
+
 		setLoading(false)
 	}
 

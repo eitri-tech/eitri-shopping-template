@@ -1,5 +1,5 @@
-import { shippingResolver } from 'shopping-vtex-template-shared'
 import { Vtex } from 'eitri-shopping-vtex-shared'
+import { shippingResolver } from 'shopping-vtex-template-shared'
 
 export default async function fetchFreight(zipCode, currentSku) {
 	if (!zipCode) {

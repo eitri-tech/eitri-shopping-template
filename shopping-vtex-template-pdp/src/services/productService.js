@@ -1,5 +1,5 @@
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export const getProductById = async productId => {
 	return Vtex.searchGraphql.product({
@@ -27,15 +27,16 @@ export const markLastViewedProduct = async product => {
 
 	if (productHistory) {
 		const prevContentIndex = productHistory.findIndex(content => content.productId === product.productId)
-		if (prevContentIndex === 0) {
-			return
-		}
+
+		if (prevContentIndex === 0) return
+
 		if (prevContentIndex !== -1) {
 			productHistory.splice(prevContentIndex, 1)
 			productHistory.unshift({ productId: product.productId, date: new Date().toISOString() })
 		} else {
 			productHistory.unshift({ productId: product.productId, date: new Date().toISOString() })
 		}
+
 		await Eitri.sharedStorage.setItemJson(key, productHistory.slice(0, 14))
 	} else {
 		await Eitri.sharedStorage.setItemJson(key, [{ productId: product.productId, date: new Date().toISOString() }])
