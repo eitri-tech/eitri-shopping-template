@@ -1,5 +1,4 @@
 export default function ReviewMiniProducts(props) {
-
 	const { products } = props
 
 	return (

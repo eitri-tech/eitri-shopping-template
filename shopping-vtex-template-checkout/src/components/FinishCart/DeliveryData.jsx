@@ -1,12 +1,11 @@
-import SimpleCard from '../Card/SimpleCard'
-import iconTruck from '../../assets/images/truck.svg'
-import iconStore from '../../assets/images/store.svg'
 import { useTranslation } from 'eitri-i18n'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { getShippingAddress } from '../../utils/getShippingAddress'
-import { navigate } from '../../services/navigationService'
 import { Text, View } from 'eitri-luminus'
 import { shippingResolver } from 'shopping-vtex-template-shared'
+import iconStore from '../../assets/images/store.svg'
+import iconTruck from '../../assets/images/truck.svg'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { navigate } from '../../services/navigationService'
+import SimpleCard from '../Card/SimpleCard'
 import ReviewMiniProducts from './components/ReviewMiniProducts'
 
 export default function DeliveryData(props) {

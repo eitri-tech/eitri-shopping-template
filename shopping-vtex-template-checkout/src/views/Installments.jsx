@@ -1,12 +1,12 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset } from 'shopping-vtex-template-shared'
-import { formatAmountInCents } from '../utils/utils'
 import { useState } from 'react'
-import { Page, Text, View } from 'eitri-luminus'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import CardIcon from '../components/Icons/CardIcons/CardIcon'
-import { navigate } from '../services/navigationService'
 import { useTranslation } from 'eitri-i18n'
+import { Page, Text, View } from 'eitri-luminus'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset } from 'shopping-vtex-template-shared'
+import CardIcon from '../components/Icons/CardIcons/CardIcon'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { navigate } from '../services/navigationService'
+import { formatAmountInCents } from '../utils/utils'
 
 export default function Installments(props) {
 	const paymentSystem = props.location?.state?.paymentSystem
@@ -39,6 +39,7 @@ export default function Installments(props) {
 							installments: installment.count
 						}
 					}
+
 					return payment
 				})
 

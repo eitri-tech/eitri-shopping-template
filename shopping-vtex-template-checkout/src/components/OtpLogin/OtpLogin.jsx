@@ -1,8 +1,8 @@
+import { useTranslation } from 'eitri-i18n'
 import { View } from 'eitri-luminus'
+import { CustomButton, BottomInset, CustomInput } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { loginWithEmailAndKey, sendAccessKeyByEmail } from '../../services/CustomerService'
-import { CustomButton, BottomInset, CustomInput } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
 
 export default function OtpLogin(props) {
 	const { open, onClose, onLogged } = props
@@ -18,6 +18,7 @@ export default function OtpLogin(props) {
 
 	useEffect(() => {
 		if (!open) return
+
 		sendOtpEmail(cart?.clientProfileData?.email)
 		setEmail(cart?.clientProfileData?.email)
 	}, [cart, open])
@@ -25,9 +26,11 @@ export default function OtpLogin(props) {
 	const sendOtpEmail = async email => {
 		try {
 			if (!email) return
+
 			if (timeOutToResentEmail > 0) {
 				return
 			}
+
 			console.error('Enviando email:', email)
 			await sendAccessKeyByEmail(email)
 		} catch (e) {
@@ -40,12 +43,14 @@ export default function OtpLogin(props) {
 		try {
 			setLoadingLogin(true)
 			const loggedIn = await loginWithEmailAndKey(email, verificationCode)
+
 			if (loggedIn === 'Success') {
 				await startCart()
 				onLogged()
 			} else {
 				setLoginError(true)
 			}
+
 			setLoadingLogin(false)
 		} catch (e) {
 			setLoadingLogin(false)
@@ -56,10 +61,15 @@ export default function OtpLogin(props) {
 
 	const maskEmailSimple = email => {
 		if (!email) return ''
+
 		const [local, domain] = email.split('@')
+
 		if (!domain) return email
+
 		if (local.length <= 2) return local[0] + '*@' + domain
+
 		const masked = local[0] + '*'.repeat(local.length - 1)
+
 		return `${masked}@${domain}`
 	}
 

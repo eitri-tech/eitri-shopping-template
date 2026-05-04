@@ -1,13 +1,12 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { useTranslation } from 'eitri-i18n'
-import { Page, Radio, Text, View } from 'eitri-luminus'
-import { navigate } from '../services/navigationService'
 import { useState } from 'react'
-import { FaChevronRight } from 'react-icons/fa'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
+import { Page, Text, View } from 'eitri-luminus'
 import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
-import Eitri from 'eitri-bifrost'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { navigate } from '../services/navigationService'
 
 export default function FreightGroupSelectorOptions(props) {
 	const group = props?.location?.state?.group
@@ -64,8 +63,8 @@ export default function FreightGroupSelectorOptions(props) {
 				</Text>
 
 				<View className='flex flex-row gap-4'>
-					{group?.items?.map(product => (
-						<View>
+					{group?.items?.map((product, index) => (
+						<View key={product?.itemId ? `${product.itemId}-${index}` : index}>
 							<Image
 								src={product.imageUrl}
 								className='w-12 h-12 rounded-full object-contain'
@@ -74,13 +73,14 @@ export default function FreightGroupSelectorOptions(props) {
 					))}
 				</View>
 				<View className='flex flex-col'>
-					{group?.slas?.map(sla => {
+					{group?.slas?.map((sla, index) => {
 						const label = sla.isPickupInPoint
 							? `${t('freightGroupSelectorOptions.pickupAtStore', 'Retire na loja')} ${sla.pickupStoreInfo.friendlyName}`
 							: `${sla.formatedShippingEstimate}`
 
 						return (
 							<CardSelector
+								key={label ? `${label}-${index}` : index}
 								mainTitle={label}
 								mainClickHandler={() => onSelectFreightOption(sla, group.items)}
 								secondaryActionTitle={sla.formatedShippingEstimate}>

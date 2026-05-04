@@ -1,21 +1,22 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { clearCart, startPayment } from '../services/cartService'
-import Recaptcha from '../services/Recaptcha'
-import UserData from '../components/FinishCart/UserData'
-import SelectedPaymentData from '../components/FinishCart/SelectedPaymentData'
-import DeliveryData from '../components/FinishCart/DeliveryData'
-import { useTranslation } from 'eitri-i18n'
-import CartSummary from '../components/CartSummary/CartSummary'
-import { navigate } from '../services/navigationService'
-import { trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import OtpLogin from '../components/OtpLogin/OtpLogin'
-import { ERROR_MAP } from '../utils/vtexErrorMap'
-import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
+import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
+import CartSummary from '../components/CartSummary/CartSummary'
+import DeliveryData from '../components/FinishCart/DeliveryData'
+import SelectedPaymentData from '../components/FinishCart/SelectedPaymentData'
+import UserData from '../components/FinishCart/UserData'
+import OtpLogin from '../components/OtpLogin/OtpLogin'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import Recaptcha from '../services/Recaptcha'
+import { trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
+import { clearCart, startPayment } from '../services/cartService'
+import { navigate } from '../services/navigationService'
+import { ERROR_MAP } from '../utils/vtexErrorMap'
 
 let selectedShipping = null
 let selectedPayment = null
+
 export default function CheckoutReview() {
 	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
 	const { t } = useTranslation()
@@ -31,6 +32,7 @@ export default function CheckoutReview() {
 	useEffect(() => {
 		Eitri.environment.getRemoteConfigs().then(rc => {
 			const recaptchaSiteKey = rc?.appConfigs?.checkout?.recaptchaKey
+
 			if (recaptchaSiteKey) {
 				setRecaptchaSiteKey(recaptchaSiteKey)
 			}
@@ -44,6 +46,7 @@ export default function CheckoutReview() {
 	useEffect(() => {
 		if (cart && cart?.items?.length > 0) {
 			const unavailableItems = cart?.items?.filter(item => item.availability !== 'available')
+
 			if (unavailableItems.length > 0) {
 				setUnavailableItems(unavailableItems)
 			} else {
@@ -59,6 +62,7 @@ export default function CheckoutReview() {
 		try {
 			const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
 			const paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
+
 			if (paymentType && (!selectedPayment || selectedPayment !== paymentType)) {
 				trackAddPaymentInfo(cart, paymentType)
 				selectedPayment = paymentType
@@ -71,6 +75,7 @@ export default function CheckoutReview() {
 	const sendTrackingShipping = async cart => {
 		try {
 			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
+
 			if (shippingTier && (!selectedShipping || selectedShipping !== shippingTier)) {
 				trackShippingInfo(cart)
 				selectedShipping = shippingTier
@@ -102,11 +107,13 @@ export default function CheckoutReview() {
 					orderId: paymentResult.orderId,
 					orderValue: cart.value
 				})
+
 				return
 			}
 
 			if (paymentResult?.paymentAuthorizationAppCollection?.[0]?.appName === 'vtex.pix-payment') {
 				navigate('PixOrder', { paymentResult })
+
 				return
 			}
 
@@ -115,8 +122,10 @@ export default function CheckoutReview() {
 			console.error('Error on runPaymentScript', error)
 
 			const errorCode = error.response?.data?.error?.code
+
 			if (errorCode === 'CHK003' || errorCode === 'CHK0087' || errorCode === 'ORD062') {
 				setShowOtpLogin(true)
+
 				return
 			}
 
@@ -150,6 +159,7 @@ export default function CheckoutReview() {
 		try {
 			setIsLoading(true)
 			const index = cart.items.findIndex(item => item.uniqueId === uItem.uniqueId)
+
 			await removeCartItem(index)
 			setIsLoading(false)
 		} catch (e) {
@@ -184,7 +194,9 @@ export default function CheckoutReview() {
 				<>
 					{unavailableItems.length > 0 && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}</Text>
+							<Text className='text-sm text-red-600 font-medium'>
+								{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}
+							</Text>
 
 							{unavailableItems.map(uItem => (
 								<View

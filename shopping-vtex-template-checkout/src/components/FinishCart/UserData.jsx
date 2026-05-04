@@ -1,8 +1,8 @@
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import SimpleCard from '../Card/SimpleCard'
-import personalIcon from '../../assets/images/personal.svg'
 import { useTranslation } from 'eitri-i18n'
+import personalIcon from '../../assets/images/personal.svg'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { navigate } from '../../services/navigationService'
+import SimpleCard from '../Card/SimpleCard'
 import OtpLogin from '../OtpLogin/OtpLogin'
 
 export default function UserData(props) {

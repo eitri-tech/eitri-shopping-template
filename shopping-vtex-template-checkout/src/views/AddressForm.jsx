@@ -1,13 +1,7 @@
+import { useState } from 'react'
 import Eitri from 'eitri-bifrost'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackScreenView } from '../services/Tracking'
 import { useTranslation } from 'eitri-i18n'
 import { Page, View } from 'eitri-luminus'
-import { resolvePostalCode } from '../services/freigthService'
-import { navigate, requestLogin } from '../services/navigationService'
-import { useRef, useState } from 'react'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import FixedBottom from '../components/FixedBottom/FixedBottom'
 import {
 	HeaderContentWrapper,
 	HeaderReturn,
@@ -16,6 +10,12 @@ import {
 	BottomInset,
 	CustomInput
 } from 'shopping-vtex-template-shared'
+import FixedBottom from '../components/FixedBottom/FixedBottom'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { trackScreenView } from '../services/Tracking'
+import { resolvePostalCode } from '../services/freigthService'
+import { navigate, requestLogin } from '../services/navigationService'
 
 function PostalCodeInput({ value, onChange, isLoading, t, error, touched, onBlur }) {
 	return (
@@ -132,6 +132,7 @@ function AddressFields({ address, handleAddressChange, t, touched, errors, onBlu
 
 function validateAddress(address, t) {
 	const postalCodeDigits = address.postalCode?.replace(/\D/g, '') || ''
+
 	return {
 		postalCode: !address.postalCode
 			? t('addNewShippingAddress.errorPostalCode', 'Informe o CEP')
@@ -142,7 +143,9 @@ function validateAddress(address, t) {
 		neighborhood: !address.neighborhood ? t('addNewShippingAddress.errorNeighborhood', 'Informe o bairro') : '',
 		city: !address.city ? t('addNewShippingAddress.errorCity', 'Informe a cidade') : '',
 		state: !address.state ? t('addNewShippingAddress.errorState', 'Informe o estado') : '',
-		receiverName: !address.receiverName ? t('addNewShippingAddress.errorReceiverName', 'Informe quem irá receber') : '',
+		receiverName: !address.receiverName
+			? t('addNewShippingAddress.errorReceiverName', 'Informe quem irá receber')
+			: '',
 		number: !address.number ? t('addNewShippingAddress.errorNumber', 'Informe o número') : ''
 	}
 }
@@ -205,16 +208,20 @@ export default function AddressForm(props) {
 				const _address = newCart?.shippingData?.selectedAddresses?.find(
 					address => address.addressId === addressId
 				)
+
 				setAddress({
 					...address,
 					..._address
 				})
 			} else {
 				const _address = cart?.shippingData?.selectedAddresses?.find(address => address.addressId === addressId)
+
 				if (!_address && cart?.shippingData?.selectedAddresses?.[0]?.addressId) {
 					setAddressId(cart.shippingData.selectedAddresses[0].addressId)
+
 					return
 				}
+
 				setAddress({
 					...address,
 					..._address
@@ -227,6 +234,7 @@ export default function AddressForm(props) {
 
 	const handleAddressChange = useCallback((key, e) => {
 		const { value } = e.target
+
 		setAddress(prev => ({
 			...prev,
 			[key]: key === 'receiverName' ? value.replace(/[^a-zA-Z\s]/g, '') : value
@@ -235,14 +243,17 @@ export default function AddressForm(props) {
 
 	const onChangePostalCodeInput = async e => {
 		const { value } = e.target
+
 		setAddress({ ...address, postalCode: value })
 	}
 
 	const submitZipCode = async postalCode => {
 		try {
 			if (!postalCode) return
+
 			setIsLoading(true)
 			const { street, neighborhood, city, state, country, geoCoordinates } = await resolvePostalCode(postalCode)
+
 			setAddress({
 				...address,
 				street,
@@ -264,14 +275,17 @@ export default function AddressForm(props) {
 
 	const submit = async () => {
 		if (isSubmitting) return
+
 		setIsSubmitting(true)
 		setAddressError('')
+
 		try {
 			if (addressId) {
 				const newSelectedAddresses = cart?.shippingData?.selectedAddresses?.map(selectedAddress => {
 					if (selectedAddress.addressId === addressId) {
 						return address
 					}
+
 					return selectedAddress
 				})
 
@@ -280,21 +294,28 @@ export default function AddressForm(props) {
 					clearAddressIfPostalCodeNotFound: false,
 					selectedAddresses: newSelectedAddresses
 				}
+
 				await setLogisticInfo(payload)
 			} else {
 				const payload = {
 					address,
 					clearAddressIfPostalCodeNotFound: false
 				}
+
 				await setLogisticInfo(payload)
 			}
+
 			navigate('FreightResolver', {}, true)
 		} catch (e) {
 			if (e.response?.status === 400) {
-				setAddressError(t('addNewShippingAddress.errorAddress', 'Endereço inválido, por favor verifique os dados'))
+				setAddressError(
+					t('addNewShippingAddress.errorAddress', 'Endereço inválido, por favor verifique os dados')
+				)
 				console.error('Error on submit', e)
+
 				return
 			}
+
 			setAddressError(t('addNewShippingAddress.errorDefault', 'Ocorreu um erro inesperado, tente novamente'))
 			setTimeout(() => setAddressError(''), 8000)
 		} finally {

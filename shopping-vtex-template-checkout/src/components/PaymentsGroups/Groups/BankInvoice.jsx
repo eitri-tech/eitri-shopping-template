@@ -1,7 +1,7 @@
+import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
 import Boleto from '../../Icons/MethodIcons/Boleto'
 import GroupsWrapper from './GroupsWrapper'
-import { useTranslation } from 'eitri-i18n'
 
 export default function BankInvoice(props) {
 	const { selectedPaymentData, setSelectedPaymentData } = useLocalShoppingCart()

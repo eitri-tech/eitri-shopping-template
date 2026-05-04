@@ -1,6 +1,6 @@
-import Pix from './MethodIcons/Pix'
 import Boleto from './MethodIcons/Boleto'
 import Card from './MethodIcons/Card'
+import Pix from './MethodIcons/Pix'
 
 export default function MethodIcon(props) {
 	const method = props.iconKey

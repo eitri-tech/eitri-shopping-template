@@ -1,13 +1,13 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackScreenView } from '../services/Tracking'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'eitri-i18n'
 import { Page, Text, View } from 'eitri-luminus'
-import { useEffect, useState } from 'react'
-import { navigate } from '../services/navigationService'
-import FixedBottom from '../components/FixedBottom/FixedBottom'
-import CardSelector from '../components/CardSelector/CardSelector'
 import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset, Loading } from 'shopping-vtex-template-shared'
+import CardSelector from '../components/CardSelector/CardSelector'
+import FixedBottom from '../components/FixedBottom/FixedBottom'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { trackScreenView } from '../services/Tracking'
+import { navigate } from '../services/navigationService'
 
 export default function AddressSelector(props) {
 	const { cart, setShippingAddress } = useLocalShoppingCart()
@@ -30,8 +30,10 @@ export default function AddressSelector(props) {
 
 	const handleAddressSelect = async address => {
 		setIsAddressLoading(true)
+
 		try {
 			const currentAddress = cart?.shippingData?.address
+
 			if (currentAddress?.addressId !== address?.addressId) {
 				await setShippingAddress(address)
 			}
@@ -61,6 +63,7 @@ export default function AddressSelector(props) {
 					return a.street > b.street ? 1 : -1
 				})
 		}
+
 		return []
 	}
 
@@ -68,8 +71,10 @@ export default function AddressSelector(props) {
 		if (!cart.canEditData) {
 			setModalLogin(true)
 			setCurrentEditingAddress(address)
+
 			return
 		}
+
 		navigate('AddressForm', { addressId: address.addressId })
 	}
 

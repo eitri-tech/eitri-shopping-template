@@ -1,14 +1,15 @@
 import Eitri from 'eitri-bifrost'
-import { addLoggedCustomerToCart, cartHasCustomerData, saveCartIdOnStorage } from '../services/cartService'
-import { startConfigure } from '../services/AppService'
+import { useTranslation } from 'eitri-i18n'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import { useCustomer } from '../providers/Customer'
 import { useLocalShoppingCart } from '../providers/LocalCart'
+import { startConfigure } from '../services/AppService'
 import { trackBeginCheckout } from '../services/Tracking'
+import { addLoggedCustomerToCart, cartHasCustomerData, saveCartIdOnStorage } from '../services/cartService'
 import { navigate } from '../services/navigationService'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import { useTranslation } from 'eitri-i18n'
 
 let pristine = true
+
 export default function Home(props) {
 	const { startCart, addPersonalData } = useLocalShoppingCart()
 	const { getCustomer, getUserByEmail } = useCustomer()
@@ -26,6 +27,7 @@ export default function Home(props) {
 			const [loggedCustomer, cart] = await Promise.all([
 				getCustomer().catch(err => {
 					console.error('Failed to get customer:', err)
+
 					return null
 				}),
 				loadCart().catch(err => {
@@ -39,6 +41,7 @@ export default function Home(props) {
 			if (loggedCustomer) {
 				const cartEmail = cart?.clientProfileData?.email
 				const customerEmail = loggedCustomer?.email
+
 				if (cartEmail !== customerEmail) {
 					try {
 						_cart = await addLoggedCustomerToCart(loggedCustomer, cart, { addPersonalData })
@@ -86,6 +89,7 @@ export default function Home(props) {
 
 	const loadCheckoutProfile = async email => {
 		if (!email) return
+
 		await getUserByEmail(email)
 	}
 

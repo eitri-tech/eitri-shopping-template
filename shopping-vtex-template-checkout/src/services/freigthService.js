@@ -2,11 +2,13 @@ import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export default async function setFreight(payload) {
 	const newCart = await Vtex.checkout.setLogisticInfo(payload)
+
 	return newCart
 }
 
 export const setLogisticInfo = async payload => {
 	const newCart = await Vtex.checkout.setLogisticInfo(payload)
+
 	return newCart
 }
 
@@ -36,6 +38,7 @@ export const setShippingAddress = async address => {
 		clearAddressIfPostalCodeNotFound: false,
 		address
 	})
+
 	return newCart
 }
 

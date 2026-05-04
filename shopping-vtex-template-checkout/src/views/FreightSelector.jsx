@@ -1,12 +1,12 @@
-import { useLocalShoppingCart } from '../providers/LocalCart'
+import { useState } from 'react'
 import { useTranslation } from 'eitri-i18n'
 import { Page, Radio, Text, View } from 'eitri-luminus'
-import { navigate } from '../services/navigationService'
-import { useState } from 'react'
 import { cartShippingResolver } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, CustomButton } from 'shopping-vtex-template-shared'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
 import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import { HeaderContentWrapper, HeaderReturn, CustomButton } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { navigate } from '../services/navigationService'
 
 export default function FreightSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
@@ -33,6 +33,7 @@ export default function FreightSelector(props) {
 				logisticsInfo: slas,
 				selectedAddresses: cart.shippingData.selectedAddresses
 			}
+
 			await setFreight(payload)
 		} catch (error) {
 			console.error('Error on select freight option', error)

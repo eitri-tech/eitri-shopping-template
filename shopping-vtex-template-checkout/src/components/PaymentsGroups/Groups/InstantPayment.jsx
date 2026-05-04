@@ -1,10 +1,9 @@
+import { useTranslation } from 'eitri-i18n'
+import { Badge, Text, View } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import { navigate } from '../../../services/navigationService'
 import Pix from '../../Icons/MethodIcons/Pix'
 import GroupsWrapper from './GroupsWrapper'
-import { navigate } from '../../../services/navigationService'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
-import { Badge, Text, View } from 'eitri-luminus'
-import { useTranslation } from 'eitri-i18n'
 
 export default function InstantPayment(props) {
 	const { cart } = useLocalShoppingCart()

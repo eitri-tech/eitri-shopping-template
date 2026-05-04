@@ -2,6 +2,7 @@ import { formatAmountInCents } from './utils'
 
 export const getPaymentSystem = cart => {
 	if (!cart?.paymentData) return
+
 	const paymentData = JSON.parse(JSON.stringify(cart?.paymentData))
 
 	return paymentData?.paymentSystems?.reduce((acc, paymentSystem) => {

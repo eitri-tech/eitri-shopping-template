@@ -1,6 +1,6 @@
+import { useTranslation } from 'eitri-i18n'
 import { View } from 'eitri-luminus'
 import AddressCard from './AddressCard'
-import { useTranslation } from 'eitri-i18n'
 
 export default function DeliveryAddressList({ addresses, selectedAddress, onAddressSelect }) {
 	const { t } = useTranslation()

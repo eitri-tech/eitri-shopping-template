@@ -1,13 +1,12 @@
-import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import GroupsWrapper from './GroupsWrapper'
-import Card from '../../Icons/MethodIcons/Card'
-import { Text, View } from 'eitri-luminus'
-import CardIcon from '../../Icons/CardIcons/CardIcon'
-import { navigate } from '../../../services/navigationService'
-import { useCustomer } from '../../../providers/Customer'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { Text, View } from 'eitri-luminus'
+import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { useCustomer } from '../../../providers/Customer'
+import { useLocalShoppingCart } from '../../../providers/LocalCart'
+import { navigate } from '../../../services/navigationService'
+import CardIcon from '../../Icons/CardIcons/CardIcon'
+import Card from '../../Icons/MethodIcons/Card'
+import GroupsWrapper from './GroupsWrapper'
 
 export default function CreditCard(props) {
 	const { onSelectPaymentMethod, systemGroup } = props
@@ -25,6 +24,7 @@ export default function CreditCard(props) {
 
 	useEffect(() => {
 		if (loadingRemoveCard) return
+
 		if (checkoutProfile?.availableAccounts || cart?.paymentData?.availableAccounts) {
 			setAvailableAccounts(
 				assetUniqueCards(checkoutProfile?.availableAccounts || cart?.paymentData?.availableAccounts)
@@ -34,11 +34,13 @@ export default function CreditCard(props) {
 
 	const assetUniqueCards = accounts => {
 		const cards = []
+
 		accounts.forEach(account => {
 			if (!cards.some(card => card.cardNumber === account.cardNumber)) {
 				cards.push(account)
 			}
 		})
+
 		return cards
 	}
 
@@ -46,6 +48,7 @@ export default function CreditCard(props) {
 		const paymentSystem = systemGroup?.paymentSystems?.find(
 			system => system.stringId === accountSelected?.paymentSystem
 		)
+
 		if (!paymentSystem) return
 
 		await onSelectPaymentMethod([
@@ -94,7 +97,9 @@ export default function CreditCard(props) {
 				if (!isRetrying) {
 					setOtpLogin(true)
 				}
+
 				console.log('nao logado, tenta logar com o otp')
+
 				return
 			}
 

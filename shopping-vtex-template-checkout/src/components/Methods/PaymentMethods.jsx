@@ -1,7 +1,7 @@
-import ImplementationInterface from '../PaymentsGroups/ImplementationInterface'
+import { App } from 'eitri-shopping-vtex-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { getPaymentSystem } from '../../utils/getPaymentSystem'
-import { App } from 'eitri-shopping-vtex-shared'
+import ImplementationInterface from '../PaymentsGroups/ImplementationInterface'
 
 export default function PaymentMethods(props) {
 	const { cart } = useLocalShoppingCart()
@@ -12,10 +12,12 @@ export default function PaymentMethods(props) {
 
 	const executeSort = paymentSystemGroups => {
 		const displayOrder = App?.configs?.appConfigs?.checkout?.paymentSystemDisplayOrder
+
 		if (displayOrder) {
 			return paymentSystemGroups.sort((a, b) => {
 				const ai = displayOrder.indexOf(a.groupName)
 				const bi = displayOrder.indexOf(b.groupName)
+
 				return (ai === -1 ? Infinity : ai) - (bi === -1 ? Infinity : bi)
 			})
 		} else {

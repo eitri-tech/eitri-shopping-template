@@ -1,9 +1,6 @@
+import { useEffect, useState } from 'react'
 import Eitri from 'eitri-bifrost'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { cartHasCustomerData, registerToNotify } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
-import { trackScreenView } from '../services/Tracking'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import {
 	HeaderContentWrapper,
 	HeaderReturn,
@@ -12,12 +9,15 @@ import {
 	BottomInset,
 	CustomInput
 } from 'shopping-vtex-template-shared'
-import { verifySocialNumber } from '../utils/verifySocialNumber'
-import { useEffect, useState } from 'react'
-import FixedBottom from '../components/FixedBottom/FixedBottom'
-import { navigate } from '../services/navigationService'
-import OtpLogin from '../components/OtpLogin/OtpLogin'
 import { useCustomer } from '@/providers/Customer'
+import FixedBottom from '../components/FixedBottom/FixedBottom'
+import OtpLogin from '../components/OtpLogin/OtpLogin'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { trackScreenView } from '../services/Tracking'
+import { cartHasCustomerData, registerToNotify } from '../services/cartService'
+import { navigate } from '../services/navigationService'
+import { verifySocialNumber } from '../utils/verifySocialNumber'
 
 export default function PersonalData() {
 	const { cart, addCustomerData } = useLocalShoppingCart()
@@ -166,6 +166,7 @@ export default function PersonalData() {
 				...personalData,
 				...cart.clientProfileData
 			})
+
 			if (cart?.clientProfileData?.email) {
 				setUserDataVerified(true)
 			}
@@ -181,9 +182,11 @@ export default function PersonalData() {
 			setInputOptions(prev => {
 				const updated = [...prev]
 				const index = updated.findIndex(opt => opt.label === inputOption.label)
+
 				if (index !== -1) {
 					updated[index] = { ...inputOption, error: '', pristine: false, ...changes }
 				}
+
 				return updated
 			})
 		}
@@ -200,6 +203,7 @@ export default function PersonalData() {
 
 		if (inputOption.label === 'document') {
 			const validSocialNumber = verifySocialNumber(inputValue.replace(/\D/g, ''))
+
 			if (!validSocialNumber) {
 				return updateOption({ error: t('personalData.invalidDocument', 'Documento inválido') })
 			}
@@ -214,6 +218,7 @@ export default function PersonalData() {
 			documentType: 'cpf',
 			isCorporate: isLegalPerson
 		}
+
 		setPersonalData(localPersonalData)
 		addUserData(localPersonalData)
 	}
@@ -228,6 +233,7 @@ export default function PersonalData() {
 			Eitri.navigation.navigate({ path: 'FreightResolver', replace: true })
 		} catch (error) {
 			console.log('error', error)
+
 			if (error?.response?.data?.error?.code === 'CHK003') {
 				setShowOtpLogin(true)
 			}
@@ -251,9 +257,11 @@ export default function PersonalData() {
 
 		if (client.userProfileId) {
 			const updatedCart = await addCustomerData({ email: personalData.email }, cart.orderFormId)
+
 			if (cartHasCustomerData(updatedCart)) {
 				navigate('FreightResolver', {}, true)
 			}
+
 			setUserDataVerified(true)
 		} else {
 			setUserDataVerified(true)
@@ -274,6 +282,7 @@ export default function PersonalData() {
 
 	const isValidEmail = (() => {
 		const regex = /^[\w.-]+@[\w.-]+\.\w{2,}$/
+
 		return regex.test(personalData?.email)
 	})()
 
@@ -292,7 +301,10 @@ export default function PersonalData() {
 						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
 					</Text>
 					<Text className='block text-center'>
-						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
+						{t(
+							'personalData.enterEmailSubtitle',
+							'Vamos verificar se você já fez alguma compra com a gente'
+						)}
 					</Text>
 				</View>
 
@@ -346,7 +358,9 @@ export default function PersonalData() {
 								className='mt-3'
 								onClick={handleLegalPerson}>
 								<Text className='text-primary font-bold'>
-									{isLegalPerson ? t('personalData.labelPerson', 'Sou pessoa física') : t('personalData.labelCorporate', 'Sou pessoa jurídica')}
+									{isLegalPerson
+										? t('personalData.labelPerson', 'Sou pessoa física')
+										: t('personalData.labelCorporate', 'Sou pessoa jurídica')}
 								</Text>
 							</View>
 						</>

@@ -1,5 +1,5 @@
-import { getCustomerData } from '../services/CustomerService'
 import { getUserByEmail } from '@/services/cartService'
+import { getCustomerData } from '../services/CustomerService'
 
 const LocalCustomer = createContext({})
 
@@ -9,15 +9,21 @@ export default function CustomerProvider({ children }) {
 
 	const getCustomer = async () => {
 		const customer = await getCustomerData()
+
 		if (!customer) return
+
 		setCustomer(customer)
+
 		return customer
 	}
 
 	const _getUserByEmail = async email => {
 		if (checkoutProfile && checkoutProfile?.userProfile?.email === email) return checkoutProfile
+
 		const customer = await getUserByEmail(email)
+
 		setCheckoutProfile(customer)
+
 		return customer
 	}
 

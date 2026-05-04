@@ -1,9 +1,9 @@
+import { useTranslation } from 'eitri-i18n'
 import { HeaderContentWrapper, HeaderReturn, cartShippingResolver } from 'shopping-vtex-template-shared'
+import CardSelector from '../components/CardSelector/CardSelector'
+import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { navigate } from '../services/navigationService'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import CardSelector from '../components/CardSelector/CardSelector'
-import { useTranslation } from 'eitri-i18n'
 
 export default function ShippingMethod(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
@@ -35,6 +35,7 @@ export default function ShippingMethod(props) {
 				logisticsInfo: slas,
 				selectedAddresses: cart.shippingData.selectedAddresses
 			}
+
 			await setFreight(payload)
 			navigate('PaymentData')
 		} catch (error) {
