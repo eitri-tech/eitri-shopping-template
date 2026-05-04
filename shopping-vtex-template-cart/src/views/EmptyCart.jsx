@@ -1,15 +1,9 @@
 import Eitri from 'eitri-bifrost'
-import { View, Text, Image } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
-import iconCart from '../assets/images/cart-01.svg'
-import {
-	HeaderContentWrapper,
-	HeaderReturn,
-	HeaderText,
-	CustomButton,
-	BottomInset
-} from 'shopping-vtex-template-shared'
+import { View, Text, Image } from 'eitri-luminus'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
+import iconCart from '../assets/images/cart-01.svg'
 
 export default function EmptyCart(props) {
 	const openWithBottomBar = props?.location?.state?.openWithBottomBar
@@ -20,6 +14,7 @@ export default function EmptyCart(props) {
 	useEffect(() => {
 		Eitri.navigation.setOnResumeListener(async () => {
 			const cart = await startCart()
+
 			if (cart && cart.items?.length > 0) {
 				Eitri.navigation.navigate({ path: 'Home', replace: true })
 			}
@@ -48,7 +43,10 @@ export default function EmptyCart(props) {
 							{t('emptyCart.txtEmptyCart', 'Seu carrinho está vazio')}
 						</Text>
 						<Text className='text-neutral-700 text-base text-center mb-6'>
-							{t('emptyCart.txtMessageList', 'Adicione produtos no seu carrinho e eles serão listados aqui.')}
+							{t(
+								'emptyCart.txtMessageList',
+								'Adicione produtos no seu carrinho e eles serão listados aqui.'
+							)}
 						</Text>
 						{!openWithBottomBar && (
 							<View className='w-full mt-2'>

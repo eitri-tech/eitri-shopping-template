@@ -1,8 +1,8 @@
-import { CustomButton, CustomInput, Loading, shippingResolver } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { View, Text, Radio } from 'eitri-luminus'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'eitri-i18n'
+import { View, Text, Radio } from 'eitri-luminus'
+import { CustomButton, CustomInput, Loading, shippingResolver } from 'shopping-vtex-template-shared'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
 
 export default function Freight(props) {
@@ -41,10 +41,13 @@ export default function Freight(props) {
 			if (!zipCode) {
 				return
 			}
+
 			if (!(zipCode.length == 8 || zipCode.length == 9)) {
 				setError(t('freight.errorCep', 'Digite um CEP válido'))
+
 				return
 			}
+
 			fetchFreight(zipCode)
 		} catch (e) {
 			console.error('Error onPressZipCodeChange', e)
@@ -59,6 +62,7 @@ export default function Freight(props) {
 
 	const fetchFreight = async zipCode => {
 		setIsLoading(true)
+
 		try {
 			setError('')
 
@@ -87,6 +91,7 @@ export default function Freight(props) {
 				}),
 				selectedAddresses: cart?.shippingData?.selectedAddresses
 			}
+
 			await setFreight(payload)
 			setIsLoading(false)
 		} catch (e) {
@@ -97,6 +102,7 @@ export default function Freight(props) {
 
 	const getMessageError = label => {
 		const message = messagesError.find(item => item.code === 'cannotBeDelivered')
+
 		return (
 			<View className='w-full px-2'>
 				<Text className='font-bold'>{label}</Text>

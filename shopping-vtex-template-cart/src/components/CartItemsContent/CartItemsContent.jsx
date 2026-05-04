@@ -1,5 +1,5 @@
-import CartItem from '../CartItem/CartItem'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
+import CartItem from '../CartItem/CartItem'
 
 export default function CartItemsContent(props) {
 	const { cart, changeQuantity, removeItem, addItemOffer, removeItemOffer } = useLocalShoppingCart()
@@ -8,12 +8,13 @@ export default function CartItemsContent(props) {
 
 	useEffect(() => {
 		if (cart) {
-			setCartItems([...cart?.items])
+			setCartItems([...(cart?.items || [])])
 		}
 	}, [cart])
 
 	const hasMessage = itemEan => {
 		let message = cart.messages.filter(item => item.code === 'withoutStock' && item.fields.ean == itemEan)
+
 		return message[0] || null
 	}
 

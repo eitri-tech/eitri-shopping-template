@@ -1,6 +1,6 @@
-import { CustomButton } from 'shopping-vtex-template-shared'
-import { View, Text, Modal } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import { View, Text } from 'eitri-luminus'
+import { CustomButton } from 'shopping-vtex-template-shared'
 
 export default function ModalConfirm(props) {
 	const { t } = useTranslation()

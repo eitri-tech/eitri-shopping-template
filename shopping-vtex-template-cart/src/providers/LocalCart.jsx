@@ -1,4 +1,3 @@
-import { setNewAddress, setFreight } from '../services/freigthService'
 import {
 	getCart,
 	addCoupon,
@@ -9,6 +8,7 @@ import {
 	removeCoupon,
 	removeItemOffer
 } from '../services/cartService'
+import { setNewAddress, setFreight } from '../services/freigthService'
 
 const LocalCart = createContext({})
 
@@ -19,10 +19,13 @@ export default function CartProvider({ children }) {
 	const executeCartOperation = async (operation, ...args) => {
 		setCartInLoading(true)
 		const newCart = await operation(...args)
+
 		if (newCart) {
 			setCart(newCart)
 		}
+
 		setCartInLoading(false)
+
 		return newCart
 	}
 

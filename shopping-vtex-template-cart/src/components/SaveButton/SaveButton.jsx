@@ -1,5 +1,6 @@
 import { useTranslation } from 'eitri-i18n'
 import { View, Text } from 'eitri-luminus'
+
 export default function SaveButton(props) {
 	const { handleSaveFavorite, isInWishlist } = props
 

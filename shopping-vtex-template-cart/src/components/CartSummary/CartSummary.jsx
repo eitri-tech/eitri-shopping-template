@@ -1,9 +1,7 @@
-import { View, Text, Button } from 'eitri-luminus'
-import { CustomButton, Spacing, Divisor } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
-import { formatAmountInCents } from '../../utils/utils'
+import { View, Text } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { navigateToCheckout } from '../../services/navigationService'
+import { formatAmountInCents } from '../../utils/utils'
 
 export default function CartSummary(props) {
 	const { cart } = useLocalShoppingCart()
@@ -16,6 +14,7 @@ export default function CartSummary(props) {
 
 	useEffect(() => {
 		if (!cart) return
+
 		const items = getTotalizerById(cart.totalizers, 'Items')
 		const discounts = getTotalizerById(cart.totalizers, 'Discounts')
 
@@ -23,6 +22,7 @@ export default function CartSummary(props) {
 		setDiscounts(discounts?.value || 0)
 
 		const total = items?.value ?? 0 + (discounts?.value ?? 0)
+
 		setTotal(total)
 	}, [cart])
 
@@ -37,13 +37,17 @@ export default function CartSummary(props) {
 					<View className='w-full max-w-sm px-4'>
 						{itemsValue > 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal', 'Subtotal')}</Text>
+								<Text className='text-base-content/70 text-sm'>
+									{t('cartSummary.txtSubtotal', 'Subtotal')}
+								</Text>
 								<Text className='text-sm'>{formatAmountInCents(itemsValue)}</Text>
 							</View>
 						)}
 						{discounts > 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDiscount', 'Desconto')}</Text>
+								<Text className='text-base-content/70 text-sm'>
+									{t('cartSummary.txtDiscount', 'Desconto')}
+								</Text>
 								<Text className='text-sm'>{formatAmountInCents(discounts)}</Text>
 							</View>
 						)}

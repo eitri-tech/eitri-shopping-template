@@ -1,7 +1,6 @@
-import Eitri from 'eitri-bifrost'
-import { View, Text, Button } from 'eitri-luminus'
-import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
+import { View, Text } from 'eitri-luminus'
+import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 
 export default function Coupon(props) {
@@ -33,6 +32,7 @@ export default function Coupon(props) {
 				} else if (couponError.code === 'couponExpired') {
 					setCouponTextAlert(t('coupon.txtExpiredCoupon', 'Cupom Expirado'))
 				}
+
 				setInvalidCoupon(true)
 			} else {
 				setInvalidCoupon(false)
