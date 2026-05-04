@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
 import { useTranslation } from 'eitri-i18n'
+import { Page, Text, View } from 'eitri-luminus'
+import { useEffect, useState } from 'react'
 import {
 	BottomInset,
 	cartShippingResolver,

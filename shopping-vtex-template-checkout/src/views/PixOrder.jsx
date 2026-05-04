@@ -1,15 +1,16 @@
-import { useEffect, useState } from 'react'
+import { navigate } from '@/services/navigationService'
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
+import { Image, Page, Text, View } from 'eitri-luminus'
+import { useEffect, useState } from 'react'
 import {
-	HeaderContentWrapper,
-	HeaderReturn,
-	HeaderText,
+	BottomInset,
 	CustomButton,
 	CustomInput,
-	BottomInset
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText
 } from 'shopping-vtex-template-shared'
-import { navigate } from '@/services/navigationService'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { trackScreenView } from '../services/Tracking'
 import { clearCart, getPixStatus } from '../services/cartService'
