@@ -1,5 +1,4 @@
 import { App, Vtex } from 'eitri-shopping-vtex-shared'
-import { CMS_PRODUCT_SORT } from '../utils/Constants'
 import { resolveSortParam } from './helpers/resolveSortParam'
 
 export const autocompleteSuggestions = async value => {
@@ -17,7 +16,7 @@ export const autocompleteSuggestions = async value => {
 
 export const getProductsService = async (params, page) => {
 	const remoteConfig = App?.configs?.appConfigs
-	
+
 	const useRestSearch = remoteConfig?.useRestSearch
 
 	if (useRestSearch) {
@@ -73,9 +72,11 @@ export const getProductsServiceRest = async (params, page) => {
 		page: page ?? 1,
 		sort: resolveSortParam(params.sort)
 	}
+
 	if (params?.count) {
 		options.count = params.count
 	}
+
 	return await Vtex.catalog.getProductsByFacets(facetsPath, options)
 }
 

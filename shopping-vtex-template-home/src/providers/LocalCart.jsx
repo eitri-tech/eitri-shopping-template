@@ -1,13 +1,17 @@
 import { getCart, addItemToCart, removeCartItem } from '../services/CartService'
+
 const LocalCart = createContext({})
+
 export default function CartProvider({ children }) {
 	const [cart, setCart] = useState(null)
 	const [cartIsLoading, setCartInLoading] = useState(false)
 	const executeCartOperation = async (operation, ...args) => {
 		setCartInLoading(true)
 		const newCart = await operation(...args)
+
 		setCart(newCart)
 		setCartInLoading(false)
+
 		return newCart
 	}
 	const startCart = async () => {
@@ -19,6 +23,7 @@ export default function CartProvider({ children }) {
 	const removeItem = async itemId => {
 		return executeCartOperation(removeCartItem, itemId)
 	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -35,5 +40,6 @@ export default function CartProvider({ children }) {
 }
 export function useLocalShoppingCart() {
 	const context = useContext(LocalCart)
+
 	return context
 }

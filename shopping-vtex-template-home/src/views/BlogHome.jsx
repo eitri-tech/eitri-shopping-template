@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { BottomInset, HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
-import BlogCard from '../components/CmsComponents/Blog/BlogCard'
 import BlogBanner from '../components/CmsComponents/Blog/BlogBanner'
+import BlogCard from '../components/CmsComponents/Blog/BlogCard'
 
 export default function BlogHome(props) {
 	const blogUrl = props?.history?.location?.state?.blogUrl || props?.location?.state?.blogUrl
@@ -38,7 +38,9 @@ export default function BlogHome(props) {
 				}
 			}
 		}
+
 		window.addEventListener('scroll', handleScroll)
+
 		return () => window.removeEventListener('scroll', handleScroll)
 	}, [isFetchingMore, posts.length, totalPosts])
 
@@ -46,6 +48,7 @@ export default function BlogHome(props) {
 		try {
 			const _url = `${blogUrl}/wp-json/wp/v2/posts?_embed&per_page=${postsNum}`
 			const result = await Eitri.http.get(_url)
+
 			setPosts([...result.data])
 
 			if (totalPosts === null) {
@@ -86,6 +89,7 @@ export default function BlogHome(props) {
 						.filter(post => !post.categories.includes(1))
 						.map((post, index) => {
 							const postImg = getPostImageUrl(post)
+
 							return index < 3 ? (
 								<BlogBanner
 									key={post.id}
@@ -94,7 +98,9 @@ export default function BlogHome(props) {
 									handleClick={() => navigateToPost(post.id)}
 								/>
 							) : (
-								<View key={post.id} className='px-4 mt-4'>
+								<View
+									key={post.id}
+									className='px-4 mt-4'>
 									<BlogCard
 										postImg={postImg}
 										post={post}

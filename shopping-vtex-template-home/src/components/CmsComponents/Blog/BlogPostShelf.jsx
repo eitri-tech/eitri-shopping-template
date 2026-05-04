@@ -1,8 +1,8 @@
 import Eitri from 'eitri-bifrost'
-import BlogCard from './BlogCard'
+import { useTranslation } from 'eitri-i18n'
 import { Loading } from 'shopping-vtex-template-shared'
 import SwiperContent from '../../SwiperContent/SwiperContent'
-import { useTranslation } from 'eitri-i18n'
+import BlogCard from './BlogCard'
 
 export default function BlogPostShelf(props) {
 	const { data } = props
@@ -21,6 +21,7 @@ export default function BlogPostShelf(props) {
 		try {
 			const _url = `${url}/wp-json/wp/v2/posts?_embed&per_page=${data?.numberOfItems}`
 			const result = await Eitri.http.get(_url)
+
 			setPosts(result.data)
 		} catch (error) {
 			console.error('Error fetching posts:', error)

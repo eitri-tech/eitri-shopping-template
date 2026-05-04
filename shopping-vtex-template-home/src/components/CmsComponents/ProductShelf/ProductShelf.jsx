@@ -1,5 +1,6 @@
 import { getProductsService } from '../../../services/ProductService'
 import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
+
 export default function ProductShelf(props) {
 	const { data } = props
 
@@ -14,20 +15,30 @@ export default function ProductShelf(props) {
 	const executeProductSearch = async () => {
 		setIsLoadingProducts(true)
 
-		const params = {
-			facets: data.facets || [],
-			query: data.term ?? '',
-			sort: data.sort ?? '',
-			to: data.numberOfItems || 8
-		}
+		try {
+			const params = {
+				facets: data.facets || [],
+				query: data.term ?? '',
+				sort: data.sort ?? '',
+				to: data.numberOfItems || 8
+			}
 
-		const result = await getProductsService(params)
-		if (result) {
-			setCurrentProducts(result.products)
-			setSearchParams({ facets: data?.facets, ...params })
+			const result = await getProductsService(params)
+
+			if (result?.products) {
+				setCurrentProducts(result.products)
+				setSearchParams({ facets: data?.facets, ...params })
+			}
+		} catch (error) {
+			console.error('Error executeProductSearch [ProductShelf] =>', error)
+		} finally {
+			setIsLoadingProducts(false)
 		}
-		setIsLoadingProducts(false)
 	}
+
+	if (!isLoadingProducts && !currentProducts.length) return
+
+	const paramsObject = Object.fromEntries((data?.params || []).map(item => [item.key, item.value]))
 
 	return (
 		<ShelfOfProducts
@@ -36,6 +47,7 @@ export default function ProductShelf(props) {
 			isLoading={isLoadingProducts}
 			products={currentProducts}
 			searchParams={searchParams}
+			params={paramsObject}
 		/>
 	)
 }

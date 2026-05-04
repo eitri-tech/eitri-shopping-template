@@ -36,7 +36,8 @@ export default function BlogCard(props) {
 					</View>
 
 					<View>
-						<Text className={`line-clamp-3 ${isFullWidth ? 'w-full' : `max-w-[${textWidth || '231px'}]`} text-support-01 text-sm mb-[4px] font-normal`}>
+						<Text
+							className={`line-clamp-3 ${isFullWidth ? 'w-full' : `max-w-[${textWidth || '231px'}]`} text-support-01 text-sm mb-[4px] font-normal`}>
 							{excerpt}
 						</Text>
 					</View>

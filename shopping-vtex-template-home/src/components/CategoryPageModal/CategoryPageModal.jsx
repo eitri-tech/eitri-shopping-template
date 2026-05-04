@@ -1,8 +1,9 @@
-import CollapsableView from './components/CollapsableView'
-import SelectableTouchable from './components/SelectableTouchable'
+import { useTranslation } from 'eitri-i18n'
 import { Text, View, Radio } from 'eitri-luminus'
 import { Loading } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import CollapsableView from './components/CollapsableView'
+import SelectableTouchable from './components/SelectableTouchable'
+
 export default function CategoryPageModal(props) {
 	const {
 		show,
@@ -17,8 +18,6 @@ export default function CategoryPageModal(props) {
 		addOrdering
 	} = props
 	const { t } = useTranslation()
-
-	return null
 
 	return (
 		<Modal
@@ -177,7 +176,9 @@ export default function CategoryPageModal(props) {
 							<View
 								onClick={executeSearch}
 								className='flex p-2 items-center justify-center grow-1 bg-primary-content font-bold'>
-								<Text className='text-neutral font-bold'>{t('categoryPageModal.button', 'Filtrar')}</Text>
+								<Text className='text-neutral font-bold'>
+									{t('categoryPageModal.button', 'Filtrar')}
+								</Text>
 							</View>
 						</View>
 						<View bottomInset />

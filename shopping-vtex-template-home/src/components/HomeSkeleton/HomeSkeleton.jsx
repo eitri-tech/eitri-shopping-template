@@ -2,6 +2,7 @@ import { Skeleton, View } from 'eitri-luminus'
 
 export default function HomeSkeleton(props) {
 	const { show } = props
+
 	return (
 		<View className={`p-4 ${show ? 'block' : 'hidden'}`}>
 			<View className='flex flex-col gap-4'>

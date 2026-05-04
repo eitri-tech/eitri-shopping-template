@@ -1,12 +1,13 @@
 import Banner from '../components/CmsComponents/Banner/Banner'
+import BannersRichText from '../components/CmsComponents/BannersRichText/BannersRichText'
+import BlogPostShelf from '../components/CmsComponents/Blog/BlogPostShelf'
+import CategoryListSwipe from '../components/CmsComponents/CategoryListSwipe/CategoryListSwipe'
+import CategoryTree from '../components/CmsComponents/CategoryTree/CategoryTree'
+import HighlightedProductShelf from '../components/CmsComponents/HighlightedProductShelf/HighlightedProductShelf'
+import LastSeenProducts from '../components/CmsComponents/LastSeenProducts/LastSeenProducts'
+import ProductInfiniteScroll from '../components/CmsComponents/ProductInfiniteScroll/ProductInfiniteScroll'
 import ProductShelf from '../components/CmsComponents/ProductShelf/ProductShelf'
 import ProductTiles from '../components/CmsComponents/ProductTiles/ProductTiles'
-import CategoryTree from '../components/CmsComponents/CategoryTree/CategoryTree'
-import LastSeenProducts from '../components/CmsComponents/LastSeenProducts/LastSeenProducts'
-import CategoryListSwipe from '../components/CmsComponents/CategoryListSwipe/CategoryListSwipe'
-import ProductInfiniteScroll from '../components/CmsComponents/ProductInfiniteScroll/ProductInfiniteScroll'
-import BlogPostShelf from '../components/CmsComponents/Blog/BlogPostShelf'
-import HighlightedProductShelf from '../components/CmsComponents/HighlightedProductShelf/HighlightedProductShelf'
 
 const componentMap = {
 	MultipleImageBanner: Banner,
@@ -17,18 +18,22 @@ const componentMap = {
 	CategoryListSwipe: CategoryListSwipe,
 	ProductInfiniteScroll: ProductInfiniteScroll,
 	WordPressCardList: BlogPostShelf,
-	HighlightedProductShelf: HighlightedProductShelf
+	HighlightedProductShelf: HighlightedProductShelf,
+	BannersRichText: BannersRichText
 }
 
 const shouldReloadOnResume = componentName => {
 	const componentsToReload = ['LastSeenProducts']
+
 	return componentsToReload.includes(componentName)
 }
 
 export const getMappedComponent = (content, reloadKey) => {
 	const Component = componentMap[content.name]
+
 	if (!Component) {
 		console.error(`Component ${content.name} does not exist in the component map.`)
+
 		return null
 	}
 
@@ -43,6 +48,7 @@ export const getMappedComponent = (content, reloadKey) => {
 		)
 	} catch (error) {
 		console.error(`Error rendering component ${content.name}:`, error)
+
 		return null
 	}
 }

@@ -1,5 +1,5 @@
-import { getTopSearches } from '../../services/CatalogService'
 import { useTranslation } from 'eitri-i18n'
+import { getTopSearches } from '../../services/CatalogService'
 
 export default function TopSearches(props) {
 	const { onSubmit, ...rest } = props
@@ -11,6 +11,7 @@ export default function TopSearches(props) {
 		getTopSearches()
 			.then(res => {
 				const searches = res?.searches
+
 				setSearches(searches)
 			})
 			.catch(err => {})

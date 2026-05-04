@@ -1,11 +1,12 @@
-import { Skeleton, Text, View } from 'eitri-luminus'
-import ShelfOfProductsCarousel from './components/ShelfOfProductsCarousel'
-import ShelfOfProductsSlider from './components/ShelfOfProductsSlider'
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
+import { Text, View } from 'eitri-luminus'
+import { getSpacingValue } from '../../utils/utils'
+import ShelfOfProductsCarousel from './components/ShelfOfProductsCarousel'
+import ShelfOfProductsSlider from './components/ShelfOfProductsSlider'
 
 export default function ShelfOfProducts(props) {
-	const { products, title, isLoading, mode, searchParams, ...rest } = props
+	const { products, title, isLoading, mode, searchParams, params, ...rest } = props
 
 	const { t } = useTranslation()
 
@@ -19,24 +20,29 @@ export default function ShelfOfProducts(props) {
 		})
 	}
 
+	// Expliquei o que essa lógica faz no componente 'FitOnScreen'
+	const marginTop = getSpacingValue(params?.marginTop)
+	const marginBottom = getSpacingValue(params?.marginBottom)
+
 	return (
-		<View>
+		<View
+			style={{
+				...(marginTop && { marginTop }),
+				...(marginBottom && { marginBottom })
+			}}>
 			{title && (
 				<View className={`flex justify-between items-center px-4`}>
-					{isLoading ? (
-						<Skeleton className='!w-[160px] !h-7 !rounded-md' />
-					) : (
-						<Text className='font-bold text-xl'>{title}</Text>
-					)}
+					<Text className='font-bold text-xl'>
+						{isLoading ? t('shelfOfProducts.loading', 'Carregando...') : title}
+					</Text>
+
 					{searchParams && (
 						<View
 							onClick={seeMore}
 							className='flex items-center min-w-fit'>
-							{isLoading ? (
-								<Skeleton className='!w-[64px] !h-7 !rounded-md' />
-							) : (
-								<Text className='font-bold'>{t('shelfOfProducts.seeMore', 'Ver mais')}</Text>
-							)}
+							<Text className='font-bold text-sm underline'>
+								{t('shelfOfProducts.seeMore', 'Ver mais')}
+							</Text>
 						</View>
 					)}
 				</View>

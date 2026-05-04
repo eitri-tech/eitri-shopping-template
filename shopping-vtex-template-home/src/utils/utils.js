@@ -1,5 +1,5 @@
-import { App } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
+import { App } from 'eitri-shopping-vtex-shared'
 
 export const formatPrice = (price, _locale, _currency) => {
 	if (!price) return ''
@@ -11,6 +11,7 @@ export const formatPrice = (price, _locale, _currency) => {
 }
 
 let cartmantCountdown = 10
+
 export const goToCartman = () => {
 	if (cartmantCountdown === 0) {
 		Eitri.navigation.navigate({ path: 'Cartman' })
@@ -18,4 +19,15 @@ export const goToCartman = () => {
 	} else {
 		cartmantCountdown--
 	}
+}
+
+export const getSpacingValue = value => {
+	if (!value) return undefined
+
+	// se já for algo tipo "80px", "1rem", "10%"
+	if (typeof value === 'string' && /\d/.test(value)) {
+		return value
+	}
+
+	return undefined
 }

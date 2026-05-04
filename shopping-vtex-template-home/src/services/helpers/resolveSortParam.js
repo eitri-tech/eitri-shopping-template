@@ -1,6 +1,7 @@
 export const resolveSortParam = (sort, useGraphQlMode) => {
 	if (useGraphQlMode) {
 		if (sort?.startsWith('OrderBy')) return sort
+
 		switch (sort) {
 			case 'orders:desc':
 				return 'OrderByTopSaleDESC'
@@ -22,7 +23,9 @@ export const resolveSortParam = (sort, useGraphQlMode) => {
 				return getDefaultSortParam(useGraphQlMode)
 		}
 	}
+
 	if (sort?.indexOf(':') > -1) return sort
+
 	switch (sort) {
 		case 'OrderByTopSaleDESC':
 			return 'orders:desc'
@@ -47,5 +50,6 @@ export const resolveSortParam = (sort, useGraphQlMode) => {
 
 export const getDefaultSortParam = useGraphQlMode => {
 	if (useGraphQlMode) return 'OrderByReleaseDateDESC'
+
 	return 'release:desc'
 }

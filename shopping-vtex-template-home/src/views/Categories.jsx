@@ -1,8 +1,8 @@
 import Eitri from 'eitri-bifrost'
-import { Loading, HeaderContentWrapper, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
-import { getCmsContent } from '../services/CmsService'
 import { useTranslation } from 'eitri-i18n'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
+import { getCmsContent } from '../services/CmsService'
 
 export default function Categories() {
 	const { t } = useTranslation()
@@ -15,6 +15,7 @@ export default function Categories() {
 
 	const loadCms = async () => {
 		const { sections } = await getCmsContent('categories', 'categorias')
+
 		setCmsContent(sections)
 		setIsLoading(false)
 	}

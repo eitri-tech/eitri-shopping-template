@@ -1,8 +1,11 @@
 import { Text, View } from 'eitri-luminus'
+
 export default function SimpleList(props) {
 	const { currentShelf, chooseCategory } = props
+
 	const totalLength = currentShelf?.content?.length
 	const half = totalLength % 2 === 0 ? totalLength / 2 : (totalLength + 1) / 2
+
 	return (
 		<View className='px-8 flex'>
 			<View width='50%'>
@@ -17,6 +20,7 @@ export default function SimpleList(props) {
 					</View>
 				))}
 			</View>
+
 			<View width='50%'>
 				{currentShelf?.content?.slice(half, totalLength).map(category => (
 					<View

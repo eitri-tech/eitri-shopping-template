@@ -1,5 +1,5 @@
-import { openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
 import Eitri from 'eitri-bifrost'
+import { openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
 
 const handleSearchAction = value => {
 	Eitri.navigation.navigate({
@@ -43,6 +43,7 @@ const handleCategoryAction = action => {
 		}),
 		sort: action?.sort || ''
 	}
+
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: { params, title: action?.title, banner: action?.banner }
@@ -57,6 +58,7 @@ const handleProductAction = value => {
 }
 const openBrand = action => {
 	const facets = [{ key: 'brand', value: action?.value }]
+
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: { params: { facets, sort: action?.sort }, title: action?.title || '' }
@@ -71,6 +73,7 @@ const openLink = link => {
 
 export const processActions = sliderData => {
 	const action = sliderData?.action
+
 	switch (action?.type) {
 		case 'search':
 			handleSearchAction(action.value)
