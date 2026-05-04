@@ -1,5 +1,3 @@
-import Eitri from 'eitri-bifrost'
-
 export default function HeaderFilter(props) {
 	const { handleFilterModal, facetsModalReady, hasFilters, iconColor } = props
 

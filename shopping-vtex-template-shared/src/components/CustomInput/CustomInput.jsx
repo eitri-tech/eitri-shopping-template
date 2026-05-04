@@ -10,6 +10,7 @@ export default function CustomInput(props) {
 			if (status.code === 'keyboardDidShow') {
 				e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
 			}
+
 			Eitri.keyboard.clearVisibilityListener()
 		})
 

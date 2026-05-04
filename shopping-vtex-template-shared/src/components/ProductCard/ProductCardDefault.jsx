@@ -1,5 +1,5 @@
-import WishlistIcon from './components/WishlistIcon'
 import Loading from '../Loading/LoadingComponent'
+import WishlistIcon from './components/WishlistIcon'
 
 export default function ProductCardDefault(props) {
 	const {
@@ -20,6 +20,7 @@ export default function ProductCardDefault(props) {
 		onPressOnWishlist,
 		className
 	} = props
+
 	return (
 		<View className={`relative drop-shadow-[0px_0px_6px_rgba(0,0,0,0.2)] bg-white rounded ${className}`}>
 			<View className='flex flex-col rounded-sm p-2'>

@@ -44,6 +44,7 @@ export default function CustomCarousel({
 	useEffect(() => {
 		if (autoPlay && !isDragging) {
 			const timer = setInterval(nextSlide, interval)
+
 			return () => clearInterval(timer)
 		}
 	}, [autoPlay, interval, nextSlide, isDragging])
@@ -60,6 +61,7 @@ export default function CustomCarousel({
 		if (!isDragging) return
 
 		const diff = clientX - startX
+
 		setCurrentX(clientX)
 		setDragOffset(diff)
 	}
@@ -120,6 +122,7 @@ export default function CustomCarousel({
 	const getTransform = () => {
 		const slideOffset = -currentSlide * 100
 		const dragOffsetPercent = dragOffset ? (dragOffset / window.innerWidth) * 100 : 0
+
 		return `translateX(${slideOffset + dragOffsetPercent}%)`
 	}
 

@@ -44,19 +44,23 @@ function getAddress(sla, selectedAddresses) {
 	if (isPickupDelivery(sla.deliveryChannel)) {
 		return sla.pickupStoreInfo?.address ? { ...sla.pickupStoreInfo.address } : null
 	}
+
 	return selectedAddresses?.find(addr => addr.addressId === sla.addressId) || null
 }
 
 // Helper: Obtém produto por índice com validação
 function getProductData(items, itemIndex) {
 	const item = items?.[itemIndex]
+
 	if (!item) {
 		console.warn(`Item not found at index ${itemIndex}`)
+
 		return {
 			name: 'Unknown Product',
 			imageUrl: null
 		}
 	}
+
 	return {
 		name: item.name,
 		imageUrl: item.imageUrl,
@@ -85,6 +89,7 @@ function groupSlasByType(allSlas) {
 	for (const sla of allSlas) {
 		if (grouped.has(sla.id)) {
 			const existing = grouped.get(sla.id)
+
 			existing.price += sla.price
 			existing.slas.push({
 				itemIndex: sla.itemIndex,
@@ -123,6 +128,7 @@ function enrichShippingOptions(groupedSlas, items, selectedAddresses, pickupPoin
 		let deliveryAddress = !group.isPickupInPoint
 			? (() => {
 					const address = selectedAddresses?.find(addr => addr.addressId === group.addressId)
+
 					return address ? JSON.parse(JSON.stringify(address)) : null
 				})()
 			: null
@@ -138,6 +144,7 @@ function enrichShippingOptions(groupedSlas, items, selectedAddresses, pickupPoin
 			businessHours: pickupPoint?.businessHours,
 			products: group.slas.map(slaItem => {
 				const productData = getProductData(items, slaItem.itemIndex)
+
 				return {
 					itemIndex: slaItem.itemIndex,
 					...productData
@@ -155,6 +162,7 @@ function extractCurrentSlas(logisticsInfo, items, selectedAddresses) {
 		if (!logistic.selectedSla) continue
 
 		const sla = logistic.slas?.find(s => s.id === logistic.selectedSla)
+
 		if (!sla) continue
 
 		const isPickup = isPickupDelivery(sla.deliveryChannel)
@@ -163,6 +171,7 @@ function extractCurrentSlas(logisticsInfo, items, selectedAddresses) {
 		if (currentSlasMap.has(sla.id)) {
 			// Atualiza SLA existente
 			const existing = currentSlasMap.get(sla.id)
+
 			existing.price += sla.price
 			existing.formatedPrice = formatPrice(existing.price)
 			existing.products.push(productData)
