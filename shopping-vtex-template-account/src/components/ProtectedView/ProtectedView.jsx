@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { isLoggedIn } from '../../services/CustomerService'
 import { useTranslation } from 'eitri-i18n'
+import { isLoggedIn } from '../../services/CustomerService'
 
 export default function ProtectedView(props) {
 	const { afterLoginRedirectTo, redirectState, labelLoading } = props

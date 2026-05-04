@@ -1,17 +1,17 @@
 import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
 import { CustomButton, HeaderText, Loading, HeaderContentWrapper, BottomInset } from 'shopping-vtex-template-shared'
+import InfoCard from '../components/InfoCard/InfoCard'
+import LoginCard from '../components/LoginCard/LoginCard'
+import PoweredBy from '../components/PoweredBy/PoweredBy'
+import ProfileCardButton from '../components/ProfileCardButton/ProfileCardButton'
+import { startConfigure } from '../services/AppService'
 import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
-import { useTranslation } from 'eitri-i18n'
-import ProfileCardButton from '../components/ProfileCardButton/ProfileCardButton'
-import { startConfigure } from '../services/AppService'
-import PoweredBy from '../components/PoweredBy/PoweredBy'
-import LoginCard from '../components/LoginCard/LoginCard'
-import InfoCard from '../components/InfoCard/InfoCard'
-import userIcon from '../assets/images/user.svg'
 import bookmarkIcon from '../assets/images/bookmark-01.svg'
 import boxIcon from '../assets/images/box-01.svg'
+import userIcon from '../assets/images/user.svg'
 
 export default function Home(props) {
 	const PAGE = 'Minha Conta'
@@ -37,18 +37,22 @@ export default function Home(props) {
 
 		if (startParams?.action === 'RequestLogin') {
 			navigate(PAGES.SIGNIN, { closeAppAfterLogin: true }, true)
+
 			return
 		}
 
 		if (startParams) {
 			const openRoute = processDeepLink(startParams)
+
 			if (openRoute) {
 				Eitri.navigation.navigate(openRoute)
+
 				return
 			}
 		}
 
 		const isLogged = await isLoggedIn()
+
 		if (isLogged) {
 			await loadMe()
 		}
@@ -61,6 +65,7 @@ export default function Home(props) {
 
 	const loadMe = async () => {
 		const customerData = await getCustomerData()
+
 		setCustomerData(customerData)
 	}
 
@@ -73,6 +78,7 @@ export default function Home(props) {
 	const processDeepLink = startParams => {
 		if (startParams?.route) {
 			let { route, ...rest } = startParams
+
 			return {
 				path: route,
 				state: rest,
@@ -95,7 +101,9 @@ export default function Home(props) {
 			{!isLoading && (isLogged ? <InfoCard customerData={customerData} /> : <LoginCard />)}
 
 			<View className='px-4 mt-2 mb-2'>
-				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData', 'Dados pessoais')}</Text>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>
+					{t('home.lbPersonalData', 'Dados pessoais')}
+				</Text>
 
 				<View className='flex flex-col gap-3 mt-2'>
 					<ProfileCardButton

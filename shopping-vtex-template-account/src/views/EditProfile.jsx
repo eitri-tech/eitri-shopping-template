@@ -1,6 +1,4 @@
-import { getCustomerData, setCustomerData } from '../services/CustomerService'
-import { sendScreenView } from '../services/TrackingService'
-import Eitri from 'eitri-bifrost'
+import { useTranslation } from 'eitri-i18n'
 import {
 	CustomButton,
 	CustomInput,
@@ -10,9 +8,10 @@ import {
 	HeaderReturn,
 	BottomInset
 } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
-import formatDateMMDDYYYY, { formatDate } from '../utils/utils'
+import { getCustomerData, setCustomerData } from '../services/CustomerService'
+import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import formatDateMMDDYYYY, { formatDate } from '../utils/utils'
 
 export default function EditProfile(props) {
 	const [user, setUser] = useState({})
@@ -41,6 +40,7 @@ export default function EditProfile(props) {
 
 	const handleInputChange = (target, e) => {
 		const value = e.target.value
+
 		setUser({
 			...user,
 			[target]: value
@@ -73,6 +73,7 @@ export default function EditProfile(props) {
 			newErrors.birthDate = t('editProfile.errors.birthDateRequired', 'Data de nascimento é obrigatória')
 		} else {
 			const { isValid } = convertToISO(user.birthDate)
+
 			if (!isValid) {
 				newErrors.birthDate = t(
 					'editProfile.errors.birthDateInvalid',
@@ -97,6 +98,7 @@ export default function EditProfile(props) {
 		}
 
 		setErrors(newErrors)
+
 		return Object.keys(newErrors).length === 0
 	}
 
@@ -109,11 +111,15 @@ export default function EditProfile(props) {
 
 			setIsLoading(true)
 			const { isValid, isoDate } = convertToISO(user.birthDate)
+
 			if (!isValid) {
 				setIsLoading(false)
+
 				return
 			}
+
 			const updatedUser = await setCustomerData({ ...user, birthDate: isoDate })
+
 			setUser({ ...updatedUser, birthDate: formatDate(updatedUser?.birthDate) })
 			setIsLoading(false)
 			setShowNotification(true)
@@ -128,6 +134,7 @@ export default function EditProfile(props) {
 	const loadMe = async () => {
 		setIsLoading(true)
 		const customerData = await getCustomerData()
+
 		setUser({ ...customerData, birthDate: customerData?.birthDate ? formatDate(customerData?.birthDate) : '' })
 		setIsLoading(false)
 	}
@@ -217,7 +224,9 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate', 'Data de nascimento')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>
+						{t('editProfile.lbBirthdate', 'Data de nascimento')} *
+					</Text>
 					<CustomInput
 						backgroundColor='background-color'
 						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}

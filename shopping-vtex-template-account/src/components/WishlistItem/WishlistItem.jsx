@@ -1,9 +1,9 @@
+import { useTranslation } from 'eitri-i18n'
 import { getProductById } from '../../services/ProductService'
 import ProductCard from '../ProductCard/ProductCard'
-import { useTranslation } from 'eitri-i18n'
 
 export default function WishlistItem(props) {
-	const { productId } = props
+	const { productId, onRemoveFromWishList } = props
 	const { t } = useTranslation()
 
 	const [product, setProduct] = useState(null)
@@ -15,6 +15,7 @@ export default function WishlistItem(props) {
 	const init = async () => {
 		try {
 			const product = await getProductById(productId)
+
 			console.log('productId', productId)
 			setProduct(product)
 		} catch (e) {
@@ -22,5 +23,14 @@ export default function WishlistItem(props) {
 		}
 	}
 
-	return <>{product && <ProductCard product={product} />}</>
+	return (
+		<>
+			{product && (
+				<ProductCard
+					product={product}
+					onRemoveFromWishListExternal={onRemoveFromWishList}
+				/>
+			)}
+		</>
+	)
 }

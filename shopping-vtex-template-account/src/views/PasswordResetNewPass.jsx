@@ -1,4 +1,5 @@
 // /Users/calindra/Workspace/Eitri/eitri-shopping-template/shopping-vtex-template-account/src/views/PasswordResetNewPass.jsx
+import { useTranslation } from 'eitri-i18n'
 import {
 	Loading,
 	HeaderContentWrapper,
@@ -8,9 +9,8 @@ import {
 	CustomInput
 } from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
-import { navigate, PAGES } from '../services/NavigationService'
-import { useTranslation } from 'eitri-i18n'
 import { setPassword } from '../services/CustomerService'
+import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
@@ -55,6 +55,7 @@ export default function PasswordResetNewPass(props) {
 			if (!email || !recoveryCode || !newPassword) {
 				return
 			}
+
 			setLoading(true)
 			await setPassword(email, recoveryCode, newPassword)
 			navigate(PAGES.HOME, {}, true)
@@ -84,7 +85,9 @@ export default function PasswordResetNewPass(props) {
 
 			<View className='p-4'>
 				<View className='flex flex-col gap-2'>
-					<Text className='w-full font-bold text-xl'>{t('passwordResetNewPass.forgotPass', 'Esqueceu a senha?')}</Text>
+					<Text className='w-full font-bold text-xl'>
+						{t('passwordResetNewPass.forgotPass', 'Esqueceu a senha?')}
+					</Text>
 				</View>
 
 				<View className='mt-4 flex flex-col gap-2'>
@@ -158,7 +161,10 @@ export default function PasswordResetNewPass(props) {
 				show={showErrorAlert}
 				onDismiss={() => setShowErrorAlert(false)}
 				duration={7}
-				message={t('passwordResetNewPass.messageError', 'Houve um erro ao redefinir a senha. Tente novamente mais tarde.')}
+				message={t(
+					'passwordResetNewPass.messageError',
+					'Houve um erro ao redefinir a senha. Tente novamente mais tarde.'
+				)}
 			/>
 		</Page>
 	)

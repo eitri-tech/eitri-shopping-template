@@ -13,9 +13,11 @@ export const formatPriceInCents = (price, _locale, _currency) => {
 	if (typeof price !== 'number') {
 		return ''
 	}
+
 	if (price === 0) {
 		return 'Grátis'
 	}
+
 	return formatPrice(price / 100)
 }
 
@@ -24,6 +26,7 @@ export const formatDateDaysMonthYear = date => {
 	const dia = data.getDate()
 	const mes = data.toLocaleString('pt-BR', { month: 'long' })
 	const ano = data.getFullYear()
+
 	return `${dia} de ${mes} de ${ano}`
 }
 

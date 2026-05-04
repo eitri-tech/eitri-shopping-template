@@ -11,7 +11,9 @@ export default function InfiniteScroll(props) {
 				setScrollEnded(true)
 			}
 		}
+
 		window.addEventListener('scroll', handleScroll)
+
 		return () => {
 			window.removeEventListener('scroll', handleScroll)
 		}
@@ -21,6 +23,7 @@ export default function InfiniteScroll(props) {
 		if (scrollEnded) {
 			onScrollEnd()
 		}
+
 		setScrollEnded(false)
 	}, [scrollEnded])
 

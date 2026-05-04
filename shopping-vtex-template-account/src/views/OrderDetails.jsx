@@ -1,14 +1,14 @@
 import Eitri from 'eitri-bifrost'
-import { Vtex } from 'eitri-shopping-vtex-shared'
 import { useTranslation } from 'eitri-i18n'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } from 'shopping-vtex-template-shared'
-import { formatDate, formatDateDaysMonthYear, formatPriceInCents } from '../utils/utils'
+import { Vtex } from 'eitri-shopping-vtex-shared'
+import { BottomInset, HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import ImageCard from '../components/Image/ImageCard'
 import OrderStatusBadge from '../components/OrderStatusBadge/OrderStatusBadge'
 import ProtectedView from '../components/ProtectedView/ProtectedView'
 import { getOrderById } from '../services/CustomerService'
-import ImageCard from '../components/Image/ImageCard'
-import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 import { sendScreenView } from '../services/TrackingService'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { formatDate, formatDateDaysMonthYear, formatPriceInCents } from '../utils/utils'
 
 // Componente auxiliar para padronizar as seções de detalhes
 const DetailSection = ({ title, children }) => (
@@ -27,7 +27,7 @@ export default function OrderDetails(props) {
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		const { order, orderId } = props?.history?.location?.state
+		const { order, orderId } = props?.history?.location?.state || {}
 
 		if (order) {
 			setOrder(order)
@@ -35,6 +35,7 @@ export default function OrderDetails(props) {
 			handleOrder(orderId)
 		} else {
 			Eitri.navigation.back()
+
 			return
 		}
 
@@ -44,8 +45,10 @@ export default function OrderDetails(props) {
 
 	const handleOrder = async id => {
 		setIsLoading(true)
+
 		try {
 			const orderData = await getOrderById(id)
+
 			setOrder(orderData)
 		} catch (error) {
 			console.error(t('orderDetails.errors.getOrder', 'Erro ao pegar detalhes do pedido:'), error)
@@ -57,7 +60,9 @@ export default function OrderDetails(props) {
 
 	const cancelOrder = async () => {
 		if (!cancelReason) return
+
 		setIsLoading(true)
+
 		try {
 			await Vtex.customer.cancelOrder(order?.orderId, { reason: cancelReason })
 			Eitri.navigation.back()
@@ -97,6 +102,8 @@ export default function OrderDetails(props) {
 	}
 
 	const handleShippingEstimate = shippingEstimate => {
+		if (!shippingEstimate) return ''
+
 		return shippingEstimate.replace(/[a-zA-Z]/g, '')
 	}
 
@@ -204,8 +211,8 @@ export default function OrderDetails(props) {
 										<Text className='font-bold text-gray-900'>
 											{formatPriceInCents(
 												order?.totals
-													.map(item => item.value)
-													.reduce((acc, curr) => acc + curr, 0)
+													?.map(item => item.value)
+													?.reduce((acc, curr) => acc + curr, 0)
 											)}
 										</Text>
 									</View>
@@ -218,11 +225,17 @@ export default function OrderDetails(props) {
 									{cancelConfirmation ? (
 										<View className='w-full'>
 											<Text className='mb-2 block text-sm font-bold text-gray-800'>
-												{t('orderDetails.lbCancelReason', 'Selecione o motivo para o cancelamento')}
+												{t(
+													'orderDetails.lbCancelReason',
+													'Selecione o motivo para o cancelamento'
+												)}
 											</Text>
 											<Dropdown
 												value={cancelReason}
-												placeholder={t('orderDetails.lbSelectCancelReason', 'Selecione o motivo')}
+												placeholder={t(
+													'orderDetails.lbSelectCancelReason',
+													'Selecione o motivo'
+												)}
 												onChange={value => setCancelReason(value)}>
 												{/* Adicione os Dropdown.Item aqui */}
 											</Dropdown>

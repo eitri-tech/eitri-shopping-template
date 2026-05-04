@@ -1,12 +1,12 @@
-import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
-import NoItem from '../components/NoItem/NoItem'
-import { sendScreenView } from '../services/TrackingService'
-import OrderCard from '../components/OrderCard/OrderCard'
-import { listOrders } from '../services/CustomerService'
-import ProtectedView from '../components/ProtectedView/ProtectedView'
-import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
-import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 import { useTranslation } from 'eitri-i18n'
+import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
+import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
+import NoItem from '../components/NoItem/NoItem'
+import OrderCard from '../components/OrderCard/OrderCard'
+import ProtectedView from '../components/ProtectedView/ProtectedView'
+import { listOrders } from '../services/CustomerService'
+import { sendScreenView } from '../services/TrackingService'
+import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function OrderList(props) {
 	const [orders, setOrders] = useState([])
@@ -30,14 +30,19 @@ export default function OrderList(props) {
 			if (pageHasEnded) {
 				return
 			}
+
 			setIsLoading(true)
 			const orders = await listOrders(page)
+
 			if (orders && orders.list && orders.list.length === 0) {
 				setPageHasEnded(true)
+
 				return
 			}
+
 			if (orders && orders.list && orders.list.length > 0) {
 				const moreOrdersList = orders.list
+
 				setOrders(prevOrders => [...prevOrders, ...moreOrdersList])
 				setOrders(orders.list)
 				setPage(page + 1)

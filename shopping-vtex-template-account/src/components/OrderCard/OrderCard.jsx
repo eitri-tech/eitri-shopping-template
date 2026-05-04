@@ -1,12 +1,11 @@
-import Eitri from 'eitri-bifrost'
 import { useState, useEffect } from 'react'
-import { CustomButton } from 'shopping-vtex-template-shared'
-import OrderStatusBadge from '../OrderStatusBadge/OrderStatusBadge'
-import { formatDateDaysMonthYear, formatPriceInCents } from '../../utils/utils'
-import { getOrderById } from '../../services/CustomerService'
-import ImageCard from '../Image/ImageCard'
-import { navigate, PAGES } from '../../services/NavigationService'
 import { useTranslation } from 'eitri-i18n'
+import { CustomButton } from 'shopping-vtex-template-shared'
+import { getOrderById } from '../../services/CustomerService'
+import { navigate, PAGES } from '../../services/NavigationService'
+import { formatDateDaysMonthYear, formatPriceInCents } from '../../utils/utils'
+import ImageCard from '../Image/ImageCard'
+import OrderStatusBadge from '../OrderStatusBadge/OrderStatusBadge'
 
 export default function OrderCard(props) {
 	const { order, showOrderDetails } = props
@@ -23,8 +22,10 @@ export default function OrderCard(props) {
 
 	const loadDetails = async () => {
 		setLoadingDetails(true)
+
 		try {
 			const result = await getOrderById(order?.orderId)
+
 			setOrderDetails(result)
 		} catch (e) {
 			console.error(t('orderCard.loadDetailsError', 'Falha ao carregar detalhes do pedido:'), e)
@@ -59,9 +60,7 @@ export default function OrderCard(props) {
 				</View>
 
 				<View className='flex flex flex-col'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						{t('orderCard.date', 'Data')}
-					</Text>
+					<Text className='text-xs font-semibold uppercase text-gray-500'>{t('orderCard.date', 'Data')}</Text>
 					<Text className='text-sm text-gray-700'>{formatDateDaysMonthYear(order?.creationDate)}</Text>
 				</View>
 
@@ -69,9 +68,7 @@ export default function OrderCard(props) {
 					<Text className='text-xs font-semibold uppercase text-gray-500'>
 						{t('orderCard.total', 'Total')} (
 						{`${order?.totalItems} ${
-							order?.totalItems > 1
-								? t('orderCard.items', 'itens')
-								: t('orderCard.item', 'item')
+							order?.totalItems > 1 ? t('orderCard.items', 'itens') : t('orderCard.item', 'item')
 						}`}
 						)
 					</Text>
