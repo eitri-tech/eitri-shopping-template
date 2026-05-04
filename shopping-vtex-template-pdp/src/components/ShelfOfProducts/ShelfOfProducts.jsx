@@ -1,5 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
+import { Skeleton, Text, View } from 'eitri-luminus'
 import ProductCard from '../ProductCard/ProductCard'
 import ShelfOfProductsCarousel from './components/ShelfOfProductsCarousel'
 
