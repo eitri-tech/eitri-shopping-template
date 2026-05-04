@@ -14,12 +14,15 @@ const getValidCacheName = async () => {
 		// Encontrar um cache válido
 		const validCacheName = cacheKeys.find(cacheName => {
 			if (!cacheName.startsWith(CACHE_NAME_PREFIX)) return false
+
 			const cacheTimestamp = Number(cacheName.split('_')[1])
+
 			return cacheTimestamp > currentTimestamp - MAX_AGE
 		})
 
 		if (validCacheName) {
 			console.log('Cache válido encontrado:', validCacheName)
+
 			return validCacheName
 		}
 
@@ -30,6 +33,7 @@ const getValidCacheName = async () => {
 		return newCacheName
 	} catch (error) {
 		console.error('Erro ao verificar o cache:', error)
+
 		return newCacheName
 	}
 }
@@ -48,6 +52,7 @@ const getBlankImageResponse = () => {
 	}
 
 	const imageBlob = new Blob([intArray], { type: 'image/png' })
+
 	return new Response(imageBlob, {
 		status: 200,
 		headers: { 'Content-Type': 'image/png', 'Content-Length': imageBlob.size }
@@ -60,13 +65,16 @@ const getBlankImageResponse = () => {
 const fetchAndCache = async (request, cache) => {
 	try {
 		const response = await fetch(request)
+
 		if (cache) {
 			console.log('Salvando no cache:', request.url)
 			cache.put(request, response.clone())
 		}
+
 		return response
 	} catch (error) {
 		console.error('Erro ao buscar recurso:', error)
+
 		return getBlankImageResponse()
 	}
 }
@@ -82,15 +90,19 @@ const handleImageRequest = async event => {
 		const cache = await caches.open(cacheName)
 
 		const cachedResponse = await cache.match(request)
+
 		if (cachedResponse) {
 			console.log('Cache hit:', request.url)
+
 			return cachedResponse
 		}
 
 		console.log('Cache miss:', request.url)
+
 		return fetchAndCache(request, cache)
 	} catch (error) {
 		console.error('Erro ao manipular requisição de imagem:', error)
+
 		return getBlankImageResponse()
 	}
 }

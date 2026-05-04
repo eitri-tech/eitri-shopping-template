@@ -1,10 +1,10 @@
+import { useTranslation } from 'eitri-i18n'
 import { View, Text, Image } from 'eitri-luminus'
-import Quantity from '../Quantity/Quantity'
 import { HeaderWishList, Loading } from 'shopping-vtex-template-shared'
 import { addToWishlist, checkWishlistItem, removeItemFromWishlist } from '../../services/customerService'
-import ModalConfirm from '../ModalConfirm/ModalConfirm'
-import { useTranslation } from 'eitri-i18n'
 import { formatAmountInCents } from '../../utils/utils'
+import ModalConfirm from '../ModalConfirm/ModalConfirm'
+import Quantity from '../Quantity/Quantity'
 
 export default function CartItem(props) {
 	const { item, onChangeQuantityItem, message, handleRemoveCartItem, onAddOfferingToCart, onRemoveOfferingFromCart } =
@@ -24,6 +24,7 @@ export default function CartItem(props) {
 
 	const checkWishlist = async () => {
 		const { inList, listId } = await checkWishlistItem(item.productId)
+
 		if (inList) {
 			setWishlistId(listId)
 		}
@@ -39,6 +40,7 @@ export default function CartItem(props) {
 			} else {
 				setWishlistId(true)
 				const result = await addToWishlist(item.productId, item.name, item.id)
+
 				setWishlistId(result?.data?.addToList)
 			}
 		} catch (e) {
@@ -69,8 +71,10 @@ export default function CartItem(props) {
 	const handleItemOffer = offeringId => {
 		if (offerIsBundled(offeringId)) {
 			onRemoveOfferingFromCart(offeringId)
+
 			return
 		}
+
 		onAddOfferingToCart(offeringId)
 	}
 

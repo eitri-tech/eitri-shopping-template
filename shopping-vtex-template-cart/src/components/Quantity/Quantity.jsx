@@ -1,4 +1,4 @@
-import { View, Text, Button } from 'eitri-luminus'
+import { View, Text } from 'eitri-luminus'
 
 export default function Quantity(props) {
 	const { quantity, handleItemQuantity, disable } = props

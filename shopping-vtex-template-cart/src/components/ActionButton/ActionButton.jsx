@@ -1,6 +1,6 @@
+import { useTranslation } from 'eitri-i18n'
 import { View } from 'eitri-luminus'
 import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { navigateToCheckout } from '../../services/navigationService'
 
@@ -16,7 +16,9 @@ export default function ActionButton(props) {
 
 	const isValidToProceed = () => {
 		if (!cart) return false
+
 		if (!cart?.items) return false
+
 		return cart?.items.length !== 0
 	}
 

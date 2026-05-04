@@ -1,16 +1,15 @@
 import Eitri from 'eitri-bifrost'
-import { sendPageView } from '../services/trackingService'
-import { useLocalShoppingCart } from '../providers/LocalCart'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
-import { saveCartIdOnStorage } from '../services/cartService'
-import Freight from '../components/Freight/Freight'
-import Coupon from '../components/Coupon/Coupon'
-import CartSummary from '../components/CartSummary/CartSummary'
-import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
-import ActionButton from '../components/ActionButton/ActionButton'
-import { startConfigure } from '../services/AppService'
-import { Page } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import { Page } from 'eitri-luminus'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import ActionButton from '../components/ActionButton/ActionButton'
+import CartItemsContent from '../components/CartItemsContent/CartItemsContent'
+import CartSummary from '../components/CartSummary/CartSummary'
+import Coupon from '../components/Coupon/Coupon'
+import { useLocalShoppingCart } from '../providers/LocalCart'
+import { startConfigure } from '../services/AppService'
+import { saveCartIdOnStorage } from '../services/cartService'
+import { sendPageView } from '../services/trackingService'
 
 export default function Home(props) {
 	const { t } = useTranslation()
@@ -38,6 +37,7 @@ export default function Home(props) {
 
 	const startHome = async () => {
 		const startParams = await Eitri.getInitializationInfos()
+
 		setOpenWithBottomBar(startParams?.tabIndex)
 
 		await startConfigure()
@@ -49,9 +49,11 @@ export default function Home(props) {
 
 	const loadCart = async () => {
 		const startParams = await Eitri.getInitializationInfos()
+
 		if (startParams?.orderFormId) {
 			await saveCartIdOnStorage(startParams?.orderFormId)
 		}
+
 		return startCart()
 	}
 

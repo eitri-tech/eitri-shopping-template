@@ -1,6 +1,7 @@
 import { useTranslation } from 'eitri-i18n'
-import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { View, Text } from 'eitri-luminus'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+
 export default function InstallmentsMsg(props) {
 	const { cart } = useLocalShoppingCart()
 	const { t } = useTranslation()
