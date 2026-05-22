@@ -112,7 +112,7 @@ export default function CheckoutReview() {
 			setError({
 				state: true,
 				message:
-					ERROR_MAP[errorCode] || error.response?.data?.error?.message || 'Houve um erro ao fechar pedido'
+					ERROR_MAP[errorCode] || error.response?.data?.error?.message || t('checkoutReview.txtError')
 			})
 
 			setIsLoading(false)
@@ -157,14 +157,14 @@ export default function CheckoutReview() {
 			</HeaderContentWrapper>
 
 			<Loading
-				text={'Estamos preparando a sua compra'}
+				text={t('checkoutReview.txtLoading')}
 				fullScreen
 				isLoading={cartIsLoading || isLoading}
 			/>
 
 			<View className='p-4'>
 				<View className='mb-2'>
-					<Text className='text-xl font-bold'>Revise e confirme</Text>
+					<Text className='text-xl font-bold'>{t('checkoutReview.txtTitle')}</Text>
 				</View>
 
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
@@ -185,7 +185,7 @@ export default function CheckoutReview() {
 										<Text className='text-sm font-medium'>{uItem.name}</Text>
 									</View>
 									<View onClick={() => removeUnavailableItem(uItem)}>
-										<Text className='text-sm text-red-600 font-medium'>Excluir</Text>
+										<Text className='text-sm text-red-600 font-medium'>{t('checkoutReview.txtDelete')}</Text>
 									</View>
 								</View>
 							))}

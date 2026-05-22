@@ -73,7 +73,7 @@ export default function DeliveryData(props) {
 
 								{/* Store Address */}
 								<View className='bg-neutral-50 p-3 rounded-lg w-full'>
-									<Text className='text-sm font-medium mb-2'>Endereço da Loja</Text>
+									<Text className='text-sm font-medium mb-2'>{t('deliveryData.txtStoreAddress')}</Text>
 									<View className='flex flex-col gap-1'>
 										<Text className='text-xs text-neutral-600'>
 											{`${currentDelivery?.pickupStoreInfo?.address?.street}, ${currentDelivery?.pickupStoreInfo?.address?.number}${
@@ -86,7 +86,7 @@ export default function DeliveryData(props) {
 											{`${currentDelivery?.pickupStoreInfo?.address?.neighborhood}, ${currentDelivery?.pickupStoreInfo?.address?.city} - ${currentDelivery?.pickupStoreInfo?.address?.state}`}
 										</Text>
 										<Text className='text-xs text-neutral-600'>
-											{`CEP: ${currentDelivery?.pickupStoreInfo?.address?.postalCode}`}
+											{t('deliveryData.txtPostalCode', { code: currentDelivery?.pickupStoreInfo?.address?.postalCode })}
 										</Text>
 									</View>
 								</View>
@@ -163,7 +163,7 @@ export default function DeliveryData(props) {
 
 								{/* Delivery Address */}
 								<View className='bg-neutral-50 p-3 rounded-lg'>
-									<Text className='text-sm font-medium mb-2'>Endereço de Entrega</Text>
+									<Text className='text-sm font-medium mb-2'>{t('deliveryData.txtDeliveryAddress')}</Text>
 									<View className='flex flex-col gap-1'>
 										<Text className='text-xs text-neutral-600'>
 											{`${currentDelivery?.address?.street}, ${

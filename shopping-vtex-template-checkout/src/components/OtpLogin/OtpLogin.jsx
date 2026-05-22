@@ -2,10 +2,12 @@ import { View } from 'eitri-luminus'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { loginWithEmailAndKey, sendAccessKeyByEmail } from '../../services/CustomerService'
 import { CustomButton, BottomInset, CustomInput, Loading } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 export default function OtpLogin(props) {
 	const { open, onClose, onLogged } = props
 	const { cart, startCart } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [timeOutToResentEmail, setTimeOutToResentEmail] = useState(0)
 	const [verificationCode, setVerificationCode] = useState('')
@@ -73,20 +75,20 @@ export default function OtpLogin(props) {
 				onClick={e => e.stopPropagation()}
 				className='bg-white !rounded-t-sm w-screen max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
 				<Text className='text-lg font-semibold'>
-					{`Por questões de segurança, nos informe o código enviado para seu email ${maskEmailSimple(email)}`}
+					{t('otpLogin.txtMessage', { email: maskEmailSimple(email) })}
 				</Text>
 
 				<View className='flex flex-col mt-6 gap-2'>
 					<View>
 						<CustomInput
-							placeholder={'Código enviado para o email'}
+							placeholder={t('otpLogin.placeholderCode')}
 							inputMode='numeric'
 							value={verificationCode}
 							onChange={e => setVerificationCode(e.target.value)}
 							height='45px'
 						/>
 						<View className='min-h-[20px]'>
-							{loginError && <Text className='font-bold text-red-500 text-sm'>Código inválido</Text>}
+							{loginError && <Text className='font-bold text-red-500 text-sm'>{t('otpLogin.errorInvalidCode')}</Text>}
 						</View>
 					</View>
 
@@ -97,7 +99,7 @@ export default function OtpLogin(props) {
 					) : (
 						<CustomButton
 							disabled={!verificationCode}
-							label='Continuar'
+							label={t('otpLogin.labelContinue')}
 							onClick={loginWithEmailAndAccessKey}
 						/>
 					)}

@@ -63,7 +63,7 @@ export default function AddressCard({ address, isSelected = false, onClick, show
 					<View
 						onClick={editAddress}
 						className='mt-2'>
-						<Text className='uppercase text-xs text-primary-700'>Editar</Text>
+						<Text className='uppercase text-xs text-primary-700'>{t('addressSelector.edit')}</Text>
 					</View>
 				</View>
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { View, Text } from 'eitri-luminus'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 import { savePostalCodeOnStorage } from '../../services/customerService'
 import { resolveZipCode } from '../../services/freigthService'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
@@ -9,6 +10,7 @@ export default function Freight() {
 	const [zipCode, setZipCode] = useState('')
 	const [loading, setLoading] = useState(false)
 	const { cart, setLogisticInfo } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const unavailableItems = cart?.items?.filter(item => item.availability === 'cannotBeDelivered') || []
 
@@ -47,19 +49,19 @@ export default function Freight() {
 				<View className='flex flex-col gap-1'>
 					<Text className='text-sm font-semibold text-gray-800'>
 						{cartPostalCode
-							? `Produto(s) não disponível(eis) para o CEP ${cartPostalCode}:`
-							: 'Produto(s) indisponível(eis) para entrega:'}
+							? t('freight.unavailableWithZip', { postalCode: cartPostalCode })
+							: t('freight.unavailableGeneral')}
 					</Text>
 					{unavailableItems.map((item, index) => (
 						<Text
 							key={index}
 							className='text-xs text-gray-600'>
-							{'• ' + (item?.name || 'Produto indisponível')}
+							{'• ' + (item?.name || t('freight.unavailableProduct'))}
 						</Text>
 					))}
 				</View>
 
-				<Text className='text-xs text-gray-600'>Informe outro CEP para verificar a disponibilidade.</Text>
+				<Text className='text-xs text-gray-600'>{t('freight.txtChangeZip')}</Text>
 
 				<View className='flex flex-row items-center gap-2'>
 					<View className='flex-1'>
@@ -74,7 +76,7 @@ export default function Freight() {
 					</View>
 					<View className='w-1/3'>
 						<CustomButton
-							label='calcular'
+							label={t('freight.labelCalculate')}
 							variant='outlined'
 							isLoading={loading}
 							onClick={() => handleFreight(zipCode)}

@@ -14,9 +14,11 @@ import FixedBottom from '../components/FixedBottom/FixedBottom'
 import CreditCardBillingAddress from '../components/PaymentsGroups/Groups/Components/CreditCardBillingAddress'
 import { navigate } from '../services/navigationService'
 import CreditCardDisplay from '../components/CreditCardDisplay/CreditCardDisplay'
+import { useTranslation } from 'eitri-i18n'
 
 export default function AddCardForm(props) {
 	const { cart, cardInfo, setCardInfo, selectPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [paymentSystemName, setPaymentSystemName] = useState('')
 	const [systemGroup, setSystemGroups] = useState([])
@@ -125,7 +127,7 @@ export default function AddCardForm(props) {
 		<Page title='Checkout - Dados de pagamento'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Novo cartão'} />
+				<HeaderText text={t('addCardForm.txtHeader')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -144,7 +146,7 @@ export default function AddCardForm(props) {
 				<View className='flex flex-col gap-2'>
 					<View className='relative'>
 						<CustomInput
-							placeholder={'Insira o número do seu cartão'}
+							placeholder={t('creditCard.labelCardNumber')}
 							label={'Número do cartão'}
 							value={formCardInfo?.cardNumber || ''}
 							inputMode='numeric'
@@ -199,7 +201,7 @@ export default function AddCardForm(props) {
 			</View>
 
 			<View className='px-4 pb-4'>
-				<Text className='text-accent-100 font-bold font-sm'>Bandeiras aceitas:</Text>
+				<Text className='text-accent-100 font-bold font-sm'>{t('addCardForm.txtBrandsAccepted')}</Text>
 				<View className='flex gap-1 justify-between mt-2'>
 					{systemGroup?.paymentSystems?.map(system => {
 						return (

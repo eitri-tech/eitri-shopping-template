@@ -4,17 +4,63 @@
 	},
 	"orderCompleted": {
 		"title": "Pedido Confirmado",
+		"titleHeader": "Pedido concluído",
 		"txtCongratulation": "Parabéns!",
 		"txtOrderSuccessful": "Pedido realizado com sucesso.",
 		"txtOrderNumber": "Nº do pedido:",
 		"txtOrderFollow": "Você receberá um email com todos os detalhes. Acompanhe também seu pedido na opção 'Meus pedidos'.",
-		"labelSeeOrders": "Ver pedidos",
-		"labelBack": "Voltar para a tela inicial"
+		"txtReady": "Pronto, compra feita!",
+		"txtEmailConfirmation": "Enviamos uma confirmação com os detalhes do seu pedido para seu email",
+		"txtOrderCode": "Seu código de pedido é",
+		"labelSeeOrders": "Ver meus pedidos",
+		"labelBack": "Voltar ao início"
 	},
 	"paymentData": {
 		"title": "Pagamento",
 		"txtTotalPayment": "Total a pagar",
-		"labelButton": "Continuar"
+		"labelButton": "Continuar",
+		"txtTitle": "Escolha como pagar"
+	},
+	"checkoutReview": {
+		"txtLoading": "Estamos preparando a sua compra",
+		"txtTitle": "Revise e confirme",
+		"txtDelete": "Excluir",
+		"txtError": "Houve um erro ao fechar pedido"
+	},
+	"freightSelector": {
+		"txtTitle": "Como deseja receber seu produto?",
+		"txtDeliverAt": "Receber em {{street}}, {{number}} {{complement}}",
+		"txtContinue": "Continuar",
+		"txtChangeAddress": "Alterar endereço de entrega"
+	},
+	"freightGroupSelector": {
+		"txtTitle": "Escolha como quer receber esses produtos",
+		"txtPickup": "Retire na loja {{name}}",
+		"txtDelivery": "Receba em casa"
+	},
+	"pickupSelector": {
+		"txtHeader": "Retirada",
+		"txtTitle": "Em qual loja deseja retirar seu produto?",
+		"txtSeeMore": "Ver mais",
+		"txtSeeLess": "Ver menos"
+	},
+	"installments": {
+		"txtHeader": "Parcelamento",
+		"txtWithInterest": "com juros",
+		"txtNoInterest": "sem juros"
+	},
+	"addCardForm": {
+		"txtHeader": "Novo cartão",
+		"txtBrandsAccepted": "Bandeiras aceitas:",
+		"labelContinue": "Continuar",
+		"errorCardNumber": "Verifique o número digitado",
+		"errorDueDate": "Data inválida"
+	},
+	"otpLogin": {
+		"txtMessage": "Por questões de segurança, nos informe o código enviado para seu email {{email}}",
+		"placeholderCode": "Código enviado para o email",
+		"errorInvalidCode": "Código inválido",
+		"labelContinue": "Continuar"
 	},
 	"personalData": {
 		"frmName": "Nome",
@@ -45,7 +91,20 @@
 	},
 	"pixOrder": {
 		"txtTimeRemaining": "Tempo restante",
-		"labelCopyCode": "Copiar código"
+		"labelCopyCode": "Copiar código",
+		"labelShare": "Compartilhar",
+		"labelShowQRCode": "Mostrar QR Code",
+		"labelHideQRCode": "Ocultar QR Code",
+		"txtHeader": "Pagamento PIX",
+		"txtPixApproved": "Com o PIX, sua compra é aprovada na hora",
+		"txtOrderValue": "Valor da compra:",
+		"txtPixCode": "Código PIX",
+		"txtHowToPay": "Como pagar com PIX",
+		"txtHowStep1": "Acesse seu Internet Banking",
+		"txtHowStep2": "Escolha o pagamento via PIX",
+		"txtHowStep3": "Cole o código acima",
+		"txtProcessing": "O pagamento será processado automaticamente após a confirmação",
+		"snackCopied": "código pix copiado com sucesso!"
 	},
 	"finishCart": {
 		"errorOrder": "Houve um erro ao processar o seu pedido. Por favor revise os produtos e dados de pagamento antes de tentar novamente",
@@ -99,7 +158,10 @@
 		"txtWithdrawal": "RETIRADA",
 		"txtDelivery": "ENTREGA",
 		"txtNoNumber": "sem número",
-		"txtAlert": "Suas informações de endereço estão incompletas. Por favor clique aqui para atualizá-las."
+		"txtAlert": "Suas informações de endereço estão incompletas. Por favor clique aqui para atualizá-las.",
+		"txtStoreAddress": "Endereço da Loja",
+		"txtDeliveryAddress": "Endereço de Entrega",
+		"txtPostalCode": "CEP: {{code}}"
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAGAMENTO",
@@ -147,6 +209,7 @@
 		"noReceiver": "Nome não informado",
 		"loading": "Carregando endereços...",
 		"selectedAddress": "Endereço Selecionado",
-		"otherAddresses": "Outros Endereços"
+		"otherAddresses": "Outros Endereços",
+		"edit": "Editar"
 	}
 }

@@ -59,7 +59,7 @@ export default function CartItem(props) {
 	}
 
 	const handleRemoveCartItemIntention = () => {
-		setModalRemoveItemText(`Deseja remover ${item.name} da cesta?`)
+		setModalRemoveItemText(t('cartItem.txtRemoveCartItem', { name: item.name }))
 		setShowModalRemoveItem(true)
 	}
 
@@ -102,8 +102,8 @@ export default function CartItem(props) {
 							<View className='mb-2 p-2 bg-red-50 border border-red-200 rounded'>
 								<Text className='text-sm text-red-600 font-medium'>
 									{item.availability === 'cannotBeDelivered'
-										? t('cartItem.cannotBeDelivered', 'Este item não pode ser entregue')
-										: t('cartItem.notAvailable', 'Este item não está disponível')}
+										? t('cartItem.cannotBeDelivered')
+										: t('cartItem.notAvailable')}
 								</Text>
 							</View>
 						)}

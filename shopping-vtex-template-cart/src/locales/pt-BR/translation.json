@@ -9,7 +9,10 @@
 	"cartItem": {
 		"txtAdd": "Adicionar",
 		"txtMessageUnavailable": "Este produto não está disponível!",
-		"txtRemoveCart": "Deseja excluir o produto da cesta?"
+		"txtRemoveCart": "Deseja excluir o produto da cesta?",
+		"txtRemoveCartItem": "Deseja remover {{name}} da cesta?",
+		"cannotBeDelivered": "Este item não pode ser entregue",
+		"notAvailable": "Este item não está disponível"
 	},
 	"cartSummary": {
 		"txtSubtotal": "Subtotal",
@@ -46,7 +49,12 @@
 		"tabDelivery": "Opções de Entrega",
 		"tabPickup": "Opções de Retirada",
 		"noDeliveryOptions": "Nenhuma opção de entrega disponível",
-		"noPickupOptions": "Nenhuma opção de retirada disponível"
+		"noPickupOptions": "Nenhuma opção de retirada disponível",
+		"unavailableWithZip": "Produto(s) não disponível(eis) para o CEP {{postalCode}}:",
+		"unavailableGeneral": "Produto(s) indisponível(eis) para entrega:",
+		"unavailableProduct": "Produto indisponível",
+		"txtChangeZip": "Informe outro CEP para verificar a disponibilidade.",
+		"labelCalculate": "Calcular"
 	},
 	"modalOfferingGender": {
 		"labelReceiverGift": "Para quem vai ser o presente?",

@@ -1233,60 +1233,6 @@
 		}
 	},
 	{
-		"name": "Flags",
-		"requiredScopes": ["flags"],
-		"schema": {
-			"title": "Flags de produtos",
-			"description": "Flags",
-			"properties": {
-				"text": {
-					"type": "string",
-					"title": "Texto",
-					"description": "Texto do selo"
-				},
-				"color": {
-					"type": "string",
-					"title": "Cor do texto",
-					"description": "Cor do selo"
-				},
-				"type": {
-					"title": "Tipo",
-					"enumNames": [
-						"Lista de produtos",
-						"Lista de categorias",
-						"Lista de coleções",
-						"Lista de especificações",
-						"Promoções principais"
-					],
-					"enum": ["product", "category", "collection", "specification", "promotion"],
-					"default": "collection"
-				},
-				"values": {
-					"type": "array",
-					"title": "ID de produto, coleção ou categoria",
-					"items": {
-						"title": "Id",
-						"type": "string"
-					}
-				},
-				"startDate": {
-					"title": "Exibição programada: Data de início",
-					"type": "string",
-					"widget": {
-						"ui:widget": "date-time"
-					}
-				},
-				"endDate": {
-					"title": "Exibição programada: Data de fim",
-					"type": "string",
-					"widget": {
-						"ui:widget": "date-time"
-					}
-				}
-			}
-		}
-	},
-	{
 		"name": "VtexAdsBanner",
 		"requiredScopes": null,
 		"schema": {

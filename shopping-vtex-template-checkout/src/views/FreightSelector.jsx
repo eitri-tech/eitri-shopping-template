@@ -54,10 +54,10 @@ export default function FreightSelector(props) {
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>Como deseja receber seu produto?</Text>
+				<Text className='text-xl font-bold'>{t('freightSelector.txtTitle')}</Text>
 
 				<Text>
-					{`Receber em ${userAddress.street}, ${userAddress.number || ''} ${userAddress.complement || ''}`}
+					{t('freightSelector.txtDeliverAt', { street: userAddress.street, number: userAddress.number || '', complement: userAddress.complement || '' })}
 				</Text>
 
 				<GenericBox className='p-4 w-full flex flex-col gap-3'>
@@ -73,7 +73,7 @@ export default function FreightSelector(props) {
 									{item?.formatedPrice}
 								</Text>
 							</View>
-							<View className={'text-primary font-bold flex justify-end mt-2'}>Continuar</View>
+							<View className={'text-primary font-bold flex justify-end mt-2'}>{t('freightSelector.txtContinue')}</View>
 						</View>
 					))}
 				</GenericBox>
@@ -81,7 +81,7 @@ export default function FreightSelector(props) {
 
 			<FixedBottom className='flex flex-col align-center gap-4'>
 				<View onClick={() => navigate('AddressSelector', {}, true)}>
-					<Text className='text-primary text-center font-bold block'>{'Alterar endereço de entrega'}</Text>
+					<Text className='text-primary text-center font-bold block'>{t('freightSelector.txtChangeAddress')}</Text>
 				</View>
 			</FixedBottom>
 		</Page>

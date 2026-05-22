@@ -49,82 +49,73 @@ export default function OrderCard(props) {
 	}
 
 	return (
-		<GenericBox className=''>
-			<View className='grid grid-cols-2 gap-x-4 gap-y-4'>
-				<View className='flex flex flex-col'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>{t('orderCard.order')}</Text>
-					<View className='flex flex-row items-center gap-2'>
-						<Text className='text-sm font-medium text-gray-900'>{order?.orderId}</Text>
+		<GenericBox>
+			{/* Header: ID + status */}
+			<View className='flex items-start justify-between'>
+				<View className='flex flex-col gap-1'>
+					<View className='flex items-center gap-1.5'>
+						<Text className='text font-bold'>#{order?.orderId}</Text>
 						<View onClick={handleCopyOrderId}>
 							<FiCopy
-								className='text-gray-900'
-								size={16}
+								className='text-gray-700'
+								size={12}
 							/>
 						</View>
 					</View>
+					<Text className='text-sm text-gray-800'>{formatDateDaysMonthYear(order?.creationDate)}</Text>
 				</View>
-
 				{orderDetail && (
-					<View className='flex justify-end items-start'>
-						<OrderStatusBadge
-							order={orderDetail}
-							statusId={order?.status}
-							statusDescription={order?.statusDescription}
-						/>
-					</View>
-				)}
-
-				<View className='flex flex flex-col'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>{t('orderCard.date')}</Text>
-					<Text className='text-sm text-gray-700'>{formatDateDaysMonthYear(order?.creationDate)}</Text>
-				</View>
-
-				<View className='flex flex flex-col text-right'>
-					<Text className='text-xs font-semibold uppercase text-gray-500'>
-						{t(order?.totalItems > 1 ? 'orderCard.totalPlural' : 'orderCard.totalSingular', { count: order?.totalItems })}
-					</Text>
-					<Text className='text-sm font-bold text-gray-900'>{formatPriceInCents(order?.totalValue)}</Text>
-				</View>
-			</View>
-
-			<View className='py-4 mt-4 border-t border-gray-200'>
-				{loadingDetails ? (
-					<View className='flex justify-center items-center py-2'>
-						<Text className='text-sm text-gray-500'>{t('orderCard.loading')}</Text>
-					</View>
-				) : (
-					orderDetail && (
-						<View className='flex flex-col gap-y-4'>
-							{orderDetail?.items?.map(item => (
-								<View
-									key={item.uniqueId}
-									className='flex items-center gap-x-3'>
-									<ImageCard
-										imageUrl={item.imageUrl}
-										className='w-16 h-16 rounded-md object-cover'
-									/>
-									<View className='flex flex-1 flex-col justify-center'>
-										<Text className='text-sm text-gray-800 font-medium line-clamp-2 mb-1'>
-											{item.name}
-										</Text>
-										<Text className='text-xs text-gray-600'>
-											{`${item.quantity} un • ${formatPriceInCents(item.price)}`}
-										</Text>
-									</View>
-								</View>
-							))}
-						</View>
-					)
+					<OrderStatusBadge
+						order={orderDetail}
+						statusId={order?.status}
+						statusDescription={order?.statusDescription}
+					/>
 				)}
 			</View>
 
+			{/* Thumbnails dos produtos */}
+			{loadingDetails ? (
+				<View className='py-4'>
+					<Text className='text-xs text-gray-400'>{t('orderCard.loading')}</Text>
+				</View>
+			) : (
+				orderDetail?.items?.length > 0 && (
+					<View className='flex gap-2 py-4 overflow-x-auto'>
+						{orderDetail.items.map(item => (
+							<View
+								key={item.uniqueId}
+								className='w-[56px] h-[56px] flex-shrink-0 rounded-xl overflow-hidden bg-gray-100 border border-gray-100'>
+								<ImageCard
+									imageUrl={item.imageUrl}
+									className='w-full h-full object-cover'
+								/>
+							</View>
+						))}
+					</View>
+				)
+			)}
+
+			{/* Rodapé: total + ações */}
 			{orderDetail && (
-				<View className='flex flex-col gap-4'>
-					<OrderBuyAgain order={orderDetail} />
-					<View
-						className={'w-full flex justify-center'}
-						onClick={openOrderDetails}>
-						<Text className={'font-bold text-primary'}>{t('orderCard.details')}</Text>
+				<View className='border-t border-gray-100'>
+					<View className='flex items-center justify-between py-4'>
+						<Text className='text-xs text-gray-800'>
+							{t(order?.totalItems > 1 ? 'orderCard.totalPlural' : 'orderCard.totalSingular', {
+								count: order?.totalItems
+							})}
+						</Text>
+						<Text className='text-base font-bold text-gray-900'>
+							{formatPriceInCents(order?.totalValue)}
+						</Text>
+					</View>
+
+					<View className='flex flex-col gap-2 mt-2'>
+						<OrderBuyAgain order={orderDetail} />
+						<View
+							className='w-full flex justify-center py-2'
+							onClick={openOrderDetails}>
+							<Text className='text font-semibold text-primary'>{t('orderCard.details')}</Text>
+						</View>
 					</View>
 				</View>
 			)}

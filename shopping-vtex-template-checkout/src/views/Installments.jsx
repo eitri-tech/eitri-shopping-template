@@ -1,4 +1,5 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
+import { useTranslation } from 'eitri-i18n'
 import {
 	HeaderContentWrapper,
 	HeaderReturn,
@@ -18,6 +19,7 @@ export default function Installments(props) {
 	const description = props.location?.state?.description
 
 	const { cart, cardInfo, selectPaymentOption } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 
@@ -71,7 +73,7 @@ export default function Installments(props) {
 			<View className='p-4 pt-8 h-min-screen flex flex-col'>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={'Parcelamento'} />
+					<HeaderText text={t('installments.txtHeader')} />
 				</HeaderContentWrapper>
 
 				<Loading
@@ -108,7 +110,7 @@ export default function Installments(props) {
 									</Text>
 									{installment.count > 1 && (
 										<Text className='text-sm text-neutral-500'>
-											{installment.hasInterestRate ? 'com juros' : 'sem juros'}
+											{installment.hasInterestRate ? t('installments.txtWithInterest') : t('installments.txtNoInterest')}
 										</Text>
 									)}
 								</View>

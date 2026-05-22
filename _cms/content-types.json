@@ -21,14 +21,8 @@
 	},
 	{
 		"id": "badges",
-		"name": "Selos",
+		"name": "Badges",
 		"scopes": ["badges"],
-		"configurationSchemaSets": []
-	},
-	{
-		"id": "flags",
-		"name": "Flags",
-		"scopes": ["flags"],
 		"configurationSchemaSets": []
 	}
 ]

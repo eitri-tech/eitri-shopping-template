@@ -65,7 +65,7 @@ export default function FreightGroupSelectorOptions(props) {
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>Escolha como quer receber esses produtos</Text>
+				<Text className='text-xl font-bold'>{t('freightGroupSelector.txtTitle')}</Text>
 
 				<View className='flex flex-col gap-4'>
 					{group?.items?.map(product => (
@@ -81,8 +81,8 @@ export default function FreightGroupSelectorOptions(props) {
 				<View className='flex flex-col'>
 					{group?.slas?.map(sla => {
 						const label = sla.isPickupInPoint
-							? `Retire na loja ${sla.pickupStoreInfo.friendlyName}`
-							: `Receba em casa`
+							? t('freightGroupSelector.txtPickup', { name: sla.pickupStoreInfo.friendlyName })
+							: t('freightGroupSelector.txtDelivery')
 
 						const address = getAddress(sla)
 

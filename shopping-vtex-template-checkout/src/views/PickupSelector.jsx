@@ -1,6 +1,7 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { Page, Text, View } from 'eitri-luminus'
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'eitri-i18n'
 import { navigate } from '../services/navigationService'
 import { shippingResolver } from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
@@ -15,6 +16,7 @@ import {
 
 export default function PickupSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
+	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [seeMore, setSeeMore] = useState(false)
@@ -63,7 +65,7 @@ export default function PickupSelector(props) {
 		<Page title={PAGE}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Retirada'} />
+				<HeaderText text={t('pickupSelector.txtHeader')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -74,7 +76,7 @@ export default function PickupSelector(props) {
 			<View className='flex-1 flex flex-col p-4'>
 				<View>
 					<Text className='text-lg font-bold text-base-content'>
-						{'Em qual loja deseja retirar seu produto?'}
+						{t('pickupSelector.txtTitle')}
 					</Text>
 				</View>
 
@@ -100,7 +102,7 @@ export default function PickupSelector(props) {
 				<View
 					onClick={() => setSeeMore(!seeMore)}
 					className='flex items-center justify-center mt-4 text-primary font-bold'>
-					<Text>{seeMore ? 'Ver menos' : 'Ver mais'}</Text>
+					<Text>{seeMore ? t('pickupSelector.txtSeeLess') : t('pickupSelector.txtSeeMore')}</Text>
 				</View>
 			</View>
 

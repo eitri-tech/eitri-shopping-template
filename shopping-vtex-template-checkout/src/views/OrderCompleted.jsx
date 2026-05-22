@@ -33,7 +33,7 @@ export default function OrderCompleted(props) {
 		<Page>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={'Pedido concluído'} />
+				<HeaderText text={t('orderCompleted.titleHeader')} />
 			</HeaderContentWrapper>
 
 			<View className='p-4'>
@@ -43,29 +43,29 @@ export default function OrderCompleted(props) {
 						<View className='w-16 h-16 bg-green-100 rounded-full flex items-center justify-center'>
 							<Text className='text-2xl'>✓</Text>
 						</View>
-						<Text className='text-xl font-bold text-gray-800 text-center'>Pronto, compra feita!</Text>
+						<Text className='text-xl font-bold text-gray-800 text-center'>{t('orderCompleted.txtReady')}</Text>
 					</View>
 
 					<View className='flex flex-col items-center'>
 						<Text className='text-gray-600 text-center text'>
-							Enviamos uma confirmação com os detalhes do seu pedido para seu email
+							{t('orderCompleted.txtEmailConfirmation')}
 						</Text>
 					</View>
 
 					<View className='flex flex-col items-center mt-4'>
-						<Text className='text-gray-600 text-center text-sm'>Seu código de pedido é</Text>
+						<Text className='text-gray-600 text-center text-sm'>{t('orderCompleted.txtOrderCode')}</Text>
 						<Text className='text-gray-800 font-bold text-center text-lg'>{orderId}</Text>
 					</View>
 				</View>
 
 				<View className='flex flex-col gap-4 mt-6'>
 					<CustomButton
-						label='Ver meus pedidos'
+						label={t('orderCompleted.labelSeeOrders')}
 						onClick={openAccount}
 					/>
 					<CustomButton
 						outlined
-						label='Voltar ao início'
+						label={t('orderCompleted.labelBack')}
 						onClick={goHome}
 					/>
 				</View>
