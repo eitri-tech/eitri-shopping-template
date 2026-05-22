@@ -1,16 +1,24 @@
 import Eitri from 'eitri-bifrost'
-import { Loading, HeaderContentWrapper, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
+import {
+	Loading,
+	HeaderContentWrapper,
+	HeaderSearchIcon,
+	BottomInset,
+	TrackingService
+} from 'shopping-vtex-template-shared'
 import { getCmsContent } from '../services/CmsService'
-import { useTranslation } from 'eitri-i18n'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 
 export default function Categories() {
-	const { t } = useTranslation()
 	const [cmsContent, setCmsContent] = useState(null)
 	const [isLoading, setIsLoading] = useState(true)
+	const [pageTitle, setPageTitle] = useState(null)
 
 	useEffect(() => {
 		loadCms()
+		Eitri.navigation.addOnResumeListener(() => {
+			TrackingService.sendScreenView('Categorias', 'Categories')
+		})
 	}, [])
 
 	const loadCms = async () => {
@@ -26,12 +34,9 @@ export default function Categories() {
 	}
 
 	return (
-		<Page
-			title={t('categories.title', 'Categorias')}
-			bottomInset
-			topInset>
+		<Page title='Categorias'>
 			<HeaderContentWrapper className='justify-between'>
-				<HeaderText text={t('categories.title', 'Categorias')} />
+				{pageTitle}
 				<HeaderSearchIcon onClick={goToSearch} />
 			</HeaderContentWrapper>
 
@@ -40,7 +45,12 @@ export default function Categories() {
 				isLoading={isLoading}
 			/>
 
-			<CmsContentRender cmsContent={cmsContent} />
+			<CmsContentRender
+				cmsContent={cmsContent}
+				setPageTitle={setPageTitle}
+			/>
+
+			<BottomInset />
 		</Page>
 	)
 }

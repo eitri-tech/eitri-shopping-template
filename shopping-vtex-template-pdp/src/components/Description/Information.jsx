@@ -1,6 +1,7 @@
 import { useTranslation } from 'eitri-i18n'
 import CollapseWrapper from './components/CollapseWrapper'
 import { App } from 'eitri-shopping-vtex-shared'
+import { GenericBox } from 'shopping-vtex-template-shared'
 
 export default function Information(props) {
 	const { product } = props
@@ -30,27 +31,31 @@ export default function Information(props) {
 
 	const specifications = buildSpecifications(product)
 
-	return (
-		<CollapseWrapper
-			title={t('information.txtInformation', 'Informações')}
-			defaultCollapsed={true}>
-			<View>
-				{specifications?.map((specification, index) => (
-					<View
-						key={specification.name}
-						className='mb-1'>
-						<View>
-							<Text className='font-bold text-neutral-content mr-1'>{`${specification.name}: `}</Text>
-						</View>
+	if (specifications.length === 0) return null
 
+	return (
+		<GenericBox>
+			<CollapseWrapper
+				title={t('information.txtInformation')}
+				defaultCollapsed={true}>
+				<View>
+					{specifications?.map((specification, index) => (
 						<View
-							key={index}
-							className='flex flex-col'>
-							<HTMLRender html={specification.values.join(', ')} />
+							key={specification.name}
+							className='mb-1'>
+							<View>
+								<Text className='font-bold mr-1'>{`${specification.name}: `}</Text>
+							</View>
+
+							<View
+								key={index}
+								className='flex flex-col'>
+								<HTMLRender html={specification.values.join(', ')} />
+							</View>
 						</View>
-					</View>
-				))}
-			</View>
-		</CollapseWrapper>
+					))}
+				</View>
+			</CollapseWrapper>
+		</GenericBox>
 	)
 }

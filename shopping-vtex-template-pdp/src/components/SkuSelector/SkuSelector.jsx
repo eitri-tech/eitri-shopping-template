@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { RemoteConfig } from 'eitri-shopping-vtex-shared'
+import { GenericBox } from 'shopping-vtex-template-shared'
 import { sortSku } from '../../utils/skuSort'
 
 // Get unique values per attribute
@@ -48,17 +49,18 @@ function ColorSwatch({ color, selected, status, onClick }) {
 	const unavailable = !status.availableExists
 	const inexistent = !status.exists
 
+	console.log('color', color, hex, unavailable, inexistent)
+
 	return (
 		<View
 			onClick={onClick}
 			className={`
-        relative w-10 h-10 rounded-full cursor-pointer transition-all duration-200
-        flex items-center justify-center
-        ${selected ? 'ring-2 ring-offset-2 ring-gray-900 scale-110' : ''}
-        ${unavailable && !inexistent ? 'opacity-50' : ''}
-        ${inexistent ? 'opacity-20 cursor-not-allowed' : ''}
-      `}
-			style={{ backgroundColor: hex || '#aaa' }}>
+				relative w-10 h-10 rounded-full cursor-pointer transition-all duration-200
+				flex items-center justify-center
+				${selected ? 'ring-2 ring-offset-2 ring-gray-900 scale-110' : ''}
+				${unavailable && !inexistent ? 'opacity-50' : ''}
+				${inexistent ? 'opacity-20 cursor-not-allowed' : ''}
+      		`}>
 			{unavailable && !inexistent && (
 				<View className='absolute inset-0 flex items-center justify-center rounded-full overflow-hidden'>
 					<View className='absolute w-[120%] h-[1.5px] bg-white opacity-70 rotate-45' />
@@ -68,24 +70,31 @@ function ColorSwatch({ color, selected, status, onClick }) {
 	)
 }
 
-function OptionChip({ value, selected, status, onClick }) {
+function OptionChip({ imageUrl, value, selected, status, onClick }) {
 	const unavailable = !status.availableExists
 	const inexistent = !status.exists
 
 	return (
 		<View
 			onClick={!inexistent ? onClick : undefined}
-			className={`
-        relative px-3 py-2 rounded-lg border text-sm font-medium transition-all duration-200 select-none
-        ${inexistent ? 'opacity-20 cursor-not-allowed border-gray-200 text-gray-400' : 'cursor-pointer'}
-        ${
-			selected
-				? 'bg-primary text-primary-content border-primary'
-				: unavailable && !inexistent
-					? 'bg-white text-gray-400 border-gray-200'
-					: 'bg-white text-gray-800 border-gray-300 active:bg-gray-50'
-		}
+			className={`border border-2 px-3 py-2 rounded text-sm transition-all duration-200 select-none flex flex-col gap-2 items-center justify-center
+						${inexistent ? 'opacity-20 cursor-not-allowed border-gray-300 text-gray-600' : ''}
+						${
+							selected
+								? 'border border-primary text-primary'
+								: unavailable && !inexistent
+									? 'bg-white text-gray-400 border-gray-200'
+									: 'bg-white text-gray-600 border-gray-300'
+						}
       `}>
+			{imageUrl && (
+				<View className={''}>
+					<Image
+						src={imageUrl}
+						width={70}
+					/>
+				</View>
+			)}
 			<Text>{value}</Text>
 			{unavailable && !inexistent && (
 				<View className='absolute inset-0 flex items-center justify-center rounded-lg overflow-hidden pointer-events-none'>
@@ -102,11 +111,8 @@ export default function SkuSelector(props) {
 	const [selections, setSelections] = useState({})
 
 	useEffect(() => {
-		if (!currentSku?.variations?.length) {
-			setSelections({})
-			return
-		}
-		const currentSelection = currentSku?.variations?.reduce((acc, variation) => {
+		if (!currentSku?.variations?.length) return
+		const currentSelection = currentSku?.variations.reduce((acc, variation) => {
 			if (variation.name && variation.values?.[0]) {
 				acc[variation.name] = variation.values[0]
 			}
@@ -118,8 +124,8 @@ export default function SkuSelector(props) {
 	const skus = useMemo(() => {
 		const hiddenVariations = RemoteConfig.getContent('appConfigs.pdp.hiddenVariations') || []
 
-		const res = product?.items?.map(item => {
-			const sellerDefault = item?.sellers?.find(s => s.sellerDefault) ?? item.sellers[0]
+		const res = product.items.map(item => {
+			const sellerDefault = item.sellers.find(s => s.sellerDefault) ?? item.sellers[0]
 			return {
 				itemId: item.itemId,
 				available: sellerDefault.commertialOffer.AvailableQuantity > 0,
@@ -131,10 +137,10 @@ export default function SkuSelector(props) {
 			}
 		})
 
-		return res?.filter(sku => Object.keys(sku.attributes).length > 0)
+		return res.filter(sku => Object.keys(sku.attributes).length > 0)
 	}, [product])
 
-	const attributeKeys = useMemo(() => (skus?.length > 0 ? Object.keys(skus[0].attributes) : []), [skus])
+	const attributeKeys = useMemo(() => (skus.length > 0 ? Object.keys(skus[0].attributes) : []), [skus])
 
 	const handleSelect = (key, value) => {
 		const isSame = selections[key] === value
@@ -147,56 +153,51 @@ export default function SkuSelector(props) {
 		onSkuChange?.(newSku)
 	}
 
-	if (attributeKeys.length === 0) {
-		return null
-	}
+	if (attributeKeys?.length === 0) return null
+
 	return (
-		<View className='flex flex-col gap-4 bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
+		<GenericBox className={'flex flex-col gap-4'}>
 			{attributeKeys.map(key => {
 				const values = getUniqueValues(skus, key)
 				const statusMap = getOptionStatus(skus, attributeKeys, key, selections)
-				// const isCor = key === 'Cor'
-				const isCor = false // Precisa especificar melhor o tratamento de cores... forcando pra renderizar como Chip
 
 				return (
 					<View key={key}>
-						<View className='flex items-center gap-2 mb-3'>
-							<Text className='text-lg font-semibold text-gray-700'>{key}</Text>
+						<View className='flex items-center gap-1 mb-2'>
+							<Text className='text-sm text-gray-600'>{key}:</Text>
 							{selections[key] && (
-								<Text className='text-sm text-gray-400'>
-									— <Text className='text-gray-600'>{selections[key]}</Text>
-								</Text>
+								<Text className='text-sm text-gray-700 font-semibold'>{selections[key]}</Text>
 							)}
 						</View>
+						<View className='flex flex-row flex-wrap gap-2'>
+							{sortSku(values).map(value => {
+								let imageUrl = ''
+								const isCor = key?.toLowerCase() === 'cor'
+								if (isCor) {
+									const item =
+										product.items.find(v =>
+											v.variations.some(
+												variation => variation.name === key && variation.values?.[0] === value
+											)
+										) || null
+									imageUrl = item?.images[0]?.imageUrl || ''
+								}
 
-						{isCor ? (
-							<View className='flex flex-row flex-wrap gap-3'>
-								{values.map(value => (
-									<ColorSwatch
-										key={value}
-										color={value}
-										selected={selections[key] === value}
-										status={statusMap[value]}
-										onClick={() => handleSelect(key, value)}
-									/>
-								))}
-							</View>
-						) : (
-							<View className='flex flex-row flex-wrap gap-2'>
-								{sortSku(values).map(value => (
+								return (
 									<OptionChip
 										key={value}
+										imageUrl={imageUrl}
 										value={value}
 										selected={selections[key] === value}
 										status={statusMap[value]}
 										onClick={() => handleSelect(key, value)}
 									/>
-								))}
-							</View>
-						)}
+								)
+							})}
+						</View>
 					</View>
 				)
 			})}
-		</View>
+		</GenericBox>
 	)
 }

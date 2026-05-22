@@ -1,6 +1,6 @@
 {
 	"home": {
-		"title": "Carrinho"
+		"title": "Cesta"
 	},
 	"cart": {
 		"labelGiftWrapping": "Embalagem de presente",
@@ -9,9 +9,7 @@
 	"cartItem": {
 		"txtAdd": "Adicionar",
 		"txtMessageUnavailable": "Este produto não está disponível!",
-		"txtRemoveCart": "Deseja excluir o produto do carrinho?",
-		"cannotBeDelivered": "Este item não pode ser entregue",
-		"notAvailable": "Este item não está disponível"
+		"txtRemoveCart": "Deseja excluir o produto da cesta?"
 	},
 	"cartSummary": {
 		"txtSubtotal": "Subtotal",
@@ -19,6 +17,10 @@
 		"txtDelivery": "Entrega",
 		"txtTotal": "Total",
 		"labelFinish": "Finalizar Compra"
+	},
+	"minimumOrderValue": {
+		"missing": "Adicione {{value}} para atingir o valor mínimo",
+		"reached": "Valor mínimo da compra atingido"
 	},
 	"coupon": {
 		"txtAppliedCoupon": "Cupom aplicado!",
@@ -29,8 +31,8 @@
 		"labelInsertCode": "Insira o código"
 	},
 	"emptyCart": {
-		"txtEmptyCart": "Seu carrinho está vazio",
-		"txtMessageList": "Adicione produtos no seu carrinho e eles serão listados aqui.",
+		"txtEmptyCart": "Sua cesta está vazia",
+		"txtMessageList": "Adicione produtos no sua cesta e eles serão listados aqui.",
 		"labelButton": "Comprar Agora"
 	},
 	"freight": {
@@ -39,9 +41,6 @@
 		"errorEditFreight": "Não foi possível modificar o frete",
 		"txtDelivery": "Entrega",
 		"txtCalculate": "Calcular",
-		"receiveAt": "Receber em",
-		"change": "Alterar",
-		"unavailableDelivery": "Entrega indisponível",
 		"labelZipCode": "CEP",
 		"txtUnknow": "Não sei meu cep",
 		"tabDelivery": "Opções de Entrega",
@@ -64,10 +63,10 @@
 	"cartTemplate": {
 		"labelContinue": "Continuar comprando"
 	},
-   "modal": {
-      "confirm": {
-        "delete": "Excluir",
-        "cancel": "Cancelar"
-      }
-    }
+	"modal": {
+		"confirm": {
+			"delete": "Excluir",
+			"cancel": "Cancelar"
+		}
+	}
 }

@@ -5,6 +5,7 @@ import EloSvg from './Networks/Elo.svg'
 import DinersSvg from './Networks/Diners.svg'
 import AmericanExpressSvg from './Networks/AmericanExpress.svg'
 import GooglePayIcon from './../../../assets/images/GPay_Acceptance_Mark_800.png'
+import storeCard from './../../../assets/images/card-store.svg'
 
 export default function CardIcon(props) {
 	const iconKey = props.iconKey
@@ -38,6 +39,17 @@ export default function CardIcon(props) {
 			<Image
 				src={icon}
 				className={`w-[100px] rounded ${className}`}
+			/>
+		)
+	}
+
+	if (iconKey === 'Cartão da Loja') {
+		return (
+			<Image
+				src={storeCard}
+				width={width}
+				height={height}
+				className={`aspect-[856/540] rounded ${className}`}
 			/>
 		)
 	}

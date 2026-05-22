@@ -1,3 +1,4 @@
+
 export { default as HeaderCart } from './components/Header/HeaderCart'
 export { default as HeaderLogo } from './components/Header/HeaderLogo'
 export { default as HeaderMenu } from './components/Header/HeaderMenu'
@@ -22,5 +23,13 @@ export { default as cartShippingResolver } from './utils/cartShippingResolver'
 export { default as shippingResolver } from './utils/shippingResolver'
 export { default as productGroupShippingResolver } from './utils/productGroupShippingResolver'
 export { default as TrackingService } from './services/TrackingService'
+export { default as Datadog } from './services/Datadog'
 export { default as BottomInset } from './components/BottomInset/BottomInset'
 export { default as CustomCarousel } from './components/CustomCarousel/CustomCarousel'
+export { default as LoginModal } from './components/LoginModal/LoginModal'
+
+export { default as Rating } from './components/ProductCard/components/Rating'
+export { default as GenericBox } from './components/GenericBox/GenericBox'
+
+export { default as Slider } from './Slider/Slider'
+export { default as SkuSelector } from './components/SkuSelector/SkuSelector'

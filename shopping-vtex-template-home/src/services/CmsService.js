@@ -7,7 +7,7 @@ export const getCmsContent = async (contentType, pageName) => {
 		if (!pageName) return null
 
 		const { faststore } = Vtex.configs
-		const cachedPage = await loadPageFromCache(faststore, contentType, pageName)
+		const cachedPage = null
 
 		if (cachedPage) {
 			loadVtexCmsPage(faststore, contentType, pageName)
@@ -38,8 +38,8 @@ export const getCmsContent = async (contentType, pageName) => {
 export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
 	try {
 		const result = await Vtex.cms.getPagesByContentTypes(faststore, contentType, { 'filters[name]': pageName })
-
 		let page = result?.data?.[0]
+		if (!page) return null
 
 		const now = new Date()
 
@@ -53,14 +53,12 @@ export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
 			// Se for MultipleImageBanner, filtra banners com mesma lógica
 			if (name === 'MultipleImageBanner' && Array.isArray(images)) {
 				section.data.images = images.filter(img => {
-					const action = img?.action || {}
-					return isWithinValidDateRange(action.startDate, action.endDate, now)
+					return isWithinValidDateRange(img.startDate, img.endDate, now)
 				})
 			}
 
 			return true
 		})
-
 		return filterRemoteConfigContent(page)
 	} catch (error) {
 		console.error('Error loading VTEX CMS page:', pageName, error)
@@ -69,11 +67,8 @@ export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
 }
 
 const isWithinValidDateRange = (startDateStr, endDateStr, now) => {
-	const hasStart = !!startDateStr
-	const hasEnd = !!endDateStr
-
-	const start = hasStart ? new Date(startDateStr) : null
-	const end = hasEnd ? new Date(endDateStr) : null
+	const start = startDateStr ? new Date(startDateStr) : null
+	const end = endDateStr ? new Date(endDateStr) : null
 
 	if ((start && isNaN(start)) || (end && isNaN(end))) return false
 

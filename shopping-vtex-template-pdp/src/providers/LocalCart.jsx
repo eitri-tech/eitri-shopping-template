@@ -1,8 +1,10 @@
-import { addItemToCart, getCart, removeCartItem } from '../services/cartService'
+import { addItemToCart, changeItemQuantity, getCart, removeCartItem } from '../services/cartService'
 const LocalCart = createContext({})
+
 export default function CartProvider({ children }) {
 	const [cart, setCart] = useState(null)
 	const [cartIsLoading, setCartInLoading] = useState(false)
+
 	const executeCartOperation = async (operation, ...args) => {
 		setCartInLoading(true)
 		const newCart = await operation(...args)
@@ -11,15 +13,23 @@ export default function CartProvider({ children }) {
 		}
 		setCartInLoading(false)
 	}
+
 	const startCart = async () => {
 		return executeCartOperation(getCart)
 	}
+
 	const addItem = async payload => {
 		return executeCartOperation(addItemToCart, payload)
 	}
+
 	const removeItem = async itemId => {
 		return executeCartOperation(removeCartItem, itemId)
 	}
+
+	const _changeItemQuantity = async (index, newQuantity) => {
+		return executeCartOperation(changeItemQuantity, index, newQuantity)
+	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -28,7 +38,8 @@ export default function CartProvider({ children }) {
 				cart,
 				cartIsLoading,
 				addItem,
-				removeItem
+				removeItem,
+				changeItemQuantity: _changeItemQuantity
 			}}>
 			{children}
 		</LocalCart.Provider>

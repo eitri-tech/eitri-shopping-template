@@ -45,7 +45,9 @@ export const addMinutesToDate = minutesToAdd => {
 
 export const formatShippingEstimate = sla => {
 	const shippingEstimate = sla.shippingEstimate
-	let date = getShippingEstimate(sla)
+
+	let shippingEstimateDate = sla.shippingEstimateDate ? new Date(sla.shippingEstimateDate) : getShippingEstimate(sla)
+	let today = new Date()
 
 	const isHours = shippingEstimate.indexOf('h') > -1
 	const isMinutes = shippingEstimate.indexOf('m') > -1
@@ -56,48 +58,34 @@ export const formatShippingEstimate = sla => {
 	if (sla.deliveryChannel === 'pickup-in-point') {
 		if (isHours) {
 			const isSameDay =
-				date.getFullYear() === new Date().getFullYear() &&
-				date.getMonth() === new Date().getMonth() &&
-				date.getDate() === new Date().getDate()
+				shippingEstimateDate.getFullYear() === today.getFullYear() &&
+				shippingEstimateDate.getMonth() === today.getMonth() &&
+				shippingEstimateDate.getDate() === today.getDate()
 
 			if (isSameDay) {
-				return `Retire hoje a partir de ${value} horas`
+				return `Retire em ${value} horas`
 			}
 
 			const isTomorrow =
-				date.getFullYear() === new Date().getFullYear() &&
-				date.getMonth() === new Date().getMonth() &&
-				date.getDate() === new Date().getDate() + 1
+				shippingEstimateDate.getFullYear() === today.getFullYear() &&
+				shippingEstimateDate.getMonth() === today.getMonth() &&
+				shippingEstimateDate.getDate() === today.getDate() + 1
 
 			if (isTomorrow) {
 				return `Retire amanhã`
 			}
-			//
-			// console.log(
-			// 	'date==>',
-			// 	date.getFullYear() === new Date().getFullYear() &&
-			// 		date.getMonth() === new Date().getMonth() &&
-			// 		date.getDate() === new Date().getDate(),
-			// 	date.toLocaleString('pt-BR', {
-			// 		hour: '2-digit',
-			// 		minute: '2-digit'
-			// 	})
-			// )
 
-			// if (value === 1) {
-			// 	return `Retire na loja após ${value} hora`
-			// }
-			return `Retire na loja após ${value} horas`
+			return `Retire em ${shippingEstimateDate.toLocaleDateString('pt-BR')}`
 		}
 
 		if (isMinutes) {
-			return `Retire na loja após ${value} minutos`
+			return `Retire em ${value} minutos`
 		}
 
 		if (useBd) {
-			const weekday = date.toLocaleDateString('pt-BR', { weekday: 'long' })
-			const day = date.getDate()
-			const month = date.toLocaleDateString('pt-BR', { month: 'long' })
+			const weekday = shippingEstimateDate.toLocaleDateString('pt-BR', { weekday: 'long' })
+			const day = shippingEstimateDate.getDate()
+			const month = shippingEstimateDate.toLocaleDateString('pt-BR', { month: 'long' })
 
 			// Se for até 7 dias úteis (aproximadamente 1 semana)
 			if (value <= 7) {
@@ -109,20 +97,19 @@ export const formatShippingEstimate = sla => {
 	}
 
 	// Para entregas normais (não pickup)
-	if (useBd || (!isHours && !isMinutes)) {
-		const weekday = date.toLocaleDateString('pt-BR', { weekday: 'long' })
-		const day = date.getDate()
-		const month = date.toLocaleDateString('pt-BR', { month: 'long' })
+	const weekday = shippingEstimateDate.toLocaleDateString('pt-BR', { weekday: 'long' })
+	const day = shippingEstimateDate.getDate()
+	const month = shippingEstimateDate.toLocaleDateString('pt-BR', { month: 'long' })
 
-		// Se for até 7 dias úteis (aproximadamente 1 semana)
-		if (value <= 7) {
-			return `Receba até ${weekday}, ${day} de ${month}`
-		} else {
-			return `Receba até ${day} de ${month}`
+	// Se for até 7 dias úteis (aproximadamente 1 semana)
+	if (value <= 7) {
+		if (value === 1) {
+			return `Receba amanhã`
 		}
+		return `Receba até ${weekday}, ${day} de ${month}`
+	} else {
+		return `Receba até ${day} de ${month}`
 	}
-
-	return date
 }
 
 export const getShippingEstimate = sla => {

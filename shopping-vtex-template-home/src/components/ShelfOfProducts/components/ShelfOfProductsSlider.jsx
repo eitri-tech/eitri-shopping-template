@@ -17,11 +17,11 @@ export default function ShelfOfProductsSlider(props) {
 			) : (
 				<View className='flex overflow-x-auto'>
 					<View className='flex gap-4 px-4 py-2'>
-						{products.map(product => (
+						{products?.map(product => (
 							<ProductCard
 								key={product.productId}
 								product={product}
-								className={`min-w-[50vw]`}
+								className={`w-[50vw]`}
 							/>
 						))}
 					</View>

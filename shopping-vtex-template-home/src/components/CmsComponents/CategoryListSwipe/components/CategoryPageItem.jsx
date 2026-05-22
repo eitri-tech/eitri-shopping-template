@@ -7,25 +7,47 @@ export default function CategoryPageItem(props) {
 	const { item, goToItem } = props
 	const { t } = useTranslation()
 
-	const [showSubItems, setShowSubItems] = useState(false)
+	const [navigationStack, setNavigationStack] = useState([])
+
+	const hasSubItems = targetItem => targetItem?.subcategories && targetItem.subcategories.length > 0
+	const showSubItems = navigationStack.length > 0
+	const currentItem = navigationStack[navigationStack.length - 1] || null
 
 	useEffect(() => {
 		if (showSubItems) {
 			Eitri.navigation.addBackHandler(() => {
-				setShowSubItems(false)
+				setNavigationStack(previousStack => {
+					if (previousStack.length <= 1) {
+						return []
+					}
+					return previousStack.slice(0, -1)
+				})
 				return false
 			})
 		} else {
 			Eitri.navigation.clearBackHandlers()
 		}
+
+		return () => {
+			Eitri.navigation.clearBackHandlers()
+		}
 	}, [showSubItems])
 
-	const handleItemPress = item => {
-		if (item.subcategories && item.subcategories.length > 0) {
-			setShowSubItems(true)
+	const handleItemPress = selectedItem => {
+		if (hasSubItems(selectedItem)) {
+			setNavigationStack(previousStack => [...previousStack, selectedItem])
 		} else {
-			goToItem(item)
+			goToItem(selectedItem)
 		}
+	}
+
+	const handleBack = () => {
+		setNavigationStack(previousStack => {
+			if (previousStack.length <= 1) {
+				return []
+			}
+			return previousStack.slice(0, -1)
+		})
 	}
 
 	return (
@@ -33,33 +55,33 @@ export default function CategoryPageItem(props) {
 			<CategoryTitle
 				icon={item.icon}
 				title={item.title}
-				hasSubItems={item.subcategories && item.subcategories.length > 0}
+				hasSubItems={hasSubItems(item)}
 				onClick={() => handleItemPress(item)}
 			/>
 			<View
 				className={`flex flex-col min-h-screen h-screen w-screen fixed ${showSubItems ? 'left-0 ' : 'left-[100vw]'} top-0 transition-left duration-300 z-[9999]`}>
 				<HeaderContentWrapper
 					containerClassName={`${showSubItems ? 'left-0' : '!left-[100vw] !shadow-none'} transition-left !duration-300 !backdrop-blur-none !bg-white`}>
-					<HeaderReturn onClick={() => setShowSubItems(false)} />
-					<HeaderText text={item.title}>{item.title}</HeaderText>
+					<HeaderReturn onClick={handleBack} />
+					<HeaderText text={currentItem?.title || item.title}>{currentItem?.title || item.title}</HeaderText>
 				</HeaderContentWrapper>
 				<View
 					bottomInset={'auto'}
 					className='bg-base-100 flex-1 overflow-y-auto'>
 					<View className='flex flex-col p-4 gap-4'>
-						{item?.action && (
+						{currentItem?.action && (
 							<CategoryTitle
-								icon={item.icon}
+								icon={currentItem.icon}
 								hasSubItems={false}
-								title={`${t('categoryPageItem.seeAllIn', 'Ver tudo em')} ${item.title}`}
-								onClick={() => goToItem(item)}
+								title={t('categoryPage.seeAll', { title: currentItem.title })}
+								onClick={() => goToItem(currentItem)}
 							/>
 						)}
-						{item?.subcategories?.map((subItem, index) => (
+						{currentItem?.subcategories?.map(subItem => (
 							<CategoryTitle
 								key={subItem.title}
 								icon={subItem.icon}
-								hasSubItems={false}
+								hasSubItems={hasSubItems(subItem)}
 								title={subItem.title}
 								onClick={() => handleItemPress(subItem)}
 							/>

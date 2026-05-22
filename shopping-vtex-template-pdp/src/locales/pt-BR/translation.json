@@ -1,7 +1,6 @@
 {
 	"home": {
-		"title": "Produto",
-		"pageTitle": "Página de produto"
+		"title": "Produto"
 	},
 	"description": {
 		"txtDescription": "Descrição",
@@ -17,37 +16,30 @@
 	"freight": {
 		"labelZipCode": "CEP",
 		"labelCalculate": "Calcular",
-		"txtCalculate": "Calcular frete"
-	},
-	"productCard": {
-		"actionBuy": "Comprar",
-		"actionViewCart": "Ver carrinho"
-	},
-	"shelfOfProducts": {
-		"loading": "Carregando...",
-		"seeMore": "Ver mais"
+		"txtCalculate": "Frete"
 	},
 	"mainDescription": {
-		"txtUntil": "ou em até",
-		"txtOf": "de"
+		"txtUntil": "em até",
+		"txtOf": "de",
+		"installment": "em até {{installment}}x de {{value}} sem juros"
 	},
 	"modalComponent": {
 		"txtProductAdded": "Produto adicionado",
 		"txtQuantity": "Quantidade:",
-		"txtGoToCart": "Ir para carrinho",
-		"txtAddToCart": "Adicionar ao carrinho",
+		"txtGoToCart": "Ir para cesta",
+		"txtAddToCart": "Adicionar à cesta",
 		"txtBuyTogether": "Aproveite e compre junto"
 	},
 	"product": {
-		"labelAddToCart": "Adicionar ao carrinho",
-		"labelGoToCart": "Ir para carrinho",
+		"labelAddToCart": "Adicionar à cesta",
+		"labelGoToCart": "Ir para a cesta",
 		"errorNoProduct": "Produto Indisponível"
 	},
 	"productBasicTemplate": {
 		"txtWhoSaw": "Quem viu esta, viu também:"
 	},
 	"productCardVertical": {
-		"cart": "ver Carrinho",
+		"cart": "ver cesta",
 		"buy": "comprar"
 	},
 	"review": {

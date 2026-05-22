@@ -4,7 +4,7 @@ export default function InfiniteScroll(props) {
 	const [scrollEnded, setScrollEnded] = useState(false)
 	useEffect(() => {
 		const handleScroll = () => {
-			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 300) {
 				setScrollEnded(true)
 			}
 		}
@@ -19,5 +19,5 @@ export default function InfiniteScroll(props) {
 		}
 		setScrollEnded(false)
 	}, [scrollEnded])
-	return <View>{children}</View>
+	return <View {...rest}>{children}</View>
 }

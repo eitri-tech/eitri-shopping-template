@@ -56,9 +56,7 @@
 		"formCodeVerification": "Código de verificação",
 		"textSendCode": "Enviar código",
 		"textResendCode": "Reenviar código",
-		"labelLoginWithPass": "Login com email e senha",
-		"loadLoginProvidersError": "Erro ao carregar provedores de login",
-		"or": "Ou"
+		"labelLoginWithPass": "Login com email e senha"
 	},
 	"orderStatusBadge": {
 		"cancel": "Cancelando pedido",
@@ -85,8 +83,7 @@
 	},
 	"socialLogin": {
 		"lbButton": "Continuar com o Google",
-		"socialLoginError": "Error on social login:",
-		"continueWithFacebook": "Continuar com Facebook"
+		"lbButtonFacebook": "Continuar com Facebook"
 	},
 	"terms": {
 		"title": "Termos"
@@ -98,13 +95,12 @@
 		"alertMessageServiceError": "Ocorreu uma falha no serviço, tente novamente",
 		"alertMessageVerify": "Verifique as informaçoes e tente novamente",
 		"lbRegister": "Registrar",
-		"lbEmailAccess": "Acessar com o seu email",
+		"lbEmailAccess": "Informe seu email",
 		"textTerms": "Ao clicar em Registrar você concorda com os termos de serviço",
 		"lbVerifyCode": "Código de verificação",
 		"lbResendCode": "Reenviar código",
 		"lbLogin": "Login",
-		"lbBack": "Voltar",
-		"emailPlaceholder": "Email"
+		"lbBack": "Voltar"
 	},
 	"editProfile": {
 		"title": "Editar perfil",
@@ -117,21 +113,18 @@
 		"lbGenderFemale": "Feminino",
 		"lbCPF": "CPF",
 		"lbSave": "Salvar",
-		"errors": {
-			"firstNameRequired": "Nome é obrigatório",
-			"lastNameRequired": "Sobrenome é obrigatório",
-			"birthDateRequired": "Data de nascimento é obrigatória",
-			"birthDateInvalid": "Data de nascimento inválida ou menor de 18 anos",
-			"phoneRequired": "Telefone é obrigatório",
-			"genderRequired": "Gênero é obrigatório",
-			"documentRequired": "CPF é obrigatório"
-		},
-		"placeholders": {
-			"birthDate": "DD/MM/AAAA",
-			"phone": "(99) 99999-9999",
-			"cpf": "000.000.000-00"
-		},
-		"saveSuccess": "Salvo com sucesso!"
+		"errorSave": "Erro ao salvar. Tente novamente.",
+		"errorLoad": "Erro ao carregar dados. Tente novamente.",
+		"successSave": "Salvo com sucesso!",
+		"validationFirstName": "Nome é obrigatório",
+		"validationLastName": "Sobrenome é obrigatório",
+		"validationBirthdate": "Data de nascimento é obrigatória",
+		"validationBirthdateInvalid": "Data de nascimento inválida ou menor de 18 anos",
+		"validationPhone": "Telefone é obrigatório",
+		"validationGender": "Gênero é obrigatório",
+		"validationCPF": "CPF é obrigatório",
+		"validationCPFDigits": "CPF deve ter 11 dígitos",
+		"validationCPFInvalid": "CPF inválido"
 	},
 	"orderDetails": {
 		"title": "Meus Pedidos",
@@ -158,45 +151,95 @@
 		"lbBack": "Voltar",
 		"lbCancel": "Cancelar pedido",
 		"lbContinueCancel": "Continuar cancelamento",
-		"errors": {
-			"getOrder": "Erro ao pegar detalhes do pedido:",
-			"cancelOrder": "Erro ao cancelar pedido"
-		},
-		"unit": "un."
+		"order": "pedido #{{orderId}}",
+		"addressPickup": "endereço para retirada",
+		"addressDelivery": "endereço de entrega",
+		"payment": "forma de pagamento",
+		"summary": "resumo da compra",
+		"packages": "pacotes",
+		"package": "Pacote {{number}}",
+		"packagePickedUp": "Retirado",
+		"packageDelivered": "Entregue",
+		"packageDeliveryType": "Tipo de envio",
+		"packageCarrier": "Transportadora",
+		"packageDeliveredOn": "Entregue em",
+		"packageEstimatedDelivery": "Previsão de entrega",
+		"packageNFe": "NF-e",
+		"packageAccess": "Acessar",
+		"packageTracking": "Rastreamento",
+		"packageTrack": "Rastrear",
+		"packagePickup": "Retirada",
+		"packageDelivery": "Entrega",
+		"orderProducts": "produtos do pedido"
+	},
+	"orderList": {
+		"title": "Meus Pedidos",
+		"emptyTitle": "Você não possui nenhum pedido",
+		"emptySubtitle": "Quando você fizer uma compra, ela será listada aqui."
+	},
+	"addressList": {
+		"title": "Meus Endereços",
+		"empty": "Nenhum endereço cadastrado",
+		"add": "Cadastrar Novo Endereço",
+		"postalCode": "CEP: ",
+		"recipient": "Destinatário: ",
+		"edit": "Editar",
+		"delete": "Excluir"
+	},
+	"wishlist": {
+		"title": "Meus favoritos",
+		"emptyTitle": "Você não possui nenhum item salvo",
+		"emptySubtitle": "Quando você salvar um produto, ele será listado aqui."
+	},
+	"addressForm": {
+		"postalCode": "CEP",
+		"street": "Endereço",
+		"number": "Número",
+		"complement": "Complemento",
+		"neighborhood": "Bairro",
+		"city": "Cidade",
+		"state": "Estado",
+		"recipient": "Destinatário",
+		"save": "Salvar",
+		"validatePostalCode": "Preencha o CEP",
+		"validateStreet": "Preencha o endereço",
+		"validateNeighborhood": "Preencha o bairro",
+		"validateCity": "Preencha a cidade",
+		"validateState": "Preencha o estado",
+		"validateNumber": "Preencha o número",
+		"validateRecipient": "Preencha o destinatário"
 	},
 	"orderCard": {
-		"loadDetailsError": "Falha ao carregar detalhes do pedido:",
 		"order": "Pedido",
 		"date": "Data",
-		"total": "Total",
-		"items": "itens",
-		"item": "item",
-		"loadingProducts": "Carregando produtos...",
-		"unit": "un",
-		"viewOrderDetails": "Ver detalhes do pedido"
+		"totalSingular": "Total ({{count}} item)",
+		"totalPlural": "Total ({{count}} itens)",
+		"loading": "Carregando produtos...",
+		"details": "detalhes do pedido",
+		"copySuccess": "Número do pedido copiado!"
 	},
-	"productCard": {
-		"upTo": "em até",
-		"off": "OFF",
-		"buy": "Comprar",
-		"addToCartError": "Error adding cart item"
+	"modalConfirm": {
+		"deleteAddress": "Confirma a exclusão do endereço",
+		"confirm": "Confirmar",
+		"cancel": "Cancelar"
 	},
-	"wishlistItem": {
-		"fetchProductError": "Erro ao buscar produto"
+	"orderBuyAgain": {
+		"loading": "Adicionando...",
+		"buyAgain": "Comprar novamente"
 	},
 	"protectedView": {
 		"loading": "Carregando..."
 	},
-	"wishlist": {
-		"pageTitle": "Wishlist",
-		"myFavorites": "Meus favoritos",
-		"noItems": "Você não possui nenhum item salvo",
-		"noItemsSubtitle": "Quando você salvar um produto, ele será listado aqui."
+	"orderStatusTimeline": {
+		"title": "Status do pedido"
 	},
-	"orderList": {
-		"myOrders": "Meus Pedidos",
-		"fetchOrdersError": "erro ao buscar orders",
-		"noOrders": "Você não possui nenhum pedido",
-		"noOrdersSubtitle": "Quando você fizer uma compra, ela será listada aqui."
+	"appVersion": {
+		"label": "versão {{version}}"
+	},
+	"productCard": {
+		"addedToCart": "adicionado à cesta com sucesso",
+		"removedFromCart": "produto removido da cesta",
+		"viewCart": "Ver cesta",
+		"buy": "Comprar"
 	}
 }

@@ -7,15 +7,15 @@ export default function LoadingComponent(props) {
 
 	if (fullScreen) {
 		return (
-			<View className='fixed inset-0 z-[999] bg-neutral-500 opacity-90 flex justify-center items-center'>
-				<Loading className='loading-lg' />
+			<View className='fixed inset-0 z-[999] bg-neutral-500/30 flex justify-center items-center'>
+				<Loading className='loading-lg text-primary' />
 			</View>
 		)
 	}
 
 	return (
 		<View>
-			<Loading />
+			<Loading className='text-primary' />
 		</View>
 	)
 }

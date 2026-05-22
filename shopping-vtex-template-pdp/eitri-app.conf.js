@@ -2,9 +2,8 @@ module.exports = {
 	'name': 'shopping-vtex-template-pdp',
 	'title': 'shopping-vtex-template-pdp',
 	'slug': 'shopping-vtex-template-pdp',
-	'eitri-luminus': '2.3.6',
-	'eitri-bifrost': '3.10.0',
-	'eitri-commons': '2.1.2',
+	'eitri-luminus': '2.22.3',
+	'eitri-bifrost': '4.7.0',
 	'version': '0.1.3',
 	'public-key': '9ae6c9a8-6959-4c42-ae39-dcc3ea07e6d8',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
@@ -18,7 +17,7 @@ module.exports = {
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
-			version: '1.9.0'
+			version: '1.13.0'
 		},
 		'i18n': {
 			version: '14.1.2'

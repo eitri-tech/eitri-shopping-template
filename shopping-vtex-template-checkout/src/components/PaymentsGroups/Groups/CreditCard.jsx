@@ -5,16 +5,14 @@ import { Text, View } from 'eitri-luminus'
 import CardIcon from '../../Icons/CardIcons/CardIcon'
 import { navigate } from '../../../services/navigationService'
 import { useCustomer } from '../../../providers/Customer'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { CustomButton, CustomInput, TrackingService } from 'shopping-vtex-template-shared'
+import { isLoggedIn } from '../../../services/CustomerService'
 
 export default function CreditCard(props) {
 	const { onSelectPaymentMethod, systemGroup } = props
 
 	const { cart, setCardInfo, cardInfo, removeAccount } = useLocalShoppingCart()
 	const { checkoutProfile, getCustomer } = useCustomer()
-	const { t } = useTranslation()
 
 	const [availableAccounts, setAvailableAccounts] = useState([])
 	const [accountSelected, setAccountSelected] = useState(null)
@@ -58,7 +56,7 @@ export default function CreditCard(props) {
 				hasDefaultBillingAddress: true
 			}
 		])
-		// trackAddPaymentInfo(cart, paymentSystem.name)
+		TrackingService.addPaymentInfoEvent(cart, paymentSystem.name)
 		navigate('Installments', { paymentSystem })
 	}
 
@@ -118,7 +116,7 @@ export default function CreditCard(props) {
 	return (
 		<>
 			<GroupsWrapper
-				title={t('paymentMethods.creditCard.title', 'Cartão de Crédito')}
+				title='Cartão de Crédito'
 				icon={<Card />}>
 				{availableAccounts?.length > 0 && (
 					<View className='flex flex-col gap-3'>
@@ -138,12 +136,10 @@ export default function CreditCard(props) {
 												<View
 													onClick={e => removeAccountConfirm(e, account)}
 													className='text-xs text-primary font-semibold'>
-													({t('paymentMethods.creditCard.remove', 'Remover')})
+													(Remover)
 												</View>
 											</View>
-											<Text className='text-sm'>
-												{`${t('paymentMethods.creditCard.endingIn', 'final')} ${account?.cardNumber?.replaceAll('*', '')}`}
-											</Text>
+											<Text className='text-sm'>{`final ${account?.cardNumber?.replaceAll('*', '')}`}</Text>
 										</View>
 									</View>
 
@@ -172,8 +168,8 @@ export default function CreditCard(props) {
 										inputMode='numeric'
 										variant='mask'
 										mask='9999'
-										label={t('paymentMethods.creditCard.securityCode', 'Cód. Segurança')}
-										placeholder={t('paymentMethods.creditCard.securityCode', 'Cód. Segurança')}
+										label='Cód. Segurança'
+										placeholder={'Cód. Segurança'}
 										value={cardInfo?.validationCode || ''}
 										onChange={e => setCardInfo({ ...cardInfo, validationCode: e.target.value })}
 									/>
@@ -182,7 +178,7 @@ export default function CreditCard(props) {
 									<CustomButton
 										onClick={setPaymentSystem}
 										disabled={!cardInfo?.validationCode || cardInfo?.validationCode?.length < 3}
-										label={t('paymentMethods.creditCard.continue', 'Continuar')}
+										label='Continuar'
 									/>
 								</View>
 							</View>
@@ -193,9 +189,7 @@ export default function CreditCard(props) {
 				<View className='border-b my-4'></View>
 
 				<View onClick={addNewCard}>
-					<Text className='text-primary font-bold'>
-						{t('paymentMethods.creditCard.newCard', '+ novo cartão')}
-					</Text>
+					<Text className='text-primary font-bold'>+ novo cartão</Text>
 				</View>
 			</GroupsWrapper>
 
@@ -209,17 +203,17 @@ export default function CreditCard(props) {
 						onClick={e => e.stopPropagation()}
 						className='bg-white !rounded-t-sm max-w-[80%] max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
 						<Text className='text-lg font-semibold'>
-							{`${t('paymentMethods.creditCard.confirmRemove', 'Deseja remover o cartão final')} ${accountToRemove?.cardNumber?.replaceAll('*', '')}`}
+							{`Deseja remover o cartão final ${accountToRemove?.cardNumber?.replaceAll('*', '')}`}
 						</Text>
 
 						<View className='flex flex-col mt-5 gap-3'>
 							<CustomButton
-								label={t('paymentMethods.creditCard.yes', 'Sim')}
+								label='Sim'
 								onClick={removeUserAccount}
 							/>
 							<CustomButton
 								outlined
-								label={t('paymentMethods.creditCard.no', 'Não')}
+								label='Não'
 								onClick={() => setAccountToRemove(null)}
 							/>
 						</View>

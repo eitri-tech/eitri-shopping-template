@@ -1,4 +1,4 @@
-import WishlistIcon from './components/WishlistIcon'
+import WishlistIcon from './../WishlistIcon/WishlistIcon'
 import Loading from '../Loading/LoadingComponent'
 
 export default function ProductCardDefault(props) {

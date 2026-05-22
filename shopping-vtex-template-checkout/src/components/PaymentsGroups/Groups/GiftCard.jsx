@@ -1,22 +1,37 @@
 import Gift from '../../Icons/MethodIcons/Gift'
 import GroupsWrapper from './GroupsWrapper'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import LoadingComponent from '../../Shared/Loading/LoadingComponent'
-import { formatAmountInCents } from '../../../utils/utils'
+import { formatAmountInCents, formatGiftCardRedemptionCode } from '../../../utils/utils'
 import { navigate } from '../../../services/navigationService'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
-import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { CustomButton, CustomInput, TrackingService, Loading } from 'shopping-vtex-template-shared'
 
 export default function GiftCard(props) {
-	const { cart, setPaymentOption } = useLocalShoppingCart()
-	const { t } = useTranslation()
+	const { cart, setPaymentOption, startCart } = useLocalShoppingCart()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [redemptionCode, setRedemptionCode] = useState('')
+	const [redemptionPassword, setRedemptionPassword] = useState('')
 	const [selected, setSelected] = useState(false)
 	const [error, setError] = useState(false)
 	const [giftCardValue, setGiftCardValue] = useState(0)
+
+	const encryptRef = useRef(null)
+
+	const PUBLIC_KEY =
+		'-----BEGIN PUBLIC KEY-----' +
+		'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWKAnUudPs6rQtnMo3OWVAPXi+8TErO2whhcqbx5YRRQ3atDb7KkYntrh/ukqotDg3aooYpFMfyXx9vYDd88yeJCBEmyO9jzGl0YKwt0CaR8Na/X70swenjgXnFEyqWK4fAs/NDcnvdJEgUt/wlxg5wDVx7PBrgYW5OUkbCG7x7wIDAQAB' +
+		'-----END PUBLIC KEY-----'
+
+	useEffect(() => {
+		const script = document.createElement('script')
+		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.min.js'
+
+		script.onload = () => {
+			encryptRef.current = new window.JSEncrypt()
+		}
+
+		document.body.appendChild(script)
+	}, [])
 
 	useEffect(() => {
 		if (cart?.paymentData?.giftCards?.length > 0) {
@@ -28,46 +43,67 @@ export default function GiftCard(props) {
 		}
 	}, [])
 
+	const useRedemptionPassword = useMemo(() => {
+		return redemptionCode?.replace(/\D/g, '')?.startsWith('504161')
+	}, [redemptionCode])
+
 	const loadCardValue = cart => {
 		const giftCardsValue = cart.paymentData?.giftCards?.reduce((acc, giftCard) => acc + giftCard.value, 0) ?? 0
 		setGiftCardValue(giftCardsValue)
 	}
 
-	const addGiftCard = async () => {
+	const normalizeCode = value => value?.replace(/-/g, '')?.toLowerCase()
+
+	const encryptRedemptionPassword = password => {
 		try {
-			setIsLoading(true)
+			const encryptor = encryptRef.current || new JSEncrypt()
+			encryptor.setPublicKey(PUBLIC_KEY)
+			return encryptor.encrypt(password)
+		} catch (e) {
+			console.error('Error encrypting redemption password:', e)
+			return null
+		}
+	}
+
+	const addGiftCard = async () => {
+		setIsLoading(true)
+		setError('')
+
+		try {
+			const encrypted = useRedemptionPassword ? encryptRedemptionPassword(redemptionPassword) : null
+			const fullRedemptionCode = `${redemptionCode}${encrypted ? `.${encrypted}` : ''}`
+
 			const payload = {
 				payments: cart.paymentData.payments,
 				giftCards: [
 					...cart.paymentData.giftCards,
 					{
-						redemptionCode: redemptionCode,
+						redemptionCode: fullRedemptionCode,
 						inUse: true,
-						isSpecialCard: false
+						isSpecialCard: false,
+						provider: useRedemptionPassword ? 'TodoCartoes' : 'GIVEXProvider'
 					}
 				]
 			}
 
 			const newCart = await setPaymentOption(payload)
 			const applied = newCart?.paymentData?.giftCards?.some(
-				gift =>
-					gift.redemptionCode?.replace(/-/g, '')?.toLowerCase() ===
-					redemptionCode?.replace(/-/g, '')?.toLowerCase()
+				gift => normalizeCode(gift.redemptionCode) === normalizeCode(fullRedemptionCode)
 			)
-			if (applied) {
-				loadCardValue(newCart)
-				setRedemptionCode('')
-				setIsLoading(false)
-				//trackAddPaymentInfo(newCart, 'Vale Presente')
-			} else {
-				setError(t('paymentMethods.giftCard.invalidCode', 'Código inválido'))
-				setIsLoading(false)
-				setTimeout(() => {
-					setError('')
-				}, 8000)
+
+			if (!applied) {
+				await startCart() // Tem um bugzinho estranho, se estiver logado e o código for inválido ele traz o carrinho deslogado
+				setError('Código inválido')
+				setTimeout(() => setError(''), 8000)
+				return
 			}
+
+			loadCardValue(newCart)
+			setRedemptionCode('')
+			TrackingService.addPaymentInfoEvent(newCart, 'Vale Presente')
 		} catch (e) {
 			console.error('Error adding gift card:', e)
+		} finally {
 			setIsLoading(false)
 		}
 	}
@@ -92,30 +128,35 @@ export default function GiftCard(props) {
 
 	return (
 		<GroupsWrapper
-			title={t('paymentMethods.giftCard.title', 'Vale presente')}
+			title='Vale presente'
 			icon={<Gift />}
 			onPress={() => {}}>
 			<View>
 				{!selected && (
 					<View onClick={() => setSelected(!selected)}>
-						<Text className='text-primary font-bold'>
-							{t('paymentMethods.giftCard.addGiftCard', 'Adicionar vale presente')}
-						</Text>
+						<Text className='text-primary font-bold'>Adicionar vale presente</Text>
 					</View>
 				)}
 				{selected && (
 					<>
 						<View className='flex justify-between mt-2 gap-2 items-end w-full'>
-							<View className='w-2/3'>
+							<View className='w-2/3 flex flex-col gap-2'>
 								<CustomInput
-									placeholder={t('paymentMethods.giftCard.placeholder', 'Insira o código do vale presente')}
+									placeholder='Insira o código do vale presente'
 									value={redemptionCode}
 									onChange={e => setRedemptionCode(e.target.value)}
 								/>
+								{useRedemptionPassword && (
+									<CustomInput
+										placeholder='Código (senha)'
+										value={redemptionPassword}
+										onChange={e => setRedemptionPassword(e.target.value)}
+									/>
+								)}
 							</View>
 							<View className='w-1/3'>
 								<CustomButton
-									label={t('paymentMethods.giftCard.add', 'Adicionar')}
+									label='Adicionar'
 									className='grow'
 									onPress={addGiftCard}
 								/>
@@ -131,7 +172,7 @@ export default function GiftCard(props) {
 						<View className='flex flex-col gap-2'>
 							{isLoading && (
 								<View className='flex justify-center my-2'>
-									<LoadingComponent inline />
+									<Loading inline />
 								</View>
 							)}
 							{!isLoading &&
@@ -143,16 +184,16 @@ export default function GiftCard(props) {
 											key={gift.id}
 											className='py-2 px-1 flex flex-row items-center justify-between mt-1 gap-5'>
 											<View className='flex flex-col'>
-												<Text className='text-sm'>{`${gift.redemptionCode}`}</Text>
+												<Text className='text-sm'>
+													{formatGiftCardRedemptionCode(gift.redemptionCode)}
+												</Text>
 												<Text className='text-sm text-primary font-bold'>
 													{formatAmountInCents(gift.value)}
 												</Text>
 											</View>
 											<View className='flex flex-row items-center justify-between'>
 												<View onClick={() => removeGiftCart(gift.id)}>
-													<Text className='text-xs font-bold text-blue-500'>
-														{t('paymentMethods.giftCard.remove', 'Remover')}
-													</Text>
+													<Text className='text-xs font-bold text-blue-500'>{'Remover'}</Text>
 												</View>
 											</View>
 										</View>
@@ -161,21 +202,14 @@ export default function GiftCard(props) {
 
 						{giftCardValue > 0 && giftCardValue < cart.value && (
 							<View>
-								<Text className='text-sm font-bold'>
-									{`${t('paymentMethods.giftCard.remainingPayment', 'Pagamento restante de')} ${formatAmountInCents(
-										cart.value - giftCardValue
-									)}. ${t(
-										'paymentMethods.giftCard.combinePayment',
-										'Por favor, combine com outra forma de pagamento'
-									)}`}
-								</Text>
+								<Text className='text-sm font-bold'>{`Pagamento restante de ${formatAmountInCents(cart.value - giftCardValue)}. Por favor, combine com outra forma de pagamento`}</Text>
 							</View>
 						)}
 
 						{giftCardValue > 0 && giftCardValue >= cart.value && (
 							<View>
 								<CustomButton
-									label={t('paymentMethods.giftCard.continue', 'Continuar')}
+									label='Continuar'
 									className='w-full mt-1'
 									onClick={() => navigate('CheckoutReview')}
 								/>

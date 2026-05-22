@@ -1,11 +1,16 @@
 import { useTranslation } from 'eitri-i18n'
 import fetchFreight from '../../services/freightService'
 import { CustomButton, CustomInput } from 'shopping-vtex-template-shared'
+import { FiTruck } from 'react-icons/fi'
 import { loadPostalCodeFromStorage, savePostalCodeOnStorage } from '../../services/customerService'
+import { GenericBox } from 'shopping-vtex-template-shared'
+import storeFacadeIcon from './../../assets/images/storeFacadeIcon.svg'
+import truck from './../../assets/images/truckIcon.svg'
 
 export default function Freight(props) {
 	const { currentSku } = props
 	const { t } = useTranslation()
+	const [pristine, setPristine] = useState(true)
 	const [zipCode, setZipCode] = useState('')
 	const [freightOptions, setFreightOptions] = useState(null)
 	const [loading, setLoading] = useState(false)
@@ -31,8 +36,8 @@ export default function Freight(props) {
 		setLoading(true)
 		try {
 			let freightOpt = await fetchFreight(zipCode, currentSku)
-			console.log('freightOpt', freightOpt)
 			setFreightOptions(freightOpt)
+			setPristine(false)
 			await savePostalCodeOnStorage(zipCode)
 		} catch (error) {
 			console.error('Error handleFreight', error)
@@ -40,16 +45,21 @@ export default function Freight(props) {
 		setLoading(false)
 	}
 
+	// TODO Fazer lógica para pegar o melhor
+	const betterPickupOption = freightOptions?.options?.find(item => item.isPickupInPoint)
+	const betterDeliveryOption = freightOptions?.options?.find(item => !item.isPickupInPoint)
+
 	return (
-		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
-			<View className='flex items-center justify-between w-full'>
-				<Text className='text-lg font-semibold'>{t('freight.txtCalculate', 'Calcular frete')}</Text>
+		<GenericBox className='flex flex-col'>
+			<View className='flex items-center w-full gap-2'>
+				<FiTruck size={26} />
+				<Text className='text-lg font-semibold'>{t('freight.txtCalculate')}</Text>
 			</View>
 			<View>
 				<View className='flex justify-between items-center w-full gap-2 mt-2'>
 					<View className='w-2/3'>
 						<CustomInput
-							placeholder={t('freight.labelZipCode', 'CEP')}
+							placeholder={t('freight.labelZipCode')}
 							value={zipCode}
 							variant='mask'
 							mask='99999-999'
@@ -59,7 +69,7 @@ export default function Freight(props) {
 					</View>
 					<View className='w-1/3'>
 						<CustomButton
-							label={t('freight.labelCalculate', 'Calcular')}
+							label='calcular'
 							variant='outlined'
 							onClick={() => handleFreight(zipCode)}
 						/>
@@ -68,29 +78,50 @@ export default function Freight(props) {
 
 				{loading && <View className={`mt-3 w-full h-[100px] bg-gray-200 rounded animate-pulse`} />}
 
-				{!loading && freightOptions && freightOptions?.options?.length > 0 && (
-					<View className='flex flex-col items-center justify-between gap-2 mt-3'>
-						{freightOptions?.options?.map(item => (
-							<View
-								key={item?.label}
-								className='flex flex flex-col items-center w-full'>
-								<View className='flex items-center justify-between w-full'>
-									<Text className='font-bold'>{item?.label}</Text>
-									<Text>{item?.price}</Text>
+				{!loading && (
+					<View className='flex flex-col w-full items-center justify-between gap-2 mt-4'>
+						{betterPickupOption && (
+							<View className={'flex justify-between w-full'}>
+								<View className={'flex gap-2 grow'}>
+									<Image
+										src={storeFacadeIcon}
+										width={25}
+									/>
+									<Text className=''>{betterPickupOption?.formattedShippingEstimate}</Text>
 								</View>
-								<View className='flex items-center justify-between w-full'>
-									<Text className='text-neutral-content'>{item?.shippingEstimate}</Text>
-								</View>
-								{item.isPickupInPoint && (
-									<View className='flex items-center w-full'>
-										<Text className='text-neutral-content'>{item.pickUpAddress}</Text>
-									</View>
-								)}
+								<Text className={`${betterPickupOption.price === 0 ? 'text-accent' : ''} font-bold`}>
+									{betterPickupOption?.formatedPrice}
+								</Text>
 							</View>
-						))}
+						)}
+
+						{betterDeliveryOption && (
+							<View className={'flex justify-between w-full'}>
+								<View className={'flex gap-2 grow'}>
+									<Image
+										src={truck}
+										width={25}
+									/>
+									<Text className=''>{betterDeliveryOption?.formattedShippingEstimate}</Text>
+								</View>
+								<Text className={`${betterDeliveryOption.price === 0 ? 'text-accent' : ''} font-bold`}>
+									{betterDeliveryOption?.formatedPrice}
+								</Text>
+							</View>
+						)}
+						{!betterPickupOption && !betterDeliveryOption && !pristine && (
+							<View className='w-full rounded-lg bg-[#FEFAE2] px-4 py-3'>
+								<View className='flex flex-row items-center gap-2'>
+									<Text className='flex-1 text-sm leading-5 text-gray-800'>
+										Desculpe, esse produto não está disponível para o seu CEP. Que tal tentar outro
+										CEP?
+									</Text>
+								</View>
+							</View>
+						)}
 					</View>
 				)}
 			</View>
-		</View>
+		</GenericBox>
 	)
 }

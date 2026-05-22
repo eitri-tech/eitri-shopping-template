@@ -13,6 +13,7 @@ export async function sendAccessKeyByEmail(email) {
 }
 
 export const doLogout = async () => {
+	await Vtex.cart.removeClientData()
 	return await Vtex.customer.logout()
 }
 
@@ -98,4 +99,26 @@ export const saveUserEmailOnStorage = async email => {
 
 export const loadUserEmailFromStorage = async () => {
 	return await Vtex.customer.getCustomerData('email')
+}
+
+export const productOnWishlist = async productId => {
+	if (!(await isLoggedIn())) {
+		return { inList: false }
+	}
+	const result = await Vtex.wishlist.checkItem(productId)
+	const inList = result?.data?.checkList?.inList
+	if (inList) {
+		const listId = result?.data?.checkList?.listIds?.[0]
+		return { inList, listId }
+	} else {
+		return { inList }
+	}
+}
+
+export const removeItemFromWishlist = async id => {
+	return await Vtex.wishlist.removeItem(id)
+}
+
+export const addToWishlist = async (productId, title, sku) => {
+	return await Vtex.wishlist.addItem(productId, title, sku)
 }

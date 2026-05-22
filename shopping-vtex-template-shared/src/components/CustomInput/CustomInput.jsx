@@ -1,7 +1,8 @@
 import Eitri from 'eitri-bifrost'
 
 export default function CustomInput(props) {
-	const { icon, type, backgroundColor, width, label, height, onChange, value, className, onFocus, ...rest } = props
+	const { icon, type, backgroundColor, width, label, height, onChange, value, className, onFocus, error, ...rest } =
+		props
 
 	const [showPassword, setShowPassword] = useState(false)
 
@@ -29,7 +30,7 @@ export default function CustomInput(props) {
 			)}
 			<View className='relative'>
 				<TextInput
-					className={`w-full rounded border-gray-300 border-solid border-2 focus:outline-none ${className}`}
+					className={`w-full rounded-lg border-gray-300 border-solid border-2 bg-white focus:outline-none ${className}`}
 					type={showPassword ? 'text' : type || 'text'}
 					onChange={onChange}
 					value={value}
@@ -99,6 +100,7 @@ export default function CustomInput(props) {
 					</View>
 				)}
 			</View>
+			{error && <View className={'text-xs text-red-500 mt-1'}>{error}</View>}
 		</View>
 	)
 }

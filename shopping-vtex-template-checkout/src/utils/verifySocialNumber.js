@@ -1,4 +1,6 @@
-export const verifySocialNumber = socialNumber => {
+export const verifySocialNumber = socialNumberImp => {
+	const socialNumber = socialNumberImp?.replace(/\D/g, '')
+
 	if (!socialNumber || socialNumber?.length !== 11 || socialNumber.match(/(\d)\1{10}/)) return false
 
 	let sum = 0

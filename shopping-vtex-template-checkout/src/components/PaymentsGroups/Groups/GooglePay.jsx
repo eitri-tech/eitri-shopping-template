@@ -5,13 +5,10 @@ import GPay from '@/components/Icons/MethodIcons/GPay'
 import GPayBtn from './../../../assets/images/gp-light-pt.svg'
 import Eitri from 'eitri-bifrost'
 import loadGPaymentData from '@/services/GPayService'
-import { sendLogError } from '@/services/Tracking'
-import { useTranslation } from 'eitri-i18n'
 
 export default function GooglePay(props) {
 	const { systemGroup, onSelectPaymentMethod } = props
 	const { cart, setCardInfo } = useLocalShoppingCart()
-	const { t } = useTranslation()
 	const [loadingGoogleData, setLoadingGoogleData] = useState(false)
 
 	const [gPayAvailable, setGPayAvailable] = useState(false)
@@ -67,7 +64,7 @@ export default function GooglePay(props) {
 
 			navigate('Installments', { paymentSystem, description: googlePaymentData?.paymentMethodData?.description })
 		} catch (e) {
-			sendLogError(e, 'onSelectThisGroup', { paymentSystem: 'Google Pay' }, cart)
+			// sendLogError(e, 'onSelectThisGroup', { paymentSystem: 'Google Pay' }, cart)
 		}
 		setLoadingGoogleData(false)
 	}
@@ -78,7 +75,7 @@ export default function GooglePay(props) {
 
 	return (
 		<GroupsWrapper
-			title={t('paymentMethods.googlePay.title', 'Google Pay')}
+			title='Google Pay'
 			icon={<GPay />}
 			onPress={onSelectThisGroup}
 			isChecked={systemGroup.isCurrentPaymentSystemGroup}>

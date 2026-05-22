@@ -6,14 +6,10 @@ import {
 	getCart,
 	removeClientData,
 	removeItemFromCart,
-	selectPaymentOption
+	selectPaymentOption,
+	updateOpenTextField
 } from '../services/cartService'
-import setFreight, {
-	setLogisticInfo,
-	setNewAddress,
-	setShippingAddress,
-	updateAddress
-} from '../services/freigthService'
+import setFreight, { setLogisticInfo, setNewAddress, setShippingAddress } from '../services/freigthService'
 
 const LocalCart = createContext({})
 
@@ -45,10 +41,6 @@ export default function CartProvider({ children }) {
 
 	const addPersonalData = async (userData, orderFormId) => {
 		return executeCartOperation(addUserData, userData, orderFormId)
-	}
-
-	const _updateAddress = async selectedAddresses => {
-		return executeCartOperation(updateAddress, cart, zipCode)
 	}
 
 	const _setFreight = async option => {
@@ -93,6 +85,10 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(selectPaymentOption, payload)
 	}
 
+	const _updateOpenTextField = async (receiver) => {
+		return executeCartOperation(updateOpenTextField, cart, receiver)
+	}
+
 	return (
 		<LocalCart.Provider
 			value={{
@@ -102,7 +98,6 @@ export default function CartProvider({ children }) {
 				startCart,
 				setFreight: _setFreight,
 				setNewAddress: _setNewAddress,
-				updateAddress: _updateAddress,
 				addCustomerData,
 				selectPaymentOption: _selectPaymentOption,
 				setShippingAddress: _setShippingAddress,
@@ -110,6 +105,7 @@ export default function CartProvider({ children }) {
 				setLogisticInfo: _setLogisticInfo,
 				removeCartItem: _removeCartItem,
 				setPaymentOption: setPaymentOption,
+				updateOpenTextField: _updateOpenTextField,
 				generateNewCart: _generateNewCart,
 				addItem: _addItem,
 				selectedPaymentData,

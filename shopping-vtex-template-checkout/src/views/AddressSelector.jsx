@@ -1,12 +1,18 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackScreenView } from '../services/Tracking'
 import { useTranslation } from 'eitri-i18n'
 import { Page, Text, View } from 'eitri-luminus'
 import { useEffect, useState } from 'react'
 import { navigate } from '../services/navigationService'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
 import CardSelector from '../components/CardSelector/CardSelector'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset, Loading } from 'shopping-vtex-template-shared'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	BottomInset,
+	Loading,
+	TrackingService
+} from 'shopping-vtex-template-shared'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
 
 export default function AddressSelector(props) {
@@ -22,7 +28,7 @@ export default function AddressSelector(props) {
 
 	useEffect(() => {
 		if (cart?.shippingData?.availableAddresses?.length > 0) {
-			trackScreenView(PAGE)
+			TrackingService.sendScreenView('Seleção de endereço', 'AddressSelector')
 		} else {
 			handleAddNewAddress()
 		}
@@ -36,7 +42,7 @@ export default function AddressSelector(props) {
 				await setShippingAddress(address)
 			}
 
-			navigate('FreightSelector')
+			navigate('FreightResolver')
 		} catch (error) {
 			console.error('Error selecting address:', error)
 		} finally {
@@ -79,7 +85,7 @@ export default function AddressSelector(props) {
 		<Page title={PAGE}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('addNewShippingAddress.title', 'Entrega')} />
+				<HeaderText text={t('addNewShippingAddress.title')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -101,7 +107,7 @@ export default function AddressSelector(props) {
 							mainTitle={`${address.street}, ${address.number || ''} ${address.complement || ''}`}
 							mainClickHandler={() => handleAddressSelect(address)}
 							secondaryActionHandler={() => handleEditAddress(address)}
-							secondaryActionTitle={t('addressSelector.edit', 'Editar')}>
+							secondaryActionTitle={'Editar'}>
 							<Text className='text text-base-content/70'>
 								{`${address.neighborhood} - ${address.city} - ${address.state}`}
 							</Text>

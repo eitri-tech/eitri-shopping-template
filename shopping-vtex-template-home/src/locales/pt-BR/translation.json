@@ -1,79 +1,43 @@
 {
 	"home": {
-		"title": "Home",
 		"offers": "Ofertas"
 	},
 	"categories": {
 		"title": "Categorias"
 	},
+	"productCatalog": {
+		"title": "Catálogo"
+	},
 	"blogPostShelf": {
 		"seeMore": "Ver mais"
-	},
-	"blogCard": {
-		"publishedPrefix": "Publicado",
-		"by": "por",
-		"in": "em"
 	},
 	"categoryPageModal": {
 		"title": "Filtros",
 		"clear": "Limpar",
 		"button": "Filtrar"
 	},
-	"categoryPageItem": {
-		"seeAllIn": "Ver tudo em"
-	},
 	"pristineView": {
 		"content": "Digite um termo para busca"
 	},
 	"searchResults": {
-		"resultNotFound": "Não foram encontrados resultados para a sua busca",
-		"emptyTitle": "Nenhum produto encontrado",
-		"emptyDescription": "Tente ajustar sua busca ou explorar outras categorias."
-	},
-	"searchHistory": {
-		"title": "Buscas recentes"
+		"resultNotFound": "Não foram encontrados resultados para a sua busca"
 	},
 	"headerSearch": {
 		"labelSearch": "Procurar..."
 	},
-	"productCatalog": {
-		"title": "Catálogo",
-		"showing": "Exibindo",
-		"productSingular": "produto",
-		"productPlural": "produtos"
-	},
 	"productCardVertical": {
-		"cart": "No carrinho",
-		"buy": "Comprar"
-	},
-	"productCard": {
-		"installmentsPrefix": "em até",
-		"discountSuffix": "OFF",
-		"viewCart": "Ver carrinho",
+		"cart": "Na cesta",
 		"buy": "Comprar"
 	},
 	"scheduleCard": {
 		"button": "Confira"
 	},
 	"searchInput": {
-		"content": "Encontre seu produto...",
-		"placeholder": "Pesquisar..."
-	},
-	"search": {
-		"title": "Tela de busca",
-		"pristineTitle": "O que você está buscando?",
-		"pristineDescription": "Nos diga o que procura e achamos pra você"
-	},
-	"topSearches": {
-		"title": "Mais buscados"
+		"content": "Encontre seu produto..."
 	},
 	"shelfOfProducts": {
 		"loading": "Carregando...",
 		"seeMore": "Ver mais"
-	},
-	"priceRange": {
-		"minLabel": "Valor Mínimo",
-		"maxLabel": "Valor Máximo"
 	},
 	"lists": {
 		"title": "Ordenar por",
@@ -84,19 +48,42 @@
 		"labelHighestPrice": "Maior preço",
 		"labelLowestPrice": "Menor preço",
 		"labelAToZ": "De A a Z",
-		"labelZToA": "De Z a A",
-		"cancel": "Cancelar"
+		"labelZToA": "De Z a A"
 	},
 	"facetsModal": {
 		"from": "De",
 		"to": "à"
 	},
-	"highlightedProductShelf": {
-		"seeMore": "Veja mais",
+	"qrCodeScanner": {
+		"productNotFound": "Produto não encontrado"
+	},
+	"searchHistory": {
+		"title": "histórico",
+		"clear": "limpar histórico"
+	},
+	"topSearches": {
+		"title": "mais buscados"
+	},
+	"highlightedShelf": {
 		"days": "dias",
 		"hours": "horas",
 		"minutes": "minutos",
 		"seconds": "segundos",
-		"loading": "Carregando..."
+		"seeMore": "Veja mais"
+	},
+	"categoryPage": {
+		"seeAll": "Ver tudo em {{title}}"
+	},
+	"searchResultsEmpty": {
+		"title": "Nenhum produto encontrado",
+		"hint": "Tente ajustar sua busca ou explorar outras categorias."
+	},
+	"priceRange": {
+		"min": "Valor Mínimo",
+		"max": "Valor Máximo"
+	},
+	"blogCard": {
+		"publishedByDate": "Publicado por {{author}} em {{date}}",
+		"publishedDate": "Publicado em {{date}}"
 	}
 }

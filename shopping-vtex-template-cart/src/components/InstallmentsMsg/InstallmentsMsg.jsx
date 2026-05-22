@@ -37,7 +37,7 @@ export default function InstallmentsMsg(props) {
 				</svg>
 			</View>
 			<Text className='text-primary-100 pl-1 py-1'>
-				{`${t('cart.labelInstalmentUntil', 'Parcelamento em até')} ${maxInstallments}x`}
+				{`${t('cart.labelInstalmentUntil')} ${maxInstallments}x`}
 			</Text>
 		</View>
 	)

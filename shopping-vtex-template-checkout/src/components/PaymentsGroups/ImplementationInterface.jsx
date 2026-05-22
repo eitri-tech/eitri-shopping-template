@@ -3,8 +3,8 @@ import CreditCard from './Groups/CreditCard'
 import BankInvoice from './Groups/BankInvoice'
 import InstantPayment from './Groups/InstantPayment'
 import GiftCard from './Groups/GiftCard'
-import Eitri from 'eitri-bifrost'
 import GooglePay from '@/components/PaymentsGroups/Groups/GooglePay'
+import StoreCard from './Groups/StoreCard'
 
 export default function ImplementationInterface(props) {
 	const { groupName, systemGroup, onSelectPaymentMethod } = props
@@ -14,7 +14,8 @@ export default function ImplementationInterface(props) {
 		'bankInvoicePaymentGroup': BankInvoice,
 		'instantPaymentPaymentGroup': InstantPayment,
 		'giftCardPaymentGroup': GiftCard,
-		'WH Google PayPaymentGroup': GooglePay
+		'WH Google PayPaymentGroup': GooglePay,
+		'customPrivate_501PaymentGroup': StoreCard
 	}
 
 	const externalPaymentsImplementation = App.configs.appConfigs?.externalPayments ?? []

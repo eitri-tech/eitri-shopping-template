@@ -4,6 +4,7 @@ import personalIcon from '../../assets/images/personal.svg'
 import { useTranslation } from 'eitri-i18n'
 import { navigate } from '../../services/navigationService'
 import OtpLogin from '../OtpLogin/OtpLogin'
+import { GenericBox } from 'shopping-vtex-template-shared'
 
 export default function UserData(props) {
 	const { cart, removeClientData } = useLocalShoppingCart()
@@ -45,7 +46,7 @@ export default function UserData(props) {
 	return (
 		<>
 			<SimpleCard
-				title={t('userData.txtPersonData', 'DADOS PESSOAIS')}
+				title={t('userData.txtPersonData')}
 				isFilled={cart?.clientProfileData?.email}
 				onPress={onPressMainAction}
 				icon={personalIcon}>
@@ -55,7 +56,7 @@ export default function UserData(props) {
 						{cart?.clientProfileData?.email && !cart.canEditData && (
 							<View onClick={clearClientData}>
 								<Text className='text-xs text-primary-300 underline'>
-									{t('userData.txtMessageLeave', 'Não é você? Sair')}
+									{t('userData.txtMessageLeave')}
 								</Text>
 							</View>
 						)}

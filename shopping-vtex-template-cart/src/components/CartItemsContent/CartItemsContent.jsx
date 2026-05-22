@@ -1,5 +1,6 @@
 import CartItem from '../CartItem/CartItem'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export default function CartItemsContent(props) {
 	const { cart, changeQuantity, removeItem, addItemOffer, removeItemOffer } = useLocalShoppingCart()
@@ -25,6 +26,7 @@ export default function CartItemsContent(props) {
 		try {
 			setCartItems([...cartItems.slice(0, index), ...cartItems.slice(index + 1)])
 			await removeItem(index)
+			TrackingService.removeFromCartEvent(cart, index)
 		} catch (error) {
 			console.error('Cart: handleRemoveCartItem Error', error)
 		}

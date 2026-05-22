@@ -1,10 +1,8 @@
-import { getSearchHistory } from '../../services/CatalogService'
-import iconClock from '../../assets/icons/clock.svg'
-import iconLinkGrey from '../../assets/icons/link_grey.svg'
+import { deleteHistory, getSearchHistory } from '../../services/SearchMetadataService'
 import { useTranslation } from 'eitri-i18n'
 
 export default function SearchHistory(props) {
-	const { onSubmit, ...rest } = props
+	const { onSubmit, className, ...rest } = props
 	const { t } = useTranslation()
 
 	const [history, setHistory] = useState([])
@@ -15,43 +13,37 @@ export default function SearchHistory(props) {
 			.catch(err => {})
 	}, [])
 
+	const clearHistory = () => {
+		setHistory([])
+		deleteHistory()
+	}
+
 	if (!history?.length) return null
 
 	return (
 		<View
-			backgroundColor='accent-100'
-			padding='large'
+			className={`${className || ''}`}
 			{...rest}>
-			<Text
-				fontWeight='bold'
-				fontSize='small'>
-				{t('searchHistory.title', 'Buscas recentes')}
-			</Text>
-			<View
-				marginTop='large'
-				direction='column'
-				gap={8}>
+			<View className={'flex justify-between items-center'}>
+				<Text className='font-bold text-sm'>{t('searchHistory.title')}</Text>
+				<View
+					onClick={clearHistory}
+					className={'text-sm text-gray-600'}>
+					{t('searchHistory.clear')}
+				</View>
+			</View>
+			<View className='mt-4 flex flex-col gap-3'>
 				{history.map(term => (
 					<View
-						display='flex'
-						justifyContent='between'
-						alignItems='center'
+						className='flex items-center justify-between'
 						onClick={() => onSubmit(term)}>
-						<View
-							display='flex'
-							alignItems='center'
-							height='24px'
-							gap={8}>
-							<Image
-								src={iconClock}
-								width={20}
-							/>
-							<Text fontSize='extra-small'>{term}</Text>
+						<View className='flex items-center gap-2'>
+							<Text className='text'>{term}</Text>
 						</View>
-						<Image
-							src={iconLinkGrey}
-							width={12}
-						/>
+						{/*<Image*/}
+						{/*	src={iconLinkGrey}*/}
+						{/*	width={12}*/}
+						{/*/>*/}
 					</View>
 				))}
 			</View>

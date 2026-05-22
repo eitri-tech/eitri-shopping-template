@@ -8,7 +8,21 @@ export default function PaymentMethods(props) {
 
 	const { onSelectPaymentMethod } = props
 
-	const paymentSystemGroups = getPaymentSystem(cart)
+	const filterGiftPaymentOnGiftCard = group => {
+		return (
+			group.groupName === 'giftCardPaymentGroup' &&
+			cart?.items?.some(item => item.productCategoryIds.includes('/4440/'))
+		)
+	}
+
+	const paymentSystemGroups = useMemo(() => {
+		const paymentSystemGroups = getPaymentSystem(cart)
+
+		return paymentSystemGroups?.filter(group => {
+			if (filterGiftPaymentOnGiftCard(group)) return false
+			return true
+		})
+	}, [cart])
 
 	const executeSort = paymentSystemGroups => {
 		const displayOrder = App?.configs?.appConfigs?.checkout?.paymentSystemDisplayOrder

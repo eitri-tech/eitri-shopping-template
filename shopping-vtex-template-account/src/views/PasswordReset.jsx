@@ -4,7 +4,8 @@ import {
 	HeaderText,
 	CustomButton,
 	CustomInput,
-	HeaderReturn
+	HeaderReturn,
+	GenericBox
 } from 'shopping-vtex-template-shared'
 import Alert from '../components/Alert/Alert'
 import { sendPasswordResetCode } from '../services/CustomerService'
@@ -54,31 +55,33 @@ export default function PasswordReset(props) {
 
 			<HeaderContentWrapper className=''>
 				<HeaderReturn />
-				<HeaderText text={t('passwordReset.headerText', 'Senha')} />
+				<HeaderText text={t('passwordReset.headerText')} />
 			</HeaderContentWrapper>
 
-			<View className='p-4 flex flex-col h-full'>
-				<View>
-					<View className='flex flex flex-col gap-2 mb-4'>
-						<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle', 'Digite seu e-mail para recuperar a senha')}</Text>
-						<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery', '* Vamos te mandar uma mensagem com um código para recuperar senha')}</Text>
+			<View className='p-4'>
+				<GenericBox>
+					<View>
+						<View className='flex flex flex-col gap-2 mb-4'>
+							<Text className='w-full font-bold text-xl'>{t('passwordReset.emailRecoveryTitle')}</Text>
+							<Text className='text-sm text-gray-600'>{t('passwordReset.messageRecovery')}</Text>
+						</View>
+
+						<CustomInput
+							inputMode='email'
+							placeholder={t('passwordReset.setEmail')}
+							value={username}
+							onChange={e => setUsername(e.target.value)}
+						/>
 					</View>
 
-					<CustomInput
-						inputMode='email'
-						placeholder={t('passwordReset.setEmail', 'Digite seu e-mail')}
-						value={username}
-						onChange={e => setUsername(e.target.value)}
-					/>
-				</View>
-
-				<View className='mt-4'>
-					<CustomButton
-						label={t('passwordReset.sendButton', 'Enviar código')}
-						onPress={goToPasswordResetCode}
-						disabled={!username || loading}
-					/>
-				</View>
+					<View className='mt-4'>
+						<CustomButton
+							label={t('passwordReset.sendButton')}
+							onPress={goToPasswordResetCode}
+							disabled={!username || loading}
+						/>
+					</View>
+				</GenericBox>
 			</View>
 
 			<Alert
@@ -86,7 +89,7 @@ export default function PasswordReset(props) {
 				show={showErrorAlert}
 				onDismiss={() => setShowErrorAlert(false)}
 				duration={7}
-				message={t('passwordReset.messageError', 'Houve um erro ao enviar o código de recuperação de senha. Tente novamente mais tarde.')}
+				message={t('passwordReset.messageError')}
 			/>
 		</Page>
 	)

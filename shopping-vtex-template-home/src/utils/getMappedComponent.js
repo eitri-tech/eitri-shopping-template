@@ -7,6 +7,10 @@ import CategoryListSwipe from '../components/CmsComponents/CategoryListSwipe/Cat
 import ProductInfiniteScroll from '../components/CmsComponents/ProductInfiniteScroll/ProductInfiniteScroll'
 import BlogPostShelf from '../components/CmsComponents/Blog/BlogPostShelf'
 import HighlightedProductShelf from '../components/CmsComponents/HighlightedProductShelf/HighlightedProductShelf'
+import CategoryListVtex from '../components/CmsComponents/CategoryListVtex/CategoryListVtex'
+import CategoryAccordion from '../components/CmsComponents/CategoryAccordion/CategoryAccordion'
+import RichText from '../components/CmsComponents/RichText/RichText'
+import VtexAdsBanner from '../components/CmsComponents/VtexAdsBanner/VtexAdsBanner'
 
 const componentMap = {
 	MultipleImageBanner: Banner,
@@ -17,28 +21,29 @@ const componentMap = {
 	CategoryListSwipe: CategoryListSwipe,
 	ProductInfiniteScroll: ProductInfiniteScroll,
 	WordPressCardList: BlogPostShelf,
-	HighlightedProductShelf: HighlightedProductShelf
+	HighlightedProductShelf: HighlightedProductShelf,
+	CategoryListVtex: CategoryListVtex,
+	CategoryAccordion: CategoryAccordion,
+	RichText: RichText,
+	VtexAdsBanner: VtexAdsBanner
 }
 
-const shouldReloadOnResume = componentName => {
-	const componentsToReload = ['LastSeenProducts']
-	return componentsToReload.includes(componentName)
-}
-
-export const getMappedComponent = (content, reloadKey) => {
+export const getMappedComponent = (content, reloadKey, rest) => {
 	const Component = componentMap[content.name]
 	if (!Component) {
 		console.error(`Component ${content.name} does not exist in the component map.`)
 		return null
 	}
 
-	const key = content.id + (shouldReloadOnResume(content.name) ? reloadKey : '')
+	const key = content.id
 
 	try {
 		return (
 			<Component
 				key={key}
 				data={content.data}
+				reloadKey={reloadKey}
+				{...rest}
 			/>
 		)
 	} catch (error) {

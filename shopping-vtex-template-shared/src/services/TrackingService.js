@@ -1,438 +1,479 @@
 import Eitri from 'eitri-bifrost'
 
 export default class TrackingService {
-	static EVENTS = {
-		app_error: 'app_resolve', // personalizado
-		add_shipping_info: 'add_shipping_info',
-		add_to_cart: 'add_to_cart',
-		add_to_wishlist: 'add_to_wishlist',
-		begin_checkout: 'begin_checkout',
-		purchase: 'purchase',
-		remove_from_cart: 'remove_from_cart',
-		screen_view: 'screen_view',
-		search: 'search',
-		view_cart: 'view_cart',
-		view_item: 'view_item',
-		view_category: 'view_category', // personalizado para audiência
-		view_item_list: 'view_item_list',
-		view_search_results: 'view_search_results'
+	static _logInTerminal = (...args) => {
+		const TURNED_ON = false
+		if (!TURNED_ON) return
+		console.log('[TRACKING]', ...args)
 	}
 
-	static PARAMS = {
-		app_action: 'app_action', // personalizado
-		category: 'category', // personalizado
-		coupon: 'coupon',
-		currency: 'currency',
-		items: 'items',
-		item_brand: 'item_brand',
-		item_category: 'item_category',
-		item_name: 'item_name',
-		item_variant: 'item_variant',
-		msg_error: 'msg', // personalizado
-		payment_type: 'payment_type',
-		promotion_id: 'promotion_id',
-		promotion_name: 'promotion_name',
-		quantity: 'quantity',
-		remove_from_cart: 'remove_from_cart',
-		results_count: 'results_count',
-		screen_name: 'screen_name',
-		screen_class: 'screen_class',
-		search_term: 'search_term',
-		status: 'status',
-		value: 'value',
-		warning: 'warning'
+	static _resolveCategory = item => {
+		let ids =
+			item.productCategoryIds?.split('/').filter(Boolean) || item.categoriesIds[0]?.split('/').filter(Boolean)
+		let categories = item.productCategories || item.categories[0]?.split('/').filter(Boolean)
+		let result = {}
+
+		ids.forEach((id, index) => {
+			const key = index === 0 ? 'item_category' : `item_category${index + 1}`
+			result[key] = item.productCategories ? categories[id] : categories[index]
+		})
+
+		return result
 	}
 
-	/**
-	 * Envia um evento de tracking utilizando o Eitri.
-	 *
-	 * @async
-	 * @function sendEitriTracking
-	 * @param {string} event - Nome do evento a ser enviado.
-	 * @param {Object} data - Dados adicionais a serem enviados junto ao evento.
-	 * @param {boolean} [logEvent=false] - Se verdadeiro, exibe o evento no console para debug.
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento.
-	 *
-	 * @example
-	 * await TrackingService.sendEitriTracking('add_to_cart', { item_name: 'Camiseta', quantity: 2 });
-	 */
-	static sendEitriTracking = async (event, data, logEvent = false) => {
-		let params = {
-			screen: document.title,
-			...data
-		}
+	static _resolveInsiderProductMetadata = product => {
+		const availableSku = product.items.find(item =>
+			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
+		)
+		const mainSeller = availableSku?.sellers.find(seller => seller.sellerDefault) || availableSku?.sellers[0]
 
-		// TODO: remover quando a 100% dos usuários estiverem na versão >= 12.0.7 do app nativo
-		if (Eitri.exposedApis.appsFlyer && Eitri.exposedApis.appsFlyer.logEvent) {
-			await Eitri.exposedApis.fb.logEvent({ eventName: event, data: params })
-		} else {
-			await Eitri.exposedApis.tracking.logEvent({ eventName: event, data: params })
-		}
-
-		if (logEvent) {
-			console.log('[Analytics.]', JSON.stringify({ eventName: event, data: params }))
+		return {
+			productID: product?.productId,
+			name: product?.productName,
+			taxonomy: product?.categoryTree?.map(i => i.name) || [],
+			imageURL: product?.items?.[0]?.images?.[0]?.imageUrl || '',
+			price: mainSeller?.commertialOffer?.Price || 0,
+			currency: 'BRL'
 		}
 	}
 
-	/**
-	 * Envia um log de erro/crash para o sistema de tracking (ex: Firebase Analytics).
-	 *
-	 * @async
-	 * @function sendEitriCrashLog
-	 * @param {string} event - Nome do evento ou ação onde ocorreu o erro.
-	 * @param {Object} error - Objeto contendo informações do erro ocorrido.
-	 * @returns {Promise<void>} Promessa resolvida após o envio do log de erro.
-	 *
-	 * @example
-	 * await TrackingService.sendEitriCrashLog('login', { message: 'Erro ao autenticar usuário', stack: '...' });
-	 */
-	static sendEitriCrashLog = async (event, error) => {
-		let params = {
-			currentPage: document.title,
-			event,
-			...error
-		}
-
-		if (Eitri.exposedApis.fb && Eitri.exposedApis.fb.logError) {
-			await Eitri.exposedApis.fb.logError({ message: params })
-		} else {
-			console.error('[Analytics] Eitri.exposedApis.fb.logError not available')
-		}
-	}
-
-	/**
-	 * Registra um evento de visualização de tela no sistema de tracking (ex: Firebase Analytics, GA).
-	 *
-	 * @async
-	 * @function screenView
-	 * @param {string} friendlyScreenName - Nome amigável da tela (ex: 'Home', 'Carrinho').
-	 * @param {string} [screenFilename] - Nome do arquivo da tela ou identificador técnico (opcional).
-	 * @param {boolean} [logEvent=false] - Se verdadeiro, exibe o evento no console para debug.
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento de visualização de tela.
-	 *
-	 * @example
-	 * await TrackingService.screenView('Home', 'Home');
-	 * await TrackingService.screenView('Carrinho', 'CartScreen', true);
-	 */
-	static screenView = async (friendlyScreenName, screenFilename, logEvent = false) => {
-		try {
-			const _friendlyScreenName = friendlyScreenName.replace(/ /g, '_').toLowerCase()
-			this.sendEitriTracking(
-				this.EVENTS.screen_view,
-				{
-					[this.PARAMS.screen_name]: _friendlyScreenName,
-					[this.PARAMS.screen_class]: screenFilename || _friendlyScreenName
-				},
-				logEvent
-			)
-		} catch (error) {
-			console.error('Erro ao setar tela atual', error)
-		}
-	}
-
-	/**
-	 * Registra um evento de busca de produtos ou conteúdos no sistema de tracking (ex: Firebase Analytics).
-	 *
-	 * @async
-	 * @function trackingSearch
-	 * @param {string} term - O termo buscado pelo usuário.
-	 * @param {string} [category=''] - A categoria na qual a busca foi realizada (opcional).
-	 * @param {number|string} [totalResults=''] - O total de resultados retornados pela busca (pode ser número ou string, opcional).
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento de busca.
-	 */
-	static search = async (term, category = '', totalResults = '') => {
-		try {
-			this.sendEitriTracking(this.EVENTS.search, {
-				[this.PARAMS.search_term]: term,
-				[this.PARAMS.category]: category,
-				[this.PARAMS.results_count]: totalResults
-			})
-		} catch (error) {
-			console.error('Erro ao setar tela atual', error)
-		}
-	}
-
-	/**
-	 * Registra um erro no sistema de tracking (ex: Firebase Analytics e GA).
-	 *
-	 * @async
-	 * @function trackingError
-	 * @param {Error|string} error - O erro ocorrido. Pode ser um objeto de erro ou uma mensagem string.
-	 * @param {string} [action=''] - A ação que estava sendo executada quando o erro ocorreu. Ex: 'login', 'fetch_data'.
-	 * @param {object} [payload={}] - Parametros enviados na ação que gerou o erro, atenção para não enviar dados sensíveis
-	 * @returns {Promise<void>} - Promessa resolvida após o envio do erro ao sistema de tracking.
-	 */
-	static error = async (error, action = '', payload = {}, logEvent = false) => {
-		try {
-			console.error('Error: ', action, error)
-			this.sendEitriCrashLog(action, error)
-		} catch (error) {
-			console.error('EitriCrashLog error ao enviar log de erro', error)
-		}
-	}
-
-	/**
-	 * Registra um evento (ex: Firebase Analytics e GA).
-	 *
-	 * @async
-	 * @function event
-	 * @param {string} [eventName=''] - Nome do evento, eventos oficial em Tracking.EVENTS.
-	 * @param {object} [data={}] - Parametros enviados na ação que gerou o evento, parametro oficial em Tracking.PARAMS.
-	 * @returns {Promise<void>} - Promessa resolvida após o envio do erro ao sistema de tracking.
-	 */
-	static event = async (eventName, data, logEvent = false) => {
-		try {
-			this.sendEitriTracking(eventName, data, logEvent)
-		} catch (error) {
-			console.error('Erro ao enviar log de evento', error)
-		}
-	}
-
-	/**
-	 * Registra um evento de visualização de produto no sistema de tracking (ex: Firebase Analytics, GA).
-	 *
-	 * @async
-	 * @function product
-	 * @param {Object} product - Objeto do produto a ser registrado no evento.
-	 * @param {string} [currency='BRL'] - Código da moeda utilizada (padrão: 'BRL').
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento de visualização de produto.
-	 *
-	 * @example
-	 * await TrackingService.product(produto);
-	 * await TrackingService.product(produto, 'USD');
-	 */
-	static product = async (product, currency = 'BRL') => {
-		try {
-			const items = this.mountProductItem(product)
-
-			try {
-				this.sendEitriTracking(this.EVENTS.view_item, {
-					[this.PARAMS.currency]: currency,
-					[this.PARAMS.value]: items[0]?.price,
-					[this.PARAMS.items]: items
-				})
-			} catch (error) {
-				console.error('Erro ao enviar log de produto', error)
+	static _resolveGAProductMetadata = product => {
+		const categories = product?.categoryTree?.reduce((acc, curr, index) => {
+			if (index === 0) {
+				acc[`item_category`] = curr.name
+			} else {
+				acc[`item_category${index + 1}`] = curr.name
 			}
+			return acc
+		}, {})
+
+		const availableSku = product.items.find(item =>
+			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
+		)
+		const mainSeller = availableSku?.sellers.find(seller => seller.sellerDefault) || availableSku?.sellers[0]
+
+		return {
+			item_id: product.productId,
+			item_name: product.productName,
+			item_brand: product.brand || '',
+			...categories,
+			price: mainSeller?.commertialOffer?.Price
+		}
+	}
+
+	static _resolveGACartItemMetadata = item => {
+		const categories = Object.values(item?.productCategories)?.reduce((acc, curr, index) => {
+			if (index === 0) {
+				acc[`item_category`] = curr
+			} else {
+				acc[`item_category${index + 1}`] = curr
+			}
+			return acc
+		}, {})
+
+		return {
+			item_id: item.productId,
+			item_name: item.name,
+			item_brand: item.additionalInfo.brandName || '',
+			...categories,
+			price: item?.priceDefinition?.calculatedSellingPrice / 100,
+			quantity: item.quantity
+		}
+	}
+
+	static sendScreenView = async (friendlyScreenName, screenFilename) => {
+		Eitri.exposedApis.fb.currentScreen({ screen: friendlyScreenName, screenClass: screenFilename })
+	}
+
+	static insiderVisitHomepage = async () => {
+		Eitri.exposedApis.insider.visitHomepage()
+	}
+
+	static sendRecommendedGaEvent = async (eventName, data = {}) => {
+		await Eitri.exposedApis.fb.logEvent({ eventName, data })
+		this._logInTerminal('GA', eventName, data)
+	}
+
+	/**
+	 * Registra quando um anúncio é exibido para o usuário.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#ad_impression
+	 */
+	static adImpressionEvent = async data => TrackingService.sendRecommendedGaEvent('ad_impression', data)
+
+	/**
+	 * Registra quando o usuário envia dados de pagamento no checkout.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_payment_info
+	 */
+	static addPaymentInfoEvent = async (cart, paymentType) => {
+		try {
+			if (!paymentType) {
+				const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
+				paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
+			}
+
+			// evento enviado automaticamente pelo Vtex service se autoTriggerGAEvents() for true
+			const totalizer = cart?.totalizers?.find(i => i.id === 'Items')
+			const value = totalizer?.value ? totalizer.value / 100 : cart.value ? cart.value / 100 : ''
+
+			TrackingService.sendRecommendedGaEvent('add_payment_info', {
+				currency: 'BRL',
+				payment_type: paymentType || '',
+				value: value,
+				items: cart.items.map(item => ({
+					item_id: item.productId,
+					item_name: item.name || item.productName || item.nameComplete,
+					price: item.price ? item.price / 100 : ''
+				}))
+			})
+
+			// TrackingService.inngageEvent('add_payment_info', {
+			// 	currency: 'BRL',
+			// 	payment_type: paymentType || ''
+			// })
+		} catch (e) {
+			console.log('Error on trackAddPaymentInfo', e)
+		}
+	}
+
+	/**
+	 * Registra quando o usuário envia dados de frete no checkout.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_shipping_info
+	 */
+	static addShippingInfoEvent = async cart => {
+		try {
+			const items = cart.items.map(item => {
+				const categories = TrackingService._resolveCategory(item)
+
+				return {
+					item_id: item.id,
+					item_name: item.name,
+					item_brand: item.additionalInfo?.brandName,
+					...categories,
+					price: item.sellingPrice / 100,
+					quantity: item.quantity
+				}
+			})
+
+			let shippingSelected = cart?.shippingData?.logisticsInfo?.map(item => item.selectedSla)
+			const uniqueSla = [...new Set(shippingSelected)]
+
+			const totalItemPrice = cart.totalizers.find(item => item.id === 'Items')?.value / 100
+
+			const params = {
+				currency: cart?.storePreferencesData?.currencyCode || 'BRL',
+				value: totalItemPrice,
+				shipping_tier: uniqueSla.join(';'),
+				items: items
+			}
+			TrackingService.sendRecommendedGaEvent('add_shipping_info', params)
+		} catch (error) {
+			console.error('[SHARED] Error on addShippingInfo', error)
+		}
+	}
+
+	/**
+	 * Registra quando um item é adicionado ao carrinho.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_to_cart
+	 */
+	static addToCartEvent = async product => {
+		// GA
+		try {
+			const item = this._resolveGAProductMetadata(product)
+
+			const params = {
+				currency: 'BRL',
+				value: item.price,
+				items: [item]
+			}
+			TrackingService.sendRecommendedGaEvent('add_to_cart', params)
+		} catch (e) {
+			console.error('Error on analytics addItemToCart', e)
+		}
+
+		// Insider
+		try {
+			const productMetadata = this._resolveInsiderProductMetadata(product)
+			const payload = {
+				product: productMetadata
+			}
+			this._logInTerminal('insider', 'itemAddedToCart', payload)
+			Eitri.exposedApis.insider.itemAddedToCart(payload)
+		} catch (error) {
+			console.error(error, 'insider.addItemToCart')
+		}
+	}
+
+	/**
+	 * Registra quando um item é adicionado à lista de desejos.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_to_wishlist
+	 */
+	static addToWishlistEvent = async data => TrackingService.sendRecommendedGaEvent('add_to_wishlist', data)
+
+	/**
+	 * Registra quando o usuário inicia o checkout.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#begin_checkout
+	 */
+	static beginCheckoutEvent = async cart => {
+		try {
+			const totalizer = cart?.totalizers?.find(i => i.id === 'Items')
+			const value = totalizer?.value ? totalizer.value / 100 : cart.value ? cart.value / 100 : ''
+
+			TrackingService.sendRecommendedGaEvent('begin_checkout', {
+				currency: 'BRL',
+				value: value,
+				coupon: cart.marketingData?.coupon || '',
+				items: cart.items.map(item => this._resolveGACartItemMetadata(item))
+			})
+		} catch (e) {
+			console.log('Error on trackBeginCheckout', e)
+		}
+	}
+
+	/**
+	 * Registra quando o usuário faz login.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#login
+	 */
+	static loginEvent = async method => {
+		// GA
+		TrackingService.sendRecommendedGaEvent('login', { method })
+
+		// Insider
+		Eitri.exposedApis.insider.signUpConfirmation()
+	}
+
+	/**
+	 * Registra uma compra concluída.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#purchase
+	 */
+	static purchaseEvent = async (cart, orderId) => {
+		// GA
+		try {
+			const items = cart.items.map(item => {
+				const categories = TrackingService._resolveCategory(item)
+
+				return {
+					item_id: item.id,
+					item_name: item.name,
+					item_brand: item.additionalInfo?.brandName,
+					...categories,
+					price: item.sellingPrice / 100,
+					quantity: item.quantity
+				}
+			})
+
+			// const totalItemPrice = cart.totalizers.find(item => item.id === 'Items')?.value / 100
+			const shippingPrice = cart.totalizers.find(item => item.id === 'Shipping')?.value / 100
+
+			const coupon = cart?.marketingData?.coupon || undefined
+
+			const params = {
+				currency: 'BRL',
+				value: cart?.value && cart.value > 0 ? cart.value / 100 : 0,
+				transaction_id: orderId,
+				shipping: shippingPrice,
+				items: items,
+				...(coupon && { coupon })
+			}
+			TrackingService._logInTerminal('ga', 'purchase', params)
+			TrackingService.sendRecommendedGaEvent('purchase', params)
+		} catch (error) {
+			console.error('Erro ao montar log de compra', error)
+		}
+
+		// Insider
+		try {
+			for (const item of cart.items) {
+				try {
+					const insiderPayload = {
+						saleID: cart?.orderFormId,
+						product: {
+							productID: `${item?.productId || ''}`,
+							name: item?.name || '',
+							taxonomy: Object.values(item.productCategories),
+							imageURL: item?.imageUrl || '',
+							price: item?.price || 0,
+							currency: 'BRL'
+						}
+					}
+					TrackingService._logInTerminal('insider', 'itemPurchased', insiderPayload)
+					Eitri.exposedApis.insider.itemPurchased(insiderPayload)
+				} catch (e) {
+					console.error('insider.purchaseItem', e)
+				}
+			}
+		} catch (e) {
+			console.error('insider.purchase', e)
+		}
+	}
+
+	/**
+	 * Registra quando um item é removido do carrinho.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#remove_from_cart
+	 */
+	static removeFromCartEvent = async (cart, index) => {
+		const itemRemoved = cart.items[index]
+
+		try {
+			const itemRemoved = cart.items[index]
+			const item = this._resolveGACartItemMetadata(itemRemoved)
+
+			const params = {
+				currency: 'BRL',
+				value: item.price,
+				items: [item]
+			}
+
+			TrackingService.sendRecommendedGaEvent('remove_from_cart', params)
+		} catch (e) {
+			console.error('Error on analytics removeItemFromCart', e)
+		}
+
+		// Insider
+		try {
+			const payload = {
+				productID: itemRemoved?.productId
+			}
+			this._logInTerminal('insider', 'itemAddedToCart', payload)
+			Eitri.exposedApis.insider.itemRemovedFromCart(payload)
+		} catch (error) {
+			console.error(error, 'insider.itemRemovedFromCart')
+		}
+	}
+
+	/**
+	 * Registra uma busca realizada pelo usuário.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#search
+	 */
+	static searchEvent = async term => {
+		TrackingService.sendRecommendedGaEvent('search', {
+			search_term: term
+		})
+	}
+
+	/**
+	 * Registra quando o usuário seleciona um conteúdo.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#select_content
+	 */
+	static selectContentEvent = async data => TrackingService.sendRecommendedGaEvent('select_content', data)
+
+	/**
+	 * Registra quando o usuário seleciona um item.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#select_item
+	 */
+	static selectItemEvent = async data => TrackingService.sendRecommendedGaEvent('select_item', data)
+
+	/**
+	 * Registra quando o usuário seleciona uma promoção.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#select_promotion
+	 */
+	static selectPromotionEvent = async data => {
+		try {
+			TrackingService.sendRecommendedGaEvent('select_promotion', data)
+		} catch (e) {}
+	}
+
+	/**
+	 * Registra quando o usuário compartilha conteúdo.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#share
+	 */
+	static shareEvent = async itemId => {
+		TrackingService.sendRecommendedGaEvent('share', {
+			item_id: itemId
+		})
+	}
+
+	/**
+	 * Registra quando o usuário cria conta (signup).
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#sign_up
+	 */
+	static signUpEvent = async data => TrackingService.sendRecommendedGaEvent('sign_up', data)
+
+	/**
+	 * Registra visualização do carrinho.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#view_cart
+	 */
+	static viewCartEvent = async cart => {
+		// GA
+		const items = cart.items.map(item => this._resolveGACartItemMetadata(item))
+		const totalizer = cart?.totalizers?.find(i => i.id === 'Items')
+		const value = totalizer?.value ? totalizer.value / 100 : cart.value ? cart.value / 100 : ''
+
+		const payload = {
+			currency: 'BRL',
+			value: value,
+			items: items
+		}
+		this.sendRecommendedGaEvent('view_cart', payload)
+
+		// Insider
+		try {
+			const insiderPayload = []
+			for (const item of cart.items) {
+				insiderPayload.push({
+					productID: item.productId,
+					name: item.name,
+					taxonomy: Object.values(item.productCategories),
+					imageURL: item.imageUrl,
+					price: Number(item.price) / 100,
+					quantity: item.quantity,
+					currency: 'BRL'
+				})
+			}
+			this._logInTerminal('insider', 'visitCartPage', { products: insiderPayload })
+			Eitri.exposedApis.insider.visitCartPage({
+				products: insiderPayload
+			})
+		} catch (e) {
+			console.error('insider.visitCartPage', e)
+		}
+	}
+
+	/**
+	 * Registra visualização de item/produto.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#view_item
+	 */
+	static viewItemEvent = async product => {
+		// GA
+		try {
+			const item = this._resolveGAProductMetadata(product)
+			const data = {
+				currency: 'BRL',
+				value: item?.price,
+				items: [item]
+			}
+			this.sendRecommendedGaEvent('view_item', data)
 		} catch (error) {
 			console.error('Erro ao montar log de produto', error)
 		}
-	}
 
-	/**
-	 * Monta um array de itens de produto no formato esperado para tracking de eventos (ex: add_to_cart, view_item).
-	 *
-	 * @param {Object} product - Objeto do produto principal ou item do produto.
-	 * @param {number} [quantity] - Quantidade do produto (opcional).
-	 * @param {string} [itemListId] - ID da lista de itens (opcional, ex: categoria, shelf, etc).
-	 * @param {string} [itemListName] - Nome da lista de itens (opcional, ex: categoria, shelf, etc).
-	 * @returns {Array<Object>} Array contendo um objeto com os dados do item formatados para tracking.
-	 *
-	 * @example
-	 * const items = TrackingService.mountProductItem(produto, 2, 'shelf-1', 'Mais Vendidos');
-	 */
-	static mountProductItem = (product, quantity, itemListId, itemListName) => {
-		const _item = Array.isArray(product?.items) ? product?.items[0] : product
-
-		const _categories = product?.categories?.length > 0 ? product.categories[0] : ''
-		const categories = _categories
-			?.split('/')
-			?.filter(Boolean)
-			?.reduce((acc, curr, index) => {
-				if (index === 0) {
-					acc[`item_category`] = curr
-				} else {
-					acc[`item_category${index + 1}`] = curr
-				}
-				return acc
-			}, {})
-
-		let price = _item?.price || 0
-		if (Array.isArray(_item?.sellers) && _item?.sellers[0]?.Price) {
-			price = _item.sellers[0].Price
-		} else if (Array.isArray(_item?.sellers) && _item?.sellers[0]?.commertialOffer?.Price) {
-			price = _item.sellers[0].commertialOffer.Price
-		}
-
-		const variant = _item?.variations?.map(i => i.values?.join(','))?.join('-')
-
-		const items = [
-			{
-				item_id: _item?.itemId || product.productId || '',
-				item_name: _item?.nameComplete || _item?.name || product.productName || '',
-				item_brand: product.brand || '',
-				item_variant: variant || '',
-				...categories,
-				price: quantity ? price * quantity : price,
-				...(quantity && { quantity }),
-				...(itemListId && { item_list_id: itemListId }),
-				...(itemListName && { item_list_name: itemListName })
-			}
-		]
-
-		return items
-	}
-
-	/**
-	 * Registra um evento de adição de produto ao carrinho no sistema de tracking (ex: Firebase Analytics, GA).
-	 *
-	 * @function addItemToCart
-	 * @param {Object} product - Objeto do produto a ser adicionado ao carrinho.
-	 * @param {number} [quantity=1] - Quantidade do produto adicionada ao carrinho (padrão: 1).
-	 * @param {string} [currency='BRL'] - Código da moeda utilizada (padrão: 'BRL').
-	 * @returns {void}
-	 *
-	 * @example
-	 * TrackingService.addItemToCart(produto, 2);
-	 * TrackingService.addItemToCart(produto, 1, 'USD');
-	 */
-	static addItemToCart = (product, quantity = 1, currency = 'BRL') => {
+		// Insider
 		try {
-			const items = this.mountProductItem(product, quantity)
-
-			try {
-				this.sendEitriTracking(this.EVENTS.add_to_cart, {
-					[this.PARAMS.currency]: currency,
-					[this.PARAMS.value]: items[0]?.price,
-					[this.PARAMS.items]: items
-				})
-			} catch (error) {
-				console.error('Erro ao enviar log de adicionar produto', error)
+			const productMetadata = this._resolveInsiderProductMetadata(product)
+			const payload = {
+				product: productMetadata
 			}
-		} catch (error) {
-			console.error('Erro ao montar log de adicionar produto', error)
+			this._logInTerminal('insider', 'visitProductPage', payload)
+			Eitri.exposedApis.insider.visitProductDetailPage(payload)
+		} catch (e) {
+			console.error('insiderVisitProductPage', e)
 		}
 	}
 
 	/**
-	 * Registra um evento de remoção de produto do carrinho no sistema de tracking (ex: Firebase Analytics, GA).
-	 *
-	 * @function removeItemFromCart
-	 * @param {Object} product - Objeto do produto a ser removido do carrinho.
-	 * @param {number} [quantity=1] - Quantidade do produto removida do carrinho (padrão: 1).
-	 * @param {string} [currency='BRL'] - Código da moeda utilizada (padrão: 'BRL').
-	 * @returns {void}
-	 *
-	 * @example
-	 * TrackingService.removeItemFromCart(produto, 1);
-	 * TrackingService.removeItemFromCart(produto, 2, 'USD');
+	 * Registra visualização de lista de itens.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#view_item_list
 	 */
-	static removeItemFromCart = (product, quantity = 1, currency = 'BRL') => {
-		try {
-			const items = this.mountProductItem(product, quantity)
-
-			try {
-				this.sendEitriTracking(this.EVENTS.remove_from_cart, {
-					[this.PARAMS.currency]: currency,
-					[this.PARAMS.value]: items[0]?.price,
-					[this.PARAMS.items]: items
-				})
-			} catch (error) {
-				console.error('Erro ao enviar log de remover produto', error)
-			}
-		} catch (error) {
-			console.error('Erro ao montar log de remover produto', error)
-		}
-	}
+	static viewItemListEvent = async data => TrackingService.sendRecommendedGaEvent('view_item_list', data)
 
 	/**
-	 * Registra um evento de visualização do carrinho no sistema de tracking (ex: Firebase Analytics, GA).
-	 *
-	 * @function viewCart
-	 * @param {Object} cart - Objeto do carrinho contendo os itens e valores.
-	 * @param {string} [currency='BRL'] - Código da moeda utilizada (padrão: 'BRL').
-	 * @returns {void}
-	 *
-	 * @example
-	 * TrackingService.viewCart(carrinho);
-	 * TrackingService.viewCart(carrinho, 'USD');
+	 * Registra visualização de promoção.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#view_promotion
 	 */
-	static viewCart = (cart, currency = 'BRL') => {
-		try {
-			const items = cart?.items.map(item => {
-				item.price = (item.price / 100).toFixed(2)
-				const _item = this.mountProductItem(item, item?.quantity || 1)
-				return _item
-			})
-
-			const price = cart?.value ? (cart.value / 100).toFixed(2) : null
-			try {
-				this.sendEitriTracking(this.EVENTS.view_cart, {
-					[this.PARAMS.currency]: currency,
-					[this.PARAMS.value]: price,
-					[this.PARAMS.items]: items
-				})
-			} catch (error) {
-				console.error('Erro ao enviar log de visualizar carrinho', error)
-			}
-		} catch (error) {
-			console.error('Erro ao montar log de visualizar carrinho', error)
-		}
-	}
+	static viewPromotionEvent = async data => TrackingService.sendRecommendedGaEvent('view_promotion', data)
 
 	/**
-	 * Registra um evento customizado no sistema Inngage, caso disponível e fora do ambiente de desenvolvimento.
-	 *
-	 * @async
-	 * @function inngageEvent
-	 * @param {string} eventName - Nome do evento a ser registrado.
-	 * @param {Object} data - Dados adicionais a serem enviados junto ao evento.
-	 * @param {boolean} [logEvent=false] - Se verdadeiro, exibe o evento no console para debug.
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento ao Inngage.
-	 *
-	 * @example
-	 * await TrackingService.inngageEvent('compra_realizada', { valor: 100 });
-	 * await TrackingService.inngageEvent('login', { userId: 123 }, true);
+	 * Registra visualização de resultados de busca.
+	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#view_search_results
 	 */
-	static inngageEvent = async (eventName, data, logEvent = false) => {
-		try {
-			if (Eitri.exposedApis.inngage && Eitri.exposedApis.inngage.logEvent) {
-				const env = await Eitri.environment.getName()
-				if (env !== 'dev') {
-					await Eitri.exposedApis.inngage.logEvent({ eventName, data })
-				}
-
-				if (logEvent) {
-					console.log('[Inngage]', JSON.stringify({ eventName, data }))
-				}
-			} else {
-				console.error('[Inngage] Eitri.exposedApis.inngage.logEvent not available')
-			}
-		} catch (error) {
-			console.error('[Inngage] Erro ao enviar evento', error)
-		}
-	}
-
-	/**
-	 * Registra um evento customizado no sistema AppsFlyer, caso disponível e fora do ambiente de desenvolvimento.
-	 *
-	 * @async
-	 * @function appsFlyerEvent
-	 * @param {string} eventName - Nome do evento a ser registrado.
-	 * @param {Object} data - Dados adicionais a serem enviados junto ao evento.
-	 * @param {boolean} [logEvent=false] - Se verdadeiro, exibe o evento no console para debug.
-	 * @returns {Promise<void>} Promessa resolvida após o envio do evento ao AppsFlyer.
-	 *
-	 * @example
-	 * await TrackingService.appsFlyerEvent('compra_realizada', { valor: 100 });
-	 * await TrackingService.appsFlyerEvent('login', { userId: 123 }, true);
-	 */
-	static appsFlyerEvent = async (eventName, data, logEvent = false) => {
-		try {
-			if (Eitri.exposedApis.appsFlyer && Eitri.exposedApis.appsFlyer.logEvent) {
-				const env = await Eitri.environment.getName()
-				if (env !== 'dev') {
-					await Eitri.exposedApis.appsFlyer.logEvent({ eventName, data })
-				}
-
-				if (logEvent) {
-					console.log('[AppsFlyer]', JSON.stringify({ eventName, data }))
-				}
-			} else {
-				console.error('[AppsFlyer] Eitri.exposedApis.appsFlyer.logEvent not available')
-			}
-		} catch (error) {
-			console.error('[AppsFlyer] Erro ao enviar evento', error)
-		}
-	}
+	static viewSearchResultsEvent = async data => TrackingService.sendRecommendedGaEvent('view_search_results', data)
 }

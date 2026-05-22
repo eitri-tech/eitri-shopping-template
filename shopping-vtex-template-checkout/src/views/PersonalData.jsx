@@ -2,15 +2,15 @@ import Eitri from 'eitri-bifrost'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { cartHasCustomerData, registerToNotify } from '../services/cartService'
 import { useTranslation } from 'eitri-i18n'
-import { trackScreenView } from '../services/Tracking'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import {
 	HeaderContentWrapper,
 	HeaderReturn,
 	HeaderText,
 	CustomButton,
 	BottomInset,
-	CustomInput
+	CustomInput,
+	TrackingService,
+	Loading
 } from 'shopping-vtex-template-shared'
 import { verifySocialNumber } from '../utils/verifySocialNumber'
 import { useEffect, useState } from 'react'
@@ -49,8 +49,8 @@ export default function PersonalData() {
 			id: 'firstName',
 			label: 'firstName',
 			type: 'string',
-			title: t('personalData.frmName', 'Nome'),
-			placeholder: t('personalData.placeholderName', 'Digite seu nome'),
+			title: t('personalData.frmName'),
+			placeholder: t('personalData.placeholderName'),
 			inputMode: 'string',
 			requeriedForPersonal: true,
 			requeriedForCorporate: true,
@@ -60,8 +60,8 @@ export default function PersonalData() {
 		{
 			label: 'lastName',
 			type: 'string',
-			title: t('personalData.frmLastName', 'Sobrenome'),
-			placeholder: t('personalData.placeholderLastName', 'Digite seu sobrenome'),
+			title: t('personalData.frmLastName'),
+			placeholder: t('personalData.placeholderLastName'),
 			inputMode: 'string',
 			requeriedForPersonal: true,
 			requeriedForCorporate: true,
@@ -71,8 +71,8 @@ export default function PersonalData() {
 		{
 			label: 'document',
 			type: 'string',
-			title: t('personalData.frmTaxpayerId', 'CPF'),
-			placeholder: t('personalData.placeholderTaxpayerId', 'Digite seu CPF'),
+			title: t('personalData.frmTaxpayerId'),
+			placeholder: t('personalData.placeholderTaxpayerId'),
 			inputMode: 'numeric',
 			mask: '999.999.999-99',
 			requeriedForPersonal: true,
@@ -83,8 +83,8 @@ export default function PersonalData() {
 		{
 			label: 'phone',
 			type: 'string',
-			title: t('personalData.frmPhone', 'Telefone'),
-			placeholder: t('personalData.placeholderPhone', 'Digite seu telefone'),
+			title: t('personalData.frmPhone'),
+			placeholder: t('personalData.placeholderPhone'),
 			inputMode: 'tel',
 			mask: '(99) 99999-9999',
 			requeriedForPersonal: true,
@@ -95,8 +95,8 @@ export default function PersonalData() {
 		{
 			label: 'corporateName',
 			type: 'string',
-			title: t('personalData.frmCorporateName', 'Razão Social'),
-			placeholder: t('personalData.placeholderCorporateName', 'Digite sua razão social'),
+			title: t('personalData.frmCorporateName'),
+			placeholder: t('personalData.placeholderCorporateName'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -107,8 +107,8 @@ export default function PersonalData() {
 		{
 			label: 'tradeName',
 			type: 'string',
-			title: t('personalData.frmFantasyName', 'Nome Fantasia'),
-			placeholder: t('personalData.placeholderFantasyName', 'Digite seu nome fantasia'),
+			title: t('personalData.frmFantasyName'),
+			placeholder: t('personalData.placeholderFantasyName'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -119,8 +119,8 @@ export default function PersonalData() {
 		{
 			label: 'corporateDocument',
 			type: 'string',
-			title: t('personalData.frmCorporateDocument', 'CNPJ'),
-			placeholder: t('personalData.placeholderCorporateDocument', 'Digite seu CNPJ'),
+			title: t('personalData.frmCorporateDocument'),
+			placeholder: t('personalData.placeholderCorporateDocument'),
 			inputMode: 'numeric',
 			corporateField: true,
 			mask: '99.999.999/9999-99',
@@ -132,8 +132,8 @@ export default function PersonalData() {
 		{
 			label: 'corporatePhone',
 			type: 'string',
-			title: t('personalData.frmCorporatePhone', 'Telefone'),
-			placeholder: t('personalData.placeholderCorporatePhone', 'Digite seu telefone'),
+			title: t('personalData.frmCorporatePhone'),
+			placeholder: t('personalData.placeholderCorporatePhone'),
 			inputMode: 'tel',
 			mask: '(99) 99999-9999',
 			corporateField: true,
@@ -145,8 +145,8 @@ export default function PersonalData() {
 		{
 			label: 'stateInscription',
 			type: 'string',
-			title: t('personalData.frmStateInscription', 'Inscrição Estadual'),
-			placeholder: t('personalData.placeholderStateInscription', 'Digite sua inscrição estadual'),
+			title: t('personalData.frmStateInscription'),
+			placeholder: t('personalData.placeholderStateInscription'),
 			inputMode: 'string',
 			corporateField: true,
 			requeriedForPersonal: true,
@@ -157,7 +157,7 @@ export default function PersonalData() {
 	])
 
 	useEffect(() => {
-		trackScreenView(`checkout_dados_cliente`, 'checkout.personalData')
+		TrackingService.sendScreenView(`checkout_dados_cliente`, 'PersonalData')
 	}, [])
 
 	useEffect(() => {
@@ -195,13 +195,13 @@ export default function PersonalData() {
 			(!isLegalPerson && inputOption.requeriedForPersonal && !inputValue)
 
 		if (isRequiredError) {
-			return updateOption({ error: t('personalData.requiredField', 'Este campo é obrigatório') })
+			return updateOption({ error: 'Este campo é obrigatório' })
 		}
 
 		if (inputOption.label === 'document') {
 			const validSocialNumber = verifySocialNumber(inputValue.replace(/\D/g, ''))
 			if (!validSocialNumber) {
-				return updateOption({ error: t('personalData.invalidDocument', 'Documento inválido') })
+				return updateOption({ error: 'Documento inválido' })
 			}
 		}
 
@@ -278,22 +278,18 @@ export default function PersonalData() {
 	})()
 
 	return (
-		<Page title={t('checkoutPages.personalData', 'Checkout - Dados Pessoais')}>
+		<Page title='Checkout - Dados Pessoais'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('personalData.title', 'Seus dados pessoais')} />
 			</HeaderContentWrapper>
 
-			{isLoading && <LoadingComponent fullScreen />}
+			{isLoading && <Loading fullScreen />}
 
 			<View className='m-4 p-4 flex flex-col justify-between flex-grow bg-white rounded shadow-sm border border-gray-300'>
 				<View className='mb-2'>
-					<Text className='block text-lg font-bold text-center'>
-						{t('personalData.enterEmailTitle', 'Informe seu e-mail para continuar')}
-					</Text>
-					<Text className='block text-center'>
-						{t('personalData.enterEmailSubtitle', 'Vamos verificar se você já fez alguma compra com a gente')}
-					</Text>
+					<Text className='block text-lg font-bold text-center'>Informe seu e-mail para continuar</Text>
+					<Text className='block text-center'>Vamos verificar se você já fez alguma compra com a gente</Text>
 				</View>
 
 				<View className='flex flex-col gap-2'>
@@ -301,19 +297,19 @@ export default function PersonalData() {
 						<View className='w-3/4'>
 							<CustomInput
 								autoFocus={true}
-								label={t('personalData.frmEmail', 'Email')}
+								label={t('personalData.frmEmail')}
 								value={personalData['email'] || ''}
 								onChange={e => {
 									handleFormDataChange('email', e.target?.value?.toLowerCase())
 								}}
-								placeholder={t('personalData.placeholderEmail', 'Digite seu email')}
+								placeholder={t('personalData.placeholderEmail')}
 								inputMode={'email'}
 							/>
 						</View>
 						<View className='w-1/4'>
 							<CustomButton
 								disabled={!isValidEmail}
-								label={t('personalData.ok', 'OK')}
+								label='OK'
 								onPress={findUserByEmail}
 							/>
 						</View>
@@ -346,7 +342,7 @@ export default function PersonalData() {
 								className='mt-3'
 								onClick={handleLegalPerson}>
 								<Text className='text-primary font-bold'>
-									{isLegalPerson ? t('personalData.labelPerson', 'Sou pessoa física') : t('personalData.labelCorporate', 'Sou pessoa jurídica')}
+									{isLegalPerson ? t('personalData.labelPerson') : t('personalData.labelCorporate')}
 								</Text>
 							</View>
 						</>
@@ -360,7 +356,7 @@ export default function PersonalData() {
 					offSetHeight={77}>
 					<CustomButton
 						disabled={!handleDataFilled()}
-						label={t('personalData.labelButton', 'Continuar')}
+						label={t('personalData.labelButton')}
 						onPress={setUserData}
 					/>
 				</FixedBottom>

@@ -1,17 +1,20 @@
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackScreenView } from '../services/Tracking'
 import { Page, Text, View } from 'eitri-luminus'
 import { useEffect, useState } from 'react'
 import { navigate } from '../services/navigationService'
-import { cartShippingResolver } from 'shopping-vtex-template-shared'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
+import { shippingResolver } from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	BottomInset,
+	TrackingService,
+	Loading
+} from 'shopping-vtex-template-shared'
 
 export default function PickupSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
-	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [seeMore, setSeeMore] = useState(false)
@@ -20,7 +23,7 @@ export default function PickupSelector(props) {
 
 	useEffect(() => {
 		if (cart?.shippingData?.availableAddresses?.length > 0) {
-			trackScreenView(PAGE)
+			TrackingService.sendScreenView('seletor_retirada', 'PickupSelector')
 		} else {
 			handleAddNewAddress()
 		}
@@ -35,8 +38,8 @@ export default function PickupSelector(props) {
 			setIsLoading(true)
 			const slas = freightOption.slas.map(sla => ({
 				itemIndex: sla.itemIndex,
-				selectedSla: sla.id,
-				selectedDeliveryChannel: sla.isPickupInPoint ? 'pickup-in-point' : 'delivery'
+				selectedSla: sla.selectedSla,
+				selectedDeliveryChannel: sla.selectedDeliveryChannel ? 'pickup-in-point' : 'delivery'
 			}))
 
 			const payload = {
@@ -53,17 +56,17 @@ export default function PickupSelector(props) {
 		}
 	}
 
-	const shippingOptions = cartShippingResolver(cart)
+	const shippingOptions = shippingResolver(cart)
 	const pickUpOptions = shippingOptions?.options?.filter(opt => opt.isPickupInPoint)
 
 	return (
 		<Page title={PAGE}>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('pickupSelector.header', 'Retirada')} />
+				<HeaderText text={'Retirada'} />
 			</HeaderContentWrapper>
 
-			<LoadingComponent
+			<Loading
 				fullScreen
 				isLoading={isLoading}
 			/>
@@ -71,35 +74,33 @@ export default function PickupSelector(props) {
 			<View className='flex-1 flex flex-col p-4'>
 				<View>
 					<Text className='text-lg font-bold text-base-content'>
-						{t('pickupSelector.title', 'Em qual loja deseja retirar seu produto?')}
+						{'Em qual loja deseja retirar seu produto?'}
 					</Text>
 				</View>
 
-				{pickUpOptions?.slice(0, seeMore ? Infinity : 3).map(option => (
-					<CardSelector
-						mainTitle={option.label}
-						mainClickHandler={() => onSelectFreightOption(option)}
-						secondaryActionTitle={option.shippingEstimate}>
-						<Text className='text text-base-content/70'>{`${option.address.street}, ${option.address.number} ${option.address.complement}`}</Text>
-						<Text className='text text-base-content/70'>{`${option.address.neighborhood} - ${option.address.city} - ${option.address.state}`}</Text>
-						<Text className='text text-base-content/70'>
-							{`${t('common.zipCode', 'CEP')}: ${option.address.postalCode}`}
-						</Text>
-						<Text
-							className={`text text-base-content/70 font-bold ${option.price === 'Grátis' ? 'text-green-600' : ''}`}>
-							{option.price}
-						</Text>
-					</CardSelector>
-				))}
+				{pickUpOptions?.slice(0, seeMore ? Infinity : 3).map(option => {
+					const address = option.pickupStoreInfo.address
+
+					return (
+						<CardSelector
+							mainTitle={option.pickupStoreInfo?.friendlyName}
+							mainClickHandler={() => onSelectFreightOption(option)}
+							secondaryActionTitle={option.formattedShippingEstimate}>
+							<Text className='text text-base-content/70'>{`${address.street}, ${address.number} ${address.complement}`}</Text>
+							<Text className='text text-base-content/70'>{`${address.neighborhood} - ${address.city} - ${address.state}`}</Text>
+							<Text className='text text-base-content/70'>{`CEP: ${address.postalCode}`}</Text>
+							<Text
+								className={`text text-base-content/70 font-bold ${option.price === 0 ? 'text-green-600' : ''}`}>
+								{option.formatedPrice}
+							</Text>
+						</CardSelector>
+					)
+				})}
 
 				<View
 					onClick={() => setSeeMore(!seeMore)}
 					className='flex items-center justify-center mt-4 text-primary font-bold'>
-					<Text>
-						{seeMore
-							? t('pickupSelector.seeLess', 'Ver menos')
-							: t('pickupSelector.seeMore', 'Ver mais')}
-					</Text>
+					<Text>{seeMore ? 'Ver menos' : 'Ver mais'}</Text>
 				</View>
 			</View>
 

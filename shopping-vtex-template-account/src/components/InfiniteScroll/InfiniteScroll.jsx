@@ -1,13 +1,13 @@
 import { View } from 'eitri-luminus'
 
 export default function InfiniteScroll(props) {
-	const { children, onScrollEnd, ...rest } = props
+	const { children, onScrollEnd, className } = props
 
 	const [scrollEnded, setScrollEnded] = useState(false)
 
 	useEffect(() => {
 		const handleScroll = () => {
-			if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 300) {
+			if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500) {
 				setScrollEnded(true)
 			}
 		}
@@ -16,13 +16,11 @@ export default function InfiniteScroll(props) {
 			window.removeEventListener('scroll', handleScroll)
 		}
 	}, [])
-
 	useEffect(() => {
 		if (scrollEnded) {
 			onScrollEnd()
+			setScrollEnded(false)
 		}
-		setScrollEnded(false)
 	}, [scrollEnded])
-
-	return <View {...rest}>{children}</View>
+	return <View className={className}>{children}</View>
 }

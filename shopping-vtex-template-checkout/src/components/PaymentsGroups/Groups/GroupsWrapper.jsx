@@ -1,10 +1,11 @@
 import { Text, View } from 'eitri-luminus'
+import { GenericBox } from 'shopping-vtex-template-shared'
 
 export default function GroupsWrapper(props) {
 	const { title, subtitle, icon, children, onPress, className } = props
 
 	return (
-		<View className={`bg-white rounded shadow-sm border border-gray-300 p-4 ${className || ''}`}>
+		<GenericBox className={`p-4 ${className || ''}`}>
 			<View
 				onClick={onPress}
 				className='w-full flex flex-col'>
@@ -17,6 +18,6 @@ export default function GroupsWrapper(props) {
 				</View>
 			</View>
 			{children && <View className='mt-4'>{children}</View>}
-		</View>
+		</GenericBox>
 	)
 }

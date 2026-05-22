@@ -1,5 +1,6 @@
 import { openProductById, openProductBySlug, resolveNavigation } from './NavigationService'
 import Eitri from 'eitri-bifrost'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 const handleSearchAction = value => {
 	Eitri.navigation.navigate({
@@ -10,11 +11,13 @@ const handleSearchAction = value => {
 	})
 }
 const handleCollectionAction = action => {
+	const facets = [{ key: 'productClusterIds', value: action?.value }, ...(action?.facets || [])]
+
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: {
 			params: {
-				facets: [{ key: 'productClusterIds', value: action?.value }],
+				facets,
 				sort: action?.sort || ''
 			},
 			title: action?.title || '',
@@ -34,13 +37,18 @@ const handleCategoryAction = action => {
 	const _categories = action?.value?.split('/')
 	const categories = _categories?.filter(c => !!c)
 
-	const params = {
-		facets: categories?.map((c, index) => {
+	const _categoryFacets =
+		categories?.map((c, index) => {
 			return {
 				key: `category-${index + 1}`,
 				value: c
 			}
-		}),
+		}) || []
+
+	const facets = [..._categoryFacets, ...(action?.facets || [])]
+
+	const params = {
+		facets: facets,
 		sort: action?.sort || ''
 	}
 	Eitri.navigation.navigate({
@@ -56,12 +64,14 @@ const handleProductAction = value => {
 	}
 }
 const openBrand = action => {
-	const facets = [{ key: 'brand', value: action?.value }]
+	const facets = [{ key: 'brand', value: action?.value }, ...(action?.facets || [])]
+
 	Eitri.navigation.navigate({
 		path: 'ProductCatalog',
 		state: { params: { facets, sort: action?.sort }, title: action?.title || '' }
 	})
 }
+
 const openLink = link => {
 	Eitri.openBrowser({
 		url: link,
@@ -69,7 +79,24 @@ const openLink = link => {
 	})
 }
 
+const openFacets = action => {
+	const facets = action?.facets || []
+
+	Eitri.navigation.navigate({
+		path: 'ProductCatalog',
+		state: { params: { facets, sort: action?.sort }, title: action?.title || '' }
+	})
+}
+
 export const processActions = sliderData => {
+	if (sliderData.mktTag) {
+		TrackingService.selectPromotionEvent({
+			creative_name: sliderData.mktTag
+		})
+	}
+
+	console.log('sliderData', sliderData)
+
 	const action = sliderData?.action
 	switch (action?.type) {
 		case 'search':
@@ -96,6 +123,8 @@ export const processActions = sliderData => {
 		case 'link':
 			openLink(action.value)
 			break
+		case 'facets':
+			openFacets(action)
 		default:
 			console.log(`Unknown action type: ${action.type}`)
 	}

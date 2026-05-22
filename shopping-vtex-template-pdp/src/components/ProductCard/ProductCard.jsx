@@ -1,259 +1,174 @@
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart, openProduct } from '../../services/NavigationService'
-import { addToWishlist, productOnWishlist, removeItemFromWishlist } from '../../services/CustomerService'
 import { formatPrice } from '../../utils/utils'
-import { App } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { App, EventBus } from 'eitri-shopping-vtex-shared'
+import { ProductCardFullImage, TrackingService } from 'shopping-vtex-template-shared'
 
-export default function ProductCard(props) {
-	/*
-	 *  Aos poucos modificando esse componente para quebrar ele em mais componentes funcionais
-	 * */
+import { useCartItem, useWishlist } from './productCard.hooks'
+import { getProductVideo, formatInstallments, getFormattedListPrice } from './productCard.utils'
+import { useSnackBar } from '../../providers/SnackBar'
 
-	const { t } = useTranslation()
-	const { product, className } = props
+// ========== Componente Principal ==========
+
+export default function ProductCard({ product, className }) {
 	const { addItem, removeItem, updateItemQuantity, cart } = useLocalShoppingCart()
+	const { showSnackBar } = useSnackBar()
 
 	const [loadingCartOp, setLoadingCartOp] = useState(false)
-	const [loadingWishlistOp, setLoadingWishlistOp] = useState(true)
 
-	const [isOnWishlist, setIsOnWishlist] = useState(false)
-	const [wishListId, setWishListId] = useState(null)
+	const item = useMemo(() => {
+		const availableSku = product.items.find(item =>
+			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
+		)
+		return availableSku || product.items[0]
+	}, [product])
 
-	const [itemQuantity, setItemQuantity] = useState(1)
-	const [itemInCart, setItemInCart] = useState(null)
+	const sellerDefault = useMemo(() => {
+		if (!item?.sellers?.length) return null
+		return item.sellers.find(seller => seller.sellerDefault) || item.sellers[0]
+	}, [item])
 
-	const item = product?.items?.[0]
-	const sellerDefault = item?.sellers?.find(seller => seller.sellerDefault) || item?.sellers?.[0]
+	const isValidProduct = Boolean(item && sellerDefault)
+
+	const itemInCart = useCartItem(cart, item?.itemId)
+
+	const wishlist = useWishlist(product?.productId)
+	const wishListIdRef = useRef(wishlist.wishListId)
+
+	const productData = useMemo(() => {
+		if (!isValidProduct) return null
+
+		const { Price, ListPrice, spotPrice } = sellerDefault.commertialOffer
+
+		return {
+			name: product.productName,
+			image: item.images?.[0]?.imageUrl || '',
+			video: getProductVideo(product),
+			listPrice: getFormattedListPrice(ListPrice, Math.min(Price, spotPrice)),
+			discountPercentage: Math.round((1 - Math.min(Price, spotPrice) / ListPrice) * 100),
+			price: formatPrice(Math.min(Price, spotPrice)),
+			installments: formatInstallments(sellerDefault)
+		}
+	}, [product, item, sellerDefault, isValidProduct])
+
+	const rating = null
+
+	const itemQuantity = itemInCart?.quantity || 0
 
 	useEffect(() => {
-		checkItemOnWishlist()
-		const itemIndex = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
-		if (itemIndex > -1) {
-			setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
-			setItemQuantity(cart?.items?.[itemIndex].quantity)
-		}
-	}, [])
+		wishListIdRef.current = wishlist.wishListId
+	}, [wishlist.wishListId])
 
-	// Loaders
-	const checkItemOnWishlist = async () => {
-		try {
-			const { inList, listId } = await productOnWishlist(product.productId)
-			if (inList) {
-				setIsOnWishlist(true)
-				setWishListId(listId)
-			}
-			setLoadingWishlistOp(false)
-		} catch (e) {
-			setLoadingWishlistOp(false)
-		}
-	}
-
-	const getItemName = () => {
-		return product.productName
-	}
-
-	const getItemImage = () => {
-		if (item) {
-			return item?.images?.[0]?.imageUrl
-		}
-	}
-
-	const getItemVideo = () => {
-		if (item) {
-			let productVideo = ''
-			if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
-				const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
-				const property = product?.properties?.find(prop => prop.name === productVideoTag)
-				if (property) {
-					productVideo = property.values?.[0]
+	useEffect(() => {
+		EventBus.subscribe({
+			channel: 'addToWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.productId === product.productId) {
+					wishlist.setIsOnWishlist(true)
+					wishlist.setWishListId(data?.response?.data?.addToList)
 				}
 			}
+		})
+		EventBus.subscribe({
+			channel: 'removeFromWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.id === wishListIdRef.current && data?.response?.data?.removeFromList) {
+					wishlist.setIsOnWishlist(false)
+					wishlist.setWishListId(-1)
+				}
+			}
+		})
+	}, [])
+
+	// ========== Ações do Carrinho ==========
+
+	const handleAddToCart = useCallback(async () => {
+		if (!item || loadingCartOp) return
+
+		if (product.items.length > 1) {
+			openProduct(product)
+			return
 		}
-	}
 
-	// Formatters
-	const formatInstallments = seller => {
-		const installments = seller?.commertialOffer.Installments
+		await addItemToCart(item)
+	}, [item, loadingCartOp, addItem])
 
-		const maxInstallments = installments?.reduce((acc, curr) => {
-			return curr.NumberOfInstallments > acc.NumberOfInstallments ? curr : acc
-		}, installments[0])
-
-		if (!maxInstallments || maxInstallments?.NumberOfInstallments === 1) return ''
-
-		return `em até ${maxInstallments?.NumberOfInstallments}x ${formatPrice(maxInstallments?.Value)}`
-	}
-
-	const getListPrice = () => {
-		if (sellerDefault?.commertialOffer.Price === sellerDefault?.commertialOffer.ListPrice) {
-			return ''
-		} else {
-			return formatPrice(sellerDefault?.commertialOffer.ListPrice)
-		}
-	}
-
-	const getBadge = () => {
-		const price = sellerDefault?.commertialOffer?.Price
-		const listPrice = sellerDefault?.commertialOffer?.ListPrice
-
-		if (price !== listPrice) {
-			const discount = ((listPrice - price) / listPrice) * 100
-			return `${discount.toFixed(0)}% OFF`
-		} else {
-			return ''
-		}
-	}
-
-	// Cart
-	const addToCart = async () => {
+	const addItemToCart = async (item, quantity = 1, goToCart) => {
 		try {
 			setLoadingCartOp(true)
-			const newCart = await addItem({ ...item, quantity: itemQuantity })
-			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
-			if (itemIndex > -1) {
-				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
-				setItemQuantity(cart?.items?.[itemIndex].quantity)
+			await addItem({ ...item, quantity: itemQuantity + quantity })
+			TrackingService.addToCartEvent(product)
+			if (goToCart) {
+				openCart()
 			}
-			setLoadingCartOp(false)
-		} catch (e) {
-			console.error('Error adding cart item', e)
-			setLoadingCartOp(false)
-		}
-	}
-
-	const removeFromCart = async () => {
-		setLoadingCartOp(true)
-		const index = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
-		await removeItem(index)
-		setItemInCart(null)
-		setLoadingCartOp(false)
-	}
-
-	const isItemOnCart = () => {
-		return !!itemInCart
-	}
-
-	const onChangeQuantity = async newQuantity => {
-		if (newQuantity === 0) {
-			return removeFromCart()
-		}
-		if (itemInCart) {
-			await updateItemQuantity(itemInCart.index, newQuantity)
-			setItemQuantity(newQuantity)
-		}
-	}
-
-	// Wishlist
-	const onAddToWishlist = async () => {
-		try {
-			if (!product.productId) return
-			setLoadingWishlistOp(true)
-			setIsOnWishlist(true)
-			let response = await addToWishlist(product.productId, item?.name, item?.itemId)
-			setWishListId(response?.data?.addToList)
-			setLoadingWishlistOp(false)
+			showSnackBar('success', 'adicionado à cesta com sucesso')
 		} catch (error) {
-			console.error('error on wishlist', error)
-			setIsOnWishlist(false)
-			setLoadingWishlistOp(false)
+			console.error('Error adding to cart:', error)
+		} finally {
+			setLoadingCartOp(false)
 		}
 	}
 
-	const onRemoveFromWishlist = async () => {
+	const handleRemoveFromCart = useCallback(async () => {
+		if (!itemInCart || loadingCartOp) return
+
 		try {
-			setLoadingWishlistOp(true)
-			setIsOnWishlist(false)
-			await removeItemFromWishlist(wishListId)
-			setLoadingWishlistOp(false)
+			setLoadingCartOp(true)
+			if (itemQuantity - 1 === 0) TrackingService.removeFromCartEvent(cart, itemInCart.index)
+			await updateItemQuantity(itemInCart.index, itemQuantity - 1)
+			showSnackBar('trash', 'produto removido da cesta')
 		} catch (error) {
-			setLoadingWishlistOp(false)
-			setIsOnWishlist(true)
+			console.error('Error removing from cart:', error)
+		} finally {
+			setLoadingCartOp(false)
 		}
-	}
+	}, [itemInCart, loadingCartOp, removeItem])
 
-	// Navigation
-	const onPressOnCard = () => {
+	// ========== Ações de Navegação ==========
+
+	const handleCardPress = useCallback(() => {
 		openProduct(product)
+	}, [product])
+
+	const handleWishlistPress = useCallback(() => {
+		wishlist.toggle(item?.name, item?.itemId)
+	}, [wishlist, item])
+
+	// ========== Renderização ==========
+
+	// Retorna null se o produto for inválido
+	if (!isValidProduct || !productData) {
+		return null
 	}
 
-	const onPressOnWishlist = () => {
-		try {
-			if (loadingWishlistOp) return
-			if (isOnWishlist) {
-				onRemoveFromWishlist()
-			} else {
-				onAddToWishlist()
-			}
-		} catch (e) {}
-	}
-
-	const getActionLabel = () => {
-		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-			return t('productCard.actionBuy', 'Comprar')
-		}
-		return isItemOnCart() ? t('productCard.actionViewCart', 'Ver carrinho') : t('productCard.actionBuy', 'Comprar')
-	}
-
-	const onPressCartButton = () => {
-		if (loadingCartOp) return
-		if (isItemOnCart()) {
-			openCart()
-		} else {
-			if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
-				openProduct(product)
-				return
-			}
-			addToCart()
-		}
-	}
-
-	let productVideo = ''
-	if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
-		const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
-		const property = product?.properties?.find(prop => prop.name === productVideoTag)
-		if (property) {
-			productVideo = property.values?.[0]
-		}
-	}
-
+	// Monta os parâmetros para o componente de apresentação
 	const params = {
-		name: getItemName(),
-		image: getItemImage(),
-		video: productVideo,
-		badge: getBadge(),
-		listPrice: getListPrice(),
+		name: productData.name,
+		image: productData.image,
+		video: productData.video,
+		listPrice: productData.listPrice,
 		showListItem: App?.configs?.appConfigs?.productCard?.showListPrice ?? true,
-		price: formatPrice(sellerDefault?.commertialOffer.Price),
-		installments: formatInstallments(sellerDefault),
-		isInCart: isItemOnCart(),
-		isOnWishlist: isOnWishlist,
-		loadingWishlistOp: loadingWishlistOp,
-		loadingCartOp: loadingCartOp,
-		itemQuantity: itemQuantity,
-		actionLabel: getActionLabel(),
-		onPressOnCard: onPressOnCard,
-		onPressCartButton: onPressCartButton,
-		onPressOnWishlist: onPressOnWishlist,
-		onChangeQuantity: onChangeQuantity,
-		t: t,
+		rating: rating,
+		price: productData.price,
+		discountPercentage: productData.discountPercentage,
+		installments: productData.installments,
+		isInCart: Boolean(itemInCart),
+		isOnWishlist: wishlist.isOnWishlist,
+		loadingWishlistOp: wishlist.loading,
+		loadingCartOp,
+		itemQuantity,
+		actionLabel: itemInCart ? 'Ver cesta' : 'Comprar',
+		onPressOnCard: handleCardPress,
+		onPressRemoveItem: handleRemoveFromCart,
+		onPressAddItem: handleAddToCart,
+		onPressOnWishlist: handleWishlistPress,
 		className
 	}
 
-	const implementations = {
-		fullImage: ProductCardFullImage,
-		default: ProductCardDefault
-		// convenience: ProductCardConvenience
-	}
+	const Implementation = ProductCardFullImage
 
-	const rcProductCardStyle = App?.configs?.appConfigs?.productCard?.style
-
-	const Implementation =
-		rcProductCardStyle && implementations[rcProductCardStyle]
-			? implementations[rcProductCardStyle]
-			: ProductCardDefault
-
-	/*prettier-ignore*/
 	return React.createElement(Implementation, params)
 }

@@ -6,11 +6,6 @@ export default function ProductInfiniteScroll(props) {
 	const [params, setParams] = useState(null)
 
 	useEffect(() => {
-		const params = {
-			facets: data.facets || [],
-			query: data.term ?? '',
-			sort: data.sort ?? ''
-		}
 		setParams(data)
 	}, [])
 
@@ -23,7 +18,7 @@ export default function ProductInfiniteScroll(props) {
 			)}
 			<ProductCatalogContent
 				params={params}
-				hideFilters
+				showFilters={data.showFilters}
 			/>
 		</View>
 	)

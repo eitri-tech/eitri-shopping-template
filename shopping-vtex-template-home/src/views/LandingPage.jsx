@@ -4,7 +4,9 @@ import {
 	HeaderContentWrapper,
 	HeaderReturn,
 	HeaderText,
-	HeaderSearchIcon
+	HeaderSearchIcon,
+	TrackingService,
+	BottomInset
 } from 'shopping-vtex-template-shared'
 import { getCmsContent } from '../services/CmsService'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
@@ -25,34 +27,38 @@ export default function LandingPage(props) {
 			const { sections } = await getCmsContent('landingPage', landingPageName)
 			setCmsContent(sections)
 			setIsLoading(false)
+			TrackingService.sendScreenView(landingPageName, 'landingPage')
 		} catch (e) {
 			setIsLoading(false)
 		}
 	}
 
-	const goToSearch = () => {
-		Eitri.navigation.navigate({ path: 'Search' })
+	const handleSearch = term => {
+		Eitri.keyboard.dismiss()
+		Eitri.navigation.navigate({ path: 'Search', state: { searchTerm: term } })
 	}
 
 	return (
-		<Page
-			bottomInset
-			topInset>
+		<Page>
 			<HeaderContentWrapper className={`justify-between`}>
 				<View className={`flex items-center gap-4`}>
 					{!openInBottomBar && <HeaderReturn />}
-
 					<HeaderText text={pageTitle} />
 				</View>
 
-				<HeaderSearchIcon onClick={goToSearch} />
+				<HeaderSearchIcon onClick={() => Eitri.navigation.navigate({ path: 'Search' })} />
 			</HeaderContentWrapper>
 
 			<Loading
 				fullScreen
 				isLoading={isLoading}
 			/>
-			<CmsContentRender cmsContent={cmsContent} />
+			<CmsContentRender
+				className={'pt-4'}
+				cmsContent={cmsContent}
+			/>
+
+			<BottomInset />
 		</Page>
 	)
 }

@@ -3,6 +3,7 @@ import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { navigateToCheckout } from '../../services/navigationService'
+import { hasReachedMinimumOrderValue } from '../../utils/minimumOrderValue'
 
 export default function ActionButton(props) {
 	const { cart } = useLocalShoppingCart()
@@ -17,7 +18,9 @@ export default function ActionButton(props) {
 	const isValidToProceed = () => {
 		if (!cart) return false
 		if (!cart?.items) return false
-		return cart?.items.length !== 0
+		if (cart?.items.length === 0) return false
+		if (cart?.items?.some(item => item.availability !== 'available')) return false
+		return hasReachedMinimumOrderValue(cart)
 	}
 
 	return (
@@ -26,7 +29,7 @@ export default function ActionButton(props) {
 				<View className='p-4'>
 					<CustomButton
 						disabled={!isValidToProceed()}
-						label={t('cartSummary.labelFinish', 'Finalizar Compra')}
+						label={t('cartSummary.labelFinish')}
 						onPress={goToCheckout}
 					/>
 				</View>

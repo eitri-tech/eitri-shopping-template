@@ -1,4 +1,5 @@
 import { useTranslation } from 'eitri-i18n'
+import { GenericBox } from 'shopping-vtex-template-shared'
 
 export default function SimpleCard(props) {
 	const { isFilled, title, subtitle, onPress, children, icon, mainActionLabel, ...rest } = props
@@ -6,7 +7,7 @@ export default function SimpleCard(props) {
 	const { t } = useTranslation()
 
 	return (
-		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 w-full flex flex-col'>
+		<GenericBox className='p-4 w-full flex flex-col'>
 			<View className='flex flex-row justify-between'>
 				<View
 					onClick={onPress}
@@ -55,12 +56,12 @@ export default function SimpleCard(props) {
 							onClick={onPress}
 							className='mt-2'>
 							<Text className='uppercase text-xs text-primary-700'>
-								{mainActionLabel || t('simpleCard.txtEdit', 'ALTERAR')}
+								{mainActionLabel || t('simpleCard.txtEdit')}
 							</Text>
 						</View>
 					</View>
 				</>
 			)}
-		</View>
+		</GenericBox>
 	)
 }

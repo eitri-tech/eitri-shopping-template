@@ -1,5 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { CustomButton, HeaderText, Loading, HeaderContentWrapper, BottomInset } from 'shopping-vtex-template-shared'
+import { CustomButton, HeaderText, HeaderContentWrapper, BottomInset, Loading } from 'shopping-vtex-template-shared'
+import { FiUser, FiHeart, FiMapPin, FiShield, FiPackage } from 'react-icons/fi'
 import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
@@ -9,9 +10,8 @@ import { startConfigure } from '../services/AppService'
 import PoweredBy from '../components/PoweredBy/PoweredBy'
 import LoginCard from '../components/LoginCard/LoginCard'
 import InfoCard from '../components/InfoCard/InfoCard'
-import userIcon from '../assets/images/user.svg'
-import bookmarkIcon from '../assets/images/bookmark-01.svg'
-import boxIcon from '../assets/images/box-01.svg'
+import logoBrazilianEngineering from '../assets/images/BrazilianEngineering-Logo.png'
+import AppVersion from '../components/AppVersion/AppVersion'
 
 export default function Home(props) {
 	const PAGE = 'Minha Conta'
@@ -49,6 +49,7 @@ export default function Home(props) {
 		}
 
 		const isLogged = await isLoggedIn()
+
 		if (isLogged) {
 			await loadMe()
 		}
@@ -56,11 +57,14 @@ export default function Home(props) {
 		setIsLogged(isLogged)
 		setIsLoading(false)
 
-		sendPageView(PAGE)
+		sendScreenView('Minha conta', 'Home')
 	}
 
 	const loadMe = async () => {
 		const customerData = await getCustomerData()
+		if (!customerData) {
+			return
+		}
 		setCustomerData(customerData)
 	}
 
@@ -84,7 +88,7 @@ export default function Home(props) {
 	return (
 		<Page title={PAGE}>
 			<HeaderContentWrapper className='justify-between'>
-				<HeaderText text={t('home.labelMyAccount', 'Minha conta')} />
+				<HeaderText text={t('home.labelMyAccount')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -95,12 +99,17 @@ export default function Home(props) {
 			{!isLoading && (isLogged ? <InfoCard customerData={customerData} /> : <LoginCard />)}
 
 			<View className='px-4 mt-2 mb-2'>
-				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData', 'Dados pessoais')}</Text>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbPersonalData')}</Text>
 
 				<View className='flex flex-col gap-3 mt-2'>
 					<ProfileCardButton
-						label={t('home.labelMyAccount', 'Minha conta')}
-						icon={userIcon}
+						label={t('home.labelMyAccount')}
+						icon={
+							<FiUser
+								size={24}
+								className='text-gray-700'
+							/>
+						}
 						onClick={() => {
 							isLogged
 								? navigate(PAGES.EDIT_PROFILE, { customerData })
@@ -108,23 +117,43 @@ export default function Home(props) {
 						}}
 					/>
 					<ProfileCardButton
-						label={t('home.labelMyFavorites', 'Meus favoritos')}
-						icon={bookmarkIcon}
+						label={t('home.labelMyFavorites')}
+						icon={
+							<FiHeart
+								size={24}
+								className='text-gray-700'
+							/>
+						}
 						onClick={() => {
 							isLogged
 								? navigate(PAGES.WISH_LIST)
 								: navigate(PAGES.SIGNIN, { redirectTo: PAGES.WISH_LIST })
 						}}
 					/>
+					<ProfileCardButton
+						label={t('home.labelAddresses', 'Endereços')}
+						icon={
+							<FiMapPin
+								size={24}
+								className='text-gray-700'
+							/>
+						}
+						onClick={() => navigate(PAGES.ADDRESS_LIST)}
+					/>
 				</View>
 			</View>
 
 			<View className='px-4 mt-6 mb-2'>
-				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbOrders', 'Pedidos')}</Text>
+				<Text className='font-bold text-xl mb-3 text-gray-900'>{t('home.lbOrders')}</Text>
 				<View className='flex flex-col gap-3 mt-2'>
 					<ProfileCardButton
-						label={t('home.labelMyOrders', 'Meus pedidos')}
-						icon={boxIcon}
+						label={t('home.labelMyOrders')}
+						icon={
+							<FiPackage
+								size={24}
+								className='text-gray-700'
+							/>
+						}
 						onClick={() => {
 							isLogged
 								? navigate(PAGES.ORDER_LIST)
@@ -138,14 +167,19 @@ export default function Home(props) {
 				<View className='px-4 py-6 mt-4'>
 					<CustomButton
 						variant='outlined'
-						label={t('home.labelLeave', 'Sair')}
+						label={t('home.labelLeave')}
 						onPress={_doLogout}
 					/>
 				</View>
 			)}
 
-			<View className='flex justify-center w-full items-center mt-8 mb-4'>
+			<View className='flex flex-col justify-center w-full items-center mt-6 pb-8'>
 				<PoweredBy />
+				<Image
+					src={logoBrazilianEngineering}
+					className={'w-[130px]'}
+				/>
+				<AppVersion />
 			</View>
 
 			<BottomInset />

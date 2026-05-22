@@ -1,7 +1,7 @@
 import GroupsWrapper from './GroupsWrapper'
 import { useLocalShoppingCart } from '../../../providers/LocalCart'
-import { trackAddPaymentInfo } from '../../../services/Tracking'
 import { navigate } from '../../../services/navigationService'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export default function ExternalPayment(props) {
 	const { cart } = useLocalShoppingCart()
@@ -22,7 +22,7 @@ export default function ExternalPayment(props) {
 				hasDefaultBillingAddress: true
 			}
 		])
-		//trackAddPaymentInfo(cart, paymentSystem.name)
+		TrackingService.addPaymentInfoEvent(cart, paymentSystem.name)
 		navigate('CheckoutReview')
 	}
 

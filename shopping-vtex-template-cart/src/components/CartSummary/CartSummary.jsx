@@ -1,9 +1,8 @@
-import { View, Text, Button } from 'eitri-luminus'
-import { CustomButton, Spacing, Divisor } from 'shopping-vtex-template-shared'
+import { View, Text } from 'eitri-luminus'
+import { GenericBox } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { formatAmountInCents } from '../../utils/utils'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
-import { navigateToCheckout } from '../../services/navigationService'
 
 export default function CartSummary(props) {
 	const { cart } = useLocalShoppingCart()
@@ -22,7 +21,7 @@ export default function CartSummary(props) {
 		setItemsValue(items?.value || 0)
 		setDiscounts(discounts?.value || 0)
 
-		const total = items?.value ?? 0 + (discounts?.value ?? 0)
+		const total = (items?.value ?? 0) + (discounts?.value ?? 0)
 		setTotal(total)
 	}, [cart])
 
@@ -32,38 +31,38 @@ export default function CartSummary(props) {
 
 	return (
 		<View className='px-4'>
-			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
+			<GenericBox className='p-4'>
 				<View className='w-full flex justify-center'>
 					<View className='w-full max-w-sm px-4'>
 						{itemsValue > 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal', 'Subtotal')}</Text>
+								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtSubtotal')}</Text>
 								<Text className='text-sm'>{formatAmountInCents(itemsValue)}</Text>
 							</View>
 						)}
-						{discounts > 0 && (
+						{discounts !== 0 && (
 							<View className='flex justify-between py-2'>
-								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDiscount', 'Desconto')}</Text>
+								<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDiscount')}</Text>
 								<Text className='text-sm'>{formatAmountInCents(discounts)}</Text>
 							</View>
 						)}
 						{/*{shipping && (*/}
 						{/*	<View className='flex justify-between py-2'>*/}
-						{/*		<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDelivery', 'Entrega')}</Text>*/}
+						{/*		<Text className='text-base-content/70 text-sm'>{t('cartSummary.txtDelivery')}</Text>*/}
 						{/*		<Text className='text-sm'>{formatAmountInCents(shipping.value)}</Text>*/}
 						{/*	</View>*/}
 						{/*)}*/}
 						{total > 0 && (
 							<View className='flex justify-between py-2 border-t border-base-300 mt-2 pt-2'>
 								<Text className='text-base-content font-bold text-base'>
-									{t('cartSummary.txtTotal', 'Total')}
+									{t('cartSummary.txtTotal')}
 								</Text>
 								<Text className='text-base font-bold text-primary'>{formatAmountInCents(total)}</Text>
 							</View>
 						)}
 					</View>
 				</View>
-			</View>
+			</GenericBox>
 		</View>
 	)
 }

@@ -23,9 +23,9 @@ export default function ShelfOfProductsCarousel(props) {
 			{isLoading ? (
 				<View className='flex overflow-x-auto'>
 					<View className='flex gap-4 px-4 py-2'>
-						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
-						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
-						<View className='mt-2 min-w-[50vw] h-[388px] bg-gray-200 rounded animate-pulse' />
+						<View className='mt-2 w-[148px] h-[131px] bg-gray-200 rounded-2xl animate-pulse' />
+						<View className='mt-2 w-[148px] h-[131px] bg-gray-200 rounded-2xl animate-pulse' />
+						<View className='mt-2 w-[148px] h-[131px] bg-gray-200 rounded-2xl animate-pulse' />
 					</View>
 				</View>
 			) : (
@@ -37,7 +37,7 @@ export default function ShelfOfProductsCarousel(props) {
 						{productsPage.map((page, index) => (
 							<View
 								key={page?.[0]?.productId || index}
-								className='grid grid-cols-2 gap-2 px-4 py-2'>
+								className='grid grid-cols-2 gap-4 px-4 py-2'>
 								<ProductCard product={page[0]} />
 								{page.length > 1 && <ProductCard product={page[1]} />}
 							</View>

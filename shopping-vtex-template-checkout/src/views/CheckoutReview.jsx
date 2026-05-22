@@ -7,15 +7,18 @@ import DeliveryData from '../components/FinishCart/DeliveryData'
 import { useTranslation } from 'eitri-i18n'
 import CartSummary from '../components/CartSummary/CartSummary'
 import { navigate } from '../services/navigationService'
-import { trackAddPaymentInfo, trackScreenView, trackShippingInfo } from '../services/Tracking'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
 import OtpLogin from '../components/OtpLogin/OtpLogin'
 import { ERROR_MAP } from '../utils/vtexErrorMap'
-import { HeaderContentWrapper, HeaderReturn, BottomInset, CustomButton } from 'shopping-vtex-template-shared'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	BottomInset,
+	CustomButton,
+	TrackingService,
+	Loading
+} from 'shopping-vtex-template-shared'
 import Eitri from 'eitri-bifrost'
 
-let selectedShipping = null
-let selectedPayment = null
 export default function CheckoutReview() {
 	const { cart, cardInfo, selectedPaymentData, cartIsLoading, removeCartItem } = useLocalShoppingCart()
 	const { t } = useTranslation()
@@ -38,7 +41,7 @@ export default function CheckoutReview() {
 	}, [])
 
 	useEffect(() => {
-		trackScreenView(`checkout_finaliza_pedido`, 'checkout.finishCart')
+		TrackingService.sendScreenView(`checkout_finalizar_pedido`, 'CheckoutReview')
 	}, [])
 
 	useEffect(() => {
@@ -49,36 +52,8 @@ export default function CheckoutReview() {
 			} else {
 				setUnavailableItems([])
 			}
-
-			sendTrackingPayment(cart)
-			sendTrackingShipping(cart)
 		}
 	}, [cart])
-
-	const sendTrackingPayment = async cart => {
-		try {
-			const paymentId = cart.paymentData?.payments?.[0]?.paymentSystem
-			const paymentType = cart.paymentData?.paymentSystems?.find(p => p.stringId === paymentId)?.name
-			if (paymentType && (!selectedPayment || selectedPayment !== paymentType)) {
-				trackAddPaymentInfo(cart, paymentType)
-				selectedPayment = paymentType
-			}
-		} catch (e) {
-			console.error('Error on sendTrackingPayment', e)
-		}
-	}
-
-	const sendTrackingShipping = async cart => {
-		try {
-			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
-			if (shippingTier && (!selectedShipping || selectedShipping !== shippingTier)) {
-				trackShippingInfo(cart)
-				selectedShipping = shippingTier
-			}
-		} catch (e) {
-			console.error('Error on sendTrackingShipping', e)
-		}
-	}
 
 	const runPaymentScript = async () => {
 		try {
@@ -96,6 +71,8 @@ export default function CheckoutReview() {
 
 			const paymentResult = await startPayment(cart, payload)
 
+			TrackingService.purchaseEvent(cart, paymentResult.orderId)
+
 			if (paymentResult.status === 'completed') {
 				clearCart()
 				navigate('OrderCompleted', {
@@ -112,20 +89,30 @@ export default function CheckoutReview() {
 
 			navigate('ExternalProviderOrder', { paymentResult })
 		} catch (error) {
-			console.error('Error on runPaymentScript', error)
-
 			const errorCode = error.response?.data?.error?.code
 			if (errorCode === 'CHK003' || errorCode === 'CHK0087' || errorCode === 'ORD062') {
 				setShowOtpLogin(true)
 				return
 			}
 
+			if (error.message) {
+				try {
+					const parsedError = JSON.parse(error.message)
+					const minimumPaymentError = parsedError.find(err => err.code === 'ORD079')
+					if (minimumPaymentError) {
+						setError({
+							state: true,
+							message: minimumPaymentError.text
+						})
+						return
+					}
+				} catch (e) {}
+			}
+
 			setError({
 				state: true,
 				message:
-					ERROR_MAP[errorCode] ||
-					error.response?.data?.error?.message ||
-					t('checkoutReview.errorClosingOrder', 'Houve um erro ao fechar pedido')
+					ERROR_MAP[errorCode] || error.response?.data?.error?.message || 'Houve um erro ao fechar pedido'
 			})
 
 			setIsLoading(false)
@@ -164,27 +151,27 @@ export default function CheckoutReview() {
 	}
 
 	return (
-		<Page title={t('checkoutPages.home', 'Checkout - Home')}>
+		<Page title='Checkout - Home'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
 
-			<LoadingComponent
-				text={t('checkoutReview.loading', 'Estamos preparando a sua compra')}
+			<Loading
+				text={'Estamos preparando a sua compra'}
 				fullScreen
 				isLoading={cartIsLoading || isLoading}
 			/>
 
 			<View className='p-4'>
 				<View className='mb-2'>
-					<Text className='text-xl font-bold'>{t('checkoutReview.title', 'Revise e confirme')}</Text>
+					<Text className='text-xl font-bold'>Revise e confirme</Text>
 				</View>
 
 				{/* Adiciona padding-bottom para não sobrepor o botão */}
 				<>
 					{unavailableItems.length > 0 && (
 						<View className='mb-4 p-4 bg-red-50 border border-red-200 rounded'>
-							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems', 'Alguns itens do seu carrinho não estão mais disponíveis.')}</Text>
+							<Text className='text-sm text-red-600 font-medium'>{t('finishCart.errorItems')}</Text>
 
 							{unavailableItems.map(uItem => (
 								<View
@@ -198,9 +185,7 @@ export default function CheckoutReview() {
 										<Text className='text-sm font-medium'>{uItem.name}</Text>
 									</View>
 									<View onClick={() => removeUnavailableItem(uItem)}>
-										<Text className='text-sm text-red-600 font-medium'>
-											{t('checkoutReview.removeUnavailable', 'Excluir')}
-										</Text>
+										<Text className='text-sm text-red-600 font-medium'>Excluir</Text>
 									</View>
 								</View>
 							))}
@@ -230,7 +215,7 @@ export default function CheckoutReview() {
 				<View className='fixed bottom-[90px] left-0 w-full'>
 					<View className='p-4 bg-red-50 border border-red-200 rounded'>
 						<Text className='text-sm text-red-600 font-medium'>
-							{error.message || t('checkoutReview.errorClosingOrder', 'Houve um erro ao fechar o pedido')}
+							{error.message || 'Houve um erro ao fechar o pedido'}
 						</Text>
 					</View>
 					<BottomInset />
@@ -243,17 +228,15 @@ export default function CheckoutReview() {
 					<View className='p-4'>
 						<CustomButton
 							disabled={!isReadyToPay()}
-							label={t('finishCart.labelButton', 'Finalizar Compra')}
+							label={t('finishCart.labelButton')}
 							onPress={runPaymentScript}
 						/>
 					</View>
 					<BottomInset />
 				</View>
 
-				<View className='h-[50px] w-full' />
+				<View className='h-[75px] w-full' />
 			</View>
-
-			<BottomInset />
 
 			{recaptchaSiteKey && (
 				<Recaptcha
@@ -267,6 +250,8 @@ export default function CheckoutReview() {
 				onClose={() => setShowOtpLogin(false)}
 				onLogged={handleLogged}
 			/>
+
+			<BottomInset />
 		</Page>
 	)
 }

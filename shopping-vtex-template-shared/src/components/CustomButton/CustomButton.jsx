@@ -62,10 +62,10 @@ export default function CustomButton(props) {
 			className={`
 				flex items-center justify-center 
 				h-[45px]
-				rounded
+				rounded-lg
 				w-full
 				${_backgroundColor ? `${_backgroundColor}` : ''}
-				${variant === 'outlined' || outlined ? `border border-primary` : ''}
+				${variant === 'outlined' || outlined ? `border border-primary border-2` : ''}
 				${className || ''}
 			`}
 			{...rest}>
