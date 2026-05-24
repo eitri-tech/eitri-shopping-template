@@ -10,28 +10,9 @@ export default function GiftCard(props) {
 
 	const [isLoading, setIsLoading] = useState(false)
 	const [redemptionCode, setRedemptionCode] = useState('')
-	const [redemptionPassword, setRedemptionPassword] = useState('')
 	const [selected, setSelected] = useState(false)
 	const [error, setError] = useState(false)
 	const [giftCardValue, setGiftCardValue] = useState(0)
-
-	const encryptRef = useRef(null)
-
-	const PUBLIC_KEY =
-		'-----BEGIN PUBLIC KEY-----' +
-		'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCWKAnUudPs6rQtnMo3OWVAPXi+8TErO2whhcqbx5YRRQ3atDb7KkYntrh/ukqotDg3aooYpFMfyXx9vYDd88yeJCBEmyO9jzGl0YKwt0CaR8Na/X70swenjgXnFEyqWK4fAs/NDcnvdJEgUt/wlxg5wDVx7PBrgYW5OUkbCG7x7wIDAQAB' +
-		'-----END PUBLIC KEY-----'
-
-	useEffect(() => {
-		const script = document.createElement('script')
-		script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.min.js'
-
-		script.onload = () => {
-			encryptRef.current = new window.JSEncrypt()
-		}
-
-		document.body.appendChild(script)
-	}, [])
 
 	useEffect(() => {
 		if (cart?.paymentData?.giftCards?.length > 0) {
@@ -43,10 +24,6 @@ export default function GiftCard(props) {
 		}
 	}, [])
 
-	const useRedemptionPassword = useMemo(() => {
-		return redemptionCode?.replace(/\D/g, '')?.startsWith('504161')
-	}, [redemptionCode])
-
 	const loadCardValue = cart => {
 		const giftCardsValue = cart.paymentData?.giftCards?.reduce((acc, giftCard) => acc + giftCard.value, 0) ?? 0
 		setGiftCardValue(giftCardsValue)
@@ -54,45 +31,30 @@ export default function GiftCard(props) {
 
 	const normalizeCode = value => value?.replace(/-/g, '')?.toLowerCase()
 
-	const encryptRedemptionPassword = password => {
-		try {
-			const encryptor = encryptRef.current || new JSEncrypt()
-			encryptor.setPublicKey(PUBLIC_KEY)
-			return encryptor.encrypt(password)
-		} catch (e) {
-			console.error('Error encrypting redemption password:', e)
-			return null
-		}
-	}
-
 	const addGiftCard = async () => {
 		setIsLoading(true)
 		setError('')
 
 		try {
-			const encrypted = useRedemptionPassword ? encryptRedemptionPassword(redemptionPassword) : null
-			const fullRedemptionCode = `${redemptionCode}${encrypted ? `.${encrypted}` : ''}`
-
 			const payload = {
 				payments: cart.paymentData.payments,
 				giftCards: [
 					...cart.paymentData.giftCards,
 					{
-						redemptionCode: fullRedemptionCode,
+						redemptionCode,
 						inUse: true,
-						isSpecialCard: false,
-						provider: useRedemptionPassword ? 'TodoCartoes' : 'GIVEXProvider'
+						isSpecialCard: false
 					}
 				]
 			}
 
 			const newCart = await setPaymentOption(payload)
 			const applied = newCart?.paymentData?.giftCards?.some(
-				gift => normalizeCode(gift.redemptionCode) === normalizeCode(fullRedemptionCode)
+				gift => normalizeCode(gift.redemptionCode) === normalizeCode(redemptionCode)
 			)
 
 			if (!applied) {
-				await startCart() // Tem um bugzinho estranho, se estiver logado e o código for inválido ele traz o carrinho deslogado
+				await startCart()
 				setError('Código inválido')
 				setTimeout(() => setError(''), 8000)
 				return
@@ -140,19 +102,12 @@ export default function GiftCard(props) {
 				{selected && (
 					<>
 						<View className='flex justify-between mt-2 gap-2 items-end w-full'>
-							<View className='w-2/3 flex flex-col gap-2'>
+							<View className='w-2/3'>
 								<CustomInput
 									placeholder='Insira o código do vale presente'
 									value={redemptionCode}
 									onChange={e => setRedemptionCode(e.target.value)}
 								/>
-								{useRedemptionPassword && (
-									<CustomInput
-										placeholder='Código (senha)'
-										value={redemptionPassword}
-										onChange={e => setRedemptionPassword(e.target.value)}
-									/>
-								)}
 							</View>
 							<View className='w-1/3'>
 								<CustomButton
@@ -193,7 +148,7 @@ export default function GiftCard(props) {
 											</View>
 											<View className='flex flex-row items-center justify-between'>
 												<View onClick={() => removeGiftCart(gift.id)}>
-													<Text className='text-xs font-bold text-blue-500'>{'Remover'}</Text>
+													<Text className='text-xs font-bold text-blue-500'>Remover</Text>
 												</View>
 											</View>
 										</View>
