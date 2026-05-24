@@ -1,7 +1,8 @@
 import WishlistIcon from '../WishlistIcon/WishlistIcon'
-import Loading from '../Loading/LoadingComponent'
-import { Text, View, Image } from 'eitri-luminus'
+import { Text, View, Image, Loading } from 'eitri-luminus'
 import Eitri from 'eitri-bifrost'
+import BadgeRender from '../BadgeRender/BadgeRender'
+import { IoBagAddOutline } from 'react-icons/io5'
 
 export default function ProductCardFullImage(props) {
 	const {
@@ -12,22 +13,18 @@ export default function ProductCardFullImage(props) {
 		installments,
 		loadingCartOp,
 		isOnWishlist,
+		itemQuantity,
+		badges,
 		showListItem,
-		actionLabel,
 		onPressOnCard,
-		onPressCartButton,
+		onPressMainAction,
 		onPressOnWishlist,
 		className
 	} = props
 
 	const [cardContainerId] = useState(() => `product-card-${Math.random().toString(36).slice(2, 11)}`)
 	const [imageHeight, setImageHeight] = useState(180)
-	const [imageUrl, setImagemUrl] = useState(null)
-
-	const _onPressOnWishlist = e => {
-		e.stopPropagation()
-		onPressOnWishlist()
-	}
+	const [imageUrl, setImageUrl] = useState(null)
 
 	useEffect(() => {
 		Eitri.environment.getRemoteConfigs().then(configs => {
@@ -35,31 +32,42 @@ export default function ProductCardFullImage(props) {
 				const aspectRatio = configs.appConfigs.productCardImageAspectRatio
 
 				if (!aspectRatio) {
-					setImagemUrl(image)
+					setImageUrl(image)
+					return
 				}
 
 				const cardContainerElement = document.getElementById(cardContainerId)
-				if (!cardContainerElement) return
+				if (!cardContainerElement) {
+					setImageUrl(image)
+					return
+				}
 
 				const width = cardContainerElement.getBoundingClientRect().width
 
-				if (!width) return
+				if (!width) {
+					setImageUrl(image)
+					return
+				}
 
-				const [aspectWidth, aspectHeight] = aspectRatio?.replace('x', ':').split(':')?.map(Number)
-
+				const [aspectWidth, aspectHeight] = aspectRatio.replace('x', ':').split(':').map(Number)
 				const height = width * (aspectHeight / aspectWidth)
-
 				const avoidResize = configs.appConfigs.productCardImageAvoidResize ?? false
+				const resizedImageUrl = avoidResize
+					? image
+					: image?.replace(/\/ids\/(\d+)\//, `/ids/$1-${width}-${height}/`)
 
-				const imageUrl = avoidResize ? image : image?.replace(/\/ids\/(\d+)\//, `/ids/$1-${width}-${height}/`)
-
-				setImagemUrl(imageUrl)
+				setImageUrl(resizedImageUrl)
 				setImageHeight(height)
 			} catch (e) {
-				setImagemUrl(image)
+				setImageUrl(image)
 			}
 		})
-	}, [])
+	}, [image])
+
+	const _onPressOnWishlist = e => {
+		e.stopPropagation()
+		if (onPressOnWishlist) onPressOnWishlist()
+	}
 
 	return (
 		<View
@@ -68,13 +76,18 @@ export default function ProductCardFullImage(props) {
 			<View className={`flex flex-col w-full shadow-md rounded`}>
 				<View
 					style={{ height: `${imageHeight}px`, maxHeight: `${imageHeight}px`, minHeight: `${imageHeight}px` }}
-					className={`relative flex flex-col w-full justify-center items-center rounded-t`}>
+					className={`relative flex flex-col w-full justify-center items-center rounded-t-lg`}>
 					{imageUrl && (
 						<Image
-							className={`object-contain h-full w-full rounded-t`}
+							className={`object-contain h-full w-full rounded-t-lg`}
 							src={imageUrl}
 						/>
 					)}
+
+					<BadgeRender
+						className={`absolute top-[7px] p-2 left-[7px] z-10`}
+						badges={badges}
+					/>
 
 					<View
 						onClick={_onPressOnWishlist}
@@ -83,6 +96,27 @@ export default function ProductCardFullImage(props) {
 							filled={isOnWishlist}
 							size={'20'}
 						/>
+					</View>
+
+					<View
+						onClick={e => {
+							e.stopPropagation()
+							if (onPressMainAction) onPressMainAction()
+						}}
+						className='absolute bottom-[7px] right-[7px] w-8 h-8 rounded-full bg-primary flex items-center justify-center z-[99]'>
+						{loadingCartOp ? (
+							<Loading
+								width='18px'
+								className='text-primary-content'
+							/>
+						) : itemQuantity > 0 ? (
+							<Text className='text-primary-content font-bold text-xs'>{itemQuantity}</Text>
+						) : (
+							<IoBagAddOutline
+								className='text-primary-content'
+								size={16}
+							/>
+						)}
 					</View>
 				</View>
 
@@ -110,19 +144,6 @@ export default function ProductCardFullImage(props) {
 							<View className='h-[16px]' />
 						)}
 					</View>
-				</View>
-
-				<View
-					onClick={e => {
-						e.stopPropagation()
-						onPressCartButton()
-					}}
-					className={`mt-2 h-[36px] bg-primary w-full rounded-b-lg flex justify-center items-center border-primary-700 border-[0.5px] bg-primary-700 z-[99]`}>
-					{loadingCartOp ? (
-						<Loading width='36px' />
-					) : (
-						<Text className='text-primary-content font-medium text-xs'>{actionLabel}</Text>
-					)}
 				</View>
 			</View>
 		</View>

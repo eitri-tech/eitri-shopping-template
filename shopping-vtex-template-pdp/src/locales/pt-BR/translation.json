@@ -16,7 +16,8 @@
 	"freight": {
 		"labelZipCode": "CEP",
 		"labelCalculate": "Calcular",
-		"txtCalculate": "Frete"
+		"txtCalculate": "Frete",
+		"errorUnavailable": "Desculpe, esse produto não está disponível para o seu CEP. Que tal tentar outro CEP?"
 	},
 	"mainDescription": {
 		"txtUntil": "em até",
@@ -51,5 +52,38 @@
 	},
 	"tagsComponent": {
 		"labelOffer": "Oferta"
+	},
+	"actionButton": {
+		"snackAdded": "adicionado à cesta com sucesso",
+		"labelBuy": "Comprar"
+	},
+	"buyTogether": {
+		"txtTitle": "eeei, aproveite e leve também!"
+	},
+	"productCard": {
+		"snackAdded": "adicionado à cesta com sucesso",
+		"snackRemoved": "produto removido da cesta",
+		"viewCart": "Ver cesta",
+		"buy": "Comprar"
+	},
+	"searchInput": {
+		"placeholder": "Pesquisar..."
+	},
+	"topSearches": {
+		"title": "mais buscados"
+	},
+	"searchHistory": {
+		"title": "histórico",
+		"clear": "limpar histórico"
+	},
+	"qrCodeScanner": {
+		"title": "Escanear código de barras",
+		"description": "Centralize o código para escanear",
+		"torch": "Lanterna",
+		"productNotFound": "Produto não encontrado"
+	},
+	"rating": {
+		"txtCount": "{{count}} avaliações",
+		"txtComposition": "Composição da nota"
 	}
 }

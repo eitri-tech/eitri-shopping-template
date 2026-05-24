@@ -16,7 +16,9 @@ export default function HeaderContentWrapper(props) {
 	let _height = height || DIMENSIONS.HEADER_HEIGHT
 
 	useEffect(() => {
-		initScrollEffect()
+		let cleanup = () => {}
+		initScrollEffect().then(fn => { if (fn) cleanup = fn })
+		return () => cleanup()
 	}, [])
 
 	const initScrollEffect = async () => {

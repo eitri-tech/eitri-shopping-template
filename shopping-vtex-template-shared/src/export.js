@@ -1,4 +1,3 @@
-
 export { default as HeaderCart } from './components/Header/HeaderCart'
 export { default as HeaderLogo } from './components/Header/HeaderLogo'
 export { default as HeaderMenu } from './components/Header/HeaderMenu'
@@ -33,3 +32,4 @@ export { default as GenericBox } from './components/GenericBox/GenericBox'
 
 export { default as Slider } from './Slider/Slider'
 export { default as SkuSelector } from './components/SkuSelector/SkuSelector'
+export { default as getBadgesForProducts } from './services/BadgesService'

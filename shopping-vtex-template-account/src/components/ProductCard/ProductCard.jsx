@@ -3,20 +3,22 @@ import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart, openProduct } from '../../services/NavigationService'
 import { formatPrice } from '../../utils/utils'
 import { App, EventBus } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, TrackingService } from 'shopping-vtex-template-shared'
+import { ProductCardFullImage, TrackingService, getBadgesForProducts } from 'shopping-vtex-template-shared'
+import { Vtex } from 'eitri-shopping-vtex-shared'
+import { useTranslation } from 'eitri-i18n'
 
 import { useCartItem, useWishlist } from './productCard.hooks'
 import { getProductVideo, formatInstallments, getFormattedListPrice } from './productCard.utils'
 import { useSnackBar } from '../../providers/SnackBar'
-import { useTranslation } from 'eitri-i18n'
 
 // ========== Componente Principal ==========
 
 export default function ProductCard({ product, className }) {
-	const { addItem, removeItem, updateItemQuantity, cart } = useLocalShoppingCart()
+	const { addItem, cart } = useLocalShoppingCart()
 	const { showSnackBar } = useSnackBar()
 	const { t } = useTranslation()
 
+	const [badges, setBadges] = useState([])
 	const [loadingCartOp, setLoadingCartOp] = useState(false)
 
 	const item = useMemo(() => {
@@ -36,6 +38,7 @@ export default function ProductCard({ product, className }) {
 	const itemInCart = useCartItem(cart, item?.itemId)
 
 	const wishlist = useWishlist(product?.productId)
+
 	const wishListIdRef = useRef(wishlist.wishListId)
 
 	const productData = useMemo(() => {
@@ -63,6 +66,7 @@ export default function ProductCard({ product, className }) {
 	}, [wishlist.wishListId])
 
 	useEffect(() => {
+		loadBadges()
 		EventBus.subscribe({
 			channel: 'addToWishlist',
 			broadcast: true,
@@ -85,6 +89,12 @@ export default function ProductCard({ product, className }) {
 		})
 	}, [])
 
+	// ========== badges
+	const loadBadges = async () => {
+		const badges = await getBadgesForProducts(product, item, Vtex, 'badges')
+		setBadges(badges)
+	}
+
 	// ========== Ações do Carrinho ==========
 
 	const handleAddToCart = useCallback(async () => {
@@ -106,28 +116,13 @@ export default function ProductCard({ product, className }) {
 			if (goToCart) {
 				openCart()
 			}
-			showSnackBar('success', t('productCard.addedToCart'))
+			showSnackBar('success', t('productCard.snackAdded'))
 		} catch (error) {
 			console.error('Error adding to cart:', error)
 		} finally {
 			setLoadingCartOp(false)
 		}
 	}
-
-	const handleRemoveFromCart = useCallback(async () => {
-		if (!itemInCart || loadingCartOp) return
-
-		try {
-			setLoadingCartOp(true)
-			if (itemQuantity - 1 === 0) TrackingService.removeFromCartEvent(cart, itemInCart.index)
-			await updateItemQuantity(itemInCart.index, itemQuantity - 1)
-			showSnackBar('trash', t('productCard.removedFromCart'))
-		} catch (error) {
-			console.error('Error removing from cart:', error)
-		} finally {
-			setLoadingCartOp(false)
-		}
-	}, [itemInCart, loadingCartOp, removeItem])
 
 	// ========== Ações de Navegação ==========
 
@@ -141,12 +136,10 @@ export default function ProductCard({ product, className }) {
 
 	// ========== Renderização ==========
 
-	// Retorna null se o produto for inválido
 	if (!isValidProduct || !productData) {
 		return null
 	}
 
-	// Monta os parâmetros para o componente de apresentação
 	const params = {
 		name: productData.name,
 		image: productData.image,
@@ -156,16 +149,15 @@ export default function ProductCard({ product, className }) {
 		rating: rating,
 		price: productData.price,
 		discountPercentage: productData.discountPercentage,
+		badges,
 		installments: productData.installments,
 		isInCart: Boolean(itemInCart),
 		isOnWishlist: wishlist.isOnWishlist,
 		loadingWishlistOp: wishlist.loading,
 		loadingCartOp,
 		itemQuantity,
-		actionLabel: itemInCart ? t('productCard.viewCart') : t('productCard.buy'),
 		onPressOnCard: handleCardPress,
-		onPressRemoveItem: handleRemoveFromCart,
-		onPressAddItem: handleAddToCart,
+		onPressMainAction: handleAddToCart,
 		onPressOnWishlist: handleWishlistPress,
 		className
 	}

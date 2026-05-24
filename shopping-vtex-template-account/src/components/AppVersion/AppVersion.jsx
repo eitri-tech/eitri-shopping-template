@@ -8,9 +8,11 @@ export default function AppVersion() {
 	const [version, setVersion] = useState(null)
 
 	useEffect(() => {
-		Eitri.getConfigs().then(config => {
-			setVersion(config?.superAppData?.version ?? null)
-		})
+		Eitri.getConfigs()
+			.then(config => {
+				setVersion(config?.superAppData?.version ?? null)
+			})
+			.catch(err => console.error('AppVersion: failed to get configs', err))
 	}, [])
 
 	if (!version) return null

@@ -29,6 +29,12 @@
 		"cart": "Na cesta",
 		"buy": "Comprar"
 	},
+	"productCard": {
+		"snackAdded": "adicionado à cesta com sucesso",
+		"snackRemoved": "produto removido da cesta",
+		"viewCart": "Ver cesta",
+		"buy": "Comprar"
+	},
 	"scheduleCard": {
 		"button": "Confira"
 	},

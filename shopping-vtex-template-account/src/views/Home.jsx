@@ -1,6 +1,6 @@
 import Eitri from 'eitri-bifrost'
 import { CustomButton, HeaderText, HeaderContentWrapper, BottomInset, Loading } from 'shopping-vtex-template-shared'
-import { FiUser, FiHeart, FiMapPin, FiShield, FiPackage } from 'react-icons/fi'
+import { FiUser, FiHeart, FiMapPin, FiPackage, FiLock, FiCreditCard } from 'react-icons/fi'
 import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
@@ -140,6 +140,35 @@ export default function Home(props) {
 						}
 						onClick={() => navigate(PAGES.ADDRESS_LIST)}
 					/>
+					{isLogged && (
+						<ProfileCardButton
+							label={t('home.labelChangePassword')}
+							icon={
+								<FiLock
+									size={24}
+									className='text-gray-700'
+								/>
+							}
+							onClick={() =>
+								navigate(PAGES.CHANGE_PASSWORD, {
+									email: customerData.email,
+									passwordLastUpdate: customerData.passwordLastUpdate ?? null
+								})
+							}
+						/>
+					)}
+					{isLogged && (
+						<ProfileCardButton
+							label={t('home.labelSavedCards')}
+							icon={
+								<FiCreditCard
+									size={24}
+									className='text-gray-700'
+								/>
+							}
+							onClick={() => navigate(PAGES.SAVED_CARDS)}
+						/>
+					)}
 				</View>
 			</View>
 

@@ -1,4 +1,5 @@
 import { Rating } from 'shopping-vtex-template-shared'
+import { useTranslation } from 'eitri-i18n'
 
 const Star = ({ filled = true, size = 'md' }) => {
 	const sizes = { sm: 'text-sm', md: 'text-xl', lg: 'text-5xl' }
@@ -29,6 +30,7 @@ const RatingBar = ({ stars, percentage }) => (
 
 export default function RatingComponent(props) {
 	const { rating, composition } = props
+	const { t } = useTranslation()
 
 	const _compositionData = [1, 2, 3, 4, 5].map(id => {
 		const found = composition.find(item => item._id === id)
@@ -49,14 +51,14 @@ export default function RatingComponent(props) {
 					<Text className='font-bold'>{rating?.rating}</Text>
 				</View>
 
-				<View className='text-sm text-gray-500'>{`${rating?.count} avaliações`}</View>
+				<Text className='text-sm text-gray-500'>{t('rating.txtCount', { count: rating?.count })}</Text>
 			</View>
 
 			<View className={'border border-b-gray-600 w-full h-[1px] opacity-15 my-6'} />
 
 			{/* Composição da nota */}
 			<View className={'px-4'}>
-				<Text className='font-bold'>Composição da nota</Text>
+				<Text className='font-bold'>{t('rating.txtComposition')}</Text>
 
 				<View className={'flex flex-col mt-4'}>
 					{_compositionData?.map(item => (

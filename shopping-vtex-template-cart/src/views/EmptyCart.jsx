@@ -6,9 +6,9 @@ import {
 	HeaderReturn,
 	HeaderText,
 	CustomButton,
-	BottomInset,
+	BottomInset
 } from 'shopping-vtex-template-shared'
-import { FiShoppingCart } from 'react-icons/fi'
+import { IoBagOutline } from 'react-icons/io5'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 
 export default function EmptyCart(props) {
@@ -40,7 +40,7 @@ export default function EmptyCart(props) {
 
 				<View className='flex flex-1 flex-col justify-center items-center'>
 					<View className='flex flex-col items-center gap-4 w-full max-w-xs'>
-						<FiShoppingCart
+						<IoBagOutline
 							size={50}
 							className={'text-primary'}
 						/>

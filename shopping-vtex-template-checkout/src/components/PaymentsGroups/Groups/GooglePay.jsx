@@ -17,7 +17,9 @@ export default function GooglePay(props) {
 
 	useEffect(() => {
 		if (Eitri.canIUse(31)) {
-			Eitri.googlePay.isAvailable().then(res => setGPayAvailable(res))
+			Eitri.googlePay.isAvailable()
+				.then(res => setGPayAvailable(res))
+				.catch(err => console.error('GooglePay: isAvailable failed', err))
 		}
 	}, [])
 
@@ -30,9 +32,11 @@ export default function GooglePay(props) {
 			const googlePaymentData = await loadGPaymentData()
 
 			const cardNetWorkLabel = googlePaymentData?.paymentMethodData?.info?.cardNetwork
-			const paymentSystemWallet = cart?.paymentData?.paymentSystems?.find(
-				ps => ps.name.toLowerCase() === cardNetWorkLabel.toLowerCase()
-			)
+			const paymentSystemWallet = cardNetWorkLabel
+				? cart?.paymentData?.paymentSystems?.find(
+						ps => ps.name?.toLowerCase() === cardNetWorkLabel.toLowerCase()
+					)
+				: undefined
 
 			const metadata = {
 				walletId: 'googlePay',

@@ -13,7 +13,10 @@ export const PAGES = {
 	ORDER_DETAILS: '/OrderDetails',
 	WISH_LIST: '/WishList',
 	ADDRESS_LIST: '/AddressList',
-	ADDRESS_FORM: '/AddressForm'
+	ADDRESS_FORM: '/AddressForm',
+	CHANGE_PASSWORD: '/ChangePassword',
+	SAVED_CARDS: '/SavedCards',
+	ADD_CARD_FORM: '/AddCardForm'
 }
 
 export const openProduct = async product => {

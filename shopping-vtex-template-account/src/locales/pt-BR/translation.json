@@ -9,7 +9,9 @@
 		"labelMyOrders": "Meus pedidos",
 		"labelHistoryOders": "Confira todo o histórico dos seus pedidos",
 		"lbPersonalData": "Dados pessoais",
-		"lbOrders": "Pedidos"
+		"lbOrders": "Pedidos",
+		"labelChangePassword": "Autenticação",
+		"labelSavedCards": "Cartões"
 	},
 	"passwordReset": {
 		"emailRecoveryTitle": "Digite seu e-mail para recuperar a senha",
@@ -237,9 +239,46 @@
 		"label": "versão {{version}}"
 	},
 	"productCard": {
-		"addedToCart": "adicionado à cesta com sucesso",
+		"snackAdded": "adicionado à cesta com sucesso",
 		"removedFromCart": "produto removido da cesta",
 		"viewCart": "Ver cesta",
 		"buy": "Comprar"
+	},
+	"savedCards": {
+		"title": "Meus Cartões",
+		"empty": "Nenhum cartão salvo",
+		"expires": "Validade",
+		"expired": "Expirado",
+		"addCard": "Adicionar cartão",
+		"confirmDelete": "Confirma a exclusão do cartão",
+		"addCardTitle": "Adicionar cartão",
+		"sectionCardData": "Dados do cartão",
+		"sectionDocument": "Documento",
+		"sectionAddress": "Endereço de cobrança",
+		"labelCardNumber": "Número do cartão",
+		"labelCardHolder": "Nome do titular",
+		"labelExpiry": "Validade",
+		"labelCsc": "CVV",
+		"labelPaymentSystem": "Bandeira",
+		"labelDocument": "Número",
+		"labelDocType": "Tipo",
+		"submitCard": "Salvar cartão",
+		"errorAddCard": "Não foi possível adicionar o cartão. Verifique os dados e tente novamente.",
+		"selectAddress": "Selecione o endereço de cobrança",
+		"enterManually": "Inserir manualmente"
+	},
+	"changePassword": {
+		"headerText": "Senha",
+		"title": "Alterar senha",
+		"subtitleFirstTime": "Enviamos um código de verificação para {{email}}. Digite o código e defina sua senha.",
+		"subtitleChange": "Para alterar sua senha, informe a senha atual e defina uma nova.",
+		"labelCode": "Código de verificação",
+		"resendCode": "Reenviar código",
+		"labelCurrentPassword": "Senha atual",
+		"labelNewPassword": "Nova senha",
+		"labelConfirmPassword": "Confirme a nova senha",
+		"submitButton": "Salvar senha",
+		"errorSendCode": "Não foi possível enviar o código. Tente novamente.",
+		"errorChange": "Não foi possível alterar a senha. Verifique os dados e tente novamente."
 	}
 }

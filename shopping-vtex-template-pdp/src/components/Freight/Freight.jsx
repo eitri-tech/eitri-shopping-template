@@ -69,7 +69,7 @@ export default function Freight(props) {
 					</View>
 					<View className='w-1/3'>
 						<CustomButton
-							label='calcular'
+							label={t('freight.labelCalculate')}
 							variant='outlined'
 							onClick={() => handleFreight(zipCode)}
 						/>
@@ -113,8 +113,7 @@ export default function Freight(props) {
 							<View className='w-full rounded-lg bg-[#FEFAE2] px-4 py-3'>
 								<View className='flex flex-row items-center gap-2'>
 									<Text className='flex-1 text-sm leading-5 text-gray-800'>
-										Desculpe, esse produto não está disponível para o seu CEP. Que tal tentar outro
-										CEP?
+										{t('freight.errorUnavailable')}
 									</Text>
 								</View>
 							</View>

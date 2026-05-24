@@ -1,6 +1,6 @@
 import { Text, View } from 'eitri-luminus'
 import Eitri from 'eitri-bifrost'
-import { FiShoppingCart } from 'react-icons/fi'
+import { IoBagOutline } from 'react-icons/io5'
 
 export default function HeaderCart(props) {
 	const { quantityOfItems, onClick, cart } = props
@@ -30,7 +30,7 @@ export default function HeaderCart(props) {
 			className={`relative w-[25px] h-[25px] flex items-center`}
 			onClick={handlePress}>
 			<View>
-				<FiShoppingCart
+				<IoBagOutline
 					className='text-header-content'
 					size={24}
 				/>

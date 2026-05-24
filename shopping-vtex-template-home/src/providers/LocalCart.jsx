@@ -20,16 +20,24 @@ export default function CartProvider({ children }) {
 		})
 	}, [])
 
-	const executeCartOperation = async (operation, ...args) => {
+	const updateTabBadge = async newCart => {
 		try {
-			setCartInLoading(true)
-			const newCart = await operation(...args)
 			Eitri.bottomBar.updateTabBadge({
 				index: 2,
 				content: newCart?.items?.length
 					? `${newCart?.items?.reduce((acc, item) => acc + item.quantity, 0)}`
 					: null
 			})
+		} catch (e) {
+			console.log('Erro ao atualizar tab badge: ', e)
+		}
+	}
+
+	const executeCartOperation = async (operation, ...args) => {
+		try {
+			setCartInLoading(true)
+			const newCart = await operation(...args)
+			updateTabBadge()
 			setCart(newCart)
 			setCartInLoading(false)
 			return newCart

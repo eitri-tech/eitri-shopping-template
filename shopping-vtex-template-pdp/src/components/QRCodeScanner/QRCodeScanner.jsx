@@ -3,10 +3,12 @@ import { Text, View } from 'eitri-luminus'
 import { getProductByEan } from '../../services/productService'
 import { openProduct } from '../../services/NavigationService'
 import { MdOutlineQrCodeScanner } from 'react-icons/md'
+import { useTranslation } from 'eitri-i18n'
 
 let toastTimeoutId
 
 export default function QRCodeScanner(props) {
+	const { t } = useTranslation()
 	const [isToastVisible, setIsToastVisible] = useState(false)
 
 	useEffect(() => {
@@ -42,9 +44,9 @@ export default function QRCodeScanner(props) {
 						laserAnimation: { enabled: true, color: '#FF0000' }
 					},
 					i18n: {
-						title: 'Escanear código de barras',
-						description: 'Centralize o código para escanear',
-						torch: 'Lanterna'
+						title: t('qrCodeScanner.title'),
+						description: t('qrCodeScanner.description'),
+						torch: t('qrCodeScanner.torch')
 					},
 					buttons: ['torch']
 				}
@@ -90,7 +92,7 @@ export default function QRCodeScanner(props) {
 				<View className='fixed bottom-[0px] left-[0px] right-[0px] z-[9999]'>
 					<View className={'w-full flex justify-center items-center p-4 mb-2'}>
 						<View className='flex justify-center rounded-lg bg-black/80 px-4 py-3 w-[80%]'>
-							<Text className='text-white text-xs font-medium'>Produto não encontrado</Text>
+							<Text className='text-white text-xs font-medium'>{t('qrCodeScanner.productNotFound')}</Text>
 						</View>
 					</View>
 

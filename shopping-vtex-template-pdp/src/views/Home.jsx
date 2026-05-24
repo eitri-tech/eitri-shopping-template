@@ -13,7 +13,6 @@ import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
 import ActionButton from '../components/ActionButton/ActionButton'
 import { getProductById, getProductBySlug, markLastViewedProduct } from '../services/productService'
-import BuyTogether from '../components/BuyTogether/BuyTogether'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
@@ -22,7 +21,6 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(null)
 	const [configLoaded, setConfigLoaded] = useState(false)
 	const [currentSku, setCurrentSku] = useState(null)
-	const [selectedBuyTogetherSkus, setSelectedBuyTogetherSkus] = useState([])
 
 	useEffect(() => {
 		window.scroll(0, 0)
@@ -143,13 +141,6 @@ export default function Home() {
 								configLoaded={configLoaded}
 							/>
 
-							{configLoaded && (
-								<BuyTogether
-									product={product}
-									onSelectionChange={setSelectedBuyTogetherSkus}
-								/>
-							)}
-
 							<SkuSelector
 								currentSku={currentSku}
 								product={product}
@@ -169,7 +160,6 @@ export default function Home() {
 					<ActionButton
 						product={product}
 						currentSku={currentSku}
-						selectedBuyTogetherSkus={selectedBuyTogetherSkus}
 					/>
 
 					<BottomInset />

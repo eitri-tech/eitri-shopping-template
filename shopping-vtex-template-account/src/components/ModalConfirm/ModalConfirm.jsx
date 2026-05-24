@@ -16,7 +16,7 @@ export default function ModalConfirm(props) {
 			}}>
 			<View className='flex flex-col p-4 bg-base-100 items-center rounded w-11/12 max-w-xs mx-auto'>
 				<Text className='text-center text-lg font-bold mb-6 text-base-content'>
-					{t('modalConfirm.deleteAddress')}
+					{props.message || t('modalConfirm.deleteAddress')}
 				</Text>
 				<View className='flex flex-col gap-3 w-full'>
 					<CustomButton

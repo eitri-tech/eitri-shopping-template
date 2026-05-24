@@ -3,12 +3,6 @@ import ProductCatalogContent from '../../ProductCatalogContent/ProductCatalogCon
 export default function ProductInfiniteScroll(props) {
 	const { data } = props
 
-	const [params, setParams] = useState(null)
-
-	useEffect(() => {
-		setParams(data)
-	}, [])
-
 	return (
 		<View>
 			{data?.title && (
@@ -17,7 +11,7 @@ export default function ProductInfiniteScroll(props) {
 				</View>
 			)}
 			<ProductCatalogContent
-				params={params}
+				params={data}
 				showFilters={data.showFilters}
 			/>
 		</View>

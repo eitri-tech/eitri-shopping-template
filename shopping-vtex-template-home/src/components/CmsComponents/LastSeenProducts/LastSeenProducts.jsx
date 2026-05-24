@@ -4,7 +4,7 @@ import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
 export default function LastSeenProducts(props) {
 	const { data } = props
 	const [products, setProducts] = useState([])
-	const [isLoading, setIsLoading] = useState([])
+	const [isLoading, setIsLoading] = useState(false)
 	useEffect(() => {
 		loadLastSeenProducts()
 	}, [])

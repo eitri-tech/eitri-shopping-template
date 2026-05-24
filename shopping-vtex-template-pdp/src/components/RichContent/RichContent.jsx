@@ -8,11 +8,13 @@ export default function RichContent(props) {
 			if (product['Conteudo Enriquecido']) {
 				setRichContent(product['Conteudo Enriquecido'])
 			} else {
-				getProductById(product.productId).then(product => {
-					if (product['Conteudo Enriquecido']) {
-						setRichContent(product['Conteudo Enriquecido'])
-					}
-				})
+				getProductById(product.productId)
+					.then(product => {
+						if (product['Conteudo Enriquecido']) {
+							setRichContent(product['Conteudo Enriquecido'])
+						}
+					})
+					.catch(err => console.error('RichContent: failed to load product', err))
 			}
 		}
 	}, [product])

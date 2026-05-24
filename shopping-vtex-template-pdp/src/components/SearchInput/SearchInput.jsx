@@ -1,4 +1,5 @@
 import { Text, View } from 'eitri-luminus'
+import { useTranslation } from 'eitri-i18n'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { autocompleteSuggestions } from '../../services/productService'
 import Eitri from 'eitri-bifrost'
@@ -12,6 +13,7 @@ let skipSuggestion = false
 
 export default function SearchInput(props) {
 	const { onSubmit, incomingValue, autoFocus, onClickInput, alwaysShowBackButton } = props
+	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState(incomingValue || '')
 	const [searchSuggestion, setSearchSuggestion] = useState([])
@@ -139,7 +141,7 @@ export default function SearchInput(props) {
 					onBlur={onBlurHandler}
 					onFocus={() => setIsFocused(true)}
 					enterKeyHint='done'
-					placeholder={'Pesquisar...'}
+					placeholder={t('searchInput.placeholder')}
 					className='rounded-lg !outline-none !ring-0 focus:!outline-none focus:!ring-0 focus-within:!outline-none focus-within:!ring-0 !bg-transparent border-none shadow-none w-full px-2'
 				/>
 

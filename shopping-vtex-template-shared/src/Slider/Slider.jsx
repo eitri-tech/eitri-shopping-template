@@ -20,13 +20,14 @@ export default function Slider(props) {
 				}, autoPlayTimeout || 5000)
 			}
 			slider.on('created', () => {
-				slider.container.addEventListener('mouseover', () => {
-					mouseOver = true
-					clearNextTimeout()
-				})
-				slider.container.addEventListener('mouseout', () => {
-					mouseOver = false
-					nextTimeout()
+				const container = slider.container
+				const onMouseOver = () => { mouseOver = true; clearNextTimeout() }
+				const onMouseOut = () => { mouseOver = false; nextTimeout() }
+				container.addEventListener('mouseover', onMouseOver)
+				container.addEventListener('mouseout', onMouseOut)
+				slider.on('destroyed', () => {
+					container.removeEventListener('mouseover', onMouseOver)
+					container.removeEventListener('mouseout', onMouseOut)
 				})
 				nextTimeout()
 			})

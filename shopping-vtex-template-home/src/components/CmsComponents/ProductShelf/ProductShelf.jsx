@@ -9,7 +9,7 @@ export default function ProductShelf(props) {
 
 	useEffect(() => {
 		executeProductSearch()
-	}, [])
+	}, [data])
 
 	const executeProductSearch = async () => {
 		setIsLoadingProducts(true)

@@ -9,7 +9,7 @@ export const useCartItem = (cart, itemId) => {
 		if (index === -1) return null
 
 		return { ...cart.items[index], index }
-	}, [cart?.items, itemId])
+	}, [cart, itemId])
 }
 
 export const useWishlist = productId => {

@@ -1,13 +1,14 @@
 import { CustomButton, BottomInset, TrackingService } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart } from '../../services/NavigationService'
-
+import { useTranslation } from 'eitri-i18n'
 import { useSnackBar } from '../../providers/SnackBar'
 
 export default function ActionButton(props) {
 	const { addItem, cart, changeItemQuantity } = useLocalShoppingCart()
 	const { showSnackBar } = useSnackBar()
-	const { currentSku, selectedBuyTogetherSkus = [], product } = props
+	const { t } = useTranslation()
+	const { currentSku, product } = props
 	const [isAvailable, setIsAvailable] = useState(true)
 	const [isLoading, setLoading] = useState(false)
 
@@ -28,7 +29,7 @@ export default function ActionButton(props) {
 		}
 
 		TrackingService.addToCartEvent(product)
-		showSnackBar('success', 'adicionado à cesta com sucesso')
+		showSnackBar('success', t('actionButton.snackAdded'))
 	}
 
 	const handleButtonClick = async () => {
@@ -37,12 +38,7 @@ export default function ActionButton(props) {
 		setLoading(true)
 
 		try {
-			// TODO: Mudar para adicionar o array com todos de uma vez
 			await addOrIncreaseCartItem(currentSku)
-
-			for (const sku of selectedBuyTogetherSkus) {
-				await addItem({ ...sku, quantity: 1 })
-			}
 		} finally {
 			setLoading(false)
 		}
@@ -55,7 +51,7 @@ export default function ActionButton(props) {
 					<CustomButton
 						onClick={handleButtonClick}
 						isLoading={isLoading}
-						label={'Comprar'}
+						label={t('actionButton.labelBuy')}
 						disabled={!isAvailable}
 					/>
 				</View>

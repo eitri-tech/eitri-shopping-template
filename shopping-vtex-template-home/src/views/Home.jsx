@@ -43,7 +43,7 @@ export default function Home() {
 
 	const startHome = async () => {
 		const startParams = await Eitri.getInitializationInfos()
-		if (!startParams.route) {
+		if (!startParams?.route) {
 			setInitialLoading(false)
 		}
 

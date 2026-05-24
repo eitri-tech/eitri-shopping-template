@@ -33,6 +33,10 @@ export const setPassword = async (email, accessKey, newPassword) => {
 	return await Vtex.customer.setPassword(email, accessKey, newPassword)
 }
 
+export const changePassword = async (email, currentPassword, newPassword) => {
+	return await Vtex.customer.setPassword(email, '', newPassword, currentPassword)
+}
+
 export const getCustomerData = async () => {
 	try {
 		const result = await Vtex.customer.getCustomerProfile()
@@ -121,4 +125,17 @@ export const removeItemFromWishlist = async id => {
 
 export const addToWishlist = async (productId, title, sku) => {
 	return await Vtex.wishlist.addItem(productId, title, sku)
+}
+
+export const getSavedCards = async () => {
+	const result = await Vtex.customer.getSavedCards()
+	return result?.payments || []
+}
+
+export const addNewCard = async (cardData, recaptchaToken) => {
+	return await Vtex.customer.addNewCard(cardData, recaptchaToken)
+}
+
+export const deleteSavedCard = async cardId => {
+	return await Vtex.customer.deleteSavedCard(cardId)
 }

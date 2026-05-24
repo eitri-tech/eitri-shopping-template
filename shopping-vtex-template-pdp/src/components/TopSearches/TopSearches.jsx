@@ -1,7 +1,9 @@
 import { getTopSearches } from '../../services/SearchMetadataService'
+import { useTranslation } from 'eitri-i18n'
 
 export default function TopSearches(props) {
 	const { onSubmit, className, ...rest } = props
+	const { t } = useTranslation()
 
 	const [searches, setSearches] = useState([])
 
@@ -20,7 +22,7 @@ export default function TopSearches(props) {
 		<View
 			className={`${className || ''}`}
 			{...rest}>
-			<Text className='font-bold text-sm'>mais buscados</Text>
+			<Text className='font-bold text-sm'>{t('topSearches.title')}</Text>
 			<View className='mt-2 flex flex-col gap-2'>
 				{searches?.map((search, idx) => (
 					<View

@@ -55,7 +55,7 @@ export default function SnackBarComponent({ children }) {
 				style={{
 					display: showSnackbar ? 'block' : 'none'
 				}}
-				className={`fixed bottom-0 left-0 right-0 z-[9900] p-4`}>
+				className={`fixed bottom-[70px] left-0 right-0 z-[9900] p-4`}>
 				<View
 					style={{
 						opacity: isVisible ? 1 : 0,

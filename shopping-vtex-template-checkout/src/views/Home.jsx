@@ -6,10 +6,10 @@ import { useLocalShoppingCart } from '../providers/LocalCart'
 import { navigate } from '../services/navigationService'
 import { TrackingService, Loading } from 'shopping-vtex-template-shared'
 
-let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData } = useLocalShoppingCart()
 	const { getCustomer, getUserByEmail } = useCustomer()
+	const pristineRef = useRef(true)
 
 	useEffect(() => {
 		init()
@@ -71,9 +71,9 @@ export default function Home(props) {
 			return navigate('EmptyCart')
 		}
 
-		if (pristine) {
+		if (pristineRef.current) {
 			TrackingService.beginCheckoutEvent(cart)
-			pristine = false
+			pristineRef.current = false
 		}
 
 		const destination = cartHasCustomerData(cart) ? 'FreightResolver' : 'PersonalData'

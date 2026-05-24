@@ -1,8 +1,10 @@
 import { deleteHistory, getSearchHistory } from '../../services/SearchMetadataService'
 import { FiClock } from 'react-icons/fi'
+import { useTranslation } from 'eitri-i18n'
 
 export default function SearchHistory(props) {
 	const { onSubmit, className, ...rest } = props
+	const { t } = useTranslation()
 
 	const [history, setHistory] = useState([])
 
@@ -24,11 +26,11 @@ export default function SearchHistory(props) {
 			className={`${className || ''}`}
 			{...rest}>
 			<View className={'flex justify-between items-center'}>
-				<Text className='font-bold text-sm'>histórico</Text>
+				<Text className='font-bold text-sm'>{t('searchHistory.title')}</Text>
 				<View
 					onClick={clearHistory}
 					className={'text-sm text-gray-600'}>
-					limpar histórico
+					<Text>{t('searchHistory.clear')}</Text>
 				</View>
 			</View>
 			<View className='mt-4 flex flex-col gap-3'>
