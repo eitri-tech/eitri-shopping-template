@@ -22,6 +22,10 @@ export default function CatalogSort(props) {
 		return currentOption ? t(currentOption.name) : t('lists.labelRelevance')
 	}
 
+	const isCurrentSort = sortOption => {
+		return currentSort === sortOption.value || currentSort === sortOption.id
+	}
+
 	return (
 		<>
 			<CustomButton
@@ -60,17 +64,17 @@ export default function CatalogSort(props) {
 								key={option.value}
 								onClick={() => handleSortSelect(option.value)}
 								className={`flex flex-row items-center justify-between p-4 cursor-pointer transition-colors ${
-									currentSort === option.value
+									isCurrentSort(option)
 										? 'bg-primary/10 border-l-4 border-primary'
 										: 'border-l-4 border-transparent'
 								}`}>
 								<Text
 									className={`text-base ${
-										currentSort === option.value ? 'text-primary font-medium' : 'text-gray-700'
+										isCurrentSort(option) ? 'text-primary font-medium' : 'text-gray-700'
 									}`}>
 									{t(option.name)}
 								</Text>
-								{currentSort === option.value && (
+								{isCurrentSort(option) && (
 									<svg
 										xmlns='http://www.w3.org/2000/svg'
 										width='20'
