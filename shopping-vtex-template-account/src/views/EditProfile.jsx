@@ -14,6 +14,8 @@ import { useTranslation } from 'eitri-i18n'
 import formatDateMMDDYYYY, { formatDate } from '../utils/utils'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 import { verifySocialNumber } from '../utils/verifySocialNumber'
+import { RemoteConfig } from 'eitri-shopping-vtex-shared'
+import Eitri from 'eitri-bifrost'
 
 export default function EditProfile(props) {
 	const [user, setUser] = useState({})
@@ -215,6 +217,8 @@ export default function EditProfile(props) {
 		)
 	}
 
+	const deleteAccountUrl = RemoteConfig.getContent('appConfigs.deleteAccountUrl')
+
 	return (
 		<Page
 			title={'Editar perfil'}
@@ -330,6 +334,14 @@ export default function EditProfile(props) {
 					onClick={handleSave}
 					disabled={!isFormValid() || isLoading}
 				/>
+
+				{!!deleteAccountUrl && (
+					<View
+						className='w-full flex justify-center items-center px-4 mt-4'
+						onClick={() => Eitri.openBrowser({ url: deleteAccountUrl, inApp: true })}>
+						<Text className='text-sm font-bold text-gray-800'>Solicitar exclusão de conta</Text>
+					</View>
+				)}
 
 				{/* FIX #7: exibe erro de salvamento/carregamento */}
 				{saveError && (
