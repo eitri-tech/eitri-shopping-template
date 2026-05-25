@@ -2,22 +2,27 @@ import { closeEitriApp } from '../services/navigationService'
 import cartImage from '../assets/images/cart-01.svg'
 import { useTranslation } from 'eitri-i18n'
 import { goToCartman } from '../utils/utils'
-import { trackScreenView } from '../services/Tracking'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, CustomButton } from 'shopping-vtex-template-shared'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	CustomButton,
+	TrackingService
+} from 'shopping-vtex-template-shared'
 
 export default function EmptyCart() {
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		trackScreenView(`checkout_vazio`, 'checkout.emptyCart')
+		TrackingService.sendScreenView(`checkout_carrinho_vazio`, 'EmptyCart')
 	}, [])
 
 	return (
-		<Page title={t('checkoutPages.emptyCart', 'Checkout - Carrinho Vazio')}>
+		<Page title='Checkout - Cesta Vazia'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<View onClick={goToCartman}>
-					<HeaderText text={t('emptyCart.title', 'Finalizar Pedido')} />
+					<HeaderText text={t('emptyCart.title')} />
 				</View>
 			</HeaderContentWrapper>
 
@@ -32,14 +37,14 @@ export default function EmptyCart() {
 
 				<View className='flex flex-col justify-start self-center'>
 					<Text className='font-bold text-primary-base text-xl text-center'>
-						{t('emptyCart.txtEmptyCart', 'Seu carrinho está vazio')}
+						{t('emptyCart.txtEmptyCart')}
 					</Text>
-					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem', 'Adicione produtos no seu carrinho')}</Text>
+					<Text className='mt-6 text-neutral-700 text-base text-center'>{t('emptyCart.txtAddItem')}</Text>
 				</View>
 
 				<CustomButton
 					className={'w-full'}
-					label={t('emptyCart.labelBack', 'Voltar')}
+					label={t('emptyCart.labelBack')}
 					onPress={closeEitriApp}
 				/>
 			</View>

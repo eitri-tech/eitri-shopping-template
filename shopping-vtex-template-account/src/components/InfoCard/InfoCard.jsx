@@ -1,9 +1,11 @@
+import { GenericBox } from 'shopping-vtex-template-shared'
+
 export default function InfoCard(props) {
 	const { customerData } = props
 
 	return (
 		<View className='p-4'>
-			<View className='flex justify-between gap-3 bg-white rounded shadow-sm border border-gray-300 p-4 w-full items-center'>
+			<GenericBox className='flex justify-between gap-3 p-4 w-full items-center'>
 				<View className='flex items-center justify-center w-16 h-16 rounded-full bg-primary'>
 					<Text className='text-2xl font-bold text-white'>
 						{(customerData?.firstName ?? customerData?.email)?.charAt(0)?.toLocaleUpperCase()}
@@ -19,7 +21,7 @@ export default function InfoCard(props) {
 
 					{customerData?.email && <Text className='text-sm text-gray-600'>{customerData.email}</Text>}
 				</View>
-			</View>
+			</GenericBox>
 		</View>
 	)
 }

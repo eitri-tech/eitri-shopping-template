@@ -1,6 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { formatAmount, formatPrice } from '../../utils/utils'
 import { useTranslation } from 'eitri-i18n'
+import { GenericBox } from 'shopping-vtex-template-shared'
 import { App } from 'eitri-shopping-vtex-shared'
 
 export default function MainDescription(props) {
@@ -50,7 +51,7 @@ export default function MainDescription(props) {
 	const mainSeller = currentSku?.sellers?.find(seller => seller.sellerDefault) || currentSku?.sellers?.[0]
 
 	return (
-		<View className='flex flex-col bg-white rounded shadow-sm border border-gray-300 p-4 w-full'>
+		<GenericBox className='flex flex-col'>
 			<View>
 				<View onClick={copyCheckoutId}>
 					<Text className='text-xl font-bold'>{product.productName}</Text>
@@ -82,6 +83,6 @@ export default function MainDescription(props) {
 					<Text className='text-sm text-neutral-content'>{discoverInstallments(currentSku)}</Text>
 				)}
 			</View>
-		</View>
+		</GenericBox>
 	)
 }

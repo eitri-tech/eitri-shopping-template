@@ -4,17 +4,48 @@ import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, BottomInset } 
 import NoItem from '../components/NoItem/NoItem'
 import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { EventBusChannels, EventBus } from 'eitri-shopping-vtex-shared'
 import { useTranslation } from 'eitri-i18n'
 
 export default function Wishlist(props) {
+	const { t } = useTranslation()
 	const [wishlistItems, setWishlistItems] = useState([])
 	const [isLoading, setIsLoading] = useState(true)
-	const { t } = useTranslation()
+
+	const openWithBottomBart = !!props?.location?.state?.tabIndex
 
 	useEffect(() => {
 		start()
 		addonUserTappedActiveTabListener()
 		sendScreenView('Lista de desejos', 'Wishlist')
+		EventBus.subscribe({
+			channel: EventBusChannels.USER_LOGGED_IN,
+			broadcast: true,
+			callback: data => {
+				start()
+			}
+		})
+		EventBus.subscribe({
+			channel: EventBusChannels.USER_LOGGED_OUT,
+			broadcast: true,
+			callback: data => {
+				setWishlistItems([])
+			}
+		})
+		EventBus.subscribe({
+			channel: 'addToWishlist',
+			broadcast: true,
+			callback: data => {
+				start()
+			}
+		})
+		EventBus.subscribe({
+			channel: 'removeFromWishlist',
+			broadcast: true,
+			callback: data => {
+				start()
+			}
+		})
 	}, [])
 
 	const start = async () => {
@@ -42,36 +73,36 @@ export default function Wishlist(props) {
 	}
 
 	return (
-		<Page title={t('wishlist.pageTitle', 'Wishlist')}>
-			<HeaderContentWrapper>
-				<HeaderReturn />
-				<HeaderText text={t('wishlist.myFavorites', 'Meus favoritos')} />
-			</HeaderContentWrapper>
+		<Page title='Wishlist'>
+			<View className={'min-h-[100vh] flex flex-col'}>
+				<HeaderContentWrapper>
+					{!openWithBottomBart && <HeaderReturn />}
 
-			<Loading
-				isLoading={isLoading}
-				fullScreen
-			/>
+					<HeaderText text={t('wishlist.title')} />
+				</HeaderContentWrapper>
 
-			<View className='grid grid-cols-2 gap-x-2 gap-y-4 p-4'>
-				{wishlistItems?.map(item => (
-					<WishlistItem
-						key={item.id}
-						productId={item.productId}
-						onRemoveFromWishlist={() => onRemoveFromWishList(item.id)}
-					/>
-				))}
-			</View>
-			{wishlistItems.length === 0 && !isLoading && (
-				<NoItem
-					title={t('wishlist.noItems', 'Você não possui nenhum item salvo')}
-					subtitle={t(
-						'wishlist.noItemsSubtitle',
-						'Quando você salvar um produto, ele será listado aqui.'
-					)}
+				<Loading
+					isLoading={isLoading}
+					fullScreen
 				/>
-			)}
-			<BottomInset />
+
+				<View className='grid grid-cols-2 gap-x-2 gap-y-4 p-4'>
+					{wishlistItems?.map(item => (
+						<WishlistItem
+							key={item.id}
+							productId={item.productId}
+							onRemoveFromWishlist={() => onRemoveFromWishList(item.id)}
+						/>
+					))}
+				</View>
+				{wishlistItems.length === 0 && !isLoading && (
+					<NoItem
+						title={t('wishlist.emptyTitle')}
+						subtitle={t('wishlist.emptySubtitle')}
+					/>
+				)}
+				<BottomInset />
+			</View>
 		</Page>
 	)
 }

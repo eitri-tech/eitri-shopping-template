@@ -50,36 +50,45 @@ export const openProductBySlug = async slug => {
 	}
 }
 
-export const normalizePath = path => {
-	let pathComponents = decodeURIComponent(path).split('?')
-	let pathData = pathComponents[0].split('/').filter(Boolean)
-	let queryParams = new URLSearchParams(pathComponents[1])
-	let normalizedData = { facets: [] }
+const IGNORED_FACET_KEYS = new Set(['fuzzy', 'operator', 'channel', 'locale'])
 
-	if (queryParams.has('map')) {
-		let mapKeys = queryParams.get('map').split(',')
+export const normalizePath = path => {
+	const pathComponents = decodeURIComponent(path).split('?')
+	const pathData = pathComponents[0].split('/').filter(Boolean)
+	const queryParams = new URLSearchParams(pathComponents[1])
+	const normalizedData = { facets: [] }
+
+	if (pathData[0] === 's' && queryParams.has('q')) {
+		normalizedData.query = decodeURIComponent(queryParams.get('q').replace(/\+/g, ' '))
+	} else if (queryParams.has('map')) {
+		const mapKeys = queryParams.get('map').split(',')
 		pathData.forEach((value, index) => {
 			if (mapKeys[index] === 'ft') {
 				normalizedData.query = value
 			} else {
-				normalizedData.facets.push({
-					key: mapKeys[index],
-					value: value
-				})
+				normalizedData.facets.push({ key: mapKeys[index], value })
+			}
+		})
+	} else if (queryParams.has('facets')) {
+		const facetKeys = queryParams.get('facets').split(',')
+		facetKeys.forEach(key => {
+			if (!IGNORED_FACET_KEYS.has(key) && queryParams.has(key)) {
+				normalizedData.facets.push({ key, value: queryParams.get(key) })
 			}
 		})
 	} else {
-		// Handle paths without 'map' query param
 		pathData.forEach((value, index) => {
-			normalizedData.facets.push({
-				key: `category-${index + 1}`,
-				value: value
-			})
+			normalizedData.facets.push({ key: `category-${index + 1}`, value })
 		})
 	}
 
-	for (let [key, value] of queryParams.entries()) {
-		if (key !== 'map') {
+	const skipKeys = new Set([
+		'map', 'facets', 'page',
+		...IGNORED_FACET_KEYS,
+		...(queryParams.has('facets') ? queryParams.get('facets').split(',') : [])
+	])
+	for (const [key, value] of queryParams.entries()) {
+		if (!skipKeys.has(key)) {
 			normalizedData[key] = value
 		}
 	}

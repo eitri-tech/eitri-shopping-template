@@ -1,23 +1,30 @@
-import { Loading, HeaderContentWrapper, HeaderText, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
+import {
+	Loading,
+	HeaderContentWrapper,
+	HeaderText,
+	HeaderReturn,
+	BottomInset,
+	GenericBox
+} from 'shopping-vtex-template-shared'
 import NoItem from '../components/NoItem/NoItem'
 import { sendScreenView } from '../services/TrackingService'
+import { useTranslation } from 'eitri-i18n'
 import OrderCard from '../components/OrderCard/OrderCard'
 import { listOrders } from '../services/CustomerService'
 import ProtectedView from '../components/ProtectedView/ProtectedView'
 import InfiniteScroll from '../components/InfiniteScroll/InfiniteScroll'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
-import { useTranslation } from 'eitri-i18n'
+import SnackBarComponent from '../providers/SnackBar'
 
 export default function OrderList(props) {
+	const { t } = useTranslation()
 	const [orders, setOrders] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	const { t } = useTranslation()
-
-	const [page, setPage] = useState(1)
-
 	const [pageHasEnded, setPageHasEnded] = useState(false)
 
-	const MAX_ORDERS_SHOW_DETAILS = 3
+	const pageRef = useRef(1)
+	const maxPages = useRef(Infinity)
+	const isFetchingRef = useRef(false)
 
 	useEffect(() => {
 		handleOrders()
@@ -25,25 +32,27 @@ export default function OrderList(props) {
 		sendScreenView('Meus Pedidos', 'OrderList')
 	}, [])
 
+	useEffect(() => {
+		isFetchingRef.current = false
+	}, [orders])
+
 	const handleOrders = async () => {
 		try {
-			if (pageHasEnded) {
+			if (isFetchingRef.current || pageHasEnded || pageRef.current > maxPages.current) {
 				return
 			}
+			isFetchingRef.current = true
 			setIsLoading(true)
-			const orders = await listOrders(page)
-			if (orders && orders.list && orders.list.length === 0) {
+			const result = await listOrders(pageRef.current)
+			maxPages.current = result?.paging?.pages
+			if (!result?.list?.length) {
 				setPageHasEnded(true)
 				return
 			}
-			if (orders && orders.list && orders.list.length > 0) {
-				const moreOrdersList = orders.list
-				setOrders(prevOrders => [...prevOrders, ...moreOrdersList])
-				setOrders(orders.list)
-				setPage(page + 1)
-			}
+			setOrders(prev => [...prev, ...result.list])
+			pageRef.current += 1
 		} catch (error) {
-			console.log(t('orderList.fetchOrdersError', 'erro ao buscar orders'), error)
+			console.log('erro ao buscar orders', error)
 		} finally {
 			setIsLoading(false)
 		}
@@ -54,44 +63,39 @@ export default function OrderList(props) {
 			<Page>
 				<HeaderContentWrapper>
 					<HeaderReturn />
-					<HeaderText text={t('orderList.myOrders', 'Meus Pedidos')} />
+					<HeaderText text={t('orderList.title')} />
 				</HeaderContentWrapper>
 
-				<Loading
-					isLoading={isLoading}
-					fullScreen
-				/>
-
-				{!isLoading && (
-					<>
-						<View className='p-4'>
-							<>
-								{orders && orders.length >= 1 ? (
-									<InfiniteScroll
-										onScrollEnd={handleOrders}
-										className={'flex flex-col gap-4'}>
-										{orders.map((item, key) => (
-											<OrderCard
-												key={item.orderId}
-												order={item}
-												showOrderDetails={key < MAX_ORDERS_SHOW_DETAILS}
-											/>
-										))}
-									</InfiniteScroll>
-								) : (
-									<NoItem
-										title={t('orderList.noOrders', 'Você não possui nenhum pedido')}
-										subtitle={t(
-											'orderList.noOrdersSubtitle',
-											'Quando você fizer uma compra, ela será listada aqui.'
-										)}
-									/>
-								)}
-							</>
-						</View>
-						<BottomInset />
-					</>
-				)}
+				<View className='p-4'>
+					{orders.length >= 1 ? (
+						<InfiniteScroll
+							onScrollEnd={handleOrders}
+							className={'flex flex-col gap-4'}>
+							{orders.map(item => (
+								<OrderCard
+									key={item.orderId}
+									order={item}
+								/>
+							))}
+							{isLoading && (
+								<View className='flex justify-center py-4'>
+									<Loading isLoading={true} />
+								</View>
+							)}
+						</InfiniteScroll>
+					) : isLoading ? (
+						<Loading
+							isLoading={true}
+							fullScreen
+						/>
+					) : (
+						<NoItem
+							title={t('orderList.emptyTitle')}
+							subtitle={t('orderList.emptySubtitle')}
+						/>
+					)}
+				</View>
+				<BottomInset />
 			</Page>
 		</ProtectedView>
 	)

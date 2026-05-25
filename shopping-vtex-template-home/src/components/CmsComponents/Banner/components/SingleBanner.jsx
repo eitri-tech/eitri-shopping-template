@@ -1,4 +1,5 @@
 import { Text, View } from 'eitri-luminus'
+import SectionTitle from '../../../SectionTitle/SectionTitle'
 export default function SingleBanner(props) {
 	const { data, onClick } = props
 
@@ -14,22 +15,20 @@ export default function SingleBanner(props) {
 		} catch (e) {}
 	}
 
+	const imageUrl = imagesList?.[0].imageUrl || imagesList?.[0].externalImageUrl
+
 	return (
 		<View className='relative '>
-			{data.mainTitle && (
-				<View className='px-4 flex items-center justify-center w-full'>
-					<Text className='font-bold mb-8'>{data.mainTitle}</Text>
-				</View>
-			)}
+			<SectionTitle title={data.mainTitle} />
 
-			{imagesList && imagesList[0] && (
+			{imageUrl && (
 				<View
-					key={imagesList[0].imageUrl}
+					key={imageUrl}
 					onClick={() => onClick(imagesList[0])}
 					height={proportionalHeight}
 					className='px-4 flex flex-row w-full'>
 					<Image
-						src={imagesList[0].imageUrl}
+						src={imageUrl}
 						className='w-full h-full rounded'
 					/>
 				</View>

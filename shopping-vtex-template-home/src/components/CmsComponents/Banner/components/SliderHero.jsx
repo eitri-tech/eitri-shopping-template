@@ -1,5 +1,6 @@
 import { Text, View, Image } from 'eitri-luminus'
-import { CustomCarousel } from 'shopping-vtex-template-shared'
+import { Slider } from 'shopping-vtex-template-shared'
+import SectionTitle from '../../../SectionTitle/SectionTitle'
 
 export default function SliderHero(props) {
 	const { data, onClick } = props
@@ -7,15 +8,11 @@ export default function SliderHero(props) {
 	const [currentSlide, setCurrentSlide] = useState(0)
 	const imagesList = data.images
 
-	const onChange = i => {
-		setCurrentSlide(i)
-	}
-
 	let proportionalHeight = 'auto'
 
 	if (data?.aspectRatio) {
 		try {
-			const [aspectWidth, aspectHeight] = data?.aspectRatio?.split(':')?.map(Number)
+			const [aspectWidth, aspectHeight] = data?.aspectRatio?.replace('x', ':')?.split(':')?.map(Number)
 			const screenWidth = window.innerWidth
 			proportionalHeight = screenWidth * (aspectHeight / aspectWidth)
 		} catch (e) {}
@@ -23,38 +20,43 @@ export default function SliderHero(props) {
 
 	return (
 		<View className='relative'>
-			{data.mainTitle && (
-				<View className='px-4 flex items-center justify-center w-full'>
-					<Text className='font-bold mb-8'>{data.mainTitle}</Text>
-				</View>
-			)}
-			<CustomCarousel
-				onSlideChange={onChange}
-				autoPlay={data.autoPlay ?? true}
-				interval={6000}
-				loop={true}>
+			<SectionTitle title={data.mainTitle} />
+			<Slider
+				options={{
+					loop: imagesList.length === 1 ? false : data?.autoPlay,
+					renderMode: 'performance',
+					slideChanged(s) {
+						setCurrentSlide(s.track.details.rel)
+					}
+				}}
+				autoPlay={data?.autoPlay ?? true}
+				autoPlayTimeout={2000}>
 				{imagesList &&
-					imagesList.map(image => (
-						<View
-							className='w-full flex justify-center snap-x snap-always'
-							key={`image_${image.imageUrl}`}>
+					imagesList.map(image => {
+						const imageUrl = image.imageUrl || image.externalImageUrl
+						return (
 							<View
-								onClick={() => {
-									onClick(image)
-								}}
-								height={proportionalHeight}
-								width='100%'>
-								<Image
-									fadeIn={1000}
-									className='w-full h-full'
-									src={image.imageUrl}
-								/>
+								className='keen-slider__slide'
+								key={`image_${imageUrl}`}>
+								<View
+									onClick={() => {
+										onClick(image)
+									}}
+									height={proportionalHeight}
+									width='100%'>
+									<Image
+										fadeIn={1000}
+										className='w-full h-full'
+										src={imageUrl}
+									/>
+								</View>
 							</View>
-						</View>
-					))}
-			</CustomCarousel>
+						)
+					})}
+			</Slider>
+
 			{imagesList.length > 1 && (
-				<View className='flex justify-center gap-2 mt-2'>
+				<View className='absolute bottom-[12px] w-full flex justify-center gap-[12px] mt-2'>
 					{imagesList.map((_, index) => (
 						<View
 							key={index}

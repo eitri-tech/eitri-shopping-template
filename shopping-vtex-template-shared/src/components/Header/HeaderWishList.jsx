@@ -1,4 +1,4 @@
-import WishlistIcon from '../ProductCard/components/WishlistIcon'
+import WishlistIcon from '../WishlistIcon/WishlistIcon'
 
 export default function HeaderWishList(props) {
 	const { filled, className, onClick } = props

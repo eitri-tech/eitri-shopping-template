@@ -1,51 +1,58 @@
-import { CustomButton, BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { CustomButton, BottomInset, TrackingService } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 import { openCart } from '../../services/NavigationService'
+import { useTranslation } from 'eitri-i18n'
+import { useSnackBar } from '../../providers/SnackBar'
 
 export default function ActionButton(props) {
-	const { addItem, cart } = useLocalShoppingCart()
+	const { addItem, cart, changeItemQuantity } = useLocalShoppingCart()
+	const { showSnackBar } = useSnackBar()
 	const { t } = useTranslation()
-	const { currentSku } = props
+	const { currentSku, product } = props
 	const [isAvailable, setIsAvailable] = useState(true)
 	const [isLoading, setLoading] = useState(false)
 
 	useEffect(() => {
-		const mainSeller = currentSku.sellers.find(seller => seller.sellerDefault)
+		const mainSeller = currentSku?.sellers?.find(seller => seller.sellerDefault)
 		const isAvailable = mainSeller?.commertialOffer?.AvailableQuantity > 0
 		setIsAvailable(isAvailable)
 	}, [currentSku])
 
-	const isItemOnCart = () => {
-		return cart?.items?.some(cartItem => cartItem.id === currentSku?.itemId)
-	}
+	const addOrIncreaseCartItem = async () => {
+		const itemIndexOnCart = cart?.items?.findIndex(item => item.id === currentSku?.itemId)
 
-	const getButtonLabel = () => {
-		if (!isAvailable) return t('product.errorNoProduct', 'Produto Indisponível')
-		return isItemOnCart() ? t('product.labelGoToCart', 'Ir para carrinho') : t('product.labelAddToCart', 'Adicionar ao carrinho')
-	}
-
-	const handleButtonClick = () => {
-		if (!isAvailable) return
-		setLoading(true)
-		if (isItemOnCart()) {
-			openCart()
+		if (itemIndexOnCart > -1) {
+			const currentCartQuantity = cart?.items[itemIndexOnCart]?.quantity || 0
+			await changeItemQuantity(itemIndexOnCart, currentCartQuantity + 1)
 		} else {
-			addItem(currentSku)
+			await addItem({ ...currentSku, quantity: 1 })
 		}
-		setLoading(false)
+
+		TrackingService.addToCartEvent(product)
+		showSnackBar('success', t('actionButton.snackAdded'))
+	}
+
+	const handleButtonClick = async () => {
+		if (!isAvailable || isLoading) return
+
+		setLoading(true)
+
+		try {
+			await addOrIncreaseCartItem(currentSku)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	return (
 		<>
-			<View className='fixed bottom-0 left-0 right-0 z-[999] bg-white border-t border-gray-300'>
-				<View className='p-4'>
+			<View className='fixed bottom-0 left-0 right-0 z-[999] bg-white rounded-t-2xl'>
+				<View className='p-4 flex items-center  gap-2'>
 					<CustomButton
 						onClick={handleButtonClick}
 						isLoading={isLoading}
-						backgroundColor={isAvailable ? 'primary-700' : 'neutral-300'}
-						className='rounded-pill w-full'
-						label={getButtonLabel()}
+						label={t('actionButton.labelBuy')}
+						disabled={!isAvailable}
 					/>
 				</View>
 

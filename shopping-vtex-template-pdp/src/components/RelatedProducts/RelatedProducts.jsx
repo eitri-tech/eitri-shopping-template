@@ -29,12 +29,12 @@ export default function RelatedProducts(props) {
 		}
 	}
 
-	if (!relatedProducts && !isLoading) return null
+	if ((!relatedProducts || relatedProducts?.length === 0) && !isLoading) return null
 
 	return (
 		<View className='mt-4'>
 			<View className='px-4'>
-				<Text className='text-lg font-semibold'>{t('productBasicTemplate.txtWhoSaw', 'Quem viu esta, viu também:')}</Text>
+				<Text className='text-lg font-semibold'>{t('productBasicTemplate.txtWhoSaw')}</Text>
 			</View>
 
 			{isLoading ? (
@@ -52,7 +52,7 @@ export default function RelatedProducts(props) {
 							<ProductCard
 								key={product.productId}
 								product={product}
-								className={`min-w-[50vw]`}
+								className={`w-[50vw]`}
 							/>
 						))}
 					</View>
@@ -68,7 +68,7 @@ export default function RelatedProducts(props) {
 		// />
 
 		// <ShelfOfProducts
-		// 	title={t('productBasicTemplate.txtWhoSaw', 'Quem viu também comprou')}
+		// 	title={t('productBasicTemplate.txtWhoSaw')}
 		// 	mode='carousel'
 		// 	products={relatedProducts}
 		// />

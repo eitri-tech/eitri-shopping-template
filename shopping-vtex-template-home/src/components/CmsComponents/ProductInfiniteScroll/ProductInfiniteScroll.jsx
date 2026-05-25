@@ -3,17 +3,6 @@ import ProductCatalogContent from '../../ProductCatalogContent/ProductCatalogCon
 export default function ProductInfiniteScroll(props) {
 	const { data } = props
 
-	const [params, setParams] = useState(null)
-
-	useEffect(() => {
-		const params = {
-			facets: data.facets || [],
-			query: data.term ?? '',
-			sort: data.sort ?? ''
-		}
-		setParams(data)
-	}, [])
-
 	return (
 		<View>
 			{data?.title && (
@@ -22,8 +11,8 @@ export default function ProductInfiniteScroll(props) {
 				</View>
 			)}
 			<ProductCatalogContent
-				params={params}
-				hideFilters
+				params={data}
+				showFilters={data.showFilters}
 			/>
 		</View>
 	)

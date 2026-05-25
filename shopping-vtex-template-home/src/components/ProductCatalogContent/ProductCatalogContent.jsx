@@ -7,7 +7,6 @@ import CatalogSort from './Components/CatalogSort'
 import { getDefaultSortParam } from '../../services/helpers/resolveSortParam'
 import CatalogFilter from './Components/CatalogFilter'
 import InfiniteScroll from '../InfiniteScroll/InfiniteScroll'
-import { useTranslation } from 'eitri-i18n'
 
 export default function ProductCatalogContent(props) {
 	/*
@@ -19,7 +18,7 @@ export default function ProductCatalogContent(props) {
 	 *  sort: string
 	 * }
 	 * */
-	const { params, hideFilters, banner, ...rest } = props
+	const { params, showFilters, banner, ...rest } = props
 
 	const [productLoading, setProductLoading] = useState(false)
 	const [products, setProducts] = useState([])
@@ -30,10 +29,6 @@ export default function ProductCatalogContent(props) {
 
 	const [minPriceRange, setMinPriceRange] = useState(null)
 	const [maxPriceRange, setMaxPriceRange] = useState(null)
-	const { t } = useTranslation()
-	const showingLabel = t('productCatalog.showing', 'Exibindo')
-	const productSingular = t('productCatalog.productSingular', 'produto')
-	const productPlural = t('productCatalog.productPlural', 'produtos')
 
 	useEffect(() => {
 		if (params) {
@@ -43,8 +38,9 @@ export default function ProductCatalogContent(props) {
 			setAppliedFacets(initialParams)
 			setProducts([])
 			setPageHasEnded(false)
+			setCurrentPage(1)
 
-			getProducts(initialParams, currentPage)
+			getProducts(initialParams, 1)
 		}
 	}, [params])
 
@@ -134,7 +130,7 @@ export default function ProductCatalogContent(props) {
 				/>
 			)}
 
-			{products.length > 0 && !hideFilters && (
+			{products.length > 0 && showFilters && (
 				<>
 					<View className='p-4 flex flex-between gap-4 w-full'>
 						<CatalogFilter
@@ -152,15 +148,15 @@ export default function ProductCatalogContent(props) {
 						/>
 					</View>
 
-						{totalProducts > 0 && (
-							<View className='px-4'>
-								<Text>
-									{`${showingLabel} ${totalProducts} ${
-										totalProducts > 1 ? productPlural : productSingular
-									}`}
-								</Text>
-							</View>
-						)}
+					{totalProducts > 0 && (
+						<View className='px-4'>
+							<Text>
+								{`Exibindo ${
+									totalProducts > 1 ? `${totalProducts} produtos` : `${totalProducts} produto`
+								}`}
+							</Text>
+						</View>
+					)}
 				</>
 			)}
 

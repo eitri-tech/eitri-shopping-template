@@ -3,9 +3,7 @@ import { useTranslation } from 'eitri-i18n'
 import { Page, Radio, Text, View } from 'eitri-luminus'
 import { navigate } from '../services/navigationService'
 import { useState } from 'react'
-import { FaChevronRight } from 'react-icons/fa'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import { HeaderContentWrapper, HeaderReturn, BottomInset } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, BottomInset, Loading } from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
 import Eitri from 'eitri-bifrost'
 
@@ -47,50 +45,61 @@ export default function FreightGroupSelectorOptions(props) {
 		}
 	}
 
+	const getAddress = sla => {
+		if (sla.isPickupInPoint) {
+			return sla.pickupStoreInfo.address
+		} else {
+			return sla.deliveryAddress
+		}
+	}
+
 	return (
-		<Page title={t('checkoutPages.freightDelivery', 'Checkout - Frete e Entrega')}>
+		<Page title='Checkout - Frete e Entrega'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
 
-			<LoadingComponent
+			<Loading
 				fullScreen
 				isLoading={isLoading}
 			/>
 
 			<View className='flex-1 flex flex-col p-4 gap-4'>
-				<Text className='text-xl font-bold'>
-					{t('freightGroupSelectorOptions.title', 'Escolha como quer receber esses produtos')}
-				</Text>
+				<Text className='text-xl font-bold'>{t('freightGroupSelector.txtTitle')}</Text>
 
-				<View className='flex flex-row gap-4'>
+				<View className='flex flex-col gap-4'>
 					{group?.items?.map(product => (
-						<View>
+						<View className={'flex flex-row items-start gap-3'}>
 							<Image
 								src={product.imageUrl}
-								className='w-12 h-12 rounded-full object-contain'
+								className='w-10 object-contain rounded'
 							/>
+							<View className='flex flex-col gap-1'>{product.name}</View>
 						</View>
 					))}
 				</View>
 				<View className='flex flex-col'>
 					{group?.slas?.map(sla => {
 						const label = sla.isPickupInPoint
-							? `${t('freightGroupSelectorOptions.pickupAtStore', 'Retire na loja')} ${sla.pickupStoreInfo.friendlyName}`
-							: `${sla.formatedShippingEstimate}`
+							? t('freightGroupSelector.txtPickup', { name: sla.pickupStoreInfo.friendlyName })
+							: t('freightGroupSelector.txtDelivery')
+
+						const address = getAddress(sla)
 
 						return (
 							<CardSelector
 								mainTitle={label}
 								mainClickHandler={() => onSelectFreightOption(sla, group.items)}
 								secondaryActionTitle={sla.formatedShippingEstimate}>
-								{/*<Text className='text text-base-content/70'>{`${option.address.street}, ${option.address.number} ${option.address.complement}`}</Text>*/}
-								{/*<Text className='text text-base-content/70'>{`${option.address.neighborhood} - ${option.address.city} - ${option.address.state}`}</Text>*/}
-								{/*<Text className='text text-base-content/70'>{`CEP: ${option.address.postalCode}`}</Text>*/}
-								{/*<Text*/}
-								{/*	className={`text text-base-content/70 font-bold ${option.price === 'Grátis' ? 'text-green-600' : ''}`}>*/}
-								{/*	{option.price}*/}
-								{/*</Text>*/}
+								<Text className='text text-base-content/70'>{`${address.street}, ${address.number} ${address.complement}`}</Text>
+								<Text className='text text-base-content/70'>{`${address.neighborhood} - ${address.city} - ${address.state}`}</Text>
+								<Text className='text text-base-content/70'>{`CEP: ${address.postalCode}`}</Text>
+								<View className={'mt-2'}>
+									<Text
+										className={`font-semibold ${sla.formattedTotalPrice === 'Grátis' ? 'text-green-600' : ''}`}>
+										{sla.formattedTotalPrice}
+									</Text>
+								</View>
 							</CardSelector>
 						)
 					})}

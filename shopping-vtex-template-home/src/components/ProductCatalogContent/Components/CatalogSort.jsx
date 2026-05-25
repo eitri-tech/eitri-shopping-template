@@ -19,13 +19,14 @@ export default function CatalogSort(props) {
 
 	const getCurrentSortLabel = () => {
 		const currentOption = LIST_ORDERING.values.find(option => option.value === currentSort)
-		return currentOption ? t(currentOption.name, '') : t('lists.labelRelevance', 'Relevância')
+		return currentOption ? t(currentOption.name) : t('lists.labelRelevance')
 	}
 
 	return (
 		<>
 			<CustomButton
 				onClick={() => setShowModal(true)}
+				outlined
 				leftIcon={
 					<svg
 						xmlns='http://www.w3.org/2000/svg'
@@ -51,7 +52,7 @@ export default function CatalogSort(props) {
 				<View
 					bottomInset={'auto'}
 					className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
-					<Text className='text-lg font-semibold'>{t('lists.title', 'Ordenar por')}</Text>
+					<Text className='text-lg font-semibold'>{t('lists.title')}</Text>
 
 					<View className='flex flex-col mt-4'>
 						{LIST_ORDERING.values.map((option, index) => (
@@ -67,7 +68,7 @@ export default function CatalogSort(props) {
 									className={`text-base ${
 										currentSort === option.value ? 'text-primary font-medium' : 'text-gray-700'
 									}`}>
-									{t(option.name, '')}
+									{t(option.name)}
 								</Text>
 								{currentSort === option.value && (
 									<svg
@@ -90,7 +91,7 @@ export default function CatalogSort(props) {
 
 					<View className='mb-4'>
 						<CustomButton
-							label={t('lists.cancel', 'Cancelar')}
+							label='Cancelar'
 							onClick={() => setShowModal(false)}
 						/>
 					</View>

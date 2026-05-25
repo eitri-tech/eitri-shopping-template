@@ -33,6 +33,7 @@ export const openAccount = async () => {
 	try {
 		Eitri.nativeNavigation.open({
 			slug: 'account',
+			replace: true,
 			initParams: { route: 'OrderList' }
 		})
 	} catch (e) {

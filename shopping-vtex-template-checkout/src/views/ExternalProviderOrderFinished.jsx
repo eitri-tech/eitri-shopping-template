@@ -1,16 +1,13 @@
 import Eitri from 'eitri-bifrost'
-import { HeaderContentWrapper, CustomButton } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, CustomButton, TrackingService } from 'shopping-vtex-template-shared'
 import { openAccount } from '../services/navigationService'
-import { trackScreenView } from '../services/Tracking'
 import { useEffect } from 'react'
-import { useTranslation } from 'eitri-i18n'
 
 export default function ExternalProviderOrderFinished(props) {
-	const { t } = useTranslation()
 	const PAGE = 'External Provider Order Finished'
 
 	useEffect(() => {
-		trackScreenView(PAGE, 'ExternalProviderOrderFinished')
+		TrackingService.sendScreenView('pagamento_provedor_externo_completo', 'ExternalProviderOrderFinished')
 	}, [])
 
 	return (
@@ -26,26 +23,24 @@ export default function ExternalProviderOrderFinished(props) {
 				<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
 					<View className='mb-6 flex flex-col items-center'>
 						<Text className='text-2xl w-full font-bold text-center text-gray-800 mb-2'>
-							{t('externalProviderOrderFinished.title', 'Solicitação enviada!')}
+							Solicitação enviada!
 						</Text>
 						<Text className='text-base text-center text-gray-600 leading-relaxed'>
-							{t(
-								'externalProviderOrderFinished.description',
-								'Acompanhe seu pedido em "Meus pedidos". Se houve algum problema no pagamento, é só clicar em "Tentar novamente"!'
-							)}
+							Acompanhe seu pedido em "Meus pedidos". Se houve algum problema no pagamento, é só clicar em
+							"Tentar novamente"!
 						</Text>
 					</View>
 
 					{/* Action Buttons */}
 					<View className='flex flex-col gap-4'>
 						<CustomButton
-							label={t('externalProviderOrderFinished.seeMyOrders', 'Ver meus pedidos')}
+							label={'Ver meus pedidos'}
 							onPress={openAccount}
 							block
 						/>
 						<CustomButton
 							outlined
-							label={t('externalProviderOrderFinished.tryAgain', 'Tentar novamente')}
+							label={'Tentar novamente'}
 							onPress={Eitri.navigation.back}
 						/>
 					</View>

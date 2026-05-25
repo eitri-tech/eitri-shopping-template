@@ -3,16 +3,13 @@ import { addLoggedCustomerToCart, cartHasCustomerData, saveCartIdOnStorage } fro
 import { startConfigure } from '../services/AppService'
 import { useCustomer } from '../providers/Customer'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { trackBeginCheckout } from '../services/Tracking'
 import { navigate } from '../services/navigationService'
-import LoadingComponent from '../components/Shared/Loading/LoadingComponent'
-import { useTranslation } from 'eitri-i18n'
+import { TrackingService, Loading } from 'shopping-vtex-template-shared'
 
-let pristine = true
 export default function Home(props) {
 	const { startCart, addPersonalData } = useLocalShoppingCart()
 	const { getCustomer, getUserByEmail } = useCustomer()
-	const { t } = useTranslation()
+	const pristineRef = useRef(true)
 
 	useEffect(() => {
 		init()
@@ -74,9 +71,9 @@ export default function Home(props) {
 			return navigate('EmptyCart')
 		}
 
-		if (pristine) {
-			trackBeginCheckout(cart)
-			pristine = false
+		if (pristineRef.current) {
+			TrackingService.beginCheckoutEvent(cart)
+			pristineRef.current = false
 		}
 
 		const destination = cartHasCustomerData(cart) ? 'FreightResolver' : 'PersonalData'
@@ -90,8 +87,8 @@ export default function Home(props) {
 	}
 
 	return (
-		<Page title={t('checkoutPages.checkout', 'Checkout')}>
-			<LoadingComponent
+		<Page title={'Checkout'}>
+			<Loading
 				fullScreen={true}
 				isLoading={true}
 			/>

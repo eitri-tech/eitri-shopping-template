@@ -1,7 +1,6 @@
 import Eitri from 'eitri-bifrost'
-import { sendPageView } from '../services/trackingService'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, HeaderText, Loading, TrackingService } from 'shopping-vtex-template-shared'
 import { saveCartIdOnStorage } from '../services/cartService'
 import Freight from '../components/Freight/Freight'
 import Coupon from '../components/Coupon/Coupon'
@@ -11,6 +10,7 @@ import ActionButton from '../components/ActionButton/ActionButton'
 import { startConfigure } from '../services/AppService'
 import { Page } from 'eitri-luminus'
 import { useTranslation } from 'eitri-i18n'
+import MinimumOrderValue from '../components/MinimumOrderValue/MinimumOrderValue'
 
 export default function Home(props) {
 	const { t } = useTranslation()
@@ -41,10 +41,11 @@ export default function Home(props) {
 		setOpenWithBottomBar(startParams?.tabIndex)
 
 		await startConfigure()
-		await loadCart()
+		const cart = await loadCart()
 
 		setAppIsLoading(false)
-		sendPageView('Home')
+		TrackingService.sendScreenView('Carrinho', 'Home')
+		TrackingService.viewCartEvent(cart)
 	}
 
 	const loadCart = async () => {
@@ -56,10 +57,10 @@ export default function Home(props) {
 	}
 
 	return (
-		<Page title={t('home.title', 'Carrinho')}>
+		<Page title='Cesta'>
 			<HeaderContentWrapper>
 				{!openWithBottomBar && <HeaderReturn />}
-				<HeaderText text={t('home.title', 'Carrinho')} />
+				<HeaderText text={t('home.title')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -70,9 +71,11 @@ export default function Home(props) {
 			{cart && (
 				<>
 					<View className='py-4 flex flex-col gap-4'>
+						<MinimumOrderValue />
+
 						<CartItemsContent />
 
-						{/*<Freight />*/}
+						<Freight />
 
 						<Coupon />
 

@@ -1,8 +1,16 @@
-import { HeaderContentWrapper, HeaderReturn, HeaderText, HeaderSearchIcon } from 'shopping-vtex-template-shared'
+import {
+	HeaderContentWrapper,
+	HeaderReturn,
+	HeaderText,
+	HeaderSearchIcon,
+	TrackingService,
+	BottomInset
+} from 'shopping-vtex-template-shared'
 
 import Eitri from 'eitri-bifrost'
 import { useTranslation } from 'eitri-i18n'
 import ProductCatalogContent from '../components/ProductCatalogContent/ProductCatalogContent'
+import SearchInput from '../components/SearchInput/SearchInput'
 
 export default function ProductCatalog(props) {
 	const { location } = props
@@ -10,6 +18,7 @@ export default function ProductCatalog(props) {
 
 	const title = location.state.title
 	const openInBottomBar = !!location.state.openInBottomBar
+	const showTitle = !!location.state.showTitle
 
 	const [appliedFacets, setAppliedFacets] = useState(null)
 
@@ -25,31 +34,36 @@ export default function ProductCatalog(props) {
 				}
 			})
 		}
+
+		TrackingService.sendScreenView('catalogoDeProdutos', 'ProductCatalog')
 	}, [])
 
-	const goToSearch = () => {
-		Eitri.navigation.navigate({ path: 'Search' })
+	const handleSearch = term => {
+		Eitri.keyboard.dismiss()
+		Eitri.navigation.navigate({ path: 'Search', state: { searchTerm: term } })
 	}
 
 	return (
-		<Page title={title || t('productCatalog.title', 'Catálogo')}>
+		<Page title={title || t('productCatalog.title')}>
 			<>
 				<HeaderContentWrapper className={`justify-between`}>
 					<View className={`flex items-center gap-4`}>
 						{!openInBottomBar && <HeaderReturn />}
-
-							<HeaderText text={title || t('productCatalog.title', 'Catálogo')} />
+						<HeaderText text={title} />
 					</View>
 
-					<HeaderSearchIcon onClick={goToSearch} />
+					<HeaderSearchIcon onClick={() => Eitri.navigation.navigate({ path: 'Search' })} />
 				</HeaderContentWrapper>
 
 				{appliedFacets && (
 					<ProductCatalogContent
 						banner={location?.state?.banner}
 						params={appliedFacets}
+						showFilters={true}
 					/>
 				)}
+
+				<BottomInset />
 			</>
 		</Page>
 	)

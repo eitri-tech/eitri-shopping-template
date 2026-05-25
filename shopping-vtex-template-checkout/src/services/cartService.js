@@ -97,3 +97,22 @@ export const addLoggedCustomerToCart = async (loggedCustomer, cart, context) => 
 export const getPixStatus = async (transactionId, paymentId) => {
 	return await Vtex.checkout.getPixStatus(transactionId, paymentId)
 }
+
+export const updateOpenTextField = async (cart, receiver) => {
+	let current = {}
+	try {
+		if (cart?.openTextField?.value) {
+			current = JSON.parse(cart.openTextField.value)
+		}
+	} catch {
+		current = {}
+	}
+
+	if (receiver) {
+		current.receiver = receiver
+	} else {
+		delete current.receiver
+	}
+
+	return await Vtex.cart.addOpenTextFieldToCart(JSON.stringify(current))
+}

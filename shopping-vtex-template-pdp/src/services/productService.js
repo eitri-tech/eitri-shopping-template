@@ -41,3 +41,15 @@ export const markLastViewedProduct = async product => {
 		await Eitri.sharedStorage.setItemJson(key, [{ productId: product.productId, date: new Date().toISOString() }])
 	}
 }
+
+export const showTogether = async productId => {
+	return Vtex.catalog.showTogether(productId)
+}
+
+export const autocompleteSuggestions = async value => {
+	return Vtex.catalog.autoCompleteSuggestions(value)
+}
+
+export const getProductByEan = async ean => {
+	return Vtex.searchGraphql.product({ identifier: { field: 'ean', value: ean } })
+}

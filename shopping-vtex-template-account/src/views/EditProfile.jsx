@@ -1,6 +1,6 @@
+import { useState, useEffect, useRef } from 'react'
 import { getCustomerData, setCustomerData } from '../services/CustomerService'
 import { sendScreenView } from '../services/TrackingService'
-import Eitri from 'eitri-bifrost'
 import {
 	CustomButton,
 	CustomInput,
@@ -13,12 +13,18 @@ import {
 import { useTranslation } from 'eitri-i18n'
 import formatDateMMDDYYYY, { formatDate } from '../utils/utils'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
+import { verifySocialNumber } from '../utils/verifySocialNumber'
+import { RemoteConfig } from 'eitri-shopping-vtex-shared'
+import Eitri from 'eitri-bifrost'
 
 export default function EditProfile(props) {
 	const [user, setUser] = useState({})
 	const [isLoading, setIsLoading] = useState(false)
 	const [errors, setErrors] = useState({})
 	const [showNotification, setShowNotification] = useState(false)
+	const [saveError, setSaveError] = useState(null)
+
+	const notificationTimerRef = useRef(null)
 
 	const { t } = useTranslation()
 
@@ -28,72 +34,75 @@ export default function EditProfile(props) {
 		if (!customerData) {
 			loadMe()
 		} else {
-			setUser({
-				...user,
+			setUser(prev => ({
+				...prev,
 				...customerData,
 				birthDate: formatDateMMDDYYYY(customerData?.birthDate)
-			})
+			}))
 		}
 
 		sendScreenView('Editar Perfil', 'EditProfile')
 		addonUserTappedActiveTabListener()
+
+		return () => {
+			if (notificationTimerRef.current) {
+				clearTimeout(notificationTimerRef.current)
+			}
+		}
 	}, [])
 
 	const handleInputChange = (target, e) => {
 		const value = e.target.value
-		setUser({
-			...user,
+		setUser(prev => ({
+			...prev,
 			[target]: value
-		})
+		}))
 
-		// Limpar erro do campo quando o usuário começar a digitar
 		if (errors[target]) {
-			setErrors({
-				...errors,
+			setErrors(prev => ({
+				...prev,
 				[target]: null
-			})
+			}))
 		}
 	}
 
 	const validateFields = () => {
 		const newErrors = {}
 
-		// Validar nome
 		if (!user.firstName || user.firstName.trim() === '') {
-			newErrors.firstName = t('editProfile.errors.firstNameRequired', 'Nome é obrigatório')
+			newErrors.firstName = t('editProfile.validationFirstName')
 		}
 
-		// Validar sobrenome
 		if (!user.lastName || user.lastName.trim() === '') {
-			newErrors.lastName = t('editProfile.errors.lastNameRequired', 'Sobrenome é obrigatório')
+			newErrors.lastName = t('editProfile.validationLastName')
 		}
 
-		// Validar data de nascimento
 		if (!user.birthDate || user.birthDate.trim() === '') {
-			newErrors.birthDate = t('editProfile.errors.birthDateRequired', 'Data de nascimento é obrigatória')
+			newErrors.birthDate = t('editProfile.validationBirthdate')
 		} else {
 			const { isValid } = convertToISO(user.birthDate)
 			if (!isValid) {
-				newErrors.birthDate = t(
-					'editProfile.errors.birthDateInvalid',
-					'Data de nascimento inválida ou menor de 18 anos'
-				)
+				newErrors.birthDate = t('editProfile.validationBirthdateInvalid')
 			}
 		}
 
-		// Validar telefone
 		if (!user.homePhone || user.homePhone.trim() === '') {
-			newErrors.homePhone = t('editProfile.errors.phoneRequired', 'Telefone é obrigatório')
+			newErrors.homePhone = t('editProfile.validationPhone')
 		}
 
-		// Validar gênero
 		if (!user.gender) {
-			newErrors.gender = t('editProfile.errors.genderRequired', 'Gênero é obrigatório')
+			newErrors.gender = t('editProfile.validationGender')
 		}
 
-		// Validar CPF
 		if (!user.document || user.document.trim() === '') {
-			newErrors.document = t('editProfile.errors.documentRequired', 'CPF é obrigatório')
+			newErrors.document = t('editProfile.validationCPF')
+		} else {
+			const cpfNumbers = user.document.replace(/\D/g, '')
+			if (cpfNumbers.length !== 11) {
+				newErrors.document = t('editProfile.validationCPFDigits')
+			} else if (!verifySocialNumber(cpfNumbers)) {
+				newErrors.document = t('editProfile.validationCPFInvalid')
+			}
 		}
 
 		setErrors(newErrors)
@@ -101,35 +110,66 @@ export default function EditProfile(props) {
 	}
 
 	const handleSave = async () => {
-		try {
-			// Validar campos antes de salvar
-			if (!validateFields()) {
-				return
-			}
+		if (!validateFields()) {
+			return
+		}
 
+		setSaveError(null)
+
+		try {
 			setIsLoading(true)
 			const { isValid, isoDate } = convertToISO(user.birthDate)
+
 			if (!isValid) {
 				setIsLoading(false)
 				return
 			}
-			const updatedUser = await setCustomerData({ ...user, birthDate: isoDate })
-			setUser({ ...updatedUser, birthDate: formatDate(updatedUser?.birthDate) })
+
+			const normalizedPhone = user.homePhone
+				? '+55' + user.homePhone.replace(/\D/g, '').replace(/^55/, '')
+				: user.homePhone
+
+			const updatedUser = await setCustomerData({
+				...user,
+				birthDate: isoDate,
+				homePhone: normalizedPhone
+			})
+
+			setUser({
+				...updatedUser,
+				birthDate: formatDate(updatedUser?.birthDate),
+				homePhone: updatedUser?.homePhone?.replace('+55', '') || ''
+			})
+
 			setIsLoading(false)
+
+			// FIX #6: usa ref para o timer, evitando memory leak
 			setShowNotification(true)
-			setTimeout(() => {
+			notificationTimerRef.current = setTimeout(() => {
 				setShowNotification(false)
 			}, 3000)
 		} catch (e) {
 			setIsLoading(false)
+			setSaveError(t('editProfile.errorSave'))
+			console.error('EditProfile - handleSave error:', e)
 		}
 	}
 
 	const loadMe = async () => {
 		setIsLoading(true)
-		const customerData = await getCustomerData()
-		setUser({ ...customerData, birthDate: customerData?.birthDate ? formatDate(customerData?.birthDate) : '' })
-		setIsLoading(false)
+		try {
+			const customerData = await getCustomerData()
+			setUser({
+				...customerData,
+				birthDate: customerData?.birthDate ? formatDate(customerData?.birthDate) : '',
+				homePhone: customerData?.homePhone?.replace('+55', '') || ''
+			})
+		} catch (e) {
+			setSaveError(t('editProfile.errorLoad'))
+			console.error('EditProfile - loadMe error:', e)
+		} finally {
+			setIsLoading(false)
+		}
 	}
 
 	function convertToISO(dateStr) {
@@ -140,20 +180,22 @@ export default function EditProfile(props) {
 
 		const date = new Date(year, month - 1, day)
 
-		// Valid date
 		let isValid = date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day
 
 		if (!isValid) {
 			return { isValid }
 		}
 
-		// More than 18 years
 		const today = new Date()
+		const todayYear = today.getFullYear()
+		const todayMonth = today.getMonth() + 1
+		const todayDay = today.getDate()
+		const ageDiff = todayYear - year
 
 		isValid =
-			today.getFullYear() - year > 18 ||
-			(today.getFullYear() - year === 18 && today.getMonth() > month) ||
-			(today.getFullYear() - year === 18 && today.getMonth() === month && today.getDate() >= day)
+			ageDiff > 18 ||
+			(ageDiff === 18 && todayMonth > month) ||
+			(ageDiff === 18 && todayMonth === month && todayDay >= day)
 
 		if (!isValid) {
 			return { isValid }
@@ -162,22 +204,20 @@ export default function EditProfile(props) {
 		return { isValid, isoDate: date.toISOString() }
 	}
 
-	// Verificar se todos os campos obrigatórios estão preenchidos
 	const isFormValid = () => {
+		const cpfNumbers = user.document ? user.document.replace(/\D/g, '') : ''
 		return (
-			user.firstName &&
-			user.firstName.trim() !== '' &&
-			user.lastName &&
-			user.lastName.trim() !== '' &&
-			user.birthDate &&
-			user.birthDate.trim() !== '' &&
-			user.homePhone &&
-			user.homePhone.trim() !== '' &&
+			user.firstName?.trim() !== '' &&
+			user.lastName?.trim() !== '' &&
+			user.birthDate?.trim() !== '' &&
+			user.homePhone?.trim() !== '' &&
 			user.gender &&
-			user.document &&
-			user.document.trim() !== ''
+			user.document?.trim() !== '' &&
+			cpfNumbers.length === 11
 		)
 	}
+
+	const deleteAccountUrl = RemoteConfig.getContent('appConfigs.deleteAccountUrl')
 
 	return (
 		<Page
@@ -185,7 +225,7 @@ export default function EditProfile(props) {
 			statusBarTextColor='white'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('editProfile.title', 'Editar perfil')} />
+				<HeaderText text={t('editProfile.title')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -195,21 +235,21 @@ export default function EditProfile(props) {
 
 			<View className='p-4 flex flex-col gap-4'>
 				<View>
-					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName', 'Nome')} *</Text>
+					<Text className='w-full font-bold text-xs'>{t('editProfile.lbName')} *</Text>
 					<View className='mt-1 flex gap-1.5'>
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbName', 'Nome')}
+							placeholder={t('editProfile.lbName')}
 							value={user?.firstName || ''}
-							onChange={value => handleInputChange('firstName', value)}
+							onChange={e => handleInputChange('firstName', e)}
 							error={errors.firstName}
 						/>
 						{errors.firstName && <Text className='text-red-500 text-xs mt-1'>{errors.firstName}</Text>}
 						<CustomInput
 							backgroundColor='background-color'
-							placeholder={t('editProfile.lbLastName', 'Sobrenome')}
+							placeholder={t('editProfile.lbLastName')}
 							value={user?.lastName || ''}
-							onChange={value => handleInputChange('lastName', value)}
+							onChange={e => handleInputChange('lastName', e)}
 							error={errors.lastName}
 						/>
 						{errors.lastName && <Text className='text-red-500 text-xs mt-1'>{errors.lastName}</Text>}
@@ -217,29 +257,29 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate', 'Data de nascimento')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbBirthdate')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder={t('editProfile.placeholders.birthDate', 'DD/MM/AAAA')}
+						placeholder='DD/MM/AAAA'
 						variant='mask'
 						mask='99/99/9999'
 						inputMode='numeric'
 						value={user?.birthDate || ''}
-						onChange={value => handleInputChange('birthDate', value)}
+						onChange={e => handleInputChange('birthDate', e)}
 						error={errors.birthDate}
 					/>
 					{errors.birthDate && <Text className='text-red-500 text-xs mt-1'>{errors.birthDate}</Text>}
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone', 'Telefone')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbPhone')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder={t('editProfile.placeholders.phone', '(99) 99999-9999')}
-						value={user?.homePhone?.replace('+55', '') || ''}
+						placeholder='(99) 99999-9999'
+						value={user?.homePhone || ''}
 						inputMode='numeric'
 						variant='mask'
-						onChange={value => handleInputChange('homePhone', value)}
+						onChange={e => handleInputChange('homePhone', e)}
 						mask='(99) 99999-9999'
 						error={errors.homePhone}
 					/>
@@ -247,7 +287,7 @@ export default function EditProfile(props) {
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender', 'Sexo')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbGender')} *</Text>
 					<View className='flex gap-4'>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -255,9 +295,9 @@ export default function EditProfile(props) {
 							<Radio
 								value={'male'}
 								checked={user?.gender === 'male'}
-								onChange={value => handleInputChange('gender', value)}
+								onChange={e => handleInputChange('gender', e)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale', 'Masculino')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderMale')}</Text>
 						</View>
 						<View
 							className='flex flex-row items-center gap-1'
@@ -265,28 +305,78 @@ export default function EditProfile(props) {
 							<Radio
 								value={'female'}
 								checked={user?.gender === 'female'}
-								onChange={value => handleInputChange('gender', value)}
+								onChange={e => handleInputChange('gender', e)}
 							/>
-							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale', 'Feminino')}</Text>
+							<Text className='w-full ml-1'>{t('editProfile.lbGenderFemale')}</Text>
 						</View>
 					</View>
 					{errors.gender && <Text className='text-red-500 text-xs mt-1'>{errors.gender}</Text>}
 				</View>
 
 				<View>
-					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF', 'CPF')} *</Text>
+					<Text className='w-full mb-1 font-bold text-xs'>{t('editProfile.lbCPF')} *</Text>
 					<CustomInput
 						backgroundColor='background-color'
-						placeholder={t('editProfile.placeholders.cpf', '000.000.000-00')}
+						placeholder='000.000.000-00'
 						value={user.document || ''}
 						inputMode='numeric'
 						variant='mask'
-						onChange={value => handleInputChange('document', value)}
+						onChange={e => handleInputChange('document', e)}
 						mask='999.999.999-99'
 						error={errors.document}
 					/>
 					{errors.document && <Text className='text-red-500 text-xs mt-1'>{errors.document}</Text>}
 				</View>
+
+				<CustomButton
+					width='100%'
+					label={t('editProfile.lbSave')}
+					onClick={handleSave}
+					disabled={!isFormValid() || isLoading}
+				/>
+
+				{!!deleteAccountUrl && (
+					<View
+						className='w-full flex justify-center items-center px-4 mt-4'
+						onClick={() => Eitri.openBrowser({ url: deleteAccountUrl, inApp: true })}>
+						<Text className='text-sm font-bold text-gray-800'>Solicitar exclusão de conta</Text>
+					</View>
+				)}
+
+				{/* FIX #7: exibe erro de salvamento/carregamento */}
+				{saveError && (
+					<View className='bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex flex-row items-center gap-2'>
+						<svg
+							xmlns='http://www.w3.org/2000/svg'
+							width='20'
+							height='20'
+							viewBox='0 0 24 24'
+							fill='none'
+							stroke='currentColor'
+							strokeWidth='2'
+							strokeLinecap='round'
+							strokeLinejoin='round'>
+							<circle
+								cx='12'
+								cy='12'
+								r='10'
+							/>
+							<line
+								x1='12'
+								y1='8'
+								x2='12'
+								y2='12'
+							/>
+							<line
+								x1='12'
+								y1='16'
+								x2='12.01'
+								y2='16'
+							/>
+						</svg>
+						<Text className='text-red-700 font-medium'>{saveError}</Text>
+					</View>
+				)}
 
 				{showNotification && (
 					<View className='bg-green-500 text-white px-4 py-3 rounded shadow-lg flex flex-row items-center justify-between'>
@@ -304,28 +394,13 @@ export default function EditProfile(props) {
 								className='text-white'>
 								<path d='M20 6L9 17l-5-5'></path>
 							</svg>
-							<Text className='text-white font-medium'>
-								{t('editProfile.saveSuccess', 'Salvo com sucesso!')}
-							</Text>
+							<Text className='text-white font-medium'>{t('editProfile.successSave')}</Text>
 						</View>
 					</View>
 				)}
 			</View>
 
-			{/* Botão fixo na parte inferior */}
-			<View className='fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-300'>
-				<View className='p-4'>
-					<CustomButton
-						width='100%'
-						label={t('editProfile.lbSave', 'Salvar')}
-						onPress={handleSave}
-						disabled={!isFormValid() || isLoading}
-					/>
-				</View>
-				<BottomInset />
-			</View>
-
-			<BottomInset offSet={77} />
+			<BottomInset />
 		</Page>
 	)
 }

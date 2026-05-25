@@ -1,10 +1,11 @@
 import { FaChevronRight } from 'react-icons/fa'
+import { GenericBox } from 'shopping-vtex-template-shared'
 
 export default function CardSelector(props) {
 	const { children, mainTitle, mainClickHandler, secondaryActionHandler, secondaryActionTitle } = props
 
 	return (
-		<View className='bg-white rounded shadow-sm border border-gray-300 p-4 mt-4'>
+		<GenericBox className='p-4 mt-4'>
 			<View
 				onClick={mainClickHandler}
 				className='flex flex-col'>
@@ -20,6 +21,6 @@ export default function CardSelector(props) {
 			<View onClick={secondaryActionHandler}>
 				<Text className='text-primary font-bold'>{secondaryActionTitle}</Text>
 			</View>
-		</View>
+		</GenericBox>
 	)
 }

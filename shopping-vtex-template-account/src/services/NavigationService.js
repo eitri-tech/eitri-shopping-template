@@ -12,7 +12,11 @@ export const PAGES = {
 	ORDER_LIST: '/OrderList',
 	ORDER_DETAILS: '/OrderDetails',
 	WISH_LIST: '/WishList',
-	POINTS: '/Points'
+	ADDRESS_LIST: '/AddressList',
+	ADDRESS_FORM: '/AddressForm',
+	CHANGE_PASSWORD: '/ChangePassword',
+	SAVED_CARDS: '/SavedCards',
+	ADD_CARD_FORM: '/AddCardForm'
 }
 
 export const openProduct = async product => {
@@ -28,4 +32,14 @@ export const openProduct = async product => {
 
 export const navigate = (page, state = {}, replace = false) => {
 	return Eitri.navigation.navigate({ path: page, state, replace })
+}
+
+export const openCart = async () => {
+	try {
+		Eitri.nativeNavigation.open({
+			slug: 'cart'
+		})
+	} catch (e) {
+		console.error('Erro ao navegar para o carrinho', e)
+	}
 }

@@ -1,26 +1,21 @@
 import Eitri from 'eitri-bifrost'
 import { View } from 'eitri-luminus'
-import { Loading, BottomInset } from 'shopping-vtex-template-shared'
+import { BottomInset, TrackingService, Loading } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
-import { crashLog, sendScreenView, sendViewItem } from '../services/trackingService'
 import ImageCarousel from '../components/ImageCarousel/ImageCarousel'
 import MainDescription from '../components/MainDescription/MainDescription'
 import SkuSelector from '../components/SkuSelector/SkuSelector'
 import Freight from '../components/Freight/Freight'
-import RichContent from '../components/RichContent/RichContent'
 import DescriptionComponent from '../components/Description/DescriptionComponent'
-import Reviews from '../components/Reviews/Reviews'
 import RelatedProducts from '../components/RelatedProducts/RelatedProducts'
-import { useTranslation } from 'eitri-i18n'
 import { startConfigure } from '../services/AppService'
 import Header from '../components/Header/Header'
 import { saveCartIdOnStorage } from '../services/cartService'
 import ActionButton from '../components/ActionButton/ActionButton'
-import { getProductById, getProductBySlug } from '../services/productService'
+import { getProductById, getProductBySlug, markLastViewedProduct } from '../services/productService'
 
 export default function Home() {
 	const { startCart } = useLocalShoppingCart()
-	const { t } = useTranslation()
 
 	const [product, setProduct] = useState(null)
 	const [isLoading, setIsLoading] = useState(null)
@@ -30,10 +25,12 @@ export default function Home() {
 	useEffect(() => {
 		window.scroll(0, 0)
 
+		console.log('Eitri.getInitializationInfos()')
+
 		startHome()
 
 		Eitri.navigation.setOnResumeListener(() => {
-			startHome()
+			startCart()
 		})
 	}, [])
 
@@ -63,8 +60,8 @@ export default function Home() {
 
 		await loadCart(startParams)
 
-		sendScreenView('PDP', 'home')
-		sendViewItem(product)
+		TrackingService.sendScreenView('PDP', 'home')
+		TrackingService.viewItemEvent(product)
 		markLastViewedProduct(product)
 	}
 
@@ -101,8 +98,8 @@ export default function Home() {
 			await startConfigure()
 			setConfigLoaded(true)
 		} catch (e) {
-			crashLog('Erro ao buscar configurações', e)
-			crashLog()
+			// crashLog('Erro ao buscar configurações', e)
+			// crashLog()
 		}
 	}
 
@@ -117,7 +114,7 @@ export default function Home() {
 	}
 
 	return (
-		<Page title={t('home.pageTitle', 'Página de produto')}>
+		<Page title='Página de produto'>
 			<Header
 				product={product}
 				configLoaded={configLoaded}
@@ -131,12 +128,17 @@ export default function Home() {
 			{product && (
 				<View>
 					<View className='pb-4'>
-						<ImageCarousel currentSku={currentSku} />
+						<ImageCarousel
+							product={product}
+							currentSku={currentSku}
+							configLoaded={configLoaded}
+						/>
 
 						<View className='mt-4 px-4 flex flex-col gap-4'>
 							<MainDescription
 								product={product}
 								currentSku={currentSku}
+								configLoaded={configLoaded}
 							/>
 
 							<SkuSelector
@@ -150,14 +152,15 @@ export default function Home() {
 							{/*<RichContent product={product} />*/}
 
 							<DescriptionComponent product={product} />
-
-							<Reviews />
 						</View>
 
 						{configLoaded && <RelatedProducts product={product} />}
 					</View>
 
-					<ActionButton currentSku={currentSku} />
+					<ActionButton
+						product={product}
+						currentSku={currentSku}
+					/>
 
 					<BottomInset />
 				</View>

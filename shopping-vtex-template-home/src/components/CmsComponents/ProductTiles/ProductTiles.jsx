@@ -1,6 +1,7 @@
 import { getProductsService } from '../../../services/ProductService'
 import { Text, View } from 'eitri-luminus'
 import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
+import SectionTitle from '../../SectionTitle/SectionTitle'
 
 export default function ProductTiles(props) {
 	const { data } = props
@@ -56,11 +57,7 @@ export default function ProductTiles(props) {
 
 	return (
 		<View>
-			{data?.title && (
-				<View className='px-4 py-2'>
-					<Text className='font-bold'>{data?.title}</Text>
-				</View>
-			)}
+			<SectionTitle title={data?.title} />
 			<View className='overflow-x-auto flex px-4 gap-2 mb-1'>
 				{shelves?.map(shelf => (
 					<View

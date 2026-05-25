@@ -2,25 +2,27 @@ import { useState, useEffect } from 'react'
 import { getProductsService } from '../../../services/ProductService'
 import ProductCard from '../../ProductCard/ProductCard'
 import { LuChevronRight } from 'react-icons/lu'
-import { useTranslation } from 'eitri-i18n'
 import Eitri from 'eitri-bifrost'
+import ShelfOfProducts from '../../ShelfOfProducts/ShelfOfProducts'
+import { useTranslation } from 'eitri-i18n'
 
 // Hook customizado para countdown
 const useCountdown = (endDate, enabled) => {
-	const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0 })
+	const [time, setTime] = useState({ d: 0, h: 0, m: 0, s: 0, expired: false })
 
 	useEffect(() => {
 		if (!enabled || !endDate) return
 
 		const calculateTime = () => {
 			const diff = new Date(endDate) - new Date()
-			if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0 }
+			if (diff <= 0) return { d: 0, h: 0, m: 0, s: 0, expired: true }
 
 			return {
 				d: Math.floor(diff / (1000 * 60 * 60 * 24)),
 				h: Math.floor((diff / (1000 * 60 * 60)) % 24),
 				m: Math.floor((diff / (1000 * 60)) % 60),
-				s: Math.floor((diff / 1000) % 60)
+				s: Math.floor((diff / 1000) % 60),
+				expired: false
 			}
 		}
 
@@ -34,32 +36,33 @@ const useCountdown = (endDate, enabled) => {
 }
 
 // Componente Timer
-const CountdownTimer = ({ time, textColor, t }) => {
+const CountdownTimer = ({ endDate, enabled, textColor }) => {
+	const { t } = useTranslation()
+	const time = useCountdown(endDate, enabled)
 	const pad = n => String(n).padStart(2, '0')
 
 	const timeUnits = [
-		{ value: time.d, label: t('highlightedProductShelf.days', 'dias') },
-		{ value: time.h, label: t('highlightedProductShelf.hours', 'horas') },
-		{ value: time.m, label: t('highlightedProductShelf.minutes', 'minutos') },
-		{ value: time.s, label: t('highlightedProductShelf.seconds', 'segundos') }
+		{ value: time.d, label: t('highlightedShelf.days') },
+		{ value: time.h, label: t('highlightedShelf.hours') },
+		{ value: time.m, label: t('highlightedShelf.minutes') },
+		{ value: time.s, label: t('highlightedShelf.seconds') }
 	]
 
 	return (
 		<View
-			className='flex justify-center items-center gap-1 mb-4'
+			className='flex justify-center items-center gap-1 mb-6'
 			style={{ color: textColor }}>
 			{timeUnits.map((unit, index) => (
 				<View
 					key={`${unit.label}-${index}`}
 					className='flex'>
-					<View className='flex flex-col items-center'>
+					<View className='flex flex-col justify-center items-center w-[60px]'>
 						<Text className='text-4xl font-bold'>{pad(unit.value)}</Text>
 						<Text className='text-xs'>{unit.label}</Text>
 					</View>
 					{index < timeUnits.length - 1 && (
-						<View className='flex flex-col items-center mx-2'>
+						<View className='flex flex-col items-center'>
 							<Text className='text-4xl font-bold'>:</Text>
-							<Text>&nbsp;</Text>
 						</View>
 					)}
 				</View>
@@ -70,11 +73,10 @@ const CountdownTimer = ({ time, textColor, t }) => {
 
 // Componente principal
 export default function HighlightedProductShelf({ data }) {
+	const { t } = useTranslation()
 	const [products, setProducts] = useState([])
 	const [isLoading, setIsLoading] = useState(false)
-	const time = useCountdown(data?.endDate, data?.showTimer)
-
-	const { t } = useTranslation()
+	const { expired } = useCountdown(data?.endDate, data?.showTimer)
 
 	useEffect(() => {
 		fetchProducts()
@@ -117,7 +119,7 @@ export default function HighlightedProductShelf({ data }) {
 		})
 	}
 
-	if (!data) return null
+	if (!data || expired) return null
 
 	return (
 		<View
@@ -130,34 +132,23 @@ export default function HighlightedProductShelf({ data }) {
 				<View
 					className='flex items-center gap-1'
 					onClick={onSeeMore}>
-					<Text className='text-sm'>{t('highlightedProductShelf.seeMore', 'Veja mais')}</Text>
+					<Text className='text-sm'>{t('highlightedShelf.seeMore')}</Text>
 					<LuChevronRight />
 				</View>
 			</View>
 
-				{data.showTimer && (
-					<CountdownTimer
-						time={time}
-						textColor={data.textColor}
-						t={t}
-					/>
-				)}
+			{data.showTimer && (
+				<CountdownTimer
+					endDate={data.endDate}
+					enabled={data.showTimer}
+					textColor={data.textColor}
+				/>
+			)}
 
-			<View className='flex overflow-x-auto'>
-				<View className='flex gap-4 px-4'>
-						{isLoading ? (
-							<Text>{t('highlightedProductShelf.loading', 'Carregando...')}</Text>
-						) : (
-						products.map(product => (
-							<ProductCard
-								key={product.productId}
-								product={product}
-								className='min-w-[50vw]'
-							/>
-						))
-					)}
-				</View>
-			</View>
+			<ShelfOfProducts
+				isLoading={isLoading}
+				products={products}
+			/>
 		</View>
 	)
 }

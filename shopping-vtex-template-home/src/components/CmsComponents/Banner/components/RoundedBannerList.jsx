@@ -1,8 +1,11 @@
 import { Text, View } from 'eitri-luminus'
+import SectionTitle from '../../../SectionTitle/SectionTitle'
 
 export default function RoundedBannerList(props) {
 	const { data, onClick } = props
 	const { size } = data
+
+	const gap = data.gap || 8
 
 	const imagesList = data.images
 
@@ -23,15 +26,13 @@ export default function RoundedBannerList(props) {
 
 	return (
 		<View>
-			{data.mainTitle && (
-				<View className='px-4'>
-					<Text className='font-bold text-lg'>{data.mainTitle}</Text>
-				</View>
-			)}
+			<SectionTitle title={data.mainTitle} />
 			<View
 				className='flex flex-row overflow-x-scroll'
 				title={data.mainTitle}>
-				<View className={`flex flex-row gap-4 px-4`}>
+				<View
+					style={{ gap: `${gap}px` }}
+					className={`flex flex-row gap-4 px-4`}>
 					{imagesList &&
 						imagesList.map(slider => (
 							<View

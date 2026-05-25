@@ -7,11 +7,12 @@ import {
 	HeaderText,
 	CustomButton,
 	CustomInput,
-	HeaderReturn
+	HeaderReturn,
+	GenericBox,
+	TrackingService
 } from 'shopping-vtex-template-shared'
 import {
 	doLogin,
-	getCustomerData,
 	loadUserEmailFromStorage,
 	loginWithEmailAndKey,
 	saveUserEmailOnStorage,
@@ -87,7 +88,7 @@ export default function SignIn(props) {
 			setLoginProviders(providers)
 			setLoadingLoginProviders(false)
 		} catch (e) {
-			console.error(t('signIn.loadLoginProvidersError', 'Erro ao carregar provedores de login'), e)
+			console.error('Erro ao carregar provedores de login', e)
 			setLoadingLoginProviders(false)
 		}
 	}
@@ -111,7 +112,7 @@ export default function SignIn(props) {
 			setTimeOutToResentEmail(TIME_TO_RESEND_EMAIL)
 			setLoadingSendingCode(false)
 		} catch (e) {
-			setAlertMessage(t('signIn.errorSendAccess', 'erro ao enviar email'))
+			setAlertMessage(t('signIn.errorSendAccess'))
 			setShowLoginErrorAlert(true)
 			setEmailCodeSent(false)
 			setTimeOutToResentEmail(0)
@@ -137,12 +138,13 @@ export default function SignIn(props) {
 			const loggedIn = await doLogin(username, password)
 			if (loggedIn === 'Success') {
 				await onLoggedIn()
+				TrackingService.loginEvent('password')
 				return
 			}
-			setAlertMessage(t('signIn.verifyAgain', 'Verifique as informaçoes e tente novamente'))
+			setAlertMessage(t('signIn.verifyAgain'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
-			setAlertMessage(t('signIn.errorInvalidUser', 'Usuário ou senha inválidos'))
+			setAlertMessage(t('signIn.errorInvalidUser'))
 			setShowLoginErrorAlert(true)
 		} finally {
 			saveUserEmailOnStorage(username)
@@ -157,35 +159,19 @@ export default function SignIn(props) {
 			const loggedIn = await loginWithEmailAndKey(username, verificationCode)
 			if (loggedIn === 'Success') {
 				await onLoggedIn()
+				TrackingService.loginEvent('otp')
 				return
 			}
-			setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
+			setAlertMessage(t('signIn.wrongCredentials'))
 			setShowLoginErrorAlert(true)
 		} catch (e) {
-			setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
+			setAlertMessage(t('signIn.wrongCredentials'))
 			setShowLoginErrorAlert(true)
 		} finally {
 			saveUserEmailOnStorage(username)
 		}
 
 		setLoading(false)
-
-		// const customerData = await getCustomerData()
-		// if (loggedIn === 'WrongCredentials') {
-		// 	setAlertMessage(t('signIn.wrongCredentials', 'Token incorreto'))
-		// 	setShowLoginErrorAlert(true)
-		// } else if (loggedIn === 'Success') {
-		// 	if (redirectTo) {
-		// 		navigate(redirectTo, { customerData }, true)
-		// 	} else if (closeAppAfterLogin) {
-		// 		Eitri.close()
-		// 	} else {
-		// 		Eitri.navigation.back()
-		// 	}
-		// } else {
-		// 	setAlertMessage(t('signIn.verifyAgain', 'Verifique as informaçoes e tente novamente'))
-		// 	setShowLoginErrorAlert(true)
-		// }
 	}
 
 	const handleSocialLogin = async () => {
@@ -202,7 +188,7 @@ export default function SignIn(props) {
 		<Page topInset>
 			<HeaderContentWrapper>
 				<HeaderReturn />
-				<HeaderText text={t('signIn.headerText', 'Entrar')} />
+				<HeaderText text={t('signIn.headerText')} />
 			</HeaderContentWrapper>
 
 			<Loading
@@ -211,145 +197,146 @@ export default function SignIn(props) {
 			/>
 
 			<View className='p-4'>
-				<View className='flex flex-col gap-2'>
-					<Text className='w-full font-bold text-xl'>{t('signIn.welcome', 'Bem vindo de volta!')}</Text>
+				<View>
+					<Text className='w-full font-bold text-xl'>{t('signIn.welcome')}</Text>
 				</View>
 
-				{loginMode === LOGIN_WITH_EMAIL_AND_PASSWORD && (
-					<>
-						<View className='mt-4'>
+				<GenericBox className='mt-4'>
+					{loginMode === LOGIN_WITH_EMAIL_AND_PASSWORD && (
+						<>
+							<View>
+								<CustomInput
+									icon={userIcon}
+									value={username}
+									placeholder={t('signIn.formName')}
+									inputMode='email'
+									onChange={e => setUsername(e?.target?.value)}
+								/>
+							</View>
+
+							<View className='mt-4'>
+								<CustomInput
+									placeholder={t('signIn.formPass')}
+									icon={lockIcon}
+									value={password}
+									type='password'
+									onChange={e => setPassword(e.target.value)}
+								/>
+							</View>
+
+							<View className='mt-4'>
+								<CustomButton
+									width='100%'
+									label={t('signIn.labelButton')}
+									onPress={handleLogin}
+								/>
+							</View>
+
+							<View className='mt-4'>
+								<CustomButton
+									width='100%'
+									variant='outlined'
+									label={t('signIn.labelAccessWithCode')}
+									onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)}
+								/>
+							</View>
+
+							<View className='mt-8 flex justify-center'>
+								<View onClick={goToPasswordReset}>
+									<Text className='w-full text-primary'>{t('signIn.forgotPass')}</Text>
+								</View>
+							</View>
+
+							<View className='mt-4 flex justify-center'>
+								<View
+									onClick={() => {
+										navigate(PAGES.SIGNUP)
+									}}>
+									<Text className='w-full text-primary'>{t('signIn.noRegister')}</Text>
+								</View>
+							</View>
+						</>
+					)}
+
+					{loginMode === LOGIN_WITH_EMAIL_AND_ACCESS_KEY && (
+						<View>
 							<CustomInput
 								icon={userIcon}
 								value={username}
-								placeholder={t('signIn.formName', 'E-mail')}
 								inputMode='email'
-								onChange={e => setUsername(e?.target?.value)}
+								placeholder={t('signIn.formEmail')}
+								onChange={e => {
+									setUsername(e.target.value)
+								}}
 							/>
-						</View>
 
-						<View className='mt-4'>
-							<CustomInput
-								placeholder={t('signIn.formPass', 'Senha')}
-								icon={lockIcon}
-								value={password}
-								type='password'
-								onChange={e => setPassword(e.target.value)}
-							/>
-						</View>
+							{emailCodeSent && (
+								<>
+									<View className='mt-4'>
+										<CustomInput
+											label={t('signIn.formCodeVerification')}
+											placeholder={t('signIn.formCodeVerification')}
+											inputMode='numeric'
+											value={verificationCode}
+											onChange={e => setVerificationCode(e.target.value)}
+											height='45px'
+										/>
+									</View>
 
-						<View className='mt-4'>
-							<CustomButton
-								width='100%'
-								label={t('signIn.labelButton', 'Login')}
-								onPress={handleLogin}
-							/>
-						</View>
+									<View className='mt-4'>
+										<CustomButton
+											label={t('signIn.labelButton')}
+											onPress={loginWithEmailAndAccessKey}
+											disabled={!username || !verificationCode}
+										/>
+									</View>
+								</>
+							)}
 
-						<View className='mt-4'>
-							<CustomButton
-								width='100%'
-								variant='outlined'
-								label={t('signIn.labelAccessWithCode', 'Login com código de acesso')}
-								onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_ACCESS_KEY)}
-							/>
-						</View>
-
-						<View className='mt-8 flex justify-center'>
-							<View onClick={goToPasswordReset}>
-								<Text className='w-full text-primary'>{t('signIn.forgotPass', 'Esqueceu a senha?')}</Text>
-							</View>
-						</View>
-						<View className='mt-4 flex justify-center'>
-							<View
-								onClick={() => {
-									navigate(PAGES.SIGNUP)
-								}}>
-								<Text className='w-full text-primary'>{t('signIn.noRegister', 'Não tenho cadastro')}</Text>
-							</View>
-						</View>
-					</>
-				)}
-
-				{loginMode === LOGIN_WITH_EMAIL_AND_ACCESS_KEY && (
-					<View className='mt-4'>
-						<CustomInput
-							icon={userIcon}
-							value={username}
-							inputMode='email'
-							placeholder={t('signIn.formEmail', 'Email')}
-							onChange={e => {
-								setUsername(e.target.value)
-							}}
-						/>
-
-						{emailCodeSent && (
-							<>
-								<View className='mt-4'>
-									<CustomInput
-										label={t('signIn.formCodeVerification', 'Código de verificação')}
-										placeholder={t('signIn.formCodeVerification', 'Código de verificação')}
-										inputMode='numeric'
-										value={verificationCode}
-										onChange={e => setVerificationCode(e.target.value)}
-										height='45px'
-									/>
-								</View>
-
-								<View className='mt-4'>
-									<CustomButton
-										label={t('signIn.labelButton', 'Login')}
-										onPress={loginWithEmailAndAccessKey}
-										disabled={!username || !verificationCode}
-									/>
-								</View>
-							</>
-						)}
-
-						<View className='mt-4'>
-							<CustomButton
-								label={
-									!emailCodeSent
-										? t('signIn.textSendCode', 'Enviar código')
-										: `${t('signIn.textResendCode', 'Reenviar código')}${
-												resendCode ? ` (${timeOutToResentEmail})` : ''
-											}`
-								}
-								disabled={resendCode || !username || loadingSendingCode}
-								onPress={sendAccessKey}
-							/>
-						</View>
-
-						{loginProviders?.passwordAuthentication && (
 							<View className='mt-4'>
 								<CustomButton
-									variant='outlined'
-									label={t('signIn.labelLoginWithPass', 'Login com email e senha')}
-									onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_PASSWORD)}
+									label={
+										!emailCodeSent
+											? t('signIn.textSendCode')
+											: `${t('signIn.textResendCode')}${
+													resendCode ? ` (${timeOutToResentEmail})` : ''
+												}`
+									}
+									disabled={resendCode || !username || loadingSendingCode}
+									onPress={sendAccessKey}
 								/>
 							</View>
-						)}
-					</View>
-				)}
 
-				{Eitri.canIUse('23') &&
-					canUseSocialLogin &&
-					loginProviders?.oAuthProviders &&
-					loginProviders?.oAuthProviders?.length > 0 && (
-						<>
-							<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
-								<View className='h-px flex-1 bg-gray-300' />
-								<Text className='flex-shrink-0 text-accent-100 font-medium'>
-									{t('signIn.or', 'Ou')}
-								</Text>
-								<View className='h-px flex-1 bg-gray-300' />
-							</View>
-
-							<SocialLogin
-								oAuthProviders={loginProviders?.oAuthProviders}
-								handleSocialLogin={handleSocialLogin}
-							/>
-						</>
+							{loginProviders?.passwordAuthentication && (
+								<View className='mt-4'>
+									<CustomButton
+										variant='outlined'
+										label={t('signIn.labelLoginWithPass')}
+										onPress={() => setLoginMethod(LOGIN_WITH_EMAIL_AND_PASSWORD)}
+									/>
+								</View>
+							)}
+						</View>
 					)}
+
+					{Eitri.canIUse('23') &&
+						canUseSocialLogin &&
+						loginProviders?.oAuthProviders &&
+						loginProviders?.oAuthProviders?.length > 0 && (
+							<>
+								<View className='mt-8 mb-8 flex w-full items-center gap-x-4'>
+									<View className='h-px flex-1 bg-gray-300' />
+									<Text className='flex-shrink-0 text-accent-100 font-medium'>Ou</Text>
+									<View className='h-px flex-1 bg-gray-300' />
+								</View>
+
+								<SocialLogin
+									oAuthProviders={loginProviders?.oAuthProviders}
+									handleSocialLogin={handleSocialLogin}
+								/>
+							</>
+						)}
+				</GenericBox>
 			</View>
 
 			<Alert

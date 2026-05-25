@@ -11,10 +11,9 @@ export default function Cartman() {
 	const getCart = async () => {
 		try {
 			const cart = await Vtex.cart.getCartIfExists()
-			console.log('cart========>', cart)
 			setCart(cart)
 		} catch (error) {
-			console.log('Erro ao buscar carrinho', error)
+			console.log('Erro ao buscar cesta', error)
 		}
 	}
 
@@ -55,14 +54,14 @@ export default function Cartman() {
 				className='p-4 flex flex-col gap-4'
 				bottomInset
 				topInset>
-				<Text>{`Id do carrinho: ${cart?.orderFormId}`}</Text>
+				<Text>{`Id da cesta: ${cart?.orderFormId}`}</Text>
 				{cart?.items?.map(item => (
-					<Text>{`Item no carrinho: ${item?.name}`}</Text>
+					<Text>{`Item na cesta: ${item?.name}`}</Text>
 				))}
 				<Button
 					className='btn-primary w-full'
 					onClick={generateNewCart}>
-					Novo carrinho
+					Nova cesta
 				</Button>
 				<Button
 					className='btn-primary w-full'
@@ -72,7 +71,7 @@ export default function Cartman() {
 				<Button
 					className='btn-primary w-full'
 					onClick={clearCart}>
-					Limpar carrinho
+					Limpar cesta
 				</Button>
 				<Button
 					className='btn-primary w-full'

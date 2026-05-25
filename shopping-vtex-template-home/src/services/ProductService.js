@@ -1,4 +1,4 @@
-import { App, Vtex } from 'eitri-shopping-vtex-shared'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 import { CMS_PRODUCT_SORT } from '../utils/Constants'
 import { resolveSortParam } from './helpers/resolveSortParam'
 
@@ -16,14 +16,6 @@ export const autocompleteSuggestions = async value => {
  * */
 
 export const getProductsService = async (params, page) => {
-	const remoteConfig = App?.configs?.appConfigs
-	
-	const useRestSearch = remoteConfig?.useRestSearch
-
-	if (useRestSearch) {
-		return getProductsServiceRest(params, page)
-	}
-
 	const PAGE_SIZE = 12
 
 	// Validar se params está presente e é um objeto válido
@@ -53,7 +45,10 @@ export const getProductsService = async (params, page) => {
 		orderBy: resolveSortParam(params?.sort, true),
 		from: from,
 		to: to,
-		hideUnavailableItems: true
+		hideUnavailableItems: true,
+		options: {
+			allowRedirect: false
+		}
 	}
 
 	// Remover propriedades undefined/null que podem causar problemas no GraphQL
@@ -156,4 +151,18 @@ export const getProductById = async productId => {
 	return await Vtex.searchGraphql.product({
 		identifier: { field: 'id', value: productId }
 	})
+}
+
+let cachedCategoryTree = null
+export const getCategoryTree = async levels => {
+	if (cachedCategoryTree) {
+		return cachedCategoryTree
+	}
+	const res = await Vtex.catalog.getCategoryTree(levels)
+	cachedCategoryTree = res
+	return res
+}
+
+export const getProductByEan = async ean => {
+	return await Vtex.searchGraphql.product({ identifier: { field: 'ean', value: ean } })
 }

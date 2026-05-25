@@ -16,8 +16,13 @@ export const doLogout = async () => {
 	return await Vtex.customer.logout()
 }
 
+export const removeClientData = async () => {
+	return await Vtex.cart.removeClientData()
+}
+
 export const isLoggedIn = async () => {
-	return await Vtex.customer.isLoggedIn()
+	const session = await Vtex.session.getSession()
+	return session?.namespaces?.profile?.isAuthenticated?.value === 'true'
 }
 
 export const getSavedUser = async () => {
@@ -30,6 +35,10 @@ export const sendPasswordResetCode = async userEmail => {
 
 export const setPassword = async (email, accessKey, newPassword) => {
 	return await Vtex.customer.setPassword(email, accessKey, newPassword)
+}
+
+export const changePassword = async (email, currentPassword, newPassword) => {
+	return await Vtex.customer.setPassword(email, '', newPassword, currentPassword)
 }
 
 export const getCustomerData = async () => {
@@ -98,4 +107,39 @@ export const saveUserEmailOnStorage = async email => {
 
 export const loadUserEmailFromStorage = async () => {
 	return await Vtex.customer.getCustomerData('email')
+}
+
+export const productOnWishlist = async productId => {
+	if (!(await isLoggedIn())) {
+		return { inList: false }
+	}
+	const result = await Vtex.wishlist.checkItem(productId)
+	const inList = result?.data?.checkList?.inList
+	if (inList) {
+		const listId = result?.data?.checkList?.listIds?.[0]
+		return { inList, listId }
+	} else {
+		return { inList }
+	}
+}
+
+export const removeItemFromWishlist = async id => {
+	return await Vtex.wishlist.removeItem(id)
+}
+
+export const addToWishlist = async (productId, title, sku) => {
+	return await Vtex.wishlist.addItem(productId, title, sku)
+}
+
+export const getSavedCards = async () => {
+	const result = await Vtex.customer.getSavedCards()
+	return result?.payments || []
+}
+
+export const addNewCard = async (cardData, recaptchaToken) => {
+	return await Vtex.customer.addNewCard(cardData, recaptchaToken)
+}
+
+export const deleteSavedCard = async cardId => {
+	return await Vtex.customer.deleteSavedCard(cardId)
 }

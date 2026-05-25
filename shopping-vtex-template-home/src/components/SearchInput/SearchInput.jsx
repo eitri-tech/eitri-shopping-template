@@ -1,17 +1,24 @@
 import { Text, View } from 'eitri-luminus'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { autocompleteSuggestions } from '../../services/ProductService'
+import Eitri from 'eitri-bifrost'
+import { FiSearch, FiChevronLeft, FiX } from 'react-icons/fi'
 import { useTranslation } from 'eitri-i18n'
+import QRCodeScanner from '../QRCodeScanner/QRCodeScanner'
+import TopSearches from '../TopSearches/TopSearches'
+import SearchHistory from '../SearchHistory/SearchHistory'
 
 let timeoutId
 let skipSuggestion = false
 
 export default function SearchInput(props) {
-	const { onSubmit, incomingValue } = props
+	const { onSubmit, incomingValue, autoFocus, onClickInput, alwaysShowBackButton } = props
 	const { t } = useTranslation()
 
 	const [searchTerm, setSearchTerm] = useState(incomingValue || '')
 	const [searchSuggestion, setSearchSuggestion] = useState([])
+	const [isFocused, setIsFocused] = useState(false)
+	const [showSearchInsights, setShowSearchInsights] = useState(false)
 
 	const legacySearch = Vtex?.configs?.searchOptions?.legacySearch
 
@@ -20,6 +27,21 @@ export default function SearchInput(props) {
 			setSearchTerm(incomingValue)
 		}
 	}, [incomingValue])
+
+	useEffect(() => {
+		if (showSearchInsights) {
+			Eitri.navigation.addBackHandler(() => {
+				setShowSearchInsights(false)
+				return false
+			})
+		} else {
+			Eitri.navigation.clearBackHandlers()
+		}
+	}, [showSearchInsights])
+
+	useEffect(() => {
+		setShowSearchInsights(isFocused)
+	}, [isFocused])
 
 	const debounce = (func, delay) => {
 		return function (...args) {
@@ -57,7 +79,6 @@ export default function SearchInput(props) {
 	}
 
 	const handleSearch = suggestion => {
-		console.log('suggestion===>', suggestion)
 		if (timeoutId) {
 			clearTimeout(timeoutId)
 		}
@@ -73,6 +94,7 @@ export default function SearchInput(props) {
 			}
 			setSearchSuggestion([])
 			skipSuggestion = true
+			setIsFocused(false)
 		}, 200)
 	}
 
@@ -88,81 +110,83 @@ export default function SearchInput(props) {
 		}
 	}
 
+	const _onClickInput = () => {
+		if (onClickInput) {
+			onClickInput()
+		}
+	}
+
+	const onBackPress = () => {
+		Eitri.navigation.back()
+	}
+
+	const handleClear = () => {
+		skipSuggestion = false
+		handleAutocomplete('')
+	}
+
 	return (
-		<View>
-			<View className='flex items-center rounded-full h-10 px-4 bg-neutral-100'>
-				<View>
-					<svg
-						xmlns='http://www.w3.org/2000/svg'
-						width='24'
-						height='24'
-						viewBox='0 0 24 24'
-						fill='none'
-						stroke='currentColor'
-						strokeWidth='2'
-						strokeLinecap='round'
-						strokeLinejoin='round'
-						className='text-header-content'>
-						<circle
-							cx='11'
-							cy='11'
-							r='8'></circle>
-						<line
-							x1='21'
-							y1='21'
-							x2='16.65'
-							y2='16.65'></line>
-					</svg>
-				</View>
-				<View>
-					<TextInput
-						autoFocus={true}
-						type={'text'}
-						value={searchTerm}
-						onChange={handleInputChange}
-						onKeyPress={handleOnKeyPress}
-						onBlur={onBlurHandler}
-						placeholder={t('searchInput.placeholder', 'Pesquisar...')}
-						className='focus:outline-none !bg-transparent border-none shadow-none w-full px-2'
+		<View className={'flex items-center justify-between w-full relative'}>
+			{(searchTerm || alwaysShowBackButton) && (
+				<View
+					onClick={onBackPress}
+					className='mr-2'>
+					<FiChevronLeft
+						className='text-header-content'
+						size={24}
 					/>
 				</View>
-				{searchTerm && (
-					<View
-						onClick={() => setSearchTerm('')}
-						className=''>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							width='24'
-							height='24'
-							viewBox='0 0 24 24'
-							fill='none'
-							stroke='currentColor'
-							strokeWidth='2'
-							strokeLinecap='round'
-							strokeLinejoin='round'
-							className='text-header-content'>
-							<line
-								x1='18'
-								y1='6'
-								x2='6'
-								y2='18'></line>
-							<line
-								x1='6'
-								y1='6'
-								x2='18'
-								y2='18'></line>
-						</svg>
-					</View>
-				)}
+			)}
+
+			<View
+				className='flex items-center justify-between rounded-lg h-10 px-4 bg-neutral-100 grow'
+				onClick={_onClickInput}>
+				<TextInput
+					autoFocus={autoFocus}
+					type={'text'}
+					value={searchTerm}
+					onChange={handleInputChange}
+					onKeyPress={handleOnKeyPress}
+					onBlur={onBlurHandler}
+					onFocus={() => setIsFocused(true)}
+					placeholder={t('searchInput.content')}
+					className='rounded-lg !outline-none !ring-0 focus:!outline-none focus:!ring-0 focus-within:!outline-none focus-within:!ring-0 !bg-transparent border-none shadow-none w-full px-2'
+				/>
+
+				<View onClick={searchTerm ? handleClear : undefined}>
+					{searchTerm ? (
+						<FiX
+							size={24}
+							className='text-primary'
+						/>
+					) : (
+						<FiSearch
+							size={24}
+							className='text-primary'
+						/>
+					)}
+				</View>
 			</View>
+
+			<QRCodeScanner />
+
+			{showSearchInsights && !searchTerm && (
+				<View className='absolute top-[45px] left-0 w-full bg-white rounded-lg max-h-[70vh] overflow-y-auto'>
+					<View className=' w-full shadow flex flex-col gap-4 p-4'>
+						<SearchHistory onSubmit={handleSearch} />
+						<TopSearches onSubmit={handleSearch} />
+					</View>
+				</View>
+			)}
+
 			{searchSuggestion && searchSuggestion.length > 0 && (
-				<View className='absolute left-0 p-4 w-full'>
-					<View className='bg-white rounded w-full shadow flex flex-col gap-4 p-4'>
+				<View className='absolute top-[45px] left-0 w-full bg-white rounded-lg max-h-[70vh] overflow-y-auto'>
+					<View className='w-full shadow flex flex-col gap-4 p-4'>
 						{searchSuggestion.map((suggestion, key) => (
 							<View
 								onClick={() => handleSearch(suggestion.term)}
 								key={suggestion.term}>
-								<Text className='text-primary font-bold'>{suggestion.term}</Text>
+								<Text className=''>{suggestion.term}</Text>
 							</View>
 						))}
 					</View>

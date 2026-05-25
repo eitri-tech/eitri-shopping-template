@@ -1,6 +1,5 @@
-import Eitri from 'eitri-bifrost'
-import { View, Text, Button } from 'eitri-luminus'
-import { CustomInput, CustomButton } from 'shopping-vtex-template-shared'
+import { View, Text } from 'eitri-luminus'
+import { CustomInput, CustomButton, GenericBox } from 'shopping-vtex-template-shared'
 import { useTranslation } from 'eitri-i18n'
 import { useLocalShoppingCart } from '../../providers/LocalCart'
 
@@ -21,7 +20,7 @@ export default function Coupon(props) {
 			setAppliedCoupon(cart.marketingData.coupon)
 
 			if (coupon === cart?.marketingData?.coupon) {
-				setCouponTextAlert(t('coupon.txtAppliedCoupon', 'Cupom aplicado!'))
+				setCouponTextAlert(t('coupon.txtAppliedCoupon'))
 			}
 		} else {
 			const errorMessage = cart?.messages || []
@@ -29,9 +28,9 @@ export default function Coupon(props) {
 
 			if (couponError) {
 				if (couponError.code === 'couponNotFound') {
-					setCouponTextAlert(t('coupon.txtInvalidCoupon', 'Cupom inválido'))
+					setCouponTextAlert(t('coupon.txtInvalidCoupon'))
 				} else if (couponError.code === 'couponExpired') {
-					setCouponTextAlert(t('coupon.txtExpiredCoupon', 'Cupom Expirado'))
+					setCouponTextAlert(t('coupon.txtExpiredCoupon'))
 				}
 				setInvalidCoupon(true)
 			} else {
@@ -60,9 +59,9 @@ export default function Coupon(props) {
 	if (!cart) return null
 
 	return (
-		<View className='px-4'>
-			<View className='bg-white rounded shadow-sm border border-gray-300 p-4'>
-				<Text className='text-base font-bold'>{t('coupon.txtCoupon', 'Cupom de desconto')}</Text>
+		<View className={'px-4'}>
+			<GenericBox className='p-4'>
+				<Text className='text-base font-bold'>{t('coupon.txtCoupon')}</Text>
 				<View className='mt-2 flex gap-8 justify-between items-center'>
 					{appliedCoupon ? (
 						<>
@@ -102,7 +101,7 @@ export default function Coupon(props) {
 							<View className='flex justify-between mt-2 gap-2 items-center w-full'>
 								<View className='w-2/3'>
 									<CustomInput
-										placeholder={t('coupon.labelInsertCode', 'Insira o código')}
+										placeholder={t('coupon.labelInsertCode')}
 										value={coupon}
 										onChange={e => inputOnChange(e.target.value)}
 									/>
@@ -112,7 +111,7 @@ export default function Coupon(props) {
 										variant='outlined'
 										onPress={onPressAddCoupon}
 										isLoading={isLoading}
-										label={t('coupon.txtAdd', 'Adicionar')}
+										label={t('coupon.txtAdd')}
 									/>
 								</View>
 							</View>
@@ -125,7 +124,7 @@ export default function Coupon(props) {
 					</View>
 				)}
 				<View className={'h-[10px]'} />
-			</View>
+			</GenericBox>
 		</View>
 	)
 }

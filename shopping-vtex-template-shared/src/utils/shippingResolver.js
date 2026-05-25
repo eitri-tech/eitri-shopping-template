@@ -17,14 +17,13 @@ export default function shippingResolver(cart) {
 		const groupedSlas = groupSlasByType(flattenedSlas)
 		const enrichedOptions = enrichShippingOptions(groupedSlas, items, selectedAddresses, pickupPoints)
 		const currentSlas = extractCurrentSlas(logisticsInfo, items, selectedAddresses)
-
 		return {
 			options: enrichedOptions,
 			current: currentSlas,
 			addressOk: logisticsInfo.every(logistic => logistic.selectedSla)
 		}
 	} catch (error) {
-		console.error('Error on cartShippingResolver', error)
+		console.error('Error on shippingResolver', error)
 		throw error
 	}
 }
@@ -102,7 +101,7 @@ function groupSlasByType(allSlas) {
 				pickupDistance: sla.pickupDistance,
 				price: sla.price,
 				formattedShippingEstimate: formatShippingEstimate(sla),
-				shippingEstimateDate: getShippingEstimate(sla),
+				shippingEstimateDate: sla.shippingEstimateDate,
 				slas: [
 					{
 						itemIndex: sla.itemIndex,

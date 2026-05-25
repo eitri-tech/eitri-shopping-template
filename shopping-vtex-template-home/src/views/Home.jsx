@@ -5,21 +5,30 @@ import { startConfigure } from '../services/AppService'
 import HomeSkeleton from '../components/HomeSkeleton/HomeSkeleton'
 import CmsContentRender from '../components/CmsContentRender/CmsContentRender'
 import MainHeader from '../components/Header/MainHeader'
-import { BottomInset } from 'shopping-vtex-template-shared'
-import { useTranslation } from 'eitri-i18n'
+import { BottomInset, TrackingService, Loading } from 'shopping-vtex-template-shared'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Home() {
-	const { t } = useTranslation()
 	const { startCart } = useLocalShoppingCart()
-	const [cmsContent, setCmsContent] = useState(null)
+	const [enableCmsQuery, setEnableCmsQuery] = useState(false)
+	const [initialLoading, setInitialLoading] = useState(true)
 
 	useEffect(() => {
 		startHome()
 		requestNotificationPermission()
-		Eitri.navigation.setOnResumeListener(() => {
+		Eitri.navigation.addOnResumeListener(() => {
 			startCart()
 		})
 	}, [])
+
+	const { data: cmsContent } = useQuery({
+		queryKey: ['cms', 'home'],
+		queryFn: async () => {
+			const { sections } = await getCmsContent('home', 'home')
+			return sections
+		},
+		enabled: enableCmsQuery
+	})
 
 	const requestNotificationPermission = async () => {
 		try {
@@ -33,6 +42,11 @@ export default function Home() {
 	}
 
 	const startHome = async () => {
+		const startParams = await Eitri.getInitializationInfos()
+		if (!startParams?.route) {
+			setInitialLoading(false)
+		}
+
 		startConfigure()
 			.then(resolveRedirectAndCartAndCms)
 			.catch(e => {
@@ -49,8 +63,10 @@ export default function Home() {
 				return
 			}
 		}
-		loadCms()
+		setEnableCmsQuery(true)
 		startCart()
+		TrackingService.sendScreenView('home', 'Home')
+		TrackingService.insiderVisitHomepage()
 	}
 
 	const processDeepLink = startParams => {
@@ -64,14 +80,13 @@ export default function Home() {
 		}
 	}
 
-	const loadCms = async () => {
-		const { sections } = await getCmsContent('home', 'home')
-		setCmsContent(sections)
+	if (initialLoading) {
+		return <Loading fullScreen />
 	}
 
 	return (
 		<Page
-			title={t('home.title', 'Home')}
+			title='Home'
 			topInset>
 			<MainHeader />
 			<View>

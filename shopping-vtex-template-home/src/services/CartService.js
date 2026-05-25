@@ -1,4 +1,5 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export const getCart = async () => {
 	try {
@@ -21,5 +22,13 @@ export const removeCartItem = async index => {
 		return await Vtex.cart.removeItem(index)
 	} catch (error) {
 		console.error('Erro ao remover item ao carrinho', error)
+	}
+}
+
+export const updateItemOnCart = async (index, quantity) => {
+	try {
+		return await Vtex.cart.changeItemQuantity(index, quantity)
+	} catch (error) {
+		console.error('Erro ao atualizar item ao carrinho', error)
 	}
 }

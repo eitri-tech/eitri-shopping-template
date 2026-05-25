@@ -46,6 +46,6 @@ export const resolveSortParam = (sort, useGraphQlMode) => {
 }
 
 export const getDefaultSortParam = useGraphQlMode => {
-	if (useGraphQlMode) return 'OrderByReleaseDateDESC'
-	return 'release:desc'
+	if (useGraphQlMode) return 'OrderByScoreDESC'
+	return 'score:desc'
 }

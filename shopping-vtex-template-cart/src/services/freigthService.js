@@ -1,12 +1,12 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 
-export const setFreight = async payload => {
+export const setLogisticInfo = async payload => {
 	try {
 		const newCart = await Vtex.checkout.setLogisticInfo(payload)
 
 		return newCart
 	} catch (error) {
-		console.error('setFreight', error)
+		console.error('setLogisticInfo', error)
 	}
 }
 
@@ -128,4 +128,32 @@ export const simulateCart = async (zipCode, cart) => {
 
 export const resolveZipCode = async zipCode => {
 	return await Vtex.checkout.resolveZipCode(zipCode)
+}
+
+export default async function fetchFreight(zipCode, currentSku) {
+	if (!zipCode) {
+		return
+	}
+
+	try {
+		const { street, neighborhood, city, state, country, geoCoordinates } =
+			await Vtex.checkout.resolveZipCode(zipCode)
+		const address = {
+			street,
+			neighborhood,
+			city,
+			state,
+			country,
+			geoCoordinates
+		}
+
+		const payload = {
+			address,
+			clearAddressIfPostalCodeNotFound: true
+		}
+		console.log('payload', payload)
+		const newCart = await Vtex.checkout.setLogisticInfo(payload)
+	} catch (error) {
+		console.error('Error fetching freight', error)
+	}
 }

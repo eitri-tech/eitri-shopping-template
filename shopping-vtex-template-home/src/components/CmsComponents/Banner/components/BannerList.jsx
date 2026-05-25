@@ -1,38 +1,57 @@
 import { Text, View } from 'eitri-luminus'
+import SectionTitle from '../../../SectionTitle/SectionTitle'
 export default function BannerList(props) {
 	const { data, onClick } = props
 	const imagesList = data.images
-	const { size, aspectRatio } = data
+	const { size, aspectRatio, gap, autoSize } = data
+
+	const autoSizeMap = {
+		'three-one-half': 3.5,
+		'four-three-four': 4.5,
+		'five': 5
+	}
 
 	const getBannerDimensions = () => {
+		if (autoSize && autoSizeMap[autoSize]) {
+			const divisor = autoSizeMap[autoSize]
+			const leftPadding = 16
+			const itemGap = gap ?? 8
+			const visibleGaps = Math.floor(divisor)
+			const autoWidth = (window.innerWidth - leftPadding - itemGap * visibleGaps) / divisor
+			let finalHeight = size?.maxHeight || autoWidth
+			if (aspectRatio) {
+				try {
+					const [aspectW, aspectH] = aspectRatio.split(':').map(Number)
+					const numericRatio = aspectH / aspectW
+					if (!isNaN(numericRatio)) {
+						finalHeight = autoWidth * numericRatio
+						if (size?.maxHeight && finalHeight > size.maxHeight) finalHeight = size.maxHeight
+					}
+				} catch (e) {}
+			}
+
+			return { width: `${autoWidth}px`, height: `${finalHeight}px` }
+		}
+
 		const maxWidth = size?.maxWidth
 		const maxHeight = size?.maxHeight
-
-		// Define a largura inicial baseada no maxWidth ou um padrão.
 		let finalWidth = maxWidth || 200
-		// A altura inicial é baseada no maxHeight ou no mesmo padrão.
 		let finalHeight = maxHeight || 200
 
 		if (aspectRatio) {
 			try {
 				const [aspectW, aspectH] = aspectRatio.split(':').map(Number)
 				const numericRatio = aspectH / aspectW
-
 				if (!isNaN(numericRatio)) {
-					// Calcula a altura com base na largura inicial.
 					const calculatedHeight = finalWidth * numericRatio
-
-					// Se a altura calculada ultrapassar o maxHeight, o maxHeight vira a restrição principal.
 					if (maxHeight && calculatedHeight > maxHeight) {
 						finalHeight = maxHeight
-						finalWidth = maxHeight / numericRatio // Recalcula a largura com base na altura máxima.
+						finalWidth = maxHeight / numericRatio
 					} else {
 						finalHeight = calculatedHeight
 					}
 				}
-			} catch (e) {
-				// Em caso de erro no formato do aspectRatio, usa os valores padrão.
-			}
+			} catch (e) {}
 		}
 
 		return { width: `${finalWidth}px`, height: `${finalHeight}px` }
@@ -40,28 +59,27 @@ export default function BannerList(props) {
 
 	return (
 		<View className='flex flex-col gap-2'>
-			{data?.mainTitle && (
-				<View className='px-4'>
-					<Text className='font-bold text-lg'>{data.mainTitle}</Text>
-				</View>
-			)}
+			<SectionTitle title={data.mainTitle} />
+
 			<View className='flex overflow-x-auto'>
-				<View className='flex gap-4 px-4'>
+				<View
+					style={{ gap: `${gap ?? 8}px` }}
+					className='flex px-4'>
 					{imagesList &&
 						imagesList.map(slider => (
 							<View
-								key={slider.imageUrl}
+								key={slider.imageUrl || slider.externalImageUrl}
 								className='flex flex-col'>
 								<View // Adicionado key para melhor performance e para seguir as boas práticas do React
 									style={{
-										backgroundImage: `url(${slider.imageUrl})`,
+										backgroundImage: `url(${slider.imageUrl || slider.externalImageUrl})`,
 										...getBannerDimensions(),
 										backgroundSize: 'cover'
 									}}
 									className={'rounded'}
 									onClick={() => onClick(slider)}
 								/>
-								{slider?.action?.title && (
+								{slider?.subLabel && (
 									<View
 										style={{
 											...getBannerDimensions(),
@@ -69,7 +87,7 @@ export default function BannerList(props) {
 										}}
 										className='mt-1'>
 										<Text className='font-bold line-clamp-2 block text-center'>
-											{slider?.action?.title}
+											{slider?.subLabel}
 										</Text>
 									</View>
 								)}

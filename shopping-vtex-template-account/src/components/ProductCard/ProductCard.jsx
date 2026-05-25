@@ -1,227 +1,168 @@
-import { openProduct } from '../../services/NavigationService'
-import { removeFromWishlist } from '../../services/CustomerService'
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useLocalShoppingCart } from '../../providers/LocalCart'
+import { openCart, openProduct } from '../../services/NavigationService'
 import { formatPrice } from '../../utils/utils'
-import { App } from 'eitri-shopping-vtex-shared'
-import { ProductCardFullImage, ProductCardDefault } from 'shopping-vtex-template-shared'
+import { App, EventBus } from 'eitri-shopping-vtex-shared'
+import { ProductCardFullImage, TrackingService, getBadgesForProducts } from 'shopping-vtex-template-shared'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 import { useTranslation } from 'eitri-i18n'
 
-export default function ProductCard(props) {
-	/*
-	 *  Aos poucos modificando esse componente para quebrar ele em mais componentes funcionais
-	 * */
+import { useCartItem, useWishlist } from './productCard.hooks'
+import { getProductVideo, formatInstallments, getFormattedListPrice } from './productCard.utils'
+import { useSnackBar } from '../../providers/SnackBar'
 
+// ========== Componente Principal ==========
+
+export default function ProductCard({ product, className }) {
+	const { addItem, cart } = useLocalShoppingCart()
+	const { showSnackBar } = useSnackBar()
 	const { t } = useTranslation()
-	const { product, className } = props
 
+	const [badges, setBadges] = useState([])
 	const [loadingCartOp, setLoadingCartOp] = useState(false)
-	const [loadingWishlistOp, setLoadingWishlistOp] = useState(true)
 
-	const [isOnWishlist, setIsOnWishlist] = useState(false)
-	const [wishListId, setWishListId] = useState(null)
+	const item = useMemo(() => {
+		const availableSku = product.items.find(item =>
+			item.sellers.some(seller => seller.commertialOffer?.AvailableQuantity > 0)
+		)
+		return availableSku || product.items[0]
+	}, [product])
 
-	const [itemQuantity, setItemQuantity] = useState(1)
-	const [itemInCart, setItemInCart] = useState(null)
+	const sellerDefault = useMemo(() => {
+		if (!item?.sellers?.length) return null
+		return item.sellers.find(seller => seller.sellerDefault) || item.sellers[0]
+	}, [item])
 
-	const item = product?.items?.[0]
-	const sellerDefault = item?.sellers?.find(seller => seller.sellerDefault) || item?.sellers?.[0]
+	const isValidProduct = Boolean(item && sellerDefault)
 
-	useEffect(() => {}, [])
+	const itemInCart = useCartItem(cart, item?.itemId)
 
-	const getItemName = () => {
-		if (item) {
-			return item?.nameComplete || item?.name
+	const wishlist = useWishlist(product?.productId)
+
+	const wishListIdRef = useRef(wishlist.wishListId)
+
+	const productData = useMemo(() => {
+		if (!isValidProduct) return null
+
+		const { Price, ListPrice, spotPrice } = sellerDefault.commertialOffer
+
+		return {
+			name: product.productName,
+			image: item.images?.[0]?.imageUrl || '',
+			video: getProductVideo(product),
+			listPrice: getFormattedListPrice(ListPrice, Math.min(Price, spotPrice)),
+			discountPercentage: Math.round((1 - Math.min(Price, spotPrice) / ListPrice) * 100),
+			price: formatPrice(Math.min(Price, spotPrice)),
+			installments: formatInstallments(sellerDefault)
 		}
-	}
+	}, [product, item, sellerDefault, isValidProduct])
 
-	const getItemImage = () => {
-		if (item) {
-			return item?.images?.[0]?.imageUrl
-		}
-	}
+	const rating = null
 
-	const getItemVideo = () => {
-		if (item) {
-			let productVideo = ''
-			if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
-				const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
-				const property = product?.properties?.find(prop => prop.name === productVideoTag)
-				if (property) {
-					productVideo = property.values?.[0]
+	const itemQuantity = itemInCart?.quantity || 0
+
+	useEffect(() => {
+		wishListIdRef.current = wishlist.wishListId
+	}, [wishlist.wishListId])
+
+	useEffect(() => {
+		loadBadges()
+		EventBus.subscribe({
+			channel: 'addToWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.productId === product.productId) {
+					wishlist.setIsOnWishlist(true)
+					wishlist.setWishListId(data?.response?.data?.addToList)
 				}
 			}
-		}
-	}
-
-	// Formatters
-	const formatInstallments = seller => {
-		const installments = seller?.commertialOffer.Installments
-
-		const maxInstallments = installments?.reduce((acc, curr) => {
-			return curr.NumberOfInstallments > acc.NumberOfInstallments ? curr : acc
-		}, installments[0])
-
-		if (!maxInstallments || maxInstallments?.NumberOfInstallments === 1) return ''
-
-		return `${t('productCard.upTo', 'em até')} ${maxInstallments?.NumberOfInstallments}x ${formatPrice(
-			maxInstallments?.Value
-		)}`
-	}
-
-	const getListPrice = () => {
-		if (sellerDefault?.commertialOffer.Price === sellerDefault?.commertialOffer.ListPrice) {
-			return ''
-		} else {
-			return formatPrice(sellerDefault?.commertialOffer.ListPrice)
-		}
-	}
-
-	const getBadge = () => {
-		const price = sellerDefault?.commertialOffer?.Price
-		const listPrice = sellerDefault?.commertialOffer?.ListPrice
-
-		if (price !== listPrice) {
-			const discount = ((listPrice - price) / listPrice) * 100
-			return `${discount.toFixed(0)}% ${t('productCard.off', 'OFF')}`
-		} else {
-			return ''
-		}
-	}
-
-	// Cart
-	const addToCart = async () => {
-		try {
-			setLoadingCartOp(true)
-			const newCart = await addItem({ ...item, quantity: itemQuantity })
-			const itemIndex = newCart?.items?.find(cartItem => cartItem.id === item?.itemId)
-			if (itemIndex > -1) {
-				setItemInCart({ ...cart?.items?.[itemIndex], index: itemIndex })
-				setItemQuantity(cart?.items?.[itemIndex].quantity)
+		})
+		EventBus.subscribe({
+			channel: 'removeFromWishlist',
+			broadcast: true,
+			callback: data => {
+				if (data?.id === wishListIdRef.current && data?.response?.data?.removeFromList) {
+					wishlist.setIsOnWishlist(false)
+					wishlist.setWishListId(-1)
+				}
 			}
-			setLoadingCartOp(false)
-		} catch (e) {
-			console.error(t('productCard.addToCartError', 'Error adding cart item'), e)
-			setLoadingCartOp(false)
-		}
+		})
+	}, [])
+
+	// ========== badges
+	const loadBadges = async () => {
+		const badges = await getBadgesForProducts(product, item, Vtex, 'badges')
+		setBadges(badges)
 	}
 
-	const removeFromCart = async () => {
-		setLoadingCartOp(true)
-		const index = cart?.items?.findIndex(cartItem => cartItem.id === item?.itemId)
-		await removeItem(index)
-		setItemInCart(null)
-		setLoadingCartOp(false)
-	}
+	// ========== Ações do Carrinho ==========
 
-	const isItemOnCart = () => {
-		return !!itemInCart
-	}
+	const handleAddToCart = useCallback(async () => {
+		if (!item || loadingCartOp) return
 
-	const onChangeQuantity = async newQuantity => {
-		if (newQuantity === 0) {
-			return removeFromCart()
-		}
-		if (itemInCart) {
-			await updateItemQuantity(itemInCart.index, newQuantity)
-			setItemQuantity(newQuantity)
-		}
-	}
-
-	// Wishlist
-	const onAddToWishlist = async () => {
-		try {
-			if (!product.productId) return
-			setLoadingWishlistOp(true)
-			setIsOnWishlist(true)
-			let response = await addToWishlist(product.productId, item?.name, item?.itemId)
-			setWishListId(response?.data?.addToList)
-			setLoadingWishlistOp(false)
-		} catch (error) {
-			Tracking.error(error, 'home.productCard.onAddToWishlist')
-			setIsOnWishlist(false)
-			setLoadingWishlistOp(false)
-		}
-	}
-
-	const onRemoveFromWishlist = async () => {
-		try {
-			setLoadingWishlistOp(true)
-			setIsOnWishlist(false)
-			await removeFromWishlist(wishListId)
-			setLoadingWishlistOp(false)
-		} catch (error) {
-			setLoadingWishlistOp(false)
-			setIsOnWishlist(true)
-			Tracking.error(error, 'home.productCard.onRemoveFromWishlist')
-		}
-	}
-
-	// Navigation
-	const onPressOnCard = () => {
-		openProduct(product)
-	}
-
-	const onPressOnWishlist = () => {
-		onRemoveFromWishlist()
-	}
-
-	const onPressCartButton = () => {
-		if (App?.configs?.appConfigs?.productCard?.buyGoesToPDP) {
+		if (product.items.length > 1) {
 			openProduct(product)
 			return
 		}
-		if (loadingCartOp) return
-		if (isItemOnCart()) {
-			removeFromCart()
-		} else {
-			addToCart()
+
+		await addItemToCart(item)
+	}, [item, loadingCartOp, addItem])
+
+	const addItemToCart = async (item, quantity = 1, goToCart) => {
+		try {
+			setLoadingCartOp(true)
+			await addItem({ ...item, quantity: itemQuantity + quantity })
+			TrackingService.addToCartEvent(product)
+			if (goToCart) {
+				openCart()
+			}
+			showSnackBar('success', t('productCard.snackAdded'))
+		} catch (error) {
+			console.error('Error adding to cart:', error)
+		} finally {
+			setLoadingCartOp(false)
 		}
 	}
 
-	let productVideo = ''
-	if (App?.configs?.appConfigs?.productCard?.productVideoTag) {
-		const productVideoTag = App?.configs?.appConfigs?.productCard?.productVideoTag
-		const property = product?.properties?.find(prop => prop.name === productVideoTag)
-		if (property) {
-			productVideo = property.values?.[0]
-		}
+	// ========== Ações de Navegação ==========
+
+	const handleCardPress = useCallback(() => {
+		openProduct(product)
+	}, [product])
+
+	const handleWishlistPress = useCallback(() => {
+		wishlist.toggle(item?.name, item?.itemId)
+	}, [wishlist, item])
+
+	// ========== Renderização ==========
+
+	if (!isValidProduct || !productData) {
+		return null
 	}
 
 	const params = {
-		name: getItemName(),
-		image: getItemImage(),
-		video: productVideo,
-		badge: getBadge(),
-		listPrice: getListPrice(),
+		name: productData.name,
+		image: productData.image,
+		video: productData.video,
+		listPrice: productData.listPrice,
 		showListItem: App?.configs?.appConfigs?.productCard?.showListPrice ?? true,
-		price: formatPrice(sellerDefault?.commertialOffer.Price),
-		installments: formatInstallments(sellerDefault),
-		isInCart: isItemOnCart(),
-		isOnWishlist: true,
-		loadingWishlistOp: loadingWishlistOp,
-		loadingCartOp: loadingCartOp,
-		itemQuantity: itemQuantity,
-		actionLabel: t('productCard.buy', 'Comprar'),
-		onPressOnCard: onPressOnCard,
-		onPressCartButton: onPressCartButton,
-		onPressOnWishlist: onPressOnWishlist,
-		onChangeQuantity: onChangeQuantity,
-		t: t,
+		rating: rating,
+		price: productData.price,
+		discountPercentage: productData.discountPercentage,
+		badges,
+		installments: productData.installments,
+		isInCart: Boolean(itemInCart),
+		isOnWishlist: wishlist.isOnWishlist,
+		loadingWishlistOp: wishlist.loading,
+		loadingCartOp,
+		itemQuantity,
+		onPressOnCard: handleCardPress,
+		onPressMainAction: handleAddToCart,
+		onPressOnWishlist: handleWishlistPress,
 		className
 	}
 
-	const implementations = {
-		fullImage: ProductCardFullImage,
-		default: ProductCardDefault
-		// convenience: ProductCardConvenience
-	}
+	const Implementation = ProductCardFullImage
 
-	const rcProductCardStyle = App?.configs?.appConfigs?.productCard?.style
-
-	const Implementation =
-		rcProductCardStyle && implementations[rcProductCardStyle]
-			? implementations[rcProductCardStyle]
-			: ProductCardDefault
-
-	/*prettier-ignore*/
 	return React.createElement(Implementation, params)
 }

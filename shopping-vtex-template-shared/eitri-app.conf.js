@@ -13,8 +13,12 @@ module.exports = {
 	'organization': {},
 	'sharedVersion': 'v2',
 	'eitri-app-dependencies': {
-		i18n: {
+		'i18n': {
 			version: '14.1.2'
+		},
+		'eitri-shopping-vtex-shared': {
+			isEitriAppShared: true,
+			version: '1.15.3'
 		}
 	},
 	'type': 'module'

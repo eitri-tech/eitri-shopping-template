@@ -13,9 +13,7 @@ export default function MainHeader() {
 	}
 
 	return (
-		<HeaderContentWrapper
-			scrollEffect={true}
-			className='justify-between'>
+		<HeaderContentWrapper className='justify-between items-center'>
 			<View onClick={goToCartman}>
 				<HeaderLogo />
 			</View>

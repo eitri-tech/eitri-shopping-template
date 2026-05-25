@@ -49,9 +49,9 @@ export default function Cartman() {
 				className='p-4 flex flex-col gap-4'
 				bottomInset
 				topInset>
-				<Text>{`Id do carrinho: ${cart?.orderFormId}`}</Text>
+				<Text className={'select-text'}>{`Id da cesta: ${cart?.orderFormId}`}</Text>
 				{cart?.items?.map(item => (
-					<Text>{`Item no carrinho: ${item?.name}`}</Text>
+					<Text>{`Item na cesta: ${item?.name}`}</Text>
 				))}
 				<Button
 					className='btn-primary w-full'

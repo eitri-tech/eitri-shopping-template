@@ -1,4 +1,4 @@
-import { setNewAddress, setFreight } from '../services/freigthService'
+import { setNewAddress, setLogisticInfo } from '../services/freigthService'
 import {
 	getCart,
 	addCoupon,
@@ -54,8 +54,8 @@ export default function CartProvider({ children }) {
 		return executeCartOperation(setNewAddress, cart, zipCode)
 	}
 
-	const _setFreight = async (cart, zipCode) => {
-		return executeCartOperation(setFreight, cart, zipCode)
+	const _setLogisticInfo = async (cart, zipCode) => {
+		return executeCartOperation(setLogisticInfo, cart, zipCode)
 	}
 
 	const _removeCoupon = async () => {
@@ -80,7 +80,7 @@ export default function CartProvider({ children }) {
 				removeItem,
 				setNewAddress: _setNewAddress,
 				removeCoupon: _removeCoupon,
-				setFreight: _setFreight,
+				setLogisticInfo: _setLogisticInfo,
 				addCoupon: _addCoupon
 			}}>
 			{children}

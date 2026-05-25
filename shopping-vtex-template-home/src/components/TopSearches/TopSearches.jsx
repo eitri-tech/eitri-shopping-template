@@ -1,8 +1,8 @@
-import { getTopSearches } from '../../services/CatalogService'
+import { getTopSearches } from '../../services/SearchMetadataService'
 import { useTranslation } from 'eitri-i18n'
 
 export default function TopSearches(props) {
-	const { onSubmit, ...rest } = props
+	const { onSubmit, className, ...rest } = props
 	const { t } = useTranslation()
 
 	const [searches, setSearches] = useState([])
@@ -11,36 +11,25 @@ export default function TopSearches(props) {
 		getTopSearches()
 			.then(res => {
 				const searches = res?.searches
-				setSearches(searches)
+				setSearches(searches.slice(0, 5))
 			})
-			.catch(err => {})
+			.catch(err => {
+				console.log('err: ', err)
+			})
 	}, [])
 
 	return (
 		<View
-			backgroundColor='accent-100'
-			padding='large'
+			className={`${className || ''}`}
 			{...rest}>
-			<Text
-				fontWeight='bold'
-				fontSize='small'>
-				{t('topSearches.title', 'Mais buscados')}
-			</Text>
-			<View
-				display='flex'
-				flexWrap='wrap'
-				gap={8}
-				marginTop='small'>
-				{searches?.map(search => (
+			<Text className='font-bold text-sm'>{t('topSearches.title')}</Text>
+			<View className='mt-2 flex flex-col gap-2'>
+				{searches?.map((search, idx) => (
 					<View
 						key={search?.term}
-						borderRadius='pill'
-						borderWidth='hairline'
-						width='fit-content'
-						padding='nano'
-						paddingHorizontal='small'
+						className={''}
 						onClick={() => onSubmit(search?.term)}>
-						<Text fontWeight='bold'>{search?.term}</Text>
+						<Text className=''>{search?.term}</Text>
 					</View>
 				))}
 			</View>

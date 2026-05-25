@@ -4,24 +4,63 @@
 	},
 	"orderCompleted": {
 		"title": "Pedido Confirmado",
+		"titleHeader": "Pedido concluído",
 		"txtCongratulation": "Parabéns!",
 		"txtOrderSuccessful": "Pedido realizado com sucesso.",
 		"txtOrderNumber": "Nº do pedido:",
 		"txtOrderFollow": "Você receberá um email com todos os detalhes. Acompanhe também seu pedido na opção 'Meus pedidos'.",
-		"labelSeeOrders": "Ver pedidos",
-		"labelBack": "Voltar para a tela inicial",
-		"header": "Pedido concluído",
-		"done": "Pronto, compra feita!",
-		"emailConfirmation": "Enviamos uma confirmação com os detalhes do seu pedido para seu email",
-		"orderCodeIs": "Seu código de pedido é",
-		"seeMyOrders": "Ver meus pedidos",
-		"backHome": "Voltar ao início"
+		"txtReady": "Pronto, compra feita!",
+		"txtEmailConfirmation": "Enviamos uma confirmação com os detalhes do seu pedido para seu email",
+		"txtOrderCode": "Seu código de pedido é",
+		"labelSeeOrders": "Ver meus pedidos",
+		"labelBack": "Voltar ao início"
 	},
 	"paymentData": {
 		"title": "Pagamento",
 		"txtTotalPayment": "Total a pagar",
 		"labelButton": "Continuar",
-		"chooseHowToPay": "Escolha como pagar"
+		"txtTitle": "Escolha como pagar"
+	},
+	"checkoutReview": {
+		"txtLoading": "Estamos preparando a sua compra",
+		"txtTitle": "Revise e confirme",
+		"txtDelete": "Excluir",
+		"txtError": "Houve um erro ao fechar pedido"
+	},
+	"freightSelector": {
+		"txtTitle": "Como deseja receber seu produto?",
+		"txtDeliverAt": "Receber em {{street}}, {{number}} {{complement}}",
+		"txtContinue": "Continuar",
+		"txtChangeAddress": "Alterar endereço de entrega"
+	},
+	"freightGroupSelector": {
+		"txtTitle": "Escolha como quer receber esses produtos",
+		"txtPickup": "Retire na loja {{name}}",
+		"txtDelivery": "Receba em casa"
+	},
+	"pickupSelector": {
+		"txtHeader": "Retirada",
+		"txtTitle": "Em qual loja deseja retirar seu produto?",
+		"txtSeeMore": "Ver mais",
+		"txtSeeLess": "Ver menos"
+	},
+	"installments": {
+		"txtHeader": "Parcelamento",
+		"txtWithInterest": "com juros",
+		"txtNoInterest": "sem juros"
+	},
+	"addCardForm": {
+		"txtHeader": "Novo cartão",
+		"txtBrandsAccepted": "Bandeiras aceitas:",
+		"labelContinue": "Continuar",
+		"errorCardNumber": "Verifique o número digitado",
+		"errorDueDate": "Data inválida"
+	},
+	"otpLogin": {
+		"txtMessage": "Por questões de segurança, nos informe o código enviado para seu email {{email}}",
+		"placeholderCode": "Código enviado para o email",
+		"errorInvalidCode": "Código inválido",
+		"labelContinue": "Continuar"
 	},
 	"personalData": {
 		"frmName": "Nome",
@@ -48,48 +87,41 @@
 		"labelPerson": "Sou pessoa física",
 		"labelCorporate": "Sou pessoa jurídica",
 		"errorInvalidDoc": "O CPF digitado é inválido",
-		"labelButton": "Continuar",
-		"requiredField": "Este campo é obrigatório",
-		"invalidDocument": "Documento inválido",
-		"enterEmailTitle": "Informe seu e-mail para continuar",
-		"enterEmailSubtitle": "Vamos verificar se você já fez alguma compra com a gente",
-		"ok": "OK"
+		"labelButton": "Continuar"
 	},
 	"pixOrder": {
 		"txtTimeRemaining": "Tempo restante",
 		"labelCopyCode": "Copiar código",
-		"pageTitle": "Pix QR Code",
-		"header": "Pagamento PIX",
-		"approvalInfo": "Com o PIX, sua compra é aprovada na hora",
-		"purchaseValue": "Valor da compra",
-		"codeTitle": "Código PIX",
-		"copyCode": "Copiar código",
-		"share": "Compartilhar",
-		"hideQrCode": "Ocultar QR Code",
-		"showQrCode": "Mostrar QR Code",
-		"howToPayTitle": "Como pagar com PIX",
-		"step1": "Acesse seu Internet Banking",
-		"step2": "Escolha o pagamento via PIX",
-		"step3": "Cole o código acima",
-		"timeRemaining": "Tempo restante",
-		"autoProcessInfo": "O pagamento será processado automaticamente após a confirmação"
+		"labelShare": "Compartilhar",
+		"labelShowQRCode": "Mostrar QR Code",
+		"labelHideQRCode": "Ocultar QR Code",
+		"txtHeader": "Pagamento PIX",
+		"txtPixApproved": "Com o PIX, sua compra é aprovada na hora",
+		"txtOrderValue": "Valor da compra:",
+		"txtPixCode": "Código PIX",
+		"txtHowToPay": "Como pagar com PIX",
+		"txtHowStep1": "Acesse seu Internet Banking",
+		"txtHowStep2": "Escolha o pagamento via PIX",
+		"txtHowStep3": "Cole o código acima",
+		"txtProcessing": "O pagamento será processado automaticamente após a confirmação",
+		"snackCopied": "código pix copiado com sucesso!"
 	},
 	"finishCart": {
 		"errorOrder": "Houve um erro ao processar o seu pedido. Por favor revise os produtos e dados de pagamento antes de tentar novamente",
 		"title": "Checkout",
-		"errorItems": "Alguns itens do seu carrinho não estão mais disponíveis.",
+		"errorItems": "Alguns itens dda sua cesta não estão mais disponíveis.",
 		"txtProduct": "Produto",
 		"txtProducts": "Produtos",
 		"txtTotal": "Total",
-		"txtItems": "Itens do Carrinho",
-		"txtNoItems": "Nenhum item no carrinho",
+		"txtItems": "Itens da cesta",
+		"txtNoItems": "Nenhum item na cesta",
 		"txtSubtotal": "Subtotal",
 		"labelButton": "Finalizar Compra"
 	},
 	"emptyCart": {
 		"title": "Finalizar Pedido",
-		"txtEmptyCart": "Seu carrinho está vazio",
-		"txtAddItem": "Adicione produtos no seu carrinho",
+		"txtEmptyCart": "Sua cesta está vazia",
+		"txtAddItem": "Adicione produtos na sua cesta",
 		"labelBack": "Voltar"
 	},
 	"addNewShippingAddress": {
@@ -105,7 +137,7 @@
 		"frmReference": "Referência",
 		"frmReceiveName": "Quem irá receber o pedido?",
 		"frmStreet": "Rua / Avenida",
-		"frmNeighborhood": "Rua / Avenida",
+		"frmNeighborhood": "Bairro",
 		"frmCity": "Cidade",
 		"frmState": "Estado",
 		"labelButton": "Continuar",
@@ -117,8 +149,7 @@
 		"errorCity": "Informe a cidade",
 		"errorState": "Informe o estado",
 		"errorReceiverName": "Informe quem irá receber",
-		"errorNumber": "Informe o número",
-		"errorPostalCodeInvalid": "CEP deve ter 8 dígitos"
+		"errorNumber": "Informe o número"
 	},
 	"simpleCard": {
 		"txtEdit": "ALTERAR"
@@ -128,22 +159,13 @@
 		"txtDelivery": "ENTREGA",
 		"txtNoNumber": "sem número",
 		"txtAlert": "Suas informações de endereço estão incompletas. Por favor clique aqui para atualizá-las.",
-		"storeAddress": "Endereço da Loja",
-		"deliveryAddress": "Endereço de Entrega"
+		"txtStoreAddress": "Endereço da Loja",
+		"txtDeliveryAddress": "Endereço de Entrega",
+		"txtPostalCode": "CEP: {{code}}"
 	},
 	"selectedPaymentData": {
 		"txtPayment": "PAGAMENTO",
-		"txtFillCard": "Preencha os dados do cartão",
-		"cardType": "CARTÃO DE CRÉDITO",
-		"cardNumber": "Número do cartão",
-		"holder": "Titular",
-		"cvv": "CVV",
-		"validThru": "Válido até",
-		"installments": "Parcelamento",
-		"instantApproval": "Aprovação imediata",
-		"giftCardPayment": "Pagamento com vale presente:",
-		"code": "Código",
-		"value": "Valor"
+		"txtFillCard": "Preencha os dados do cartão"
 	},
 	"userData": {
 		"txtPersonData": "DADOS PESSOAIS",
@@ -188,153 +210,6 @@
 		"loading": "Carregando endereços...",
 		"selectedAddress": "Endereço Selecionado",
 		"otherAddresses": "Outros Endereços",
-		"edit": "Editar",
-		"today": "Hoje",
-		"businessHoursAvailable": "Horário disponível",
-		"pickupTitle": "Pontos de Retirada",
-		"pickupSubtitle": "Selecione um ponto de retirada",
-		"noPickupPoints": "Nenhum ponto de retirada disponível",
-		"tabs": {
-			"delivery": "Entrega",
-			"pickup": "Retirada"
-		}
-	},
-	"checkoutPages": {
-		"checkout": "Checkout",
-		"home": "Checkout - Home",
-		"freightDelivery": "Checkout - Frete e Entrega",
-		"paymentData": "Checkout - Dados de pagamento",
-		"personalData": "Checkout - Dados Pessoais",
-		"emptyCart": "Checkout - Carrinho Vazio"
-	},
-	"creditCardDisplay": {
-		"type": "CARTÃO DE CRÉDITO",
-		"number": "Número do cartão",
-		"holder": "Titular",
-		"validThru": "Válido até",
-		"cvv": "CVV"
-	},
-	"otpLogin": {
-		"securityMessage": "Por questões de segurança, nos informe o código enviado para seu email",
-		"codePlaceholder": "Código enviado para o email",
-		"invalidCode": "Código inválido",
-		"continue": "Continuar"
-	},
-	"paymentMethods": {
-		"bankInvoice": {
-			"title": "Boleto Bancário"
-		},
-		"googlePay": {
-			"title": "Google Pay"
-		},
-		"instantPayment": {
-			"title": "Pix",
-			"subtitle": "Pagamento instantâneo",
-			"info": "O código Pix será exibido na próxima etapa, após a revisão do seu pedido.",
-			"discount": "3% OFF"
-		},
-		"giftCard": {
-			"title": "Vale presente",
-			"invalidCode": "Código inválido",
-			"addGiftCard": "Adicionar vale presente",
-			"placeholder": "Insira o código do vale presente",
-			"add": "Adicionar",
-			"remove": "Remover",
-			"remainingPayment": "Pagamento restante de",
-			"combinePayment": "Por favor, combine com outra forma de pagamento",
-			"continue": "Continuar"
-		},
-		"creditCard": {
-			"title": "Cartão de Crédito",
-			"remove": "Remover",
-			"securityCode": "Cód. Segurança",
-			"continue": "Continuar",
-			"newCard": "+ novo cartão",
-			"confirmRemove": "Deseja remover o cartão final",
-			"endingIn": "final",
-			"yes": "Sim",
-			"no": "Não"
-		}
-	},
-	"creditCardBillingAddress": {
-		"title": "Endereço de cobrança",
-		"sameAs": "O endereço da fatura é",
-		"shippingAddress": "endereço de entrega",
-		"zipCode": "CEP",
-		"street": "Rua",
-		"number": "Número",
-		"complement": "Complemento",
-		"neighborhood": "Bairro",
-		"city": "Cidade",
-		"state": "Estado"
-	},
-	"addCardForm": {
-		"header": "Novo cartão",
-		"cardNumberPlaceholder": "Insira o número do seu cartão",
-		"cardNumberLabel": "Número do cartão",
-		"cardNumberError": "Verifique o número digitado",
-		"holderPlaceholder": "Nome impresso no cartão",
-		"holderLabel": "Nome impresso no cartão",
-		"validityLabel": "Validade",
-		"validityPlaceholder": "MM/AA",
-		"validityError": "Data inválida",
-		"cvvLabel": "CVV",
-		"cvvPlaceholder": "CVV",
-		"acceptedFlags": "Bandeiras aceitas:",
-		"continue": "Continuar"
-	},
-	"checkoutReview": {
-		"loading": "Estamos preparando a sua compra",
-		"title": "Revise e confirme",
-		"removeUnavailable": "Excluir",
-		"errorClosingOrder": "Houve um erro ao fechar pedido"
-	},
-	"freightGroupSelectorOptions": {
-		"title": "Escolha como quer receber esses produtos",
-		"pickupAtStore": "Retire na loja"
-	},
-	"freightSelector": {
-		"title": "Como deseja receber seu produto?",
-		"changeAddress": "Alterar endereço de entrega",
-		"receiveAt": "Receber em"
-	},
-	"multipleFreightSelector": {
-		"title": "Como deseja receber seu produto?",
-		"pickupAtStore": "Retire na loja",
-		"chooseHowToReceive": "Escolha como receber",
-		"yourProduct": "seu produto",
-		"yourProducts": "seus produtos",
-		"seeMoreOptions": "Ver mais opções",
-		"changeAddress": "Alterar endereço de entrega",
-		"package": "Pacote"
-	},
-	"shippingMethod": {
-		"title": "Como você prefere receber seu produto?",
-		"sendToAddress": "Enviar para o meu endereço",
-		"changeDeliveryAddress": "Trocar endereço de entrega",
-		"pickupOtherStore": "Retirar em outra loja"
-	},
-	"installments": {
-		"header": "Parcelamento",
-		"googlePay": "Google Pay",
-		"creditCard": "Cartão de Crédito",
-		"endingIn": "com final",
-		"withInterest": "com juros",
-		"withoutInterest": "sem juros"
-	},
-	"pickupSelector": {
-		"header": "Retirada",
-		"title": "Em qual loja deseja retirar seu produto?",
-		"seeLess": "Ver menos",
-		"seeMore": "Ver mais"
-	},
-	"externalProviderOrderFinished": {
-		"title": "Solicitação enviada!",
-		"description": "Acompanhe seu pedido em \"Meus pedidos\". Se houve algum problema no pagamento, é só clicar em \"Tentar novamente\"!",
-		"seeMyOrders": "Ver meus pedidos",
-		"tryAgain": "Tentar novamente"
-	},
-	"common": {
-		"zipCode": "CEP"
+		"edit": "Editar"
 	}
 }

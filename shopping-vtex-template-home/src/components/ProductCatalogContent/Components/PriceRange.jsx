@@ -12,10 +12,10 @@ export default function PriceRange({
 	rangeMax = 100,
 	step = 1
 }) {
+	const { t } = useTranslation()
 	const [minValue, setMinValue] = useState(initialMin)
 	const [maxValue, setMaxValue] = useState(initialMax)
 	const [isDragging, setIsDragging] = useState(null)
-	const { t } = useTranslation()
 
 	const sliderRef = useRef(null)
 	const minThumbRef = useRef(null)
@@ -153,20 +153,16 @@ export default function PriceRange({
 			</View>
 
 			{/* Input fields */}
-				<View className='flex justify-between w-full'>
-					<View>
-						<Text className='block text-sm font-medium text-gray-700 mb-1'>
-							{t('priceRange.minLabel', 'Valor Mínimo')}
-						</Text>
-						<Text className='block text-sm font-medium text-gray-700'>{formatPrice(minValue)}</Text>
-					</View>
-					<View>
-						<Text className='block text-sm font-medium text-gray-700 mb-1'>
-							{t('priceRange.maxLabel', 'Valor Máximo')}
-						</Text>
-						<Text className='block text-sm font-medium text-gray-700'>{formatPrice(maxValue)}</Text>
-					</View>
+			<View className='flex justify-between w-full'>
+				<View>
+					<Text className='block text-sm font-medium text-gray-700 mb-1'>{t('priceRange.min')}</Text>
+					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(minValue)}</Text>
 				</View>
+				<View>
+					<Text className='block text-sm font-medium text-gray-700 mb-1'>{t('priceRange.max')}</Text>
+					<Text className='block text-sm font-medium text-gray-700'>{formatPrice(maxValue)}</Text>
+				</View>
+			</View>
 		</View>
 	)
 }

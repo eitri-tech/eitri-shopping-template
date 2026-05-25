@@ -47,9 +47,28 @@ export default function CatalogFilter(props) {
 			const priceFacet = result.facets.find(f => f.type === 'PRICERANGE')
 			const filteredFacets = result.facets.filter(f => f.type !== 'PRICERANGE' && !f.hidden)
 
+			const FACET_NAME_VALUES = {
+				sellerName: 'Vendido por'
+			}
+
+			const VALUE_NAME_VALUES = {}
+
+			const treatedFacets = filteredFacets.map(facet => {
+				return {
+					...facet,
+					name: FACET_NAME_VALUES[facet.name] || facet.name,
+					values: facet.values.map(value => {
+						return {
+							...value,
+							name: VALUE_NAME_VALUES[value.name] || value.name
+						}
+					})
+				}
+			})
+
 			resolvePriceRangeReceivedFacet(priceFacet)
 
-			setFilterFacets(filteredFacets || [])
+			setFilterFacets(treatedFacets || [])
 			setFacetsLoading(false)
 		} catch (e) {
 			console.error('Erro ao buscar facets', e)
@@ -140,6 +159,7 @@ export default function CatalogFilter(props) {
 		<>
 			<CustomButton
 				disabled={facetsLoading}
+				outlined
 				onClick={() => setShowModal(true)}
 				leftIcon={
 					<svg
@@ -155,7 +175,7 @@ export default function CatalogFilter(props) {
 						<path d='M22 3H2l8 9.46V19l4 2v-8.54L22 3z' />
 					</svg>
 				}
-				label={t('categoryPageModal.title', 'Filtros')}
+				label={t('categoryPageModal.title')}
 			/>
 
 			{showModal && (
@@ -166,7 +186,7 @@ export default function CatalogFilter(props) {
 						onClick={e => e.stopPropagation()}
 						className='bg-white rounded-t w-full max-h-[70vh] overflow-y-auto pointer-events-auto p-4'>
 						<View className='flex flex-row items-center justify-between border-b border-gray-300'>
-							<Text className='text-xl font-semibold'>{t('categoryPageModal.title', 'Filtros')}</Text>
+							<Text className='text-xl font-semibold'>{t('categoryPageModal.title')}</Text>
 						</View>
 
 						<View className='flex flex-col gap-4 mt-4'>
@@ -206,13 +226,13 @@ export default function CatalogFilter(props) {
 									<CustomButton
 										outlined
 										onClick={onFilterClear}
-										label={t('categoryPageModal.clear', 'Limpar')}
+										label={t('categoryPageModal.clear')}
 									/>
 								</View>
 								<View className='w-1/2'>
 									<CustomButton
 										onClick={onApplyFilters}
-										label={t('categoryPageModal.button', 'Filtrar')}
+										label={t('categoryPageModal.button')}
 									/>
 								</View>
 							</View>

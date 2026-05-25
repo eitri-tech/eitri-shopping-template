@@ -6,3 +6,14 @@ export const navigateToCheckout = orderFormId => {
 		initParams: { orderFormId }
 	})
 }
+
+export const openProduct = async productId => {
+	try {
+		Eitri.nativeNavigation.open({
+			slug: 'pdp',
+			initParams: { productId }
+		})
+	} catch (e) {
+		console.error('navigate to PDP: Error trying to open PDP', e)
+	}
+}
