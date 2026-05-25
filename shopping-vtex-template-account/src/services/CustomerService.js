@@ -13,12 +13,16 @@ export async function sendAccessKeyByEmail(email) {
 }
 
 export const doLogout = async () => {
-	await Vtex.cart.removeClientData()
 	return await Vtex.customer.logout()
 }
 
+export const removeClientData = async () => {
+	return await Vtex.cart.removeClientData()
+}
+
 export const isLoggedIn = async () => {
-	return await Vtex.customer.isLoggedIn()
+	const session = await Vtex.session.getSession()
+	return session?.namespaces?.profile?.isAuthenticated?.value === 'true'
 }
 
 export const getSavedUser = async () => {

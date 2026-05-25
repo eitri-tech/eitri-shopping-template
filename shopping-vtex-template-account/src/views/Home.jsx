@@ -1,7 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { CustomButton, HeaderText, HeaderContentWrapper, BottomInset, Loading } from 'shopping-vtex-template-shared'
 import { FiUser, FiHeart, FiMapPin, FiPackage, FiLock, FiCreditCard } from 'react-icons/fi'
-import { doLogout, getCustomerData, isLoggedIn } from '../services/CustomerService'
+import { doLogout, getCustomerData, isLoggedIn, removeClientData } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
 import { useTranslation } from 'eitri-i18n'
@@ -52,6 +52,8 @@ export default function Home(props) {
 
 		if (isLogged) {
 			await loadMe()
+		} else {
+			doLogout()
 		}
 
 		setIsLogged(isLogged)
@@ -71,6 +73,7 @@ export default function Home(props) {
 	const _doLogout = async () => {
 		setIsLoading(true)
 		await doLogout()
+		await removeClientData()
 		init()
 	}
 
