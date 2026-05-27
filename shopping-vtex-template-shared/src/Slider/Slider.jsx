@@ -1,5 +1,27 @@
 import { useKeenSlider } from './keenslider/react.es'
-import { useEffect } from 'react'
+import { Children, cloneElement, isValidElement } from 'react'
+
+const CONTAINER_STYLE = {
+	alignContent: 'flex-start',
+	display: 'flex',
+	overflow: 'hidden',
+	position: 'relative',
+	userSelect: 'none',
+	WebkitUserSelect: 'none',
+	MozUserSelect: 'none',
+	msUserSelect: 'none',
+	WebkitTouchCallout: 'none',
+	touchAction: 'pan-y',
+	WebkitTapHighlightColor: 'transparent',
+	width: '100%'
+}
+
+const SLIDE_STYLE = {
+	position: 'relative',
+	overflow: 'hidden',
+	width: '100%',
+	minHeight: '100%'
+}
 
 export default function Slider(props) {
 	const { options, autoPlay, autoPlayTimeout, plugins, children } = props
@@ -19,72 +41,36 @@ export default function Slider(props) {
 					slider.next()
 				}, autoPlayTimeout || 5000)
 			}
-			slider.on('created', () => {
-				const container = slider.container
-				const onMouseOver = () => { mouseOver = true; clearNextTimeout() }
-				const onMouseOut = () => { mouseOver = false; nextTimeout() }
-				container.addEventListener('mouseover', onMouseOver)
-				container.addEventListener('mouseout', onMouseOut)
-				slider.on('destroyed', () => {
-					container.removeEventListener('mouseover', onMouseOver)
-					container.removeEventListener('mouseout', onMouseOut)
-				})
-				nextTimeout()
-			})
+			slider.on('created', nextTimeout)
 			slider.on('dragStarted', clearNextTimeout)
 			slider.on('animationEnded', nextTimeout)
 			slider.on('updated', nextTimeout)
 		})
 
-	const [sliderRef, instanceRef] = useKeenSlider(options, _plugins)
+	const [sliderRef] = useKeenSlider(options, _plugins)
 
-	useEffect(() => {
-		const id = 'keen-slider-injected-style'
+	const containerStyle = {
+		...CONTAINER_STYLE,
+		...(options?.rtl && { flexDirection: 'row-reverse' }),
+		...(options?.vertical && { flexWrap: 'wrap' })
+	}
 
-		if (window.document.getElementById(id)) return
-
-		const style = window.document.createElement('style')
-		style.id = id
-		style.innerHTML = `
-	  .keen-slider:not([data-keen-slider-disabled]) {
-	    align-content: flex-start;
-	    display: flex;
-	    overflow: hidden;
-	    position: relative;
-	    -webkit-user-select: none;
-	    -moz-user-select: none;
-	    -ms-user-select: none;
-	    user-select: none;
-	    -webkit-touch-callout: none;
-	    -khtml-user-select: none;
-	    touch-action: pan-y;
-	    -webkit-tap-highlight-color: transparent;
-	    width: 100%;
-	  }
-
-	  .keen-slider:not([data-keen-slider-disabled]) .keen-slider__slide {
-	    position: relative;
-	    overflow: hidden;
-	    width: 100%;
-	    min-height: 100%;
-	  }
-
-	  .keen-slider:not([data-keen-slider-disabled])[data-keen-slider-reverse] {
-	    flex-direction: row-reverse;
-	  }
-
-	  .keen-slider:not([data-keen-slider-disabled])[data-keen-slider-v] {
-	    flex-wrap: wrap;
-	  }
-	`
-		window.document.head.appendChild(style)
-	}, [])
+	const slides = Children.map(children, child => {
+		if (!isValidElement(child)) return child
+		const existing = child.props.className || ''
+		const className = existing.includes('keen-slider__slide') ? existing : `${existing} keen-slider__slide`.trim()
+		return cloneElement(child, {
+			className,
+			style: { ...SLIDE_STYLE, ...child.props.style }
+		})
+	})
 
 	return (
 		<div
 			ref={sliderRef}
-			className='keen-slider'>
-			{children}
+			className='keen-slider'
+			style={containerStyle}>
+			{slides}
 		</div>
 	)
 }
