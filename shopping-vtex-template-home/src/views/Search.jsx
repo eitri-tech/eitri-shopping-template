@@ -37,7 +37,7 @@ export default function Search(props) {
 			startCart()
 		})
 
-		TrackingService.sendScreenView('busca', 'Search')
+		TrackingService.sendScreenView('Busca', 'Search')
 	}, [])
 
 	const handleSearchSubmit = async term => {
@@ -59,7 +59,7 @@ export default function Search(props) {
 	}
 
 	return (
-		<Page title='Tela de busca'>
+		<Page title='Busca'>
 			<HeaderContentWrapper
 				scrollEffect={false}
 				className='gap-3 w-full justify-between relative'>

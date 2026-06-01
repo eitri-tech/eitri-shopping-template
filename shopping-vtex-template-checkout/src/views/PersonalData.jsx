@@ -157,7 +157,7 @@ export default function PersonalData() {
 	])
 
 	useEffect(() => {
-		TrackingService.sendScreenView(`checkout_dados_cliente`, 'PersonalData')
+		TrackingService.sendScreenView('Dados do cliente', 'PersonalData')
 	}, [])
 
 	useEffect(() => {
@@ -278,7 +278,7 @@ export default function PersonalData() {
 	})()
 
 	return (
-		<Page title='Checkout - Dados Pessoais'>
+		<Page title='Dados do cliente'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('personalData.title', 'Seus dados pessoais')} />

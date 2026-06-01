@@ -73,7 +73,7 @@ export default function Wishlist(props) {
 	}
 
 	return (
-		<Page title='Wishlist'>
+		<Page title='Lista de desejos'>
 			<View className={'min-h-[100vh] flex flex-col'}>
 				<HeaderContentWrapper>
 					{!openWithBottomBart && <HeaderReturn />}

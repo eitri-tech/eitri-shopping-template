@@ -5,7 +5,7 @@ import { navigate } from '../services/navigationService'
 import { useState } from 'react'
 import { productGroupShippingResolver, GenericBox } from 'shopping-vtex-template-shared'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
-import { HeaderContentWrapper, HeaderReturn, CustomButton, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, CustomButton, Loading, TrackingService } from 'shopping-vtex-template-shared'
 import { FaChevronRight } from 'react-icons/fa'
 
 function AddressSelectorCard({ sla, items }) {
@@ -63,6 +63,10 @@ export default function MultipleFreightSelector(props) {
 
 	const { t } = useTranslation()
 
+	useEffect(() => {
+		TrackingService.sendScreenView('Seleção de frete múltiplo', 'MultipleFreightSelector')
+	}, [])
+
 	const submit = async () => {
 		navigate('PaymentData', {}, true)
 	}
@@ -74,7 +78,7 @@ export default function MultipleFreightSelector(props) {
 	}
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title='Seleção de frete múltiplo'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>

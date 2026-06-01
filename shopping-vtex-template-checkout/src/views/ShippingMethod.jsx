@@ -1,4 +1,4 @@
-import { HeaderContentWrapper, HeaderReturn, shippingResolver, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, shippingResolver, Loading, TrackingService } from 'shopping-vtex-template-shared'
 import { useLocalShoppingCart } from '../providers/LocalCart'
 import { navigate } from '../services/navigationService'
 import CardSelector from '../components/CardSelector/CardSelector'
@@ -7,6 +7,10 @@ export default function ShippingMethod(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
 
 	const [isLoading, setIsLoading] = useState(false)
+
+	useEffect(() => {
+		TrackingService.sendScreenView('Método de entrega', 'ShippingMethod')
+	}, [])
 
 	const shippingOptions = shippingResolver(cart)
 
@@ -51,7 +55,7 @@ export default function ShippingMethod(props) {
 	const userAddress = cart?.shippingData?.address
 
 	return (
-		<Page>
+		<Page title='Método de entrega'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>

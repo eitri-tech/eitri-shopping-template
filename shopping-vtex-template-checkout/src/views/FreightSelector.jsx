@@ -5,7 +5,7 @@ import { navigate } from '../services/navigationService'
 import { useState } from 'react'
 import { shippingResolver } from 'shopping-vtex-template-shared'
 import FixedBottom from '../components/FixedBottom/FixedBottom'
-import { HeaderContentWrapper, HeaderReturn, Loading, GenericBox } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, Loading, GenericBox, TrackingService } from 'shopping-vtex-template-shared'
 
 export default function FreightSelector(props) {
 	const { cart, setFreight } = useLocalShoppingCart()
@@ -13,6 +13,10 @@ export default function FreightSelector(props) {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const { t } = useTranslation()
+
+	useEffect(() => {
+		TrackingService.sendScreenView('Seleção de frete', 'FreightSelector')
+	}, [])
 
 	const onSelectFreightOption = async freightOption => {
 		try {
@@ -43,7 +47,7 @@ export default function FreightSelector(props) {
 	const userAddress = cart?.shippingData?.address
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title='Seleção de frete'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>

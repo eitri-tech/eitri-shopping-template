@@ -14,11 +14,11 @@ export default function EmptyCart() {
 	const { t } = useTranslation()
 
 	useEffect(() => {
-		TrackingService.sendScreenView(`checkout_carrinho_vazio`, 'EmptyCart')
+		TrackingService.sendScreenView('Carrinho vazio', 'EmptyCartCheckout')
 	}, [])
 
 	return (
-		<Page title='Checkout - Cesta Vazia'>
+		<Page title='Carrinho vazio'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<View onClick={goToCartman}>

@@ -17,7 +17,7 @@ import { verifySocialNumber } from '../utils/verifySocialNumber'
 export default function StoreCardForm(props) {
 	const { cart, setCardInfo, selectPaymentOption } = useLocalShoppingCart()
 
-	const PAGE = 'Checkout - Cartão da loja'
+	const PAGE = 'Cadastro de cartão da loja'
 
 	const systemGroup = props.location?.state?.systemGroup
 	const propCardNumber = props.location?.state?.cardNumber
@@ -38,7 +38,7 @@ export default function StoreCardForm(props) {
 	const [validDocument, setValidDocument] = useState(false)
 
 	useEffect(() => {
-		TrackingService.sendScreenView('form_cartao_loja', 'StoreCardForm')
+		TrackingService.sendScreenView('Cadastro de cartão da loja', 'StoreCardForm')
 	}, [])
 
 	useEffect(() => {

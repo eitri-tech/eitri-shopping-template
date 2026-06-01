@@ -27,7 +27,7 @@ export default function LandingPage(props) {
 			const { sections } = await getCmsContent('landingPage', landingPageName)
 			setCmsContent(sections)
 			setIsLoading(false)
-			TrackingService.sendScreenView(landingPageName, 'landingPage')
+			TrackingService.sendScreenView(landingPageName, 'LandingPage')
 		} catch (e) {
 			setIsLoading(false)
 		}
@@ -39,7 +39,7 @@ export default function LandingPage(props) {
 	}
 
 	return (
-		<Page>
+		<Page title={landingPageName}>
 			<HeaderContentWrapper className={`justify-between`}>
 				<View className={`flex items-center gap-4`}>
 					{!openInBottomBar && <HeaderReturn />}

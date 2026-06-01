@@ -6,7 +6,8 @@ import {
 	HeaderReturn,
 	HeaderText,
 	CustomButton,
-	BottomInset
+	BottomInset,
+	TrackingService
 } from 'shopping-vtex-template-shared'
 import { IoBagOutline } from 'react-icons/io5'
 import { useLocalShoppingCart } from '../providers/LocalCart'
@@ -16,6 +17,10 @@ export default function EmptyCart(props) {
 
 	const { t } = useTranslation()
 	const { startCart } = useLocalShoppingCart()
+
+	useEffect(() => {
+		TrackingService.sendScreenView('Carrinho vazio', 'EmptyCart')
+	}, [])
 
 	useEffect(() => {
 		Eitri.navigation.setOnResumeListener(async () => {
@@ -31,7 +36,7 @@ export default function EmptyCart(props) {
 	}
 
 	return (
-		<Page>
+		<Page title='Carrinho vazio'>
 			<View className={'min-h-[100vh] flex flex-col'}>
 				<HeaderContentWrapper>
 					{!openWithBottomBar && <HeaderReturn />}

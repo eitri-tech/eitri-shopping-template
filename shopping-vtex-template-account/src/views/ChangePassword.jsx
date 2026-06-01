@@ -125,7 +125,7 @@ export default function ChangePassword(props) {
 	const canSubmit = firstInputValid && allRequirementsMet && passwordsMatch && !loading
 
 	return (
-		<Page topInset>
+		<Page title='Alterar senha' topInset>
 			<Loading
 				isLoading={loading}
 				fullScreen={true}

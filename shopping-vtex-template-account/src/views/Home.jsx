@@ -14,7 +14,7 @@ import logoBrazilianEngineering from '../assets/images/BrazilianEngineering-Logo
 import AppVersion from '../components/AppVersion/AppVersion'
 
 export default function Home(props) {
-	const PAGE = 'Minha Conta'
+	const PAGE = 'Minha conta'
 
 	const { t } = useTranslation()
 
@@ -24,7 +24,7 @@ export default function Home(props) {
 
 	useEffect(() => {
 		init()
-		sendScreenView('Perfil', 'Home')
+		sendScreenView('Perfil', 'HomeAccount')
 		Eitri.navigation.setOnResumeListener(() => {
 			init()
 		})
@@ -59,7 +59,7 @@ export default function Home(props) {
 		setIsLogged(isLogged)
 		setIsLoading(false)
 
-		sendScreenView('Minha conta', 'Home')
+		sendScreenView('Minha conta', 'HomeAccount')
 	}
 
 	const loadMe = async () => {

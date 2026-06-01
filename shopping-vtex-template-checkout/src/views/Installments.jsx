@@ -28,7 +28,7 @@ export default function Installments(props) {
 	)
 
 	useEffect(() => {
-		TrackingService.sendScreenView('selecao_parcelas', 'Installments')
+		TrackingService.sendScreenView('Seleção de parcelas', 'Installments')
 	}, [])
 
 	// console.log('paymentSystem', cart?.orderFormId, installmentOption)
@@ -69,7 +69,7 @@ export default function Installments(props) {
 	}
 
 	return (
-		<Page>
+		<Page title='Seleção de parcelas'>
 			<View className='p-4 pt-8 h-min-screen flex flex-col'>
 				<HeaderContentWrapper>
 					<HeaderReturn />

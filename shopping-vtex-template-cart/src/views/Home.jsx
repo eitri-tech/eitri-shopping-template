@@ -44,7 +44,7 @@ export default function Home(props) {
 		const cart = await loadCart()
 
 		setAppIsLoading(false)
-		TrackingService.sendScreenView('Carrinho', 'Home')
+		TrackingService.sendScreenView('Carrinho', 'HomeCart')
 		TrackingService.viewCartEvent(cart)
 	}
 
@@ -57,7 +57,7 @@ export default function Home(props) {
 	}
 
 	return (
-		<Page title='Cesta'>
+		<Page title='Carrinho'>
 			<HeaderContentWrapper>
 				{!openWithBottomBar && <HeaderReturn />}
 				<HeaderText text={t('home.title')} />

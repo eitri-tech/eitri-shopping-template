@@ -1,6 +1,10 @@
 import Eitri from 'eitri-bifrost'
-import { GenericError } from 'shopping-vtex-template-shared'
+import { GenericError, TrackingService } from 'shopping-vtex-template-shared'
 export default function Error() {
+	useEffect(() => {
+		TrackingService.sendScreenView('Erro', 'Error')
+	}, [])
+
 	const navigateToHome = () => {
 		Eitri.navigation.navigate({
 			path: 'Home'
@@ -9,6 +13,7 @@ export default function Error() {
 
 	return (
 		<Page
+			title='Erro'
 			topInset
 			bottomInset>
 			<GenericError onPress={navigateToHome} />

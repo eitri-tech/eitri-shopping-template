@@ -94,7 +94,7 @@ export default function SignUp(props) {
 	}
 
 	return (
-		<Page topInset>
+		<Page title='Cadastro' topInset>
 			<Loading
 				isLoading={loading}
 				fullScreen={true}

@@ -2,9 +2,14 @@ import Eitri from 'eitri-bifrost'
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import { clearCart } from '../services/cartService'
 import { navigate } from '../services/navigationService'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export default function ExternalProviderOrder(props) {
 	let isMounted = true
+
+	useEffect(() => {
+		TrackingService.sendScreenView('Pagamento externo', 'ExternalProviderOrder')
+	}, [])
 
 	useEffect(() => {
 		if (props.location?.state?.paymentResult) {
@@ -50,5 +55,5 @@ export default function ExternalProviderOrder(props) {
 		} catch (error) {}
 	}
 
-	return <Page></Page>
+	return <Page title='Pagamento externo'></Page>
 }

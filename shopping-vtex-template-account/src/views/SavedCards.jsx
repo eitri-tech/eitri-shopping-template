@@ -89,7 +89,7 @@ export default function SavedCards(props) {
 
 	return (
 		<ProtectedView afterLoginRedirectTo='SavedCards'>
-			<Page topInset>
+			<Page title='Cartões salvos' topInset>
 				<HeaderContentWrapper>
 					<HeaderReturn />
 					<HeaderText text={t('savedCards.title')} />

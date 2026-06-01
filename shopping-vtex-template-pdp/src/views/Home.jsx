@@ -60,7 +60,7 @@ export default function Home() {
 
 		await loadCart(startParams)
 
-		TrackingService.sendScreenView('PDP', 'home')
+		TrackingService.sendScreenView(product?.linkText, 'HomePdp')
 		TrackingService.viewItemEvent(product)
 		markLastViewedProduct(product)
 	}
@@ -114,7 +114,7 @@ export default function Home() {
 	}
 
 	return (
-		<Page title='Página de produto'>
+		<Page title={product?.linkText}>
 			<Header
 				product={product}
 				configLoaded={configLoaded}

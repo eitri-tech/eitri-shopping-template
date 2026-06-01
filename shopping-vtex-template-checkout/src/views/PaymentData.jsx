@@ -17,7 +17,7 @@ export default function PaymentData(props) {
 	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
-		TrackingService.sendScreenView(`checkout_dados_pagamento`, 'checkout.paymentData')
+		TrackingService.sendScreenView('Dados de pagamento', 'PaymentData')
 	}, [])
 
 	const handlePaymentOptionsChange = async paymentMethod => {
@@ -40,7 +40,7 @@ export default function PaymentData(props) {
 	}
 
 	return (
-		<Page title='Checkout - Dados de pagamento'>
+		<Page title='Dados de pagamento'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>
