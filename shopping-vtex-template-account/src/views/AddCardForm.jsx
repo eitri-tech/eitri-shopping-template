@@ -172,7 +172,7 @@ export default function AddCardForm(props) {
 	}
 
 	return (
-		<Page topInset>
+		<Page title='Adicionar cartão' topInset>
 			<Loading
 				isLoading={isLoading}
 				fullScreen

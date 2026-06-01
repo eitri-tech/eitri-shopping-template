@@ -21,11 +21,11 @@ export default function PickupSelector(props) {
 	const [isLoading, setIsLoading] = useState(false)
 	const [seeMore, setSeeMore] = useState(false)
 
-	const PAGE = 'Checkout - Seleção de Endereço'
+	const PAGE = 'Seleção de ponto de retirada'
 
 	useEffect(() => {
 		if (cart?.shippingData?.availableAddresses?.length > 0) {
-			TrackingService.sendScreenView('seletor_retirada', 'PickupSelector')
+			TrackingService.sendScreenView('Seleção de ponto de retirada', 'PickupSelector')
 		} else {
 			handleAddNewAddress()
 		}

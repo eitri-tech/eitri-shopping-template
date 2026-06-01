@@ -7,11 +7,11 @@ export default function ExternalProviderOrderFinished(props) {
 	const PAGE = 'External Provider Order Finished'
 
 	useEffect(() => {
-		TrackingService.sendScreenView('pagamento_provedor_externo_completo', 'ExternalProviderOrderFinished')
+		TrackingService.sendScreenView('Pagamento externo concluído', 'ExternalProviderOrderFinished')
 	}, [])
 
 	return (
-		<Page>
+		<Page title='Pagamento externo concluído'>
 			<HeaderContentWrapper />
 			<View className='p-4 flex flex-col items-center mt-6'>
 				<View className='w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mb-8'>

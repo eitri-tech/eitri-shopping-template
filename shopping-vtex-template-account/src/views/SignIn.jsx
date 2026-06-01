@@ -185,7 +185,7 @@ export default function SignIn(props) {
 	const resendCode = timeOutToResentEmail > 0
 
 	return (
-		<Page topInset>
+		<Page title='Login' topInset>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('signIn.headerText')} />

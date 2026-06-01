@@ -17,7 +17,7 @@ export default function OrderCompleted(props) {
 
 	useEffect(() => {
 		requestAppReview()
-		TrackingService.sendScreenView(`checkout_pedido_realizado`, 'OrderCompleted')
+		TrackingService.sendScreenView('Pedido realizado', 'OrderCompleted')
 	}, [])
 
 	const requestAppReview = async () => {
@@ -30,7 +30,7 @@ export default function OrderCompleted(props) {
 	}
 
 	return (
-		<Page>
+		<Page title='Pedido realizado'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('orderCompleted.titleHeader')} />

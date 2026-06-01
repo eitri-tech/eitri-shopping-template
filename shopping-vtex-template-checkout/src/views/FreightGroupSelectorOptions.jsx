@@ -3,7 +3,7 @@ import { useTranslation } from 'eitri-i18n'
 import { Page, Radio, Text, View } from 'eitri-luminus'
 import { navigate } from '../services/navigationService'
 import { useState } from 'react'
-import { HeaderContentWrapper, HeaderReturn, BottomInset, Loading } from 'shopping-vtex-template-shared'
+import { HeaderContentWrapper, HeaderReturn, BottomInset, Loading, TrackingService } from 'shopping-vtex-template-shared'
 import CardSelector from '../components/CardSelector/CardSelector'
 import Eitri from 'eitri-bifrost'
 
@@ -15,6 +15,10 @@ export default function FreightGroupSelectorOptions(props) {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const { t } = useTranslation()
+
+	useEffect(() => {
+		TrackingService.sendScreenView('Opções de frete por grupo', 'FreightGroupSelectorOptions')
+	}, [])
 
 	const submit = async () => {
 		navigate('PaymentData', {}, true)
@@ -54,7 +58,7 @@ export default function FreightGroupSelectorOptions(props) {
 	}
 
 	return (
-		<Page title='Checkout - Frete e Entrega'>
+		<Page title='Opções de frete por grupo'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>

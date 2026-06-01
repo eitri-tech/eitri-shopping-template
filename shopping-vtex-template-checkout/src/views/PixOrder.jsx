@@ -31,7 +31,7 @@ export default function PixOrder(props) {
 	const orderId = useRef(null)
 
 	useEffect(() => {
-		TrackingService.sendScreenView(`checkout_pix_completed`, 'PixOrder')
+		TrackingService.sendScreenView('Aguardando pagamento Pix', 'PixOrder')
 	}, [])
 
 	useEffect(() => {
@@ -126,7 +126,7 @@ export default function PixOrder(props) {
 	if (!pixPayload) return null
 
 	return (
-		<Page title='Pix QR Code'>
+		<Page title='Aguardando pagamento Pix'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 				<HeaderText text={t('pixOrder.txtHeader')} />

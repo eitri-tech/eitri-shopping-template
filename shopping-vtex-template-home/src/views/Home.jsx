@@ -65,7 +65,7 @@ export default function Home() {
 		}
 		setEnableCmsQuery(true)
 		startCart()
-		TrackingService.sendScreenView('home', 'Home')
+		TrackingService.sendScreenView('Página inicial', 'Home')
 		TrackingService.insiderVisitHomepage()
 	}
 
@@ -86,7 +86,7 @@ export default function Home() {
 
 	return (
 		<Page
-			title='Home'
+			title='Página inicial'
 			topInset>
 			<MainHeader />
 			<View>

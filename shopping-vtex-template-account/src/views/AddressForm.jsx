@@ -140,7 +140,7 @@ function validateAddress(address, t) {
 }
 
 export default function AddressForm(props) {
-	const PAGE_NAME = 'Checkout - Cadastro de Endereço'
+	const PAGE_NAME = 'Editar/Cadastrar Endereço'
 	const { t } = useTranslation()
 
 	const [isLoading, setIsLoading] = useState(false)

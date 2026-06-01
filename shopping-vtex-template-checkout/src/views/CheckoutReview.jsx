@@ -41,7 +41,7 @@ export default function CheckoutReview() {
 	}, [])
 
 	useEffect(() => {
-		TrackingService.sendScreenView(`checkout_finalizar_pedido`, 'CheckoutReview')
+		TrackingService.sendScreenView('Revisão do pedido', 'CheckoutReview')
 	}, [])
 
 	useEffect(() => {
@@ -151,7 +151,7 @@ export default function CheckoutReview() {
 	}
 
 	return (
-		<Page title='Checkout - Home'>
+		<Page title='Revisão do pedido'>
 			<HeaderContentWrapper>
 				<HeaderReturn />
 			</HeaderContentWrapper>

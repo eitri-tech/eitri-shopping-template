@@ -15,7 +15,7 @@ import { sendScreenView } from '../services/TrackingService'
 import { addonUserTappedActiveTabListener } from '../utils/backToTopListener'
 
 export default function PasswordResetNewPass(props) {
-	const PAGE = 'Reset de senha - Nova senha'
+	const PAGE = 'Reset de senha - nova senha'
 	const email = props?.location?.state?.email
 	const recoveryCode = props?.location?.state?.recoveryCode
 

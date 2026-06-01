@@ -221,7 +221,7 @@ export default function EditProfile(props) {
 
 	return (
 		<Page
-			title={'Editar perfil'}
+			title='Editar Perfil'
 			statusBarTextColor='white'>
 			<HeaderContentWrapper>
 				<HeaderReturn />

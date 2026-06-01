@@ -148,7 +148,7 @@ function validateAddress(address, t) {
 }
 
 export default function AddressForm(props) {
-	const PAGE_NAME = 'Checkout - Cadastro de Endereço'
+	const PAGE_NAME = 'Adicionar endereço - checkout'
 
 	const { cart, cartIsLoading, setLogisticInfo, startCart } = useLocalShoppingCart()
 	const { t } = useTranslation()
@@ -178,7 +178,7 @@ export default function AddressForm(props) {
 	const [touched, setTouched] = useState({})
 
 	useEffect(() => {
-		TrackingService.sendScreenView('Adicionar endereço - checkout', 'AddressForm')
+		TrackingService.sendScreenView('Adicionar endereço - checkout', 'AddressFormCheckout')
 	}, [])
 
 	useEffect(() => {

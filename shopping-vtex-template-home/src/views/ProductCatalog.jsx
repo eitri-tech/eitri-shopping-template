@@ -35,7 +35,7 @@ export default function ProductCatalog(props) {
 			})
 		}
 
-		TrackingService.sendScreenView('catalogoDeProdutos', 'ProductCatalog')
+		TrackingService.sendScreenView('Catálogo de produtos', 'ProductCatalog')
 	}, [])
 
 	const handleSearch = term => {
