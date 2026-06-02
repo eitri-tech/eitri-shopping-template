@@ -39,7 +39,7 @@ export default function LandingPage(props) {
 	}
 
 	return (
-		<Page title={landingPageName}>
+		<Page title={props?.location?.state?.landingPageName ?? 'Landing Page'}>
 			<HeaderContentWrapper className={`justify-between`}>
 				<View className={`flex items-center gap-4`}>
 					{!openInBottomBar && <HeaderReturn />}
