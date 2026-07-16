@@ -11,6 +11,7 @@ import CategoryListVtex from '../components/CmsComponents/CategoryListVtex/Categ
 import CategoryAccordion from '../components/CmsComponents/CategoryAccordion/CategoryAccordion'
 import RichText from '../components/CmsComponents/RichText/RichText'
 import VtexAdsBanner from '../components/CmsComponents/VtexAdsBanner/VtexAdsBanner'
+import PopupBanner from '../components/CmsComponents/PopupBanner/PopupBanner'
 
 const componentMap = {
 	MultipleImageBanner: Banner,
@@ -25,7 +26,8 @@ const componentMap = {
 	CategoryListVtex: CategoryListVtex,
 	CategoryAccordion: CategoryAccordion,
 	RichText: RichText,
-	VtexAdsBanner: VtexAdsBanner
+	VtexAdsBanner: VtexAdsBanner,
+	PopupBanner: PopupBanner
 }
 
 export const getMappedComponent = (content, reloadKey, rest) => {

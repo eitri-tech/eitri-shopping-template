@@ -230,6 +230,108 @@
 		}
 	},
 	{
+		"name": "PopupBanner",
+		"requiredScopes": [],
+		"schema": {
+			"title": "Banner pop-up",
+			"description": "Exibe uma sequência de banners ao abrir o app",
+			"type": "object",
+			"required": ["maxDisplays", "banners"],
+			"properties": {
+				"isActive": {
+					"title": "Campanha ativa?",
+					"type": "boolean",
+					"default": true
+				},
+				"maxDisplays": {
+					"title": "Quantidade de banners na sequência",
+					"description": "Ao fechar um banner, o próximo aparece imediatamente.",
+					"type": "integer",
+					"minimum": 1,
+					"default": 1
+				},
+				"banners": {
+					"title": "Banners (ordem de exibição)",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"title": "Banner",
+						"type": "object",
+						"required": ["imageUrl"],
+						"properties": {
+							"imageUrl": {
+								"title": "Imagem",
+								"type": "string",
+								"widget": { "ui:widget": "media-gallery" }
+							},
+							"altText": {
+								"title": "Texto alternativo da imagem",
+								"type": "string"
+							},
+							"action": {
+								"title": "Destino ao tocar no banner",
+								"type": "object",
+								"properties": {
+									"type": {
+										"title": "Tipo de ação",
+										"enumNames": ["Nenhum", "Abrir Link Externo", "Abrir Produto", "Abrir Coleção", "Abrir Categoria", "Abrir Busca", "Abrir Landing Page", "Abrir Path do Site", "Abrir Marca", "Abrir Facets"],
+										"enum": ["none", "link", "product", "collection", "category", "search", "page", "path", "brand", "facets"],
+										"default": "none"
+									},
+									"title": { "title": "Título na tela de destino", "type": "string" },
+									"value": { "title": "Valor", "type": "string" },
+									"sort": { "title": "Ordenação", "type": "string", "default": "score:desc" },
+									"facets": {
+										"title": "Facets complementares",
+										"type": "array",
+										"items": {
+											"type": "object",
+											"required": ["key", "value"],
+											"properties": {
+												"key": { "title": "Chave", "type": "string" },
+												"value": { "title": "Valor", "type": "string" }
+											}
+										}
+									}
+								}
+							},
+							"remoteConfigKey": {
+								"title": "Chave de hiperpersonalização Eitri",
+								"type": "string",
+								"description": "O banner só aparece quando esta chave estiver habilitada."
+							},
+							"startDate": {
+								"title": "Exibição programada: Data de início",
+								"type": "string",
+								"widget": { "ui:widget": "date-time" }
+							},
+							"endDate": {
+								"title": "Exibição programada: Data de fim",
+								"type": "string",
+								"widget": { "ui:widget": "date-time" }
+							}
+						}
+					}
+				},
+				"remoteConfigKey": {
+					"title": "Chave de hiperpersonalização Eitri",
+					"type": "string",
+					"description": "O pop-up inteiro só aparece quando esta chave estiver habilitada."
+				},
+				"startDate": {
+					"title": "Exibição programada: Data de início",
+					"type": "string",
+					"widget": { "ui:widget": "date-time" }
+				},
+				"endDate": {
+					"title": "Exibição programada: Data de fim",
+					"type": "string",
+					"widget": { "ui:widget": "date-time" }
+				}
+			}
+		}
+	},
+	{
 		"name": "ProductShelf",
 		"requiredScopes": [],
 		"schema": {
