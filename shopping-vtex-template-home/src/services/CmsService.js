@@ -50,11 +50,17 @@ export const loadVtexCmsPage = async (faststore, contentType, pageName) => {
 			// Remove section se estiver fora do intervalo
 			if (!isWithinValidDateRange(startDate, endDate, now)) return false
 
-			// Se for MultipleImageBanner, filtra banners com mesma lógica
+			// Filtra os itens internos que também podem ter período de exibição.
 			if (name === 'MultipleImageBanner' && Array.isArray(images)) {
 				section.data.images = images.filter(img => {
 					return isWithinValidDateRange(img.startDate, img.endDate, now)
 				})
+			}
+
+			if (name === 'PopupBanner' && Array.isArray(section.data?.banners)) {
+				section.data.banners = section.data.banners.filter(banner =>
+					isWithinValidDateRange(banner.startDate, banner.endDate, now)
+				)
 			}
 
 			return true
@@ -140,6 +146,14 @@ const extractRemoteConfigKeys = cmsPageContent => {
 				}
 			})
 		}
+
+		if (section.name === 'PopupBanner') {
+			section.data.banners?.forEach(banner => {
+				if (banner?.remoteConfigKey) {
+					keys.add(banner.remoteConfigKey)
+				}
+			})
+		}
 	})
 
 	return Array.from(keys)
@@ -167,6 +181,12 @@ const filterSectionsByRemoteConfig = (sections, remoteConfigMap) => {
 		if (section.name === 'MultipleImageBanner') {
 			section.data.images = section.data.images?.filter(
 				image => !(image?.remoteConfigKey && !remoteConfigMap[image.remoteConfigKey])
+			)
+		}
+
+		if (section.name === 'PopupBanner') {
+			section.data.banners = section.data.banners?.filter(
+				banner => !(banner?.remoteConfigKey && !remoteConfigMap[banner.remoteConfigKey])
 			)
 		}
 
