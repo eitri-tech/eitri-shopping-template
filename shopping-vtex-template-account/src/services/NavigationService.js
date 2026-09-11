@@ -11,6 +11,8 @@ export const PAGES = {
 	EDIT_PROFILE: '/EditProfile',
 	ORDER_LIST: '/OrderList',
 	ORDER_DETAILS: '/OrderDetails',
+	SUBSCRIPTIONS: '/Subscriptions',
+	SUBSCRIPTION_DETAILS: '/SubscriptionDetails',
 	WISH_LIST: '/WishList',
 	ADDRESS_LIST: '/AddressList',
 	ADDRESS_FORM: '/AddressForm',
