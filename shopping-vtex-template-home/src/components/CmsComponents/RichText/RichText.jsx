@@ -24,7 +24,13 @@ const STYLE_CLASS = {
 
 const openUrl = async url => {
 	try {
-		console.log('url')
+		if (url.startsWith('mailto')) {
+			await Eitri.deeplink.open({
+				url
+			})
+			return
+		}
+
 		const startUrl = /^https?:\/\//.test(url) ? url : `https://${url}`
 		await Eitri.webFlow.start({
 			startUrl,
@@ -92,7 +98,7 @@ function InlineText({ text, ranges, entityRanges, entityMap, base }) {
 	}
 
 	return (
-		<View>
+		<Text>
 			{segments.map((seg, i) => {
 				if (seg.entity?.type === 'LINK') {
 					const url = seg.entity.data?.url
@@ -102,19 +108,19 @@ function InlineText({ text, ranges, entityRanges, entityMap, base }) {
 							className='inline'
 							key={i}
 							onClick={() => openUrl(url)}>
-							<Text className={`${cls} whitespace-pre`}>{seg.text}</Text>
+							<Text className={`${cls}`}>{seg.text}</Text>
 						</View>
 					)
 				}
 				return (
 					<Text
 						key={i}
-						className={[base, seg.cls, 'whitespace-pre'].filter(Boolean).join(' ')}>
+						className={[base, seg.cls].filter(Boolean).join(' ')}>
 						{seg.text}
 					</Text>
 				)
 			})}
-		</View>
+		</Text>
 	)
 }
 
