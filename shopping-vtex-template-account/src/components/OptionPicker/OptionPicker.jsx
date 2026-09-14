@@ -46,6 +46,10 @@ export default function OptionPicker(props) {
 						</View>
 					)
 				})}
+				<View
+					bottomInset={'auto'}
+					className='w-full'
+				/>
 			</View>
 		</View>
 	)

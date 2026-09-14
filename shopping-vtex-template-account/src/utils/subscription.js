@@ -1,3 +1,5 @@
+import { RemoteConfig } from 'eitri-shopping-vtex-shared'
+
 const PERIOD_LABELS = {
 	DAILY: ['dia', 'dias'],
 	WEEKLY: ['semana', 'semanas'],
@@ -33,12 +35,17 @@ export const frequencyLabel = frequency => {
 
 export const frequencyKey = frequency => `${frequency?.interval}-${frequency?.periodicity}`
 
+const FREQUENCY_KEY = 'vtex.subscription.key.frequency'
+
 export const parseFrequencyOptions = (product, planId) => {
+	const assemblyId = RemoteConfig.getContent('appConfigs.pdp.subscription.assemblyIdSubscription')
 	const assemblyOptions = (product?.itemMetadata?.items || [])
 		.flatMap(item => item.assemblyOptions || [])
-		.filter(option => option.id === planId || option.id?.startsWith('vtex.subscription'))
+		.filter(
+			option => option.id === assemblyId || option.id === planId || option.id?.startsWith('vtex.subscription')
+		)
 	const domain =
-		assemblyOptions.flatMap(option => option.inputValues || []).find(input => /frequency/i.test(input.label))
+		assemblyOptions.flatMap(option => option.inputValues || []).find(input => input.label === FREQUENCY_KEY)
 			?.domain || []
 	return domain
 		.map(value => {
