@@ -1,6 +1,7 @@
 import Eitri from 'eitri-bifrost'
 import { isLoggedIn } from '../../services/CustomerService'
 import { useTranslation } from 'eitri-i18n'
+import { Loading } from 'shopping-vtex-template-shared'
 
 export default function ProtectedView(props) {
 	const { afterLoginRedirectTo, redirectState, labelLoading } = props
@@ -28,15 +29,7 @@ export default function ProtectedView(props) {
 	}, [])
 
 	if (isLoading) {
-		return (
-			<View
-				display='flex'
-				justifyContent='center'
-				alignItems='center'
-				minHeight='100vh'>
-				<Text block>{labelLoading || t('protectedView.loading')}</Text>
-			</View>
-		)
+		return <Loading fullScreen />
 	}
 
 	return <>{props.children}</>

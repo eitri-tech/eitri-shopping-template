@@ -1,6 +1,7 @@
 import Eitri from 'eitri-bifrost'
+import { RemoteConfig } from 'eitri-shopping-vtex-shared'
 import { CustomButton, HeaderText, HeaderContentWrapper, BottomInset, Loading } from 'shopping-vtex-template-shared'
-import { FiUser, FiHeart, FiMapPin, FiPackage, FiLock, FiCreditCard } from 'react-icons/fi'
+import { FiUser, FiHeart, FiMapPin, FiPackage, FiLock, FiCreditCard, FiRepeat } from 'react-icons/fi'
 import { doLogout, getCustomerData, isLoggedIn, removeClientData } from '../services/CustomerService'
 import { navigate, PAGES } from '../services/NavigationService'
 import { sendScreenView } from '../services/TrackingService'
@@ -21,6 +22,8 @@ export default function Home(props) {
 	const [isLoading, setIsLoading] = useState(true)
 	const [customerData, setCustomerData] = useState(props.customerData || {})
 	const [isLogged, setIsLogged] = useState(null)
+
+	const subscriptionConfig = RemoteConfig.getContent('appConfigs.pdp.subscription')
 
 	useEffect(() => {
 		init()
@@ -192,6 +195,18 @@ export default function Home(props) {
 								: navigate(PAGES.SIGNIN, { redirectTo: PAGES.ORDER_LIST })
 						}}
 					/>
+					{subscriptionConfig && (
+						<ProfileCardButton
+							label={t('home.labelMySubscriptions', 'Minhas assinaturas')}
+							icon={
+								<FiRepeat
+									size={24}
+									className='text-gray-700'
+								/>
+							}
+							onClick={() => navigate(PAGES.SUBSCRIPTIONS)}
+						/>
+					)}
 				</View>
 			</View>
 
