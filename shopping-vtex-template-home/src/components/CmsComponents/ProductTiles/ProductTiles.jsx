@@ -7,8 +7,6 @@ export default function ProductTiles(props) {
 	const { data } = props
 	const [shelves, setShelves] = useState([])
 	const [currentShelf, setCurrentShelf] = useState({})
-	const [currentProducts, setCurrentProducts] = useState([])
-	const [isLoadingProducts, setIsLoadingProducts] = useState(false)
 	const [cachedProducts, setCachedProducts] = useState({})
 
 	useEffect(() => {
@@ -19,40 +17,48 @@ export default function ProductTiles(props) {
 	}, [data])
 
 	useEffect(() => {
+		if (Object.keys(currentShelf).length === 0) return
 		executeProductSearch(currentShelf)
 	}, [currentShelf])
 
-	const executeProductSearch = async shelf => {
+	const executeProductSearch = async currentShelf => {
 		try {
-			if (cachedProducts[shelf.title]) {
-				setCurrentProducts(cachedProducts[shelf.title])
+			if (cachedProducts[currentShelf.title]?.loaded) {
 				return
 			}
 
-			setIsLoadingProducts(true)
+			setCachedProducts({
+				...cachedProducts,
+				[currentShelf.title]: {
+					loading: true
+				}
+			})
 
 			const params = {
-				facets: shelf.facets || [],
-				query: shelf.term ?? '',
-				sort: shelf.sort ?? '',
-				to: shelf.numberOfItems || 8
+				facets: currentShelf.facets || [],
+				query: currentShelf.term ?? '',
+				sort: currentShelf.sort ?? '',
+				to: currentShelf.numberOfItems || 8
 			}
 
 			const result = await getProductsService(params)
 
-			setCurrentProducts(result.products)
-			setIsLoadingProducts(false)
 			setCachedProducts({
 				...cachedProducts,
-				[shelf.title]: result.products
+				[currentShelf.title]: {
+					products: result.products,
+					loaded: true,
+					loading: false
+				}
 			})
+
 		} catch (e) {
 			console.error('executeProductSearch.error', e)
 		}
 	}
 
 	const onChooseShelf = shelf => {
-		setCurrentShelf(structuredClone(shelf))
+		setCurrentShelf(JSON.parse(JSON.stringify(shelf)))
 	}
 
 	return (
@@ -74,8 +80,8 @@ export default function ProductTiles(props) {
 			</View>
 			<ShelfOfProducts
 				mode={data.mode || 'scroll'}
-				isLoading={isLoadingProducts}
-				products={currentProducts}
+				isLoading={cachedProducts[currentShelf.title]?.loading}
+				products={cachedProducts[currentShelf.title]?.products ?? []}
 			/>
 		</View>
 	)
