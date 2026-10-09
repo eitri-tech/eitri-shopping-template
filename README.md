@@ -54,7 +54,7 @@ Para publicar uma nova versão, incremente o `version` no `eitri-app.conf.js` do
 
 ### Remote Config
 
-As configurações da loja ficam no Remote Config da aplicação, acessível pelo [Eitri Console](https://console.eitri.tech). Ele já vem com diversas configurações prontas para uso pelo template: dados de conexão com a plataforma de e-commerce, aparência do app (logo, cores, header), comportamento de componentes, bottom navigation e preferências da loja.
+As configurações da loja ficam no Remote Config da aplicação, acessível pelo [Eitri Console](https://console.eitri.tech). Ele já vem com diversas configurações prontas para uso pelo template: dados de conexão com a plataforma de e-commerce, aparência do app (logo, cores, header), comportamento de componentes, [bottom bar](docs/remote-config.md#eitriconfig) e preferências da loja.
 
 A descrição de cada configuração está em [docs/remote-config.md](docs/remote-config.md).
 
