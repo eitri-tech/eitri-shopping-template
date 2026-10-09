@@ -4,7 +4,7 @@ const path = require('path')
 
 const MANAGER_URL = 'https://api.eitri.tech/eitri-manager-api/v2/revisions?eitriAppId='
 const BLIND_GUARDIAN_URL = 'https://api.eitri.tech/blind-guardian-api/v2/o/auth'
-const DEV_ENV_ID = ''
+const DEV_ENV_ID = process.env.EITRI_DEV_ENV_ID
 const PROD_ENV_ID = ''
 
 const credentials = {
@@ -120,6 +120,19 @@ async function publishProject(project, directoryPath, sharedVersion = false, mes
 	process.chdir(directoryPath)
 }
 
+function generateGitTag(project, version) {
+	let tagName
+	try {
+		tagName = `${project.replace(/.*-/g, '')}-${version}`
+		execSync(`git tag "${tagName}"`, { stdio: 'inherit' })
+		execSync(`git push origin "${tagName}"`, { stdio: 'inherit' })
+		console.log('Tag gerada: ', tagName)
+	} catch {
+		console.log('Falhou ao gerar tag', tagName)
+	}
+}
+
+
 async function checkAndPushInDirectory(directoryPath, token) {
 	let hasError = false
 
@@ -162,6 +175,7 @@ async function checkAndPushInDirectory(directoryPath, token) {
 					console.log(`${project.project} Publicando ...`)
 					await publishProject(project.project, project.directoryPath, project.sharedVersion, project.message)
 					console.log(`${project.project} Publicado!`)
+                    generateGitTag(project.project, project.version)
 				} catch (error) {
 					console.error(`${project.project} Erro ao atualizar o projeto:`, error.message)
 					hasError = true
