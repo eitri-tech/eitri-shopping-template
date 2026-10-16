@@ -107,17 +107,31 @@ async function publishProject(project, directoryPath, sharedVersion = false, mes
 
 	// Executa o comando dentro do diretório do projeto
 	execSync(`eitri push-version -m '${message}' ${sharedVersion ? '--shared' : ''}`, { stdio: 'inherit' })
-	
-	// Publica versão em dev e prod
+
+	// Publica versão em dev
 	if (DEV_ENV_ID) {
 		execSync(`eitri publish -e ${DEV_ENV_ID}`, { stdio: 'inherit' })
 	}
+
+	// Publica versão em prod
 	if (PROD_ENV_ID) {
 		execSync(`eitri publish -e ${PROD_ENV_ID}`, { stdio: 'inherit' })
 	}
 
 	// Volta para o diretório original (opcional)
 	process.chdir(directoryPath)
+}
+
+function generateGitTag(project, version) {
+	let tagName
+	try {
+		tagName = `${project.replace(/.*-/g, '')}-${version}`
+		execSync(`git tag "${tagName}"`, { stdio: 'inherit' })
+		execSync(`git push origin "${tagName}"`, { stdio: 'inherit' })
+		console.log('Tag gerada: ', tagName)
+	} catch {
+		console.log('Falhou ao gerar tag', tagName)
+	}
 }
 
 async function checkAndPushInDirectory(directoryPath, token) {
@@ -145,7 +159,8 @@ async function checkAndPushInDirectory(directoryPath, token) {
 						project,
 						directoryPath,
 						sharedVersion: appConfig.sharedVersion,
-						message: appConfig.message || ''
+						message: appConfig.message || '',
+						version: localVersion
 					})
 				} else {
 					console.log(`${project} sem nova versão`)
@@ -162,6 +177,7 @@ async function checkAndPushInDirectory(directoryPath, token) {
 					console.log(`${project.project} Publicando ...`)
 					await publishProject(project.project, project.directoryPath, project.sharedVersion, project.message)
 					console.log(`${project.project} Publicado!`)
+					generateGitTag(project.project, project.version)
 				} catch (error) {
 					console.error(`${project.project} Erro ao atualizar o projeto:`, error.message)
 					hasError = true
