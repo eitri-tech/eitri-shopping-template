@@ -24,33 +24,69 @@
 	"eitriConfig": {
 		"mainApp": "eitri-shopping-home",
 		"renderFakeBottomBar": true,
-		"bottomNavItems": [
-			{
-				"slug": "eitri-shopping-home",
-				"initParams": {
-					"tabIndex": 0
+		"dynamicBottomBar": {
+			"layout": {
+				"theme": "classic",
+				"backgroundColor": "#FFFFFF",
+				"selectedColor": "#373737",
+				"unselectedColor": "#8B8D98",
+				"badgeBackground": "#E5484D",
+				"badgeTextColor": "#FFFFFF",
+				"themeCustomizations": {
+					"classic": {
+						"labels": "shown",
+						"topBorder": {
+							"thickness": 1,
+							"color": "#DBDDE0"
+						}
+					}
 				}
 			},
-			{
-				"slug": "eitri-shopping-home",
-				"initParams": {
-					"tabIndex": 1,
-					"route": "Categories"
+			"eitriApps": [
+				{
+					"slug": "eitri-shopping-home",
+					"title": "Inicio",
+					"icon": "https://media-eitri-content.eitri.tech/default/icon_home_v1.png",
+					"initParams": {
+						"tabIndex": 0
+					}
+				},
+				{
+					"slug": "eitri-shopping-home",
+					"title": "Categorias",
+					"icon": "https://media-eitri-content.eitri.tech/default/icon_menu_v1.png",
+					"initParams": {
+						"tabIndex": 1,
+						"route": "Categories"
+					}
+				},
+				{
+					"slug": "eitri-shopping-cart",
+					"title": "Carrinho",
+					"icon": "https://media-eitri-content.eitri.tech/default/icon_cart_v1.png",
+					"initParams": {
+						"tabIndex": 2
+					}
+				},
+				{
+					"slug": "eitri-shopping-home",
+					"title": "Ofertas",
+					"icon": "https://media-eitri-content.eitri.tech/default/icon_favorite_v1.png",
+					"initParams": {
+						"tabIndex": 3,
+						"route": "LandingPage"
+					}
+				},
+				{
+					"slug": "eitri-shopping-account",
+					"title": "Perfil",
+					"icon": "https://media-eitri-content.eitri.tech/default/icon_user_v1.png",
+					"initParams": {
+						"tabIndex": 4
+					}
 				}
-			},
-			{
-				"slug": "eitri-shopping-cart",
-				"initParams": {
-					"tabIndex": 2
-				}
-			},
-			{
-				"slug": "eitri-shopping-account",
-				"initParams": {
-					"tabIndex": 3
-				}
-			}
-		]
+			]
+		}
 	},
 	"storePreferences": {},
 	"deeplinkResolver": {
