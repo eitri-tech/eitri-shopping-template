@@ -1304,5 +1304,118 @@
 				}
 			}
 		}
+	},
+	{
+		"name": "deeplink",
+		"requiredScopes": ["deeplink"],
+		"schema": {
+			"title": "Deeplink",
+			"type": "object",
+			"description": "Redirecionamento de deeplink. A ordem dos componentes na página define a prioridade: vale o primeiro que encontrar um termo no deeplink.",
+			"required": ["path", "action"],
+			"properties": {
+				"name": {
+					"title": "Nome (identificação interna)",
+					"type": "string"
+				},
+				"path": {
+					"title": "Termos do caminho",
+					"description": "O redirecionamento é aplicado quando o deeplink contém qualquer um destes termos (ex: novidades, black-friday).",
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"title": "Termo",
+						"type": "string"
+					}
+				},
+				"action": {
+					"title": "Destino da ação",
+					"type": "object",
+					"required": ["type"],
+					"properties": {
+						"type": {
+							"title": "Tipo de ação",
+							"enumNames": [
+								"Abrir Link Externo",
+								"Abrir Produto (id ou slug)",
+								"Abrir Coleção (Id da coleção)",
+								"Abrir Categoria (cate1/cat2/cat3...)",
+								"Abrir Busca (termo de busca)",
+								"Abrir Landing Page (nome da landing page)",
+								"Abrir Path do Site",
+								"Abrir Marca",
+								"Abrir Carrinho",
+								"Abrir Minha Conta",
+								"Abrir Favoritos",
+								"Abrir Meus Pedidos"
+							],
+							"enum": [
+								"link",
+								"product",
+								"collection",
+								"category",
+								"search",
+								"page",
+								"path",
+								"brand",
+								"cart",
+								"account",
+								"wishlist",
+								"orders"
+							]
+						},
+						"value": {
+							"title": "Valor",
+							"description": "Em Minha Conta é opcional: informe o nome da view do app de conta (ex: AboutUs, PrivacyPolicies) ou deixe vazio para abrir a página inicial da conta. Não utilizado em Carrinho, Favoritos e Meus Pedidos.",
+							"type": "string"
+						},
+						"sort": {
+							"title": "Sort",
+							"description": "Items order",
+							"default": "score:desc",
+							"enum": [
+								"discount:desc",
+								"name:asc",
+								"name:desc",
+								"orders:desc",
+								"price:asc",
+								"price:desc",
+								"release:desc",
+								"score:desc"
+							],
+							"enumNames": [
+								"Desconto: do maior para o menor",
+								"Nome: A-Z",
+								"Nome: Z-A",
+								"Pedidos: do maior para o menor",
+								"Preço: do menor para o maior",
+								"Preço: do maior para o menor",
+								"Lançamento: do mais novo para o mais antigo",
+								"Relevância: do maior para o menor"
+							]
+						},
+						"title": {
+							"title": "Título (opcional)",
+							"type": "string"
+						}
+					}
+				},
+				"remoteConfigKey": {
+					"title": "Chave de hiperpersonalização Eitri",
+					"type": "string",
+					"description": "O redirecionamento só é aplicado quando esta chave estiver habilitada."
+				},
+				"startDate": {
+					"title": "Vigência: Data de início",
+					"type": "string",
+					"widget": { "ui:widget": "date-time" }
+				},
+				"endDate": {
+					"title": "Vigência: Data de fim",
+					"type": "string",
+					"widget": { "ui:widget": "date-time" }
+				}
+			}
+		}
 	}
 ]

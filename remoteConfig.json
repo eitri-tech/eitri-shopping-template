@@ -90,6 +90,6 @@
 	},
 	"storePreferences": {},
 	"deeplinkResolver": {
-		"slug": "eitri-shopping-addons-deeplink-resolver"
+		"slug": "deeplink-resolver"
 	}
 }
