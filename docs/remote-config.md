@@ -90,7 +90,7 @@ No `shopping-vtex-template-home`, o `route` dos `initParams` abre a rota indicad
 
 ### Simulação local
 
-No `eitri app start`, a bottom bar é simulada a partir de `bottom-tab-view-simulation` no [`app-config.yaml`](../app-config.yaml): `eitri-apps` define as abas e `layout` repete o formato do `dynamicBottomBar` (`layout.layout` para a aparência e `layout.eitriApps` para título e ícone). As abas de `layout.eitriApps` casam com as de `eitri-apps` pela posição, então mantenha as duas listas na mesma ordem.
+No `eitri app start`, a bottom bar é simulada em duas partes. O `bottom-tab-view-simulation.eitri-apps` do [`app-config.yaml`](../app-config.yaml) define as abas: qual Eitri-App cada uma abre e os `initialization-params`. O [`dynamic-bottom-tab-view-spec.json`](../dynamic-bottom-tab-view-spec.json), na raiz do projeto, repete o formato do `dynamicBottomBar`: `layout` para a aparência e `eitriApps` para `slug`, `title` e `icon` de cada aba (`slug` e `title` são obrigatórios). As abas do JSON casam com as do YAML pela posição, então mantenha as duas listas na mesma ordem. Durante o `eitri app start`, a CLI reenvia o layout a cada alteração no JSON (requer Eitri CLI 1.61.0 ou superior).
 
 ## `deeplinkResolver`
 

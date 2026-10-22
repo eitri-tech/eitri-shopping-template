@@ -30,7 +30,7 @@ Na raiz do repositório, execute:
 eitri app start
 ```
 
-Esse comando sobe o app completo, com todos os Eitri-Apps listados em [`app-config.yaml`](app-config.yaml) e a simulação da bottom tab definida no mesmo arquivo.
+Esse comando sobe o app completo, com todos os Eitri-Apps listados em [`app-config.yaml`](app-config.yaml) e a simulação da bottom tab definida no mesmo arquivo. A aparência da bottom bar simulada fica em [`dynamic-bottom-tab-view-spec.json`](dynamic-bottom-tab-view-spec.json).
 
 ### Um Eitri-App isolado
 
@@ -50,6 +50,7 @@ Para publicar uma nova versão, incremente o `version` no `eitri-app.conf.js` do
 ### Projeto
 
 - [`app-config.yaml`](app-config.yaml): lista os Eitri-Apps do projeto, a aplicação Eitri (`application-id`) e a simulação da bottom tab usada no desenvolvimento.
+- [`dynamic-bottom-tab-view-spec.json`](dynamic-bottom-tab-view-spec.json): aparência (cores, ícones, badges) da bottom tab simulada no desenvolvimento.
 - `eitri-app.conf.js` (um por app): nome, slug, versão, IDs do Eitri-App, da aplicação e da organização, e dependências.
 
 ### Remote Config
