@@ -260,10 +260,10 @@ export default class TrackingService {
 				}))
 			})
 
-			// TrackingService.inngageEvent('add_payment_info', {
-			// 	currency: 'BRL',
-			// 	payment_type: paymentType || ''
-			// })
+			TrackingService.inngageEvent('add_payment_info', {
+				currency: 'BRL',
+				payment_type: paymentType || ''
+			})
 		} catch (e) {
 			console.log('Error on trackAddPaymentInfo', e)
 		}
