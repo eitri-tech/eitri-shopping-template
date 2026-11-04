@@ -348,7 +348,27 @@ export default class TrackingService {
 	 * Registra quando um item é adicionado à lista de desejos.
 	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_to_wishlist
 	 */
-	static addToWishlistEvent = async data => TrackingService.sendRecommendedGaEvent('add_to_wishlist', data)
+	static addToWishlistEvent = async (data, product, skuId) => {
+		if (data) TrackingService.sendRecommendedGaEvent('add_to_wishlist', data)
+
+		// Inngage
+		try {
+			if (!product) return
+			const sku = product?.items?.find(item => `${item.itemId}` === `${skuId}`)
+			const info = TrackingService._inngageCatalogItem(product, sku)
+			TrackingService.inngageEvent('add_to_wishlist', {
+				currency: 'BRL',
+				item_category: info.category,
+				item_id: info.id,
+				item_image_url: info.imageUrl,
+				item_name: info.name,
+				item_url: info.url,
+				price: info.price
+			})
+		} catch (e) {
+			console.error('inngage addToWishlist', e)
+		}
+	}
 
 	/**
 	 * Registra quando o usuário inicia o checkout.

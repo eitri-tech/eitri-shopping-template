@@ -37,7 +37,7 @@ export default function ProductCard({ product, className }) {
 
 	const itemInCart = useCartItem(cart, item?.itemId)
 
-	const wishlist = useWishlist(product?.productId)
+	const wishlist = useWishlist(product?.productId, product)
 	const wishListIdRef = useRef(wishlist.wishListId)
 
 	const productData = useMemo(() => {
