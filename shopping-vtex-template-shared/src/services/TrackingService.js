@@ -465,6 +465,22 @@ export default class TrackingService {
 		} catch (e) {
 			console.error('insider.purchase', e)
 		}
+
+		// Inngage: dispara na criação do pedido
+		try {
+			if (!orderId) return
+			const shippingTotalizer = cart?.totalizers?.find(i => i.id === 'Shipping')
+			TrackingService.inngageEvent('purchase', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				shipping: ((shippingTotalizer?.value || 0) / 100).toFixed(2),
+				transaction_id: `${orderId}`,
+				value: cart?.value > 0 ? Number((cart.value / 100).toFixed(2)) : 0
+			})
+		} catch (e) {
+			console.error('inngage purchase', e)
+		}
 	}
 
 	/**
