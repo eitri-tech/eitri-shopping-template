@@ -516,6 +516,10 @@ export default class TrackingService {
 		TrackingService.sendRecommendedGaEvent('search', {
 			search_term: term
 		})
+
+		TrackingService.inngageEvent('search', {
+			search_term: term || ''
+		})
 	}
 
 	/**
