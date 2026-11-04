@@ -335,6 +335,13 @@ export default class TrackingService {
 		} catch (error) {
 			console.error(error, 'insider.addItemToCart')
 		}
+
+		// Inngage
+		try {
+			this._inngageAddToCart(this._inngageCatalogItem(product, sku))
+		} catch (e) {
+			console.error('inngage addToCart', e)
+		}
 	}
 
 	/**

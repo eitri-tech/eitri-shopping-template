@@ -112,7 +112,7 @@ export default function ProductCard({ product, className }) {
 		try {
 			setLoadingCartOp(true)
 			await addItem({ ...item, quantity: itemQuantity + quantity })
-			TrackingService.addToCartEvent(product)
+			TrackingService.addToCartEvent(product, item)
 			if (goToCart) {
 				openCart()
 			}
