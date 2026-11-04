@@ -587,6 +587,18 @@ export default class TrackingService {
 		} catch (e) {
 			console.error('insider.visitCartPage', e)
 		}
+
+		// Inngage
+		try {
+			if (!cart?.items?.length) return
+			this.inngageEvent('view_cart', {
+				currency: 'BRL',
+				items: this._inngageCartItems(cart),
+				value: this._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage viewCart', e)
+		}
 	}
 
 	/**
