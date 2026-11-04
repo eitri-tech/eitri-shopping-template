@@ -388,6 +388,18 @@ export default class TrackingService {
 		} catch (e) {
 			console.log('Error on trackBeginCheckout', e)
 		}
+
+		// Inngage
+		try {
+			TrackingService.inngageEvent('begin_checkout', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				value: TrackingService._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage beginCheckout', e)
+		}
 	}
 
 	/**
