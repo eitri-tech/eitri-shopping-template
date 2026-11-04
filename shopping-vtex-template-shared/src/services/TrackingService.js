@@ -499,6 +499,13 @@ export default class TrackingService {
 		} catch (error) {
 			console.error(error, 'insider.itemRemovedFromCart')
 		}
+
+		// Inngage
+		try {
+			if (itemRemoved) this._inngageRemoveFromCart(itemRemoved, quantity)
+		} catch (e) {
+			console.error('inngage removeFromCart', e)
+		}
 	}
 
 	/**
