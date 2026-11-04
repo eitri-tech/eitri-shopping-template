@@ -552,6 +552,12 @@ export default class TrackingService {
 		TrackingService.sendRecommendedGaEvent('share', {
 			item_id: itemId
 		})
+
+		TrackingService.inngageEvent('share', {
+			contentType: 'product',
+			itemId: `${product?.productId || itemId || ''}`,
+			method: 'link'
+		})
 	}
 
 	/**
