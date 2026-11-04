@@ -303,6 +303,26 @@ export default class TrackingService {
 		} catch (error) {
 			console.error('[SHARED] Error on addShippingInfo', error)
 		}
+
+		TrackingService.inngageShippingInfoEvent(cart)
+	}
+
+	/**
+	 * Inngage: seleção de frete no checkout.
+	 */
+	static inngageShippingInfoEvent = async cart => {
+		try {
+			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
+			TrackingService.inngageEvent('add_shipping_info', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				shipping_tier: shippingTier || '',
+				value: TrackingService._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage addShippingInfo', e)
+		}
 	}
 
 	/**
