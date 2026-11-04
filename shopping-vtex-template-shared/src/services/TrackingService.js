@@ -591,6 +591,22 @@ export default class TrackingService {
 		} catch (e) {
 			console.error('insiderVisitProductPage', e)
 		}
+
+		// Inngage
+		try {
+			const info = this._inngageCatalogItem(product)
+			this.inngageEvent('view_item', {
+				item_brand: info.brand,
+				item_category: info.category,
+				item_id: info.id,
+				item_image_url: info.imageUrl,
+				item_name: info.name,
+				item_price: info.price,
+				item_url: info.url
+			})
+		} catch (e) {
+			console.error('inngage viewItem', e)
+		}
 	}
 
 	/**
