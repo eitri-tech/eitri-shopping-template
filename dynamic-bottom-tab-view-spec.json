@@ -1,0 +1,46 @@
+{
+  "layout": {
+    "theme": "classic",
+    "backgroundColor": "#FFFFFF",
+    "selectedColor": "#373737",
+    "unselectedColor": "#8B8D98",
+    "badgeBackground": "#E5484D",
+    "badgeTextColor": "#FFFFFF",
+    "themeCustomizations": {
+      "classic": {
+        "labels": "shown",
+        "topBorder": {
+          "thickness": 1,
+          "color": "#DBDDE0"
+        }
+      }
+    }
+  },
+  "eitriApps": [
+    {
+      "slug": "shopping-vtex-template-home",
+      "title": "Inicio",
+      "icon": "https://media-eitri-content.eitri.tech/default/icon_home_v1.png"
+    },
+    {
+      "slug": "shopping-vtex-template-home",
+      "title": "Categorias",
+      "icon": "https://media-eitri-content.eitri.tech/default/icon_menu_v1.png"
+    },
+    {
+      "slug": "shopping-vtex-template-cart",
+      "title": "Carrinho",
+      "icon": "https://media-eitri-content.eitri.tech/default/icon_cart_v1.png"
+    },
+    {
+      "slug": "shopping-vtex-template-home",
+      "title": "Ofertas",
+      "icon": "https://media-eitri-content.eitri.tech/default/icon_favorite_v1.png"
+    },
+    {
+      "slug": "shopping-vtex-template-account",
+      "title": "Perfil",
+      "icon": "https://media-eitri-content.eitri.tech/default/icon_user_v1.png"
+    }
+  ]
+}
