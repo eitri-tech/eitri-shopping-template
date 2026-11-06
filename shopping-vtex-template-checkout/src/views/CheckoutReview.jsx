@@ -137,7 +137,8 @@ export default function CheckoutReview() {
 		try {
 			setIsLoading(true)
 			const index = cart.items.findIndex(item => item.uniqueId === uItem.uniqueId)
-			await removeCartItem(index)
+			const newCart = await removeCartItem(index)
+			if (newCart) TrackingService.removeFromCartEvent(cart, index)
 			setIsLoading(false)
 		} catch (e) {
 			console.error('Error on removeUnavailableItem', e)
