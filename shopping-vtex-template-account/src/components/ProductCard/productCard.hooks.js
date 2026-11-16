@@ -12,7 +12,7 @@ export const useCartItem = (cart, itemId) => {
 	}, [cart, itemId])
 }
 
-export const useWishlist = productId => {
+export const useWishlist = (productId, product) => {
 	const [isOnWishlist, setIsOnWishlist] = useState(false)
 	const [wishListId, setWishListId] = useState(null)
 	const [loading, setLoading] = useState(true)
@@ -45,7 +45,7 @@ export const useWishlist = productId => {
 			try {
 				setLoading(true)
 				setIsOnWishlist(true)
-				const response = await addToWishlist(productId, itemName, itemId)
+				const response = await addToWishlist(productId, itemName, itemId, product)
 				setWishListId(response?.data?.addToList)
 			} catch (error) {
 				console.error('Error adding to wishlist:', error)
@@ -54,7 +54,7 @@ export const useWishlist = productId => {
 				setLoading(false)
 			}
 		},
-		[productId]
+		[productId, product]
 	)
 
 	const removeFromList = useCallback(async () => {

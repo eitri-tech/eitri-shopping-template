@@ -27,15 +27,7 @@ export const trackShippingInfo = async cart => {
 			})
 		}
 
-		TrackingService.inngageEvent('add_shipping_info', {
-			currency: 'BRL',
-			shipping_tier: shippingTier?.selectedSla ? shippingTier.selectedSla : '',
-			value: value,
-			coupon: cart.marketingData?.coupon || '',
-			items: cart.items
-				.map(item => `${item.productId}-${item.name || item.productName || item.nameComplete}`)
-				.join(';')
-		})
+		TrackingService.inngageShippingInfoEvent?.(cart)
 	} catch (e) {
 		console.log('Error on trackShippingInfo', e)
 	}

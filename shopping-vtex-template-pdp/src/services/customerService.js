@@ -1,5 +1,6 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
 import Eitri from 'eitri-bifrost'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export const requestLogin = () => {
 	return new Promise(async (resolve, reject) => {
@@ -49,9 +50,11 @@ export const removeItemFromWishlist = async id => {
 	return await Vtex.wishlist.removeItem(id)
 }
 
-export const addToWishlist = async (productId, title, sku) => {
+export const addToWishlist = async (productId, title, sku, product) => {
 	await requestLogin()
-	return await Vtex.wishlist.addItem(productId, title, sku)
+	const result = await Vtex.wishlist.addItem(productId, title, sku)
+	TrackingService.addToWishlistEvent(null, product, sku)
+	return result
 }
 
 export const savePostalCodeOnStorage = async postalCode => {

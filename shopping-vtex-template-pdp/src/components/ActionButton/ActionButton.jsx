@@ -28,7 +28,7 @@ export default function ActionButton(props) {
 			await addItem({ ...currentSku, quantity: 1 })
 		}
 
-		TrackingService.addToCartEvent(product)
+		TrackingService.addToCartEvent(product, currentSku)
 		showSnackBar('success', t('actionButton.snackAdded'))
 	}
 

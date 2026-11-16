@@ -36,7 +36,28 @@ export default function ProductCatalog(props) {
 		}
 
 		TrackingService.sendScreenView('Catálogo de produtos', 'ProductCatalog')
+		trackCategoryView(params)
 	}, [])
+
+	// Inngage: só para listagens por categoria (facets category-N), nunca para busca por termo
+	const trackCategoryView = params => {
+		try {
+			if (!params || params.query) return
+			const categoryPath = (params.facets || [])
+				.filter(facet => /^category-\d+$/.test(facet?.key || '') && facet?.value)
+				.sort((a, b) => Number(a.key.split('-')[1]) - Number(b.key.split('-')[1]))
+				.map(facet => String(facet.value))
+			if (categoryPath.length === 0) return
+
+			TrackingService.categoryViewEvent?.({
+				name: title || categoryPath[categoryPath.length - 1],
+				path: categoryPath.join('/'),
+				imageUrl: location?.state?.banner
+			})
+		} catch (e) {
+			console.error('trackCategoryView', e)
+		}
+	}
 
 	const handleSearch = term => {
 		Eitri.keyboard.dismiss()

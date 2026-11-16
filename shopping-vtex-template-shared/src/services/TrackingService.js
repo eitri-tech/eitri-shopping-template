@@ -1,4 +1,5 @@
 import Eitri from 'eitri-bifrost'
+import { Vtex } from 'eitri-shopping-vtex-shared'
 
 export default class TrackingService {
 	static _logInTerminal = (...args) => {
@@ -81,6 +82,139 @@ export default class TrackingService {
 		}
 	}
 
+	// ================= Inngage =================
+	// Payloads seguem o JSON de eventos da Inngage (fonte da verdade): nomes exatos, sem campos extras.
+
+	/**
+	 * Envia um evento à Inngage. Não faz nada se o módulo nativo não estiver disponível.
+	 */
+	static inngageEvent = async (eventName, data) => {
+		try {
+			const modules = await Eitri.modules()
+			const logEvent = modules?.inngage?.logEvent
+			if (!logEvent) return
+			await logEvent({ eventName, data })
+			this._logInTerminal('inngage', eventName, data)
+		} catch (e) {
+			console.error('inngageEvent', e)
+		}
+	}
+
+	// Domínio da loja: Vtex.configs.domain, com fallback para Vtex.configs.host
+	static _inngageDomain = () => {
+		const raw = `${Vtex?.configs?.domain || Vtex?.configs?.host || ''}`.trim()
+		if (!raw) return ''
+		const withProtocol = /^https?:\/\//i.test(raw) ? raw.replace(/^http:\/\//i, 'https://') : `https://${raw}`
+		return withProtocol.replace(/\/+$/, '')
+	}
+
+	static _inngageProductUrl = linkText => {
+		const domain = this._inngageDomain()
+		return linkText && domain ? `${domain}/${linkText}/p` : ''
+	}
+
+	// items (String) = productId-nome de cada item, separados por vírgula
+	static _inngageCartItems = cart =>
+		(cart?.items || []).map(item => `${item.productId}-${item.name || item.productName || item.nameComplete}`).join(',')
+
+	static _inngageCartValue = cart => {
+		const totalizer = cart?.totalizers?.find(i => i.id === 'Items')
+		const value = totalizer?.value ?? cart?.value
+		return typeof value === 'number' ? Number((value / 100).toFixed(2)) : 0
+	}
+
+	// Normaliza um produto do catálogo (product + sku) para os campos usados nos eventos
+	static _inngageCatalogItem = (product, sku) => {
+		const _sku =
+			sku ||
+			product?.items?.find(item => item.sellers?.some(seller => seller.commertialOffer?.AvailableQuantity > 0)) ||
+			product?.items?.[0]
+		const seller = _sku?.sellers?.find(s => s.sellerDefault) || _sku?.sellers?.[0]
+		const price = seller?.commertialOffer?.Price
+		return {
+			id: `${product?.productId || ''}`,
+			name: product?.productName || _sku?.nameComplete || _sku?.name || '',
+			brand: product?.brand || '',
+			category: product?.categoryTree?.[0]?.name || product?.categories?.[0]?.split('/').filter(Boolean)[0] || '',
+			imageUrl: _sku?.images?.[0]?.imageUrl || '',
+			url: this._inngageProductUrl(product?.linkText),
+			price: typeof price === 'number' ? price : 0
+		}
+	}
+
+	// Normaliza um item do orderForm para os campos usados nos eventos
+	static _inngageCartItem = item => {
+		const categoryId = item?.productCategoryIds?.split('/').filter(Boolean)[0]
+		const domain = this._inngageDomain()
+		const detailUrl = item?.detailUrl ? `/${item.detailUrl.replace(/^\/+/, '')}` : ''
+		const price = item?.sellingPrice ?? item?.price
+		return {
+			id: `${item?.productId || ''}`,
+			name: item?.name || '',
+			brand: item?.additionalInfo?.brandName || '',
+			category: (categoryId && item?.productCategories?.[categoryId]) || '',
+			imageUrl: item?.imageUrl || '',
+			url: domain && detailUrl ? `${domain}${detailUrl}` : '',
+			price: typeof price === 'number' ? Number((price / 100).toFixed(2)) : 0
+		}
+	}
+
+	static _inngageAddToCart = info =>
+		this.inngageEvent('add_to_cart', {
+			currency: 'BRL',
+			id: info.id,
+			item_image_url: info.imageUrl,
+			item_name: info.name,
+			item_url: info.url,
+			price: info.price,
+			type: info.brand
+		})
+
+	static _inngageRemoveFromCart = (item, quantity) => {
+		const info = this._inngageCartItem(item)
+		const qty = quantity ?? item?.quantity ?? 1
+		return this.inngageEvent('remove_from_cart', {
+			currency: 'BRL',
+			item_brand: info.brand,
+			item_category: info.category,
+			item_id: info.id,
+			item_name: info.name,
+			value: Number((info.price * qty).toFixed(2))
+		})
+	}
+
+	/**
+	 * Inngage: aumento/redução de quantidade de um item do carrinho.
+	 * Aumento envia add_to_cart; redução envia somente remove_from_cart com a quantidade removida.
+	 */
+	static cartItemQuantityChangedEvent = async (item, previousQuantity, newQuantity) => {
+		try {
+			const diff = Number(newQuantity || 0) - Number(previousQuantity || 0)
+			if (!item || !diff) return
+			if (diff > 0) this._inngageAddToCart(this._inngageCartItem(item))
+			else this._inngageRemoveFromCart(item, -diff)
+		} catch (e) {
+			console.error('inngage cartItemQuantityChanged', e)
+		}
+	}
+
+	/**
+	 * Inngage: abertura de uma listagem de categoria.
+	 * @param {Object} data { name, path (ex.: 'moda/vestidos'), imageUrl }
+	 */
+	static categoryViewEvent = async ({ name, path, imageUrl } = {}) => {
+		try {
+			const domain = this._inngageDomain()
+			this.inngageEvent('category_view', {
+				category_image_url: typeof imageUrl === 'string' ? imageUrl : '',
+				category_name: name || '',
+				category_url: domain && path ? `${domain}/${path}` : ''
+			})
+		} catch (e) {
+			console.error('inngage categoryView', e)
+		}
+	}
+
 	static sendScreenView = async (friendlyScreenName, screenFilename) => {
 		Eitri.exposedApis.fb.currentScreen({ screen: friendlyScreenName, screenClass: screenFilename })
 	}
@@ -126,10 +260,10 @@ export default class TrackingService {
 				}))
 			})
 
-			// TrackingService.inngageEvent('add_payment_info', {
-			// 	currency: 'BRL',
-			// 	payment_type: paymentType || ''
-			// })
+			TrackingService.inngageEvent('add_payment_info', {
+				currency: 'BRL',
+				payment_type: paymentType || ''
+			})
 		} catch (e) {
 			console.log('Error on trackAddPaymentInfo', e)
 		}
@@ -169,13 +303,33 @@ export default class TrackingService {
 		} catch (error) {
 			console.error('[SHARED] Error on addShippingInfo', error)
 		}
+
+		TrackingService.inngageShippingInfoEvent(cart)
+	}
+
+	/**
+	 * Inngage: seleção de frete no checkout.
+	 */
+	static inngageShippingInfoEvent = async cart => {
+		try {
+			const shippingTier = cart?.shippingData?.logisticsInfo?.find(i => i.selectedSla)?.selectedSla
+			TrackingService.inngageEvent('add_shipping_info', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				shipping_tier: shippingTier || '',
+				value: TrackingService._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage addShippingInfo', e)
+		}
 	}
 
 	/**
 	 * Registra quando um item é adicionado ao carrinho.
 	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_to_cart
 	 */
-	static addToCartEvent = async product => {
+	static addToCartEvent = async (product, sku) => {
 		// GA
 		try {
 			const item = this._resolveGAProductMetadata(product)
@@ -201,13 +355,40 @@ export default class TrackingService {
 		} catch (error) {
 			console.error(error, 'insider.addItemToCart')
 		}
+
+		// Inngage
+		try {
+			this._inngageAddToCart(this._inngageCatalogItem(product, sku))
+		} catch (e) {
+			console.error('inngage addToCart', e)
+		}
 	}
 
 	/**
 	 * Registra quando um item é adicionado à lista de desejos.
 	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#add_to_wishlist
 	 */
-	static addToWishlistEvent = async data => TrackingService.sendRecommendedGaEvent('add_to_wishlist', data)
+	static addToWishlistEvent = async (data, product, skuId) => {
+		if (data) TrackingService.sendRecommendedGaEvent('add_to_wishlist', data)
+
+		// Inngage
+		try {
+			if (!product) return
+			const sku = product?.items?.find(item => `${item.itemId}` === `${skuId}`)
+			const info = TrackingService._inngageCatalogItem(product, sku)
+			TrackingService.inngageEvent('add_to_wishlist', {
+				currency: 'BRL',
+				item_category: info.category,
+				item_id: info.id,
+				item_image_url: info.imageUrl,
+				item_name: info.name,
+				item_url: info.url,
+				price: info.price
+			})
+		} catch (e) {
+			console.error('inngage addToWishlist', e)
+		}
+	}
 
 	/**
 	 * Registra quando o usuário inicia o checkout.
@@ -226,6 +407,18 @@ export default class TrackingService {
 			})
 		} catch (e) {
 			console.log('Error on trackBeginCheckout', e)
+		}
+
+		// Inngage
+		try {
+			TrackingService.inngageEvent('begin_checkout', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				value: TrackingService._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage beginCheckout', e)
 		}
 	}
 
@@ -304,13 +497,29 @@ export default class TrackingService {
 		} catch (e) {
 			console.error('insider.purchase', e)
 		}
+
+		// Inngage: dispara na criação do pedido
+		try {
+			if (!orderId) return
+			const shippingTotalizer = cart?.totalizers?.find(i => i.id === 'Shipping')
+			TrackingService.inngageEvent('purchase', {
+				coupon: cart?.marketingData?.coupon || '',
+				currency: 'BRL',
+				items: TrackingService._inngageCartItems(cart),
+				shipping: ((shippingTotalizer?.value || 0) / 100).toFixed(2),
+				transaction_id: `${orderId}`,
+				value: cart?.value > 0 ? Number((cart.value / 100).toFixed(2)) : 0
+			})
+		} catch (e) {
+			console.error('inngage purchase', e)
+		}
 	}
 
 	/**
 	 * Registra quando um item é removido do carrinho.
 	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#remove_from_cart
 	 */
-	static removeFromCartEvent = async (cart, index) => {
+	static removeFromCartEvent = async (cart, index, quantity) => {
 		const itemRemoved = cart.items[index]
 
 		try {
@@ -338,6 +547,13 @@ export default class TrackingService {
 		} catch (error) {
 			console.error(error, 'insider.itemRemovedFromCart')
 		}
+
+		// Inngage
+		try {
+			if (itemRemoved) this._inngageRemoveFromCart(itemRemoved, quantity)
+		} catch (e) {
+			console.error('inngage removeFromCart', e)
+		}
 	}
 
 	/**
@@ -347,6 +563,10 @@ export default class TrackingService {
 	static searchEvent = async term => {
 		TrackingService.sendRecommendedGaEvent('search', {
 			search_term: term
+		})
+
+		TrackingService.inngageEvent('search', {
+			search_term: term || ''
 		})
 	}
 
@@ -376,9 +596,15 @@ export default class TrackingService {
 	 * Registra quando o usuário compartilha conteúdo.
 	 * Docs: https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#share
 	 */
-	static shareEvent = async itemId => {
+	static shareEvent = async (itemId, product) => {
 		TrackingService.sendRecommendedGaEvent('share', {
 			item_id: itemId
+		})
+
+		TrackingService.inngageEvent('share', {
+			contentType: 'product',
+			itemId: `${product?.productId || itemId || ''}`,
+			method: 'link'
 		})
 	}
 
@@ -426,6 +652,18 @@ export default class TrackingService {
 		} catch (e) {
 			console.error('insider.visitCartPage', e)
 		}
+
+		// Inngage
+		try {
+			if (!cart?.items?.length) return
+			this.inngageEvent('view_cart', {
+				currency: 'BRL',
+				items: this._inngageCartItems(cart),
+				value: this._inngageCartValue(cart)
+			})
+		} catch (e) {
+			console.error('inngage viewCart', e)
+		}
 	}
 
 	/**
@@ -456,6 +694,22 @@ export default class TrackingService {
 			Eitri.exposedApis.insider.visitProductDetailPage(payload)
 		} catch (e) {
 			console.error('insiderVisitProductPage', e)
+		}
+
+		// Inngage
+		try {
+			const info = this._inngageCatalogItem(product)
+			this.inngageEvent('view_item', {
+				item_brand: info.brand,
+				item_category: info.category,
+				item_id: info.id,
+				item_image_url: info.imageUrl,
+				item_name: info.name,
+				item_price: info.price,
+				item_url: info.url
+			})
+		} catch (e) {
+			console.error('inngage viewItem', e)
 		}
 	}
 

@@ -19,7 +19,13 @@ export default function CartItemsContent(props) {
 	}
 
 	const onChangeQuantityItem = async (quantity, index) => {
-		await changeQuantity(index, quantity)
+		const previousItem = cart?.items?.[index]
+		const newCart = await changeQuantity(index, quantity)
+		if (newCart && previousItem) {
+			const appliedQuantity =
+				newCart?.items?.find(item => item.uniqueId === previousItem.uniqueId)?.quantity ?? quantity
+			TrackingService.cartItemQuantityChangedEvent?.(previousItem, previousItem.quantity, appliedQuantity)
+		}
 	}
 
 	const handleRemoveCartItem = async index => {

@@ -21,7 +21,7 @@ export default function Wishlist(props) {
 		if (itemWishlistId === -1) {
 			try {
 				setItemOnWishlist(true)
-				const result = await addToWishlist(product?.productId, product?.productName, product?.items[0]?.itemId)
+				const result = await addToWishlist(product?.productId, product?.productName, product?.items[0]?.itemId, product)
 				setItemWishlistId(result?.data?.addToList)
 			} catch (e) {
 				console.error('handleSaveFavorite: Error', e)

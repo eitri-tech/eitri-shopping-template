@@ -11,7 +11,7 @@ export default function Share(props) {
 		Eitri.share.link({
 			url: url
 		})
-		TrackingService.shareEvent(product?.linkText)
+		TrackingService.shareEvent(product?.linkText, product)
 	}
 
 	return (

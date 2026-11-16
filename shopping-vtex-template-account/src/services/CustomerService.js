@@ -1,4 +1,5 @@
 import { Vtex } from 'eitri-shopping-vtex-shared'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 export const doLogin = async (email, password, rememberMe) => {
 	return await Vtex.customer.loginWithEmailAndPassword(email, password, rememberMe)
@@ -127,8 +128,10 @@ export const removeItemFromWishlist = async id => {
 	return await Vtex.wishlist.removeItem(id)
 }
 
-export const addToWishlist = async (productId, title, sku) => {
-	return await Vtex.wishlist.addItem(productId, title, sku)
+export const addToWishlist = async (productId, title, sku, product) => {
+	const result = await Vtex.wishlist.addItem(productId, title, sku)
+	TrackingService.addToWishlistEvent(null, product, sku)
+	return result
 }
 
 export const getSavedCards = async () => {

@@ -10,6 +10,7 @@ import {
 	updateOpenTextField
 } from '../services/cartService'
 import setFreight, { setLogisticInfo, setNewAddress, setShippingAddress } from '../services/freigthService'
+import { TrackingService } from 'shopping-vtex-template-shared'
 
 const LocalCart = createContext({})
 
@@ -44,7 +45,9 @@ export default function CartProvider({ children }) {
 	}
 
 	const _setFreight = async option => {
-		return executeCartOperation(setFreight, option)
+		const newCart = await executeCartOperation(setFreight, option)
+		if (newCart) TrackingService.inngageShippingInfoEvent?.(newCart)
+		return newCart
 	}
 
 	const _setNewAddress = async address => {
