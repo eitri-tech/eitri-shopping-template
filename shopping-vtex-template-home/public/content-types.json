@@ -26,9 +26,18 @@
 		"configurationSchemaSets": []
 	},
 	{
+		"id": "accountPage",
+		"name": "Conta",
+		"scopes": ["accountPage"],
+		"isSingleton": true,
+		"configurationSchemaSets": []
+	},
+	{
 		"id": "deeplink",
 		"name": "Deeplinks",
-		"scopes": ["deeplink"],
+		"scopes": [
+			"deeplink"
+		],
 		"isSingleton": true,
 		"configurationSchemaSets": []
 	}
