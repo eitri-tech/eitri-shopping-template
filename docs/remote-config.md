@@ -56,7 +56,9 @@ Aparência e comportamento do app.
 | Campo | Tipo | Default | Descrição | Onde é usado |
 | --- | --- | --- | --- | --- |
 | `minimumOrderValueInCents` | number (centavos) | — | Valor mínimo do pedido para liberar o checkout. Use `0` para não ter valor mínimo | `cart`: `utils/minimumOrderValue.js` |
-| `checkout.recaptchaKey` | string | sem reCAPTCHA | Site key do reCAPTCHA usada no fechamento do pedido e no cadastro de cartão | `checkout`: `views/CheckoutReview.jsx`; `account`: `views/AddCardForm.jsx` |
+| `checkout.recaptchaKey` | string | sem reCAPTCHA | Site key do reCAPTCHA. No fechamento do pedido é usada como chave **v3** (invisível, `action: 'submit'`) quando não há chave específica da plataforma. No cadastro de cartão do `account` ainda é usada pelo widget **v2** | `checkout`: `views/CheckoutReview.jsx`, `services/Recaptcha.js`; `account`: `views/AddCardForm.jsx` |
+| `checkout.recaptchaKeyAndroid` | string | `checkout.recaptchaKey` | Site key do reCAPTCHA v3 usada no fechamento do pedido quando o app roda no Android | `checkout`: `views/CheckoutReview.jsx` |
+| `checkout.recaptchaKeyIos` | string | `checkout.recaptchaKey` | Site key do reCAPTCHA v3 usada no fechamento do pedido quando o app roda no iOS | `checkout`: `views/CheckoutReview.jsx` |
 | `checkout.paymentSystemDisplayOrder` | string[] | ordem da VTEX | Ordem de exibição dos meios de pagamento, pelo `groupName` da VTEX (ex.: `creditCardPaymentGroup`, `instantPaymentPaymentGroup`, `bankInvoicePaymentGroup`). Grupos fora da lista aparecem no final | `checkout`: `components/Methods/PaymentMethods.jsx` |
 | `externalPayments` | array de `{ externalGroupName, name, imageUrl, description }` | `[]` | Meios de pagamento externos. `externalGroupName` deve ser igual ao `groupName` da VTEX; `name`, `imageUrl` e `description` definem como o meio aparece no checkout | `checkout`: `components/PaymentsGroups/ImplementationInterface.jsx` |
 | `autoTriggerGAEvents` | boolean | `true` | Com `true`, a lib dispara automaticamente os eventos do Google Analytics no checkout. Com `false`, o template dispara os eventos | `checkout`: `services/AppService.js`, `services/Tracking.js` |

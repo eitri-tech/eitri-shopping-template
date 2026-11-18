@@ -32,8 +32,14 @@ export default function CheckoutReview() {
 	const recaptchaRef = useRef()
 
 	useEffect(() => {
-		Eitri.environment.getRemoteConfigs().then(rc => {
-			const recaptchaSiteKey = rc?.appConfigs?.checkout?.recaptchaKey
+		Promise.all([Eitri.environment.getRemoteConfigs(), Eitri.getConfigs()]).then(([rc, { applicationData }]) => {
+			const { recaptchaKey, recaptchaKeyAndroid, recaptchaKeyIos } = rc?.appConfigs?.checkout || {}
+
+			const recaptchaSiteKey =
+				(applicationData?.platform === 'android' && recaptchaKeyAndroid) ||
+				(applicationData?.platform === 'ios' && recaptchaKeyIos) ||
+				recaptchaKey
+
 			if (recaptchaSiteKey) {
 				setRecaptchaSiteKey(recaptchaSiteKey)
 			}

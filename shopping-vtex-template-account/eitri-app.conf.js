@@ -3,10 +3,9 @@ module.exports = {
 	'title': 'shopping-vtex-template-account',
 	'slug': 'shopping-vtex-template-account',
 	'eitri-luminus': '2.3.6',
-	'eitri-bifrost': '3.10.0',
-	'eitri-commons': '2.1.2',
-	'version': '0.1.4',
-	'versionMessage': 'feat: add_to_cart e add_to_wishlist Inngage com dados do produto; atualiza shared',
+	'eitri-bifrost': '5.2.0',
+	'version': '0.1.5',
+	'versionMessage': 'chore: atualiza shared, eitri-shopping-vtex-shared 1.21.1 e eitri-bifrost 5.2.0',
 	'public-key': '701d7c27-997c-4dfa-8a5b-bb33110af475',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
 	'id': 'e37e7e8e-67b5-4fcf-8f02-06b119abb1ae',
@@ -15,16 +14,17 @@ module.exports = {
 	'eitri-app-dependencies': {
 		'shopping-vtex-template-shared': {
 			isEitriAppShared: true,
-			version: '0.1.11'
+			version: '0.1.12'
 		},
 		'eitri-shopping-vtex-shared': {
 			isEitriAppShared: true,
-			version: '1.18.0'
+			version: '1.21.1'
 		},
 		'i18n': {
 			version: '14.1.2'
 		},
 		'recaptcha': {
+			providers: ['google'],
 			version: '2'
 		}
 	},
