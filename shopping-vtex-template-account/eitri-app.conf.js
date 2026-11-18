@@ -5,7 +5,7 @@ module.exports = {
 	'eitri-luminus': '2.3.6',
 	'eitri-bifrost': '5.2.0',
 	'version': '0.1.5',
-	'versionMessage': 'chore: atualiza shared, eitri-shopping-vtex-shared 1.21.1 e eitri-bifrost 5.2.0',
+	'versionMessage': 'feat: reCAPTCHA v3 no cadastro de cartão com site key por plataforma; atualiza shared, eitri-shopping-vtex-shared 1.21.1 e eitri-bifrost 5.2.0',
 	'public-key': '701d7c27-997c-4dfa-8a5b-bb33110af475',
 	'applicationId': '9022c0fb-885f-4a5f-b99f-7e065189b893',
 	'id': 'e37e7e8e-67b5-4fcf-8f02-06b119abb1ae',
@@ -22,10 +22,6 @@ module.exports = {
 		},
 		'i18n': {
 			version: '14.1.2'
-		},
-		'recaptcha': {
-			providers: ['google'],
-			version: '2'
 		}
 	},
 	'type': 'module'

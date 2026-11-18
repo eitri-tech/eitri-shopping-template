@@ -66,10 +66,15 @@ export default function AddCardForm(props) {
 	useEffect(() => {
 		sendScreenView('Adicionar cartão', 'AddCardForm')
 
-		Eitri.environment
-			.getRemoteConfigs()
-			.then(rc => {
-				const key = rc?.appConfigs?.checkout?.recaptchaKey
+		Promise.all([Eitri.environment.getRemoteConfigs(), Eitri.getConfigs()])
+			.then(([rc, { applicationData }]) => {
+				const { recaptchaKey, recaptchaKeyAndroid, recaptchaKeyIos } = rc?.appConfigs?.checkout || {}
+
+				const key =
+					(applicationData?.platform === 'android' && recaptchaKeyAndroid) ||
+					(applicationData?.platform === 'ios' && recaptchaKeyIos) ||
+					recaptchaKey
+
 				if (key) setRecaptchaSiteKey(key)
 			})
 			.catch(() => {})
