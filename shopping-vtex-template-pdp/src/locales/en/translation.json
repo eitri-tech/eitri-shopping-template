@@ -1,0 +1,89 @@
+{
+	"home": {
+		"title": "Product"
+	},
+	"description": {
+		"txtDescription": "Description",
+		"labelSeeLess": "See less",
+		"labelSeeMore": "See more"
+	},
+	"information": {
+		"txtInformation": "Information"
+	},
+	"supplier": {
+		"txtSupplier": "Supplier"
+	},
+	"freight": {
+		"labelZipCode": "ZIP code",
+		"labelCalculate": "Calculate",
+		"txtCalculate": "Shipping",
+		"errorUnavailable": "Sorry, this product is not available for your ZIP code. How about trying another one?"
+	},
+	"mainDescription": {
+		"txtUntil": "up to",
+		"txtOf": "of",
+		"installment": "up to {{installment}}x of {{value}} interest-free"
+	},
+	"modalComponent": {
+		"txtProductAdded": "Product added",
+		"txtQuantity": "Quantity:",
+		"txtGoToCart": "Go to cart",
+		"txtAddToCart": "Add to cart",
+		"txtBuyTogether": "Buy it together"
+	},
+	"product": {
+		"labelAddToCart": "Add to cart",
+		"labelGoToCart": "Go to cart",
+		"errorNoProduct": "Product unavailable"
+	},
+	"productBasicTemplate": {
+		"txtWhoSaw": "Customers who viewed this also viewed:"
+	},
+	"productCardVertical": {
+		"cart": "view cart",
+		"buy": "buy"
+	},
+	"review": {
+		"txtOpnion": "The customer did not write a review, only rated the product.",
+		"seeMoreReviews": "See more reviews"
+	},
+	"skuSelector": {
+		"txtSelect": "Select the"
+	},
+	"tagsComponent": {
+		"labelOffer": "Offer"
+	},
+	"actionButton": {
+		"snackAdded": "successfully added to cart",
+		"labelBuy": "Buy"
+	},
+	"buyTogether": {
+		"txtTitle": "hey, grab these too!"
+	},
+	"productCard": {
+		"snackAdded": "successfully added to cart",
+		"snackRemoved": "product removed from cart",
+		"viewCart": "View cart",
+		"buy": "Buy"
+	},
+	"searchInput": {
+		"placeholder": "Search..."
+	},
+	"topSearches": {
+		"title": "top searches"
+	},
+	"searchHistory": {
+		"title": "history",
+		"clear": "clear history"
+	},
+	"qrCodeScanner": {
+		"title": "Scan barcode",
+		"description": "Center the code to scan",
+		"torch": "Flashlight",
+		"productNotFound": "Product not found"
+	},
+	"rating": {
+		"txtCount": "{{count}} reviews",
+		"txtComposition": "Rating breakdown"
+	}
+}

@@ -1,0 +1,80 @@
+{
+	"home": {
+		"title": "Cart"
+	},
+	"cart": {
+		"labelGiftWrapping": "Gift wrapping",
+		"labelInstalmentUntil": "Installments up to"
+	},
+	"cartItem": {
+		"txtAdd": "Add",
+		"txtMessageUnavailable": "This product is unavailable!",
+		"txtRemoveCart": "Do you want to remove the product from the cart?",
+		"txtRemoveCartItem": "Do you want to remove {{name}} from the cart?",
+		"cannotBeDelivered": "This item cannot be delivered",
+		"notAvailable": "This item is not available"
+	},
+	"cartSummary": {
+		"txtSubtotal": "Subtotal",
+		"txtDiscount": "Discount",
+		"txtDelivery": "Shipping",
+		"txtTotal": "Total",
+		"labelFinish": "Checkout"
+	},
+	"minimumOrderValue": {
+		"missing": "Add {{value}} to reach the minimum order value",
+		"reached": "Minimum order value reached"
+	},
+	"coupon": {
+		"txtAppliedCoupon": "Coupon applied!",
+		"txtInvalidCoupon": "Invalid coupon",
+		"txtExpiredCoupon": "Expired coupon",
+		"txtCoupon": "Discount coupon",
+		"txtAdd": "Add",
+		"labelInsertCode": "Enter the code"
+	},
+	"emptyCart": {
+		"txtEmptyCart": "Your cart is empty",
+		"txtMessageList": "Add products to your cart and they will be listed here.",
+		"labelButton": "Shop Now"
+	},
+	"freight": {
+		"errorCep": "Enter a valid ZIP code",
+		"errorCalcFreight": "Unable to calculate shipping",
+		"errorEditFreight": "Unable to change shipping",
+		"txtDelivery": "Shipping",
+		"txtCalculate": "Calculate",
+		"labelZipCode": "ZIP code",
+		"txtUnknow": "I don't know my ZIP code",
+		"tabDelivery": "Delivery Options",
+		"tabPickup": "Pickup Options",
+		"noDeliveryOptions": "No delivery options available",
+		"noPickupOptions": "No pickup options available",
+		"unavailableWithZip": "Product(s) not available for ZIP code {{postalCode}}:",
+		"unavailableGeneral": "Product(s) unavailable for delivery:",
+		"unavailableProduct": "Product unavailable",
+		"txtChangeZip": "Enter another ZIP code to check availability.",
+		"labelCalculate": "Calculate"
+	},
+	"modalOfferingGender": {
+		"labelReceiverGift": "Who is the gift for?",
+		"labelSelectGender": "Select the gender",
+		"txtBoy": "Boy",
+		"txtGirl": "Girl",
+		"txtConfirm": "Confirm",
+		"txtCancel": "Cancel"
+	},
+	"saveButton": {
+		"save": "Save",
+		"saved": "Saved"
+	},
+	"cartTemplate": {
+		"labelContinue": "Continue shopping"
+	},
+	"modal": {
+		"confirm": {
+			"delete": "Delete",
+			"cancel": "Cancel"
+		}
+	}
+}
