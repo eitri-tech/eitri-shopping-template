@@ -75,7 +75,7 @@ export default function SignUp(props) {
 		try {
 			const loggedIn = await loginWithEmailAndKey(email, verificationCode)
 			if (loggedIn === 'Success') {
-				navigate(PAGES.EDIT_PROFILE)
+				navigate(PAGES.EDIT_PROFILE, { fromSignUp: true })
 			} else {
 				setAlertMessage(t('signUp.alertMessageVerify'))
 				setShowLoginErrorAlert(true)
