@@ -143,6 +143,12 @@ export default function EditProfile(props) {
 
 			setIsLoading(false)
 
+			// Just signed up: profile is complete, go back to the account home (it reloads on resume).
+			if (props?.location?.state?.fromSignUp) {
+				Eitri.navigation.backToTop()
+				return
+			}
+
 			// FIX #6: usa ref para o timer, evitando memory leak
 			setShowNotification(true)
 			notificationTimerRef.current = setTimeout(() => {

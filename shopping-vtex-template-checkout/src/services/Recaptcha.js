@@ -1,48 +1,55 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+
+const SCRIPT_ID = 'recaptcha-v3-script'
+
+const loadRecaptchaScript = (siteKey) => {
+	return new Promise((resolve, reject) => {
+		if (document.getElementById(SCRIPT_ID)) {
+			if (window.grecaptcha) {
+				window.grecaptcha.ready(() => resolve())
+			} else {
+				resolve()
+			}
+			return
+		}
+
+		const script = document.createElement('script')
+		script.id = SCRIPT_ID
+		script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`
+		script.async = true
+		script.defer = true
+		script.onload = () => {
+			window.grecaptcha.ready(() => resolve())
+		}
+		script.onerror = () => reject(new Error('Failed to load reCAPTCHA script'))
+		document.head.appendChild(script)
+	})
+}
 
 const Recaptcha = forwardRef((props, ref) => {
 	const { onRecaptchaReady, siteKey } = props
+	const siteKeyRef = useRef(siteKey)
 
 	useEffect(() => {
-		initRecaptcha()
-	}, [])
+		siteKeyRef.current = siteKey
+	}, [siteKey])
 
-	const initRecaptcha = async () => {
-		try {
-			await waitForElement('#g-recaptcha-button')
-			window?.grecaptcha?.render('g-recaptcha-button')
-			window.eitriShopRecaptchaOnSubmit = () => {}
-			if (onRecaptchaReady) onRecaptchaReady()
-		} catch (error) {
-			console.error(error)
-		}
-	}
-
-	const waitForElement = selector => {
-		return new Promise(resolve => {
-			if (document.querySelector(selector)) {
-				return resolve(document.querySelector(selector))
-			}
-
-			const observer = new MutationObserver(mutations => {
-				if (document.querySelector(selector)) {
-					observer.disconnect()
-					resolve(document.querySelector(selector))
-				}
+	useEffect(() => {
+		if (!siteKey) return
+		loadRecaptchaScript(siteKey)
+			.then(() => {
+				if (onRecaptchaReady) onRecaptchaReady()
 			})
-
-			observer.observe(document.body, {
-				childList: true,
-				subtree: true
+			.catch((error) => {
+				console.error(error)
 			})
-		})
-	}
+	}, [siteKey])
 
 	useImperativeHandle(ref, () => {
 		return {
 			async getRecaptchaToken() {
 				try {
-					const token = await window?.grecaptcha?.execute()
+					const token = await window.grecaptcha.execute(siteKeyRef.current, { action: 'submit' })
 					return token
 				} catch (e) {
 					console.error(e)
@@ -51,16 +58,9 @@ const Recaptcha = forwardRef((props, ref) => {
 		}
 	})
 
-	return (
-		<>
-			<button
-				id='g-recaptcha-button'
-				className='g-recaptcha'
-				data-sitekey={siteKey}
-				data-callback='eitriShopRecaptchaOnSubmit'
-				data-action='submit'></button>
-		</>
-	)
+	return null
 })
+
+Recaptcha.displayName = 'Recaptcha'
 
 export default Recaptcha

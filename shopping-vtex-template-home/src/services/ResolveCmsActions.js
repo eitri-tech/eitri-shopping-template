@@ -95,8 +95,6 @@ export const processActions = sliderData => {
 		})
 	}
 
-	console.log('sliderData', sliderData)
-
 	const action = sliderData?.action
 	switch (action?.type) {
 		case 'search':
